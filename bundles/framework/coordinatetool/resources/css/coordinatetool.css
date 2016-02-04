@@ -30,9 +30,9 @@ div.coordinatetool__popup {
       float: left; }
     div.coordinatetool__popup div.coordinatetool__popup__content .clear {
       clear: both; }
-  div.coordinatetool__popup div.content .srs {
-    color: #b3b3b3;
-    font-size: 12px; }
+  div.coordinatetool__popup div.content .srs-select {
+      width: 170px;
+  }
   div.coordinatetool__popup div.content .margintop {
     margin-top: 10px; }
 

@@ -18,6 +18,7 @@ Oskari.registerLocalization(
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
+                "srs": "SRS:",
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
