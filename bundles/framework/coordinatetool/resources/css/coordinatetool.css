@@ -10,7 +10,7 @@ div.mapplugin.coordinatetool {
 
 div.coordinatetool__popup {
   width: 280px;
-  height: 340px;
+  height: 360px;
   display: none;
   z-index: 15000;
   background-color: #ffffff; }
@@ -19,7 +19,7 @@ div.coordinatetool__popup {
     top: 8px;
     right: 5px; }
   div.coordinatetool__popup div.content {
-    height: 215px; }
+    height: 235px; }
   div.coordinatetool__popup div.actions {
     float: right; }
   div.coordinatetool__popup div.clear {
