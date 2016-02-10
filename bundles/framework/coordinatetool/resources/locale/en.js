@@ -14,10 +14,11 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Coordinates",
                 "searchButton": "Center map",
-                "info": "Click a location on the map to view the coordinates or enter coordinates and click 'Center map'.",
+                "info": "Choose the coordinate system and click a location on the map to view the coordinates or enter coordinates and click 'Center map'.",
                 "showMouseCoordinates": "Show mouse cursor coordinates"
             },
             "compass": {
+                "srs": "SRS:",
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },

@@ -26,6 +26,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         this._latInput = null;
         this._lonInput = null;
         this._dialog = null;
+        this._coordsConvertionEnabled = false;
+        this._selectedProjection = null;
         this._templates = {
             coordinatetool: jQuery('<div class="mapplugin coordinatetool"></div>'),
             popup: jQuery('<div class="coordinatetool__popup divmanazerpopup">'+
@@ -39,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 '</div><div class="clear"></div>'+
                 '</div>'),
             popupContent: jQuery('<div><div class="coordinatetool__popup__content"></div>' +
-                '<div class="srs"></div>' +
+                '<div class="margintop"><div class="coordinate-label floatleft srs-label"></div><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
                 '<div class="margintop"><div class="coordinate-label floatleft lat-label"></div><div class="floatleft"><input type="text" class="lat-input"></input></div><div class="clear"></div></div>' +
                 '<div class="margintop"><div class="coordinate-label floatleft lon-label"></div><div class="floatleft"><input type="text" class="lon-input"></input></div><div class="clear"></div></div>' +
                 '<div class="margintop"><input type="checkbox" id="mousecoordinates"></input><label class="mousecoordinates-label" for="mousecoordinates"></label></div></div>')
@@ -137,9 +139,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         _centerMapToSelectedCoordinates: function(){
             var me = this,
-                lonVal = me._lonInput.val(),
-                latVal = me._latInput.val(),
-                loc = me._locale;
+                lonVal,
+                latVal,
+                loc = me._locale,
+                crs = me.getMapModule().getProjection(),
+                convertedCoordinates,
+                coordinates = {
+                    'lonlat': {
+                        'lat': parseFloat(me._latInput.val()),
+                        'lon': parseFloat(me._lonInput.val())
+                    }
+                };
+
+            convertedCoordinates = me._convertCoordinates(me._selectedProjection, crs, coordinates);
+            lonVal = convertedCoordinates.lonlat.lon;
+            latVal = convertedCoordinates.lonlat.lat;
+
             if(this.getMapModule().isValidLonLat(lonVal,latVal)) {
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);
@@ -165,19 +180,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _createControlElement: function () {
             var me = this,
                 loc = me._locale,
-                crs = me.getMapModule().getProjection(),
                 el = me._templates.coordinatetool.clone(),
                 popup = me._templates.popup.clone(),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
                 crsDefaultText = loc.crs.default,
-                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs);
+                crsText = loc.crs[crs] || crsDefaultText.replace('{crs}', crs),
+                conf = me._config;
 
             // Set locales
             popup.find('.oskari-button').val(loc.popup.searchButton);
             popup.find('.popupHeader').html(loc.popup.title);
             popupContent.find('.coordinatetool__popup__content').html(loc.popup.info);
-            popupContent.find('.srs').html(crsText);
+            popupContent.find('.srs-label').html(loc.compass.srs);
             popupContent.find('.lat-label').html(loc.compass.lat);
             popupContent.find('.lon-label').html(loc.compass.lon);
             popupContent.find('.mousecoordinates-label').html(loc.popup.showMouseCoordinates);
@@ -217,6 +232,80 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._latInput = popupContent.find('.lat-input');
             me._lonInput = popupContent.find('.lon-input');
 
+            /*Notice! Add projections array to app config. Example:
+            conf.projections = [
+                    {
+                        "name": "EPSG:3067",
+                        "text": "ETRS89-TM35FIN (EPSG:3067)",
+                        "definition": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                        "default": false
+                    },
+                    {
+                        "name": "EPSG:4326",
+                        "text": "WGS84 (EPSG:4326)",
+                        "definition": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+                        "default": true
+                    },
+                    {
+                        "name": "EPSG:2393",
+                        "text": "YKJ (EPSG:2393)",
+                        "definition": "+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=3500000 +y_0=0 +ellps=intl +units=m +no_defs",
+                        "default": false
+                    }
+               ]
+            //*/
+
+            // Set the dropdown with supported projections
+            if (conf && conf.projections && conf.projections.length > 0) {
+                me._coordsConvertionEnabled = true;
+
+                $.each(conf.projections, function (i, item) {
+
+                    popupContent.find('.srs-select').append($('<option>', {
+                        value: item.name,
+                        text: item.text
+                    }));
+
+                    if (item.default) {
+                        popupContent.find('.srs-select option[value="' + item.name + '"]').prop("selected", "selected");
+                        me._selectedProjection = item.name;
+                    }
+
+                    Proj4js.defs[item.name] = item.definition;
+                });
+
+                if (!me._selectedProjection) {
+                    me._selectedProjection = conf.projections[0].name;
+                }
+
+            } else {
+                me._coordsConvertionEnabled = false;
+
+                popupContent.find('.srs-select').append($('<option>', {
+                    value: crs,
+                    text: crsText,
+                    selected: "selected"
+                }));
+
+                me._selectedProjection = crs;
+            }
+
+            // Convert coordinates in inputs according to selected projection
+            popupContent.find('.srs-select').bind('change', function (event) {
+                var coordinates,
+                    convertedCoordinates;
+
+                coordinates = {
+                    'lonlat':
+                        {
+                            'lon': parseFloat(me._lonInput.val()),
+                            'lat': parseFloat(me._latInput.val())
+                        }
+                };
+                convertedCoordinates = me._convertCoordinates(me._selectedProjection, $(this).val(), coordinates);
+                me._updateLonLat(convertedCoordinates);
+                me._selectedProjection = $(this).val();
+            });
 
             jQuery(me.getMapModule().getMapEl()).append(popup);
 
@@ -225,12 +314,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         /**
+         * Converts coordinates from one projection to another
+         * @method @private _convertCoordinates
+         * @param {string} sourceSrs source projection
+         * @param {string} destSrs destination projection
+         * @param {Object} coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         * @return {Object} converted coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         */
+        _convertCoordinates: function (sourceSrsName, destSrsName, coordinates) {
+            var me = this,
+                source,
+                dest,
+                point,
+                convertedCoords;
+
+            if (me._coordsConvertionEnabled) {
+                source = new Proj4js.Proj(sourceSrsName),
+                dest = new Proj4js.Proj(destSrsName),
+                point = new Proj4js.Point(coordinates.lonlat.lon, coordinates.lonlat.lat),
+                convertedCoords = Proj4js.transform(source, dest, point);
+
+                return {
+                    'lonlat': {
+                        'lon': convertedCoords.x,
+                        'lat': convertedCoords.y
+                    }
+                };
+            } else {
+                return coordinates;
+            }
+        },
+
+        /**
          * Update lon and lat values to inputs
          * @method  @private _updateLonLat
          * @param  {Object} data lon and lat object {lonlat: { lat: 0, lon: 0}}
          * @return {[type]}      [description]
          */
-        _updateLonLat: function(data){
+        _updateLonLat: function (data) {
             var me = this,
                 conf = me._config,
                 roundToDecimals = 0;
@@ -253,7 +374,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         refresh: function (data) {
             var me = this,
-                conf = me._config;
+                conf = me._config,
+                crs = me.getMapModule().getProjection(),
+                convertedCoordinates;
 
             if (!data || !data.lonlat) {
                 // update with map coordinates if coordinates not given
@@ -264,11 +387,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         'lon': parseFloat(map.getX())
                     }
                 };
-                me._updateLonLat(data);
-            } else {
-                me._updateLonLat(data);
             }
 
+            convertedCoordinates = me._convertCoordinates(crs, me._selectedProjection, data);
+            me._updateLonLat(convertedCoordinates);
 
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
