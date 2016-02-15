@@ -14,10 +14,11 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Koordinaatit",
                 "searchButton": "Keskitä kartta",
-                "info": "Klikkaa sijaintia kartalla nähdäksesi sen koordinaatit tai syötä koordinaatit ja paina \"Keskitä kartta\".",
+                "info": "Valitse haluamasi koordinaattijärjestelmä ja klikkaa sijaintia kartalla nähdäksesi sen koordinaatit tai syötä koordinaatit ja paina \"Keskitä kartta\".",
                 "showMouseCoordinates": "Näytä hiiren kursorin koordinaatit."
             },
             "compass": {
+                "srs": "SRS:",
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },

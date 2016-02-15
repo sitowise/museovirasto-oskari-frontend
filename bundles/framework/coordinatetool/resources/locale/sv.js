@@ -14,10 +14,11 @@ Oskari.registerLocalization(
             "popup": {
                 "title": "Koordinater",
                 "searchButton": "Centrum karta",
-                "info": "Klicka på den plats på kartan för att se koordinaterna eller mata in koordinaterna och sök",
+                "info": "Välja en koordinatsystem och klicka på den plats på kartan för att se koordinaterna eller mata in koordinaterna och sök",
                 "showMouseCoordinates": "Visa musen koordinaterna"
             },
             "compass": {
+                "srs": "SRS:",
                 "lon": "E / lon:",
                 "lat": "N / lat:"
             },
