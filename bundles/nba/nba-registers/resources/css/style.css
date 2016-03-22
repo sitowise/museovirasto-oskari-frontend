@@ -1,0 +1,12 @@
+﻿div.nba-searchContainer div.registerSelect select {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+div.nba-searchContainer div.nba-searchInput, div.nba-searchContainer div.nba-searchButton {
+    display: inline-block;
+}
+
+div.nba-searchContainer div.nba-searchInput input {
+    width: 359px;
+}
