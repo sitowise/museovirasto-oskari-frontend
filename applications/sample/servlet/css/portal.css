@@ -87,8 +87,14 @@ img::-moz-selection {
 /* Servlet version */
 /* Logo is only in the portal version afaik so this could be moved there? */
 #logo {
-  padding: 30px 0 35px 10px;
+  /*padding: 30px 0 35px 10px;*/
 }
+
+#logo a img{
+  width: 169px;
+  border-right: 1px solid #d3d3d3;
+}
+
 #logo p {
   /* FIXME change p to h3 to get rid of font-size and color */
   font-size: 17px;

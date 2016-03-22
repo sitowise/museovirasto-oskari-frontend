@@ -20,3 +20,4 @@ tools/test-results.xml
 *.tgz
 *.tar.gz
 .vs/
+oskari.sln
