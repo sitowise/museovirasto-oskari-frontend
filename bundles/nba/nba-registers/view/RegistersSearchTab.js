@@ -20,9 +20,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 this.templates[t] = jQuery(this._templates[t]);
             }
         }
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.tabContent = this._initContent();
         //this.resultsContainer = this._initResultGrid();
-
         this._getRegisters();
     }, {
         _templates: {
@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 + '<div class="nba-searchInput"></div>'
                 + '<div class="nba-searchButton"></div>'
                 + '<div class="showAllResultsLink"></div>'
+                + '<div class="nba-progressSpinner"></div>'
                 + '</div>',
             resultsGrid: '<div class="resultsContainer">'
                 + '<div class="resultsTitle"></div>'
@@ -69,7 +70,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 searchPlaceholder = this.loc['searchPlaceholder'],
                 searchInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'nba-registers-search-input'),
                 searchButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton'),
-                linkText = this.loc['showAllResultsOnMap'];
+                showAllResultsLink = jQuery('<a href="#">' + this.loc['showAllResultsOnMap'] + '</a>');
             
             tabContent.find('div.nbaRegisterHeader').append(headerLabel);
             tabContent.find('div.registerSelect').prepend(selectLabel);
@@ -79,7 +80,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //add search input
             searchInput.setIds(null, "nba-registers-search-input");
             searchInput.setPlaceholder(searchPlaceholder);
-            searchInput.setRequired(true, "You should fill this input"); //TODO make localization
             searchInput.addClearButton();
 
             //add search button
@@ -91,6 +91,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 //var dataModel = me.resultsGrid.getDataModel().setData([]);
                 if (me.resultsContainer != null) {
                     me.resultsContainer.empty();
+                }
+
+                //If user has selected a filter with geometry the name/ID should not be mandatory parameter in the search
+                if (checkboxElement.prop('checked')) {
+                    searchInput.setRequired(false);
+                } else {
+                    searchInput.setRequired(true, "You should fill this input"); //TODO make localization
                 }
 
                 searchInput.clearErrors();
@@ -137,8 +144,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             tabContent.find('div.nba-searchInput').append(searchInput.getField());
             tabContent.find('div.nba-searchButton').append(searchButton.getElement());
 
-            //FIXME
-            //resultGrid.find('div.showAllResultsLink').append(linkText);
+            
+            //showAllResultsLink.bind('click', function () {
+            //    me._showAllResultsOnMap();
+            //    return false;
+            //});
+            //tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
+
+            this.progressSpinner.insertTo(tabContent.find('div.nba-progressSpinner'));
 
             return tabContent;
         },
@@ -165,7 +178,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'x': result.coordinateX,
                     'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
-                    'mapLayerID': result.mapLayerID
+                    'mapLayerID': result.mapLayerID,
+                    'mapLayerID2': result.mapLayerID2
                 });
             });
 
@@ -182,6 +196,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
                     } else {
                         //TODO show error
+                    }
+
+                    //TODO change way of loading multiple layers for one register
+                    if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
+                        var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
+                        if (layer2 != null) {
+                            me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
+                        } else {
+                            //TODO show error
+                        }
                     }
 
                     //TODO probably need to be converted to current coordinate system
@@ -259,21 +283,81 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
         _getRegistryItems: function (params) {
             var me = this;
+            this.progressSpinner.start();
             this.instance.getSearchService().getRegistryItems(
                 params,
                 function (results) {
                     me._handleRegistryItemsResults(results);
                 },
                 function () {
+                    this.progressSpinner.stop();
                     //TODO handle error
                 });
         },
 
         _handleRegistryItemsResults: function (results) {
+            this.progressSpinner.stop();
             if (jQuery.isEmptyObject(results)) {
                 return;
             }
 
             this.resultsContainer = this._renderResultGrid(results);
-        }
+        }//,
+
+        //_showAllResultsOnMap: function () {
+        //    var me = this;
+        //    var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+
+        //    //1. get result items
+
+        //    if (me.resultsGrid != null) {
+        //        var items = me.resultsGrid.getDataModel().getData();
+        //        var features = [];
+
+        //        for (var i = 0; i < items.length; i++) {
+        //            var data = items[i];
+
+        //            //2. get layers based on layerId of the items
+        //            var layers = [];
+        //            layers.push(item.mapLayerID);
+        //            /*
+        //            var layer = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID);
+        //            if (layer != null) {
+        //                me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
+        //            } else {
+        //                //TODO show error
+        //            }
+
+        //            //TODO change way of loading multiple layers for one register
+        //            if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
+        //                var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
+        //                if (layer2 != null) {
+        //                    me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
+        //                } else {
+        //                    //TODO show error
+        //                }
+        //            }*/
+
+        //            var oLayers1 = mapModule.getOLMapLayers(data.mapLayerID);
+        //            //var oLayers2 = this.mapModule.getOLMapLayers(data.mapLayerID2);
+
+        //            //3. find features in the layers by the 'KOHDE_ID' attribute
+        //            features = oLayers1.getFeaturesByAttribute('KOHDE_ID', data.id);
+
+        //            //4. TODO highlight found features
+        //        }
+
+        //        //5. calculate bounding box for the features (create separate vector layer and get extent from it)
+        //        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
+        //        vectorLayer.addFeatures(features);
+        //        //map.addLayer(vectorLayer);
+
+        //        var extent = vectorLayer.getDataExtent();
+                
+        //        //6. TODO extend the extent with 35%
+
+        //        //7. zoom map to the extent
+        //        mapModule.getMap().zoomToExtent(extent);
+        //    }
+        //}
     });

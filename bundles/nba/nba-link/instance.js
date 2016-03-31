@@ -93,6 +93,16 @@ function () {
             //TODO show error
         }
 
+        //TODO change way of loading multiple layers for one register
+        if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
+            var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
+            if (layer2 != null) {
+                me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
+            } else {
+                //TODO show error
+            }
+        }
+
         //FIXME
         me.getSandbox().postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
 
