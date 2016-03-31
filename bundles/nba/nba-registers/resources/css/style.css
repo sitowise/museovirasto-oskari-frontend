@@ -1,0 +1,17 @@
+﻿div.nba-searchContainer div.registerSelect select {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+div.nba-searchContainer div.nba-searchInput, div.nba-searchContainer div.nba-searchButton {
+    display: inline-block;
+}
+
+div.nba-searchContainer div.nba-searchInput input {
+    width: 350px;
+}
+
+div.nba-searchContainer div.nba-progressSpinner div.spinner {
+      top: -20px !important;
+      margin: 50px auto 0;
+}
