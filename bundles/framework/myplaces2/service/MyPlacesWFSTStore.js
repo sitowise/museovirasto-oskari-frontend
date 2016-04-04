@@ -413,6 +413,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 place.setUpdateDate(featAtts.updated);
                 place.setGeometry(f.geometry);
                 place.setUUID(uuid);
+                place.setAttributes(JSON.parse(featAtts.attributes));
 
                 list.push(place);
                 //service._addMyPlace(place);
@@ -483,7 +484,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     'link': m.getLink(),
                     'image_url': m.getImageLink(),
                     'category_id': m.getCategoryID(),
-                    'uuid': uuid
+                    'uuid': uuid,
+                    'attributes': JSON.stringify(m.getAttributes())
                 };
 
                 feat = new OpenLayers.Feature.Vector(geom, featAtts);
