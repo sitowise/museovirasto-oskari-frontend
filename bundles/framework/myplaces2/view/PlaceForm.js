@@ -42,6 +42,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '    <label>' + loc.imagelink.previewLabel + '</label><br clear="all" />' +
             '    <a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
             '  </div>' +
+            '  <div id="extraParams"></div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
             '      <a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + " " + loc.category.choose +
@@ -51,6 +52,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '  </div>' +
             '</div>'
         );
+
+        var me = this;
+        $.each(this.instance.conf.extraParams, function(index, param) {
+            if(param.type === 'text') {
+                var field = jQuery('  <div class="field">' +
+                                   '    <input type="text" name="' + param.id + '" placeholder="' + param.name[Oskari.getLang()] + '"></input>' +
+                                   '  </div>');
+                me.template.find('#extraParams').append(field);
+            } else if(param.type === 'dropdown') {
+                var field = jQuery('  <div class="field">' +
+                                   '    <select name="' + param.id + '">' +
+                                   '      <option value="">' + param.name[Oskari.getLang()] + '</option>' + 
+                                   '    </select>' +
+                                   '  </div>');
+                $.each(param.values, function(i, value) {
+                    field.find('select').append(jQuery('<option value="' + value + '">' + value + '</option>'));
+                });
+                me.template.find('#extraParams').append(field);
+            }
+        });
+
         this.templateOption = jQuery('<option></option>');
         this.categoryForm = undefined;
     }, {
@@ -62,7 +84,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         getForm: function (categories) {
             var ui = this.template.clone(),
                 loc = this.instance.getLocalization('placeform'),
-                isPublished = (this.options ? this.options.published : false);
+                isPublished = (this.options ? this.options.published : false),
+                me = this;
             // TODO: if a place is given for editing -> populate fields here
             // populate category options (only if not in a published map)
             if (categories && !isPublished) {
@@ -110,6 +133,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
                 ui.find('input[name=imagelink]').attr('value', this.initialValues.place.imageLink);
                 this._updateImageUrl(this.initialValues.place.imageLink, ui);
+
+                $.each(this.instance.conf.extraParams, function(index, param) {
+                    if(typeof me.initialValues.place.attributes[param.id] !== 'undefined') {
+                        if(param.type === 'text') {
+                            ui.find('input[name=' + param.id + ']').attr('value', me.initialValues.place.attributes[param.id]);
+                        } else if(param.type === 'dropdown') {
+                            var select = ui.find('select[name=' + param.id + ']'),
+                            selected = false;
+                            select.empty();
+                            select.append(jQuery('<option value="">' + param.name[Oskari.getLang()] + '</option>'));
+                            $.each(param.values, function(i, value) {
+                                var option = jQuery('<option value="' + value + '">' + value + '</option>');
+                                if(value === me.initialValues.place.attributes[param.id]) {
+                                    option.attr('selected', true);
+                                    selected = true;
+                                }
+                                select.append(option);
+                            });
+                        }
+                    }
+                });
             }
 
             var measurementDiv = ui.find('div.measurementResult');
@@ -148,13 +192,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 }
                 var imageLink = onScreenForm.find('input[name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[name=category]').val();
+                var attributes = {};
+                $.each(this.instance.conf.extraParams, function(index, param) {
+                    if(param.type === 'text') {
+                        attributes[param.id] = onScreenForm.find('input[name=' + param.id + ']').val();
+                    } else if(param.type === 'dropdown') {
+                        attributes[param.id] = onScreenForm.find('select[name=' + param.id + ']').val();
+                    }
+                });
+
                 values.place = {
                     name: placeName,
                     desc: placeDesc,
                     attention_text: placeAttention,
                     link: placeLink,
                     imageLink: imageLink,
-                    category: forcedCategory || categorySelection
+                    category: forcedCategory || categorySelection,
+                    attributes: attributes
                 };
                 if (this.placeId) {
                     values.place.id = this.placeId;
@@ -188,6 +242,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 onScreenForm.find('select[name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
 
+                $.each(this.instance.conf.extraParams, function(index, param) {
+                    if(typeof data.place.attributes[param.id] !== 'undefined') {
+                        if(param.type === 'text') {
+                            ui.find('input[name=' + param.id + ']').val(data.place.attributes[param.id]);
+                        } else if(param.type === 'dropdown') {
+                            ui.find('select[name=' + param.id + ']').val(data.place.attributes[param.id]);
+                        }
+                    }
+                });
             }
 
             this.initialValues = data;

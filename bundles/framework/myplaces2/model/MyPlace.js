@@ -12,6 +12,7 @@ function() {
     this.geometry = undefined;
     this.link = undefined;
     this.attention_text = undefined;
+    this.attributes = undefined;
     this.createDate = undefined;
     this.updateDate = undefined;
 }, {
@@ -178,5 +179,19 @@ function() {
      */
     getUUID : function() {
         return this.uuid;
+    },
+    /**
+     * @method setAttributes
+     * @param {String} value
+     */
+    setAttributes : function(value) {
+        this.attributes = value;
+    },
+    /**
+     * @method getAttributes
+     * @return {String}
+     */
+    getAttributes : function() {
+        return this.attributes;
     }
 });

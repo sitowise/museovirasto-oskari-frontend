@@ -593,6 +593,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                             myplace.setCategoryID(myplaceModel.getCategoryID());
                             myplace.setGeometry(myplaceModel.getGeometry());
                             myplace.setUpdateDate(list[0].getUpdateDate());
+                            myplace.setAttributes(myplaceModel.getAttributes())
                         } else {
                             // couldn't load it -> failed to save it
                             success = false;
