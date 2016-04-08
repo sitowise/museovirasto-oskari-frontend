@@ -179,7 +179,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayerID': result.mapLayerID,
-                    'mapLayerID2': result.mapLayerID2
+                    'mapLayerID2': result.mapLayerID2,
+                    'type': result.type
                 });
             });
 
@@ -227,6 +228,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     //TODO make localization 'Kohdetiedot'
                     me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Register item details", [infoBoxContent], lonlat, true]);
+                    return false;
+                });
+                return idLink;
+            });
+            
+            grid.setColumnValueRenderer('actions', function (name, data) {
+                var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                idLink.bind('click', function () {
+                    me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
                     return false;
                 });
                 return idLink;
