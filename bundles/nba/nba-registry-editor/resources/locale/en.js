@@ -33,7 +33,9 @@ Oskari.registerLocalization(
 					"updateError": "Feature update failed",
 					"success": "Success",
 					"featureUpdated": "Feature was succesfully updated",
-					"searchError": "Could not find registry item"
+					"searchError": "Could not find registry item",
+					"geometryDetailsInfo": "Update registry information for geometry",
+					"geometryDetailsInfoTitle": "Update registry information"
 				},
 				"tools": {
 					"point": {

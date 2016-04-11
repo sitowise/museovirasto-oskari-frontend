@@ -20,11 +20,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.data = data;
         me.itemData = null;
         me.templates = {
-                'drawHelper': jQuery('<div class="drawHelper"><div class="infoText"></div><div class="measurementResult"></div></div>'),
+                'drawHelper': jQuery('<div class="drawHelper"><div class="infoText"></div></div>'),
                 'ancientMonument': jQuery('<div id="ancientMonument"><div id="main"><h4>' + me.loc.ancientMonument.main + '</h4></div><div id="sub"><h4>' + me.loc.ancientMonument.sub + '</h4></div><div id="area"><h4>' + me.loc.ancientMonument.area + '</h4></div></div>'),
                 'ancientMonumentMainItem': jQuery('<div class="item ancientMonumentMainItem"><div class="name"/><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="createDate"/><div class="modifyDate"/><div class="classification"/><div class="municipalityName"/><div class="url"/><div class="subType"/><div class="tools"/></div>'),
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaSelectionType"/><div class="createDate"/><div class="tools"/></div>'),
+                'ancientMonumentSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.surveyingType + '<input type="text" id="surveyingType"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="text" id="surveyingAccuracy"></label>'),
                 'buttons': jQuery('<div class=buttons/>')
         };
         me.template = jQuery(
@@ -151,7 +152,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
         },
         
-        _renderAncientMonument(data, content) {
+        _renderAncientMonument: function(data, content) {
             var me = this,
                 itemDetails = me.templates.ancientMonument.clone(),
                 main = itemDetails.find("#main"),
@@ -235,7 +236,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find(".content").append(buttons);
         },
 
-        _formatData(label, data) {
+        _formatData: function(label, data) {
             var ret = label + ": ";
             if(typeof data !== 'undefined' && data !== null) {
                 if(data.startsWith && data.startsWith("http")) {
@@ -347,17 +348,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             finishBtn.setTitle(locBtns.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                var drawing = me.instance.plugins.drawPlugin.getDrawing(),
-                    format = new OpenLayers.Format.GeoJSON(),
-                    geometry = format.write(drawing);
-
-                me.edited = true;
-                me.editFeature.geometry = JSON.parse(geometry);
-                me.editFeature._edited = true;
-
-                me.sendStopDrawRequest(true);
-                dialog.close(true);
+                me._dialog.close(true);
                 me._dialog = null;
+                me._showParameterUpdateDialog(id);
             });
             buttons.push(finishBtn);
 
@@ -366,6 +359,67 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             dialog.show(title, content, buttons);
             dialog.moveTo('div#' + id, 'top');
+        },
+        
+        _showParameterUpdateDialog: function(id) {
+            var me = this;
+
+            var locBtns = me.instance.getLocalization('buttons'),
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            this._dialog = dialog;
+
+            var buttons = [],
+            	title = me.loc,
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+            //cancelBtn.setTitle(locBtns.cancel);
+            cancelBtn.setHandler(function () {
+                // ask toolbar to select default tool
+                var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                me.instance.sandbox.request(me, toolbarRequest);
+                me.sendStopDrawRequest(true);
+                dialog.close(true);
+                me._dialog = null;
+            });
+            buttons.push(cancelBtn);
+
+            var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+            finishBtn.setTitle(locBtns.finish);
+            finishBtn.addClass('primary');
+            finishBtn.setHandler(function () {
+                var drawing = me.instance.plugins.drawPlugin.getDrawing(),
+                    format = new OpenLayers.Format.GeoJSON(),
+                    geometry = format.write(drawing);
+            
+                me.edited = true;
+                me.editFeature.geometry = JSON.parse(geometry);
+                me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
+                me.editFeature.surveyingType = content.find("#surveyingType").val();
+                me.editFeature._edited = true;
+
+                me.sendStopDrawRequest(true);
+                me._dialog.close(true);
+                me._dialog = null;
+            });
+            buttons.push(finishBtn);
+
+            var content = me.templates.drawHelper.clone();
+            content.find('div.infoText').html(me.loc.geometryDetailsInfo);
+
+            if(me.itemData.itemtype === 'AncientMonument') {
+                me._renderAncientMonumentDetails(content);
+            }
+
+            dialog.show(title, content, buttons);
+            dialog.moveTo('div#' + id, 'top');
+        },
+        
+        _renderAncientMonumentDetails: function(content) {
+        	var me = this,
+                template = me.templates.ancientMonumentSurveyingDetails.clone();
+            template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
+            template.find("#surveyingType").val(me.editFeature.surveyingType);
+            content.append(template);
         },
 
         /**
