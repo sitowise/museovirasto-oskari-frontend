@@ -234,12 +234,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             });
             
             grid.setColumnValueRenderer('actions', function (name, data) {
-                var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
-                idLink.bind('click', function () {
-                    me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                    return false;
-                });
-                return idLink;
+                //FIXME: needs to check if user has specific role
+                if (me.sandbox.getUser().isLoggedIn()) {
+                    var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                    idLink.bind('click', function () {
+                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                        return false;
+                    });
+                    return idLink;
+                }
             });
 
             grid.setColumnUIName('id', gridTexts.id);
