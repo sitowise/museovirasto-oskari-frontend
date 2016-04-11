@@ -29,7 +29,11 @@ Oskari.registerLocalization(
 					},
 					"error": "Error",
 					"noEditsDone": "No edits have been done. Edit features before saving.",
-					"link": "Link"
+					"link": "Link",
+					"updateError": "Feature update failed",
+					"success": "Success",
+					"featureUpdated": "Feature was succesfully updated",
+					"searchError": "Could not find registry item"
 				},
 				"tools": {
 					"point": {

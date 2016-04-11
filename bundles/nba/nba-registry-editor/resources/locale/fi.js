@@ -29,7 +29,11 @@ Oskari.registerLocalization(
 					},
 					"error": "Virhe",
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
-					"link": "Linkki"
+					"link": "Linkki",
+					"updateError": "Kohteen päivittäminen epäonnistui",
+					"success": "Päivitys onnistui",
+					"featureUpdated": "Kohteen päivitys onnistui",
+					"searchError": "Kohteen hakeminen epäonnistui"
 				},
 				"tools": {
 					"point": {

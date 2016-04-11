@@ -136,84 +136,103 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             $.ajax({
                 url: me.instance.sandbox.getAjaxUrl(),
                 data: {'action_route': 'GetRegistryItems', 'registerName': 'ancientMonument', 'id': me.data.id},
-                method: 'POST',
+                type: 'GET',
                 success: function(data, textStatus, jqXHR) {
                     me.progressSpinner.stop();
                     content.find(".content").empty();
                     me.itemData = data;
-                    if(data.type === 'AncientMonument') {
-                        itemDetails = me.templates.ancientMonument.clone();
-                        var main = itemDetails.find("#main"),
-                            sub = itemDetails.find("#sub"),
-                            area = itemDetails.find('#area'),
-                            saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                            buttons = me.templates.buttons.clone();
-
-                        saveBtn.setHandler(function () {
-                            if(me.edited) {
-                                me.showMessage("send edit", "add sending edit here");
-                            } else {
-                                me.showMessage(me.loc.error, me.loc.noEditsDone);
-                            }
-                        });
-
-                        buttons.append(saveBtn.getButton());
-
-                        var mainItemRow = me.templates.ancientMonumentMainItem.clone();
-
-                        mainItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.description));
-                        mainItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.id));
-                        mainItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.surveyingAccuracy));
-                        mainItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.surveyingType));
-                        mainItemRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.modifyDate));
-                        mainItemRow.find('.url').append(me._formatData(me.loc.ancientMonument.url, data.nbaUrl));
-                        mainItemRow.find('.classification').append(me._formatData(me.loc.ancientMonument.classification, data.classification));
-                        mainItemRow.find('.municipalityName').append(me._formatData(me.loc.ancientMonument.municipalityName, data.municipalityName));
-                        mainItemRow.find('.name').append(me._formatData(me.loc.ancientMonument.objectName, data.objectName));
-                        mainItemRow.find('.subType').append(me._formatData(me.loc.ancientMonument.subType, data.subType.join(", ")));
-                        mainItemRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.createDate));
-
-                        mainItemRow.find('.tools').append(me._getEditTools({'point': true, 'id': data.id, 'type': 'main', feature: data}));
-
-                        main.append(mainItemRow);
-
-                        for(var i = 0; i < data.subItems.length; ++i) {
-                            var subItemRow = me.templates.ancientMonumentSubItem.clone();
-
-                            subItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.subItems[i].description));
-                            subItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.subItems[i].objectId));
-                            subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.subItems[i].surveyingAccuracy));
-                            subItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.subItems[i].surveyingType));
-
-                            subItemRow.find('.tools').append(me._getEditTools({'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i]}));
-
-                            sub.append(subItemRow);
-                        }
-
-                        for(var i = 0; i < data.areas.length; ++i) {
-                            var areaRow = me.templates.ancientMonumentAreaItem.clone();
-
-                            areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.areas[i].surveyingAccuracy));
-                            areaRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.areas[i].surveyingType));
-                            areaRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.areas[i].modifyDate));
-                            areaRow.find('.areaSelectionSource').append(me._formatData(me.loc.ancientMonument.areaSelectionSource, data.areas[i].areaSelectionSource));
-                            areaRow.find('.sourceDating').append(me._formatData(me.loc.ancientMonument.sourceDating, data.areas[i].sourceDating));
-                            areaRow.find('.digiMk').append(me._formatData(me.loc.ancientMonument.digiMk, data.areas[i].digiMk));
-                            areaRow.find('.areaSelectionType').append(me._formatData(me.loc.ancientMonument.areaSelectionType, data.areas[i].areaSelectionType));
-                            areaRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.areas[i].description));
-                            areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
-                            areaRow.find('.tools').append(me._getEditTools({'area': true, 'id': undefined, 'type': 'area', feature: data.areas[i]}));
-
-                            area.append(areaRow);
-                        }
-                        content.find(".content").append(itemDetails);
-                        content.find(".content").append(buttons);
+                    if(data.itemtype === 'AncientMonument') {
+                        me._renderAncientMonument(data, content);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    me.showMessage("virhe", "virhe rekisterikohteen haussa");
+                    me.showMessage(me.loc.error, me.loc.searchError);
                 }
             });
+        },
+        
+        _renderAncientMonument(data, content) {
+            var me = this,
+                itemDetails = me.templates.ancientMonument.clone(),
+                main = itemDetails.find("#main"),
+                sub = itemDetails.find("#sub"),
+                area = itemDetails.find('#area'),
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
+                buttons = me.templates.buttons.clone();
+
+            saveBtn.setHandler(function () {
+                if(me.edited) {
+                    $.ajax({
+                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
+                        data: {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData)},
+                        type: 'POST',
+                        success: function(data, textStatus, jqXHR) {
+                            if(data.updated) {
+                                me.showMessage(me.loc.success, me.loc.featureUpdated);
+                            } else {
+                                me.showMessage(me.loc.error, me.loc.updateError);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            me.showMessage(me.loc.error, me.loc.updateError);
+                        }
+                    });
+                } else {
+                    me.showMessage(me.loc.error, me.loc.noEditsDone);
+                }
+            });
+
+            buttons.append(saveBtn.getButton());
+
+            var mainItemRow = me.templates.ancientMonumentMainItem.clone();
+
+            mainItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.description));
+            mainItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.id));
+            mainItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.surveyingAccuracy));
+            mainItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.surveyingType));
+            mainItemRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.modifyDate));
+            mainItemRow.find('.url').append(me._formatData(me.loc.ancientMonument.url, data.nbaUrl));
+            mainItemRow.find('.classification').append(me._formatData(me.loc.ancientMonument.classification, data.classification));
+            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.ancientMonument.municipalityName, data.municipalityName));
+            mainItemRow.find('.name').append(me._formatData(me.loc.ancientMonument.objectName, data.objectName));
+            mainItemRow.find('.subType').append(me._formatData(me.loc.ancientMonument.subType, data.subType.join(", ")));
+            mainItemRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.createDate));
+
+            mainItemRow.find('.tools').append(me._getEditTools({'point': true, 'id': data.id, 'type': 'main', feature: data}));
+
+            main.append(mainItemRow);
+
+            for(var i = 0; i < data.subItems.length; ++i) {
+                var subItemRow = me.templates.ancientMonumentSubItem.clone();
+
+                subItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.subItems[i].description));
+                subItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.subItems[i].objectId));
+                subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.subItems[i].surveyingAccuracy));
+                subItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.subItems[i].surveyingType));
+
+                subItemRow.find('.tools').append(me._getEditTools({'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i]}));
+
+                sub.append(subItemRow);
+            }
+
+            for(var i = 0; i < data.areas.length; ++i) {
+                var areaRow = me.templates.ancientMonumentAreaItem.clone();
+
+                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, data.areas[i].surveyingAccuracy));
+                areaRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, data.areas[i].surveyingType));
+                areaRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.areas[i].modifyDate));
+                areaRow.find('.areaSelectionSource').append(me._formatData(me.loc.ancientMonument.areaSelectionSource, data.areas[i].areaSelectionSource));
+                areaRow.find('.sourceDating').append(me._formatData(me.loc.ancientMonument.sourceDating, data.areas[i].sourceDating));
+                areaRow.find('.digiMk').append(me._formatData(me.loc.ancientMonument.digiMk, data.areas[i].digiMk));
+                areaRow.find('.areaSelectionType').append(me._formatData(me.loc.ancientMonument.areaSelectionType, data.areas[i].areaSelectionType));
+                areaRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.areas[i].description));
+                areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
+                areaRow.find('.tools').append(me._getEditTools({'area': true, 'id': undefined, 'type': 'area', feature: data.areas[i]}));
+
+                area.append(areaRow);
+            }
+            content.find(".content").append(itemDetails);
+            content.find(".content").append(buttons);
         },
 
         _formatData(label, data) {
