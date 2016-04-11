@@ -145,11 +145,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             tabContent.find('div.nba-searchButton').append(searchButton.getElement());
 
             
-            //showAllResultsLink.bind('click', function () {
-            //    me._showAllResultsOnMap();
-            //    return false;
-            //});
-            //tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
+            showAllResultsLink.bind('click', function () {
+                me._showAllResultsOnMap();
+                return false;
+            });
+            tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
 
             this.progressSpinner.insertTo(tabContent.find('div.nba-progressSpinner'));
 
@@ -179,7 +179,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayerID': result.mapLayerID,
-                    'mapLayerID2': result.mapLayerID2
+                    'mapLayerID2': result.mapLayerID2,
+                    'attribute' : result.attribute
                 });
             });
 
@@ -302,62 +303,87 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             }
 
             this.resultsContainer = this._renderResultGrid(results);
-        }//,
+        },
 
-        //_showAllResultsOnMap: function () {
-        //    var me = this;
-        //    var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+        _showAllResultsOnMap: function () {
+            var me = this,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
+                format = new OpenLayers.Format.WKT({}),
+                feature,
+                featureJson,
+                extent,
+                features = [],
+                layers = [];
 
-        //    //1. get result items
+            //1. get result items
+            if (me.resultsGrid != null) {
+                var items = me.resultsGrid.getDataModel().getData();
 
-        //    if (me.resultsGrid != null) {
-        //        var items = me.resultsGrid.getDataModel().getData();
-        //        var features = [];
+                for (var i = 0; i < items.length; i++) {
+                    var data = items[i];
 
-        //        for (var i = 0; i < items.length; i++) {
-        //            var data = items[i];
+                    //2. get layerIds of the items for turning on them later
+                    layers.push(data.mapLayerID);
 
-        //            //2. get layers based on layerId of the items
-        //            var layers = [];
-        //            layers.push(item.mapLayerID);
-        //            /*
-        //            var layer = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID);
-        //            if (layer != null) {
-        //                me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
-        //            } else {
-        //                //TODO show error
-        //            }
+                    featureJson = {
+                        attribute: data.attribute,
+                        itemId: data.id,
+                        layerId: data.mapLayerID
+                    };
 
-        //            //TODO change way of loading multiple layers for one register
-        //            if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
-        //                var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
-        //                if (layer2 != null) {
-        //                    me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
-        //                } else {
-        //                    //TODO show error
-        //                }
-        //            }*/
+                    features.push(featureJson);
 
-        //            var oLayers1 = mapModule.getOLMapLayers(data.mapLayerID);
-        //            //var oLayers2 = this.mapModule.getOLMapLayers(data.mapLayerID2);
+                    if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
+                        layers.push(data.mapLayerID2);
 
-        //            //3. find features in the layers by the 'KOHDE_ID' attribute
-        //            features = oLayers1.getFeaturesByAttribute('KOHDE_ID', data.id);
+                        featureJson = {
+                            attribute: data.attribute,
+                            value: data.id,
+                            layerId: data.mapLayerID2
+                        };
 
-        //            //4. TODO highlight found features
-        //        }
+                        features.push(featureJson);
+                    }
 
-        //        //5. calculate bounding box for the features (create separate vector layer and get extent from it)
-        //        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
-        //        vectorLayer.addFeatures(features);
-        //        //map.addLayer(vectorLayer);
+                    //3. Create feature and add to fake layer
+                    feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
+                    registerSearchLayer.addFeatures([feature]);
+                }
 
-        //        var extent = vectorLayer.getDataExtent();
-                
-        //        //6. TODO extend the extent with 35%
+                //4. calculate bounding box from fake layer
+                extent = registerSearchLayer.getDataExtent();
+                center = extent.getCenterLonLat();
 
-        //        //7. zoom map to the extent
-        //        mapModule.getMap().zoomToExtent(extent);
-        //    }
-        //}
+                //5. TODO extend the extent with 35%
+
+                //6. zoom map to the extent
+                me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+
+                //7. Add map layers to map
+                for (var i = 0; i < layers.length; i++) {
+                    var layer = me.sandbox.findMapLayerFromAllAvailable(layers[i]);
+                    if (layer != null) {
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [layers[i], true]);
+                    } else {
+                        //TODO show error
+                    }
+                }
+
+                //8. find features in the layers by the identyfying attribute and highlight it
+                for (var i = 0; i < features.length; i++) {
+                    var filters = {
+                        filters: [{
+                            attribute: features[i].attribute,
+                            caseSensitive: false,
+                            operator: "=",
+                            value: features[i].itemId
+                        }]
+                    };
+
+                    var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
+                    me.sandbox.notifyAll(evt);
+                }
+            }
+        }
     });
