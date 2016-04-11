@@ -369,7 +369,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             this._dialog = dialog;
 
             var buttons = [],
-            	title = me.loc,
+                title = me.loc,
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             //cancelBtn.setTitle(locBtns.cancel);
             cancelBtn.setHandler(function () {
@@ -415,7 +415,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         },
         
         _renderAncientMonumentDetails: function(content) {
-        	var me = this,
+            var me = this,
                 template = me.templates.ancientMonumentSurveyingDetails.clone();
             template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
             template.find("#surveyingType").val(me.editFeature.surveyingType);
