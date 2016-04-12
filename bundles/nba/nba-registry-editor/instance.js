@@ -108,7 +108,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
             );
             
             var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: me.drawPluginId}),
-            	mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             this.plugins.drawPlugin = drawPlugin;
             mapModule.registerPlugin(drawPlugin);
             mapModule.startPlugin(drawPlugin);
@@ -157,7 +157,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
          * @static
          */
         eventHandlers: {
-        	
+            
         },
         enableGfi: function (blnEnable) {
             var gfiReqBuilder = this.sandbox.getRequestBuilder(
@@ -244,8 +244,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 requestBuilder;
 
             if (blnEnabled) {
-                me.oskariLang = Oskari.getLang();
-
+                //remove old editor first
+                if (me.sideRegistryEditor && me.sandbox._mapMode === 'mapRegistryEditorMode') {
+                    me.sideRegistryEditor.destroy();
+                }
+                
                 map.addClass('mapRegistryEditorMode');
                 me.sandbox._mapMode = 'mapRegistryEditorMode';
 
@@ -270,8 +273,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                     'float': ''
                 });
 
-
-                Oskari.setLang(me.oskariLang);
                 if (me.sideRegistryEditor) {
                     me.sideRegistryEditor.destroy();
                 }
@@ -290,7 +291,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
         },
 
         showRegistryEditor: function (data) {
-        	this.setEditorMode(true, data);
+            this.setEditorMode(true, data);
         }
     }, {
         /**
