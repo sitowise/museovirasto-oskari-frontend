@@ -429,7 +429,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          *
          */
         destroy: function () {
-            var me = this;
+            this.mainPanel.remove();
         }
     }, {
         /**

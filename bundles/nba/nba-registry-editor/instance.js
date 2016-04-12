@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 me.oskariLang = Oskari.getLang();
 
                 map.addClass('mapRegistryEditorMode');
-                me.sandbox.mapMode = 'mapRegistryEditorMode';
+                me.sandbox._mapMode = 'mapRegistryEditorMode';
 
                 me.sideRegistryEditor = Oskari.clazz.create(
                     'Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEditor',
