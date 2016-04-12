@@ -17,8 +17,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.sandbox = instance.sandbox;
         me.instance = instance;
         me.loc = localization;
-        me.data = data;
-        me.itemData = null;
+        me.data = data; //item data from search ui
+        me.itemData = null;  //full item data from registry
         me.templates = {
                 'drawHelper': jQuery('<div class="drawHelper"><div class="infoText"></div></div>'),
                 'ancientMonument': jQuery('<div id="ancientMonument"><div id="main"><h4>' + me.loc.ancientMonument.main + '</h4></div><div id="sub"><h4>' + me.loc.ancientMonument.sub + '</h4></div><div id="area"><h4>' + me.loc.ancientMonument.area + '</h4></div></div>'),
@@ -39,8 +39,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             '  </div>' +
             '</div>');
         me._dialog = null;
-        me.editFeature = null;
-        me.edited = false;
+        me.editFeature = null; //current item in editing, can be main item, sub item or area item
+        me.edited = false; //true if something has been edited
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         __name: 'RegistryEditor',
@@ -125,18 +125,30 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             container.append(content);
 
             content.find('div.header h3').append(me.loc.title);
-
-            //TODO:spinner gif
-            me.progressSpinner.insertTo(content.find(".content"));
-            me.progressSpinner.start();
+            
+            me._refreshData(me.data.id);
 
             content.find(".icon-close").on('click', function(){
                 me.instance.setEditorMode(false);
             });
+        },
+        
+        _refreshData: function(id) {
+            var me = this,
+                content = me.mainPanel,
+                postData = null;
+            
+            content.find(".content").empty();
+            me.progressSpinner.insertTo(content.find(".content"));
+            me.progressSpinner.start();
+            
+            if(me.data.itemtype === 'AncientMonument') {
+                postData = {'action_route': 'GetRegistryItems', 'registerName': 'ancientMonument', 'id': me.data.id};
+            }
 
             $.ajax({
                 url: me.instance.sandbox.getAjaxUrl(),
-                data: {'action_route': 'GetRegistryItems', 'registerName': 'ancientMonument', 'id': me.data.id},
+                data: postData,
                 type: 'GET',
                 success: function(data, textStatus, jqXHR) {
                     me.progressSpinner.stop();
@@ -159,16 +171,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 sub = itemDetails.find("#sub"),
                 area = itemDetails.find('#area'),
                 saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                buttons = me.templates.buttons.clone();
+                buttons = me.templates.buttons.clone(),
+                postData = null;
 
             saveBtn.setHandler(function () {
                 if(me.edited) {
+                    if(me.data.itemtype === 'AncientMonument') {
+                        postData = {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData)};
+                    }
                     $.ajax({
                         url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
-                        data: {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData)},
+                        data: postData,
                         type: 'POST',
                         success: function(data, textStatus, jqXHR) {
                             if(data.updated) {
+                                me._refreshData(me.data.id);
                                 me.showMessage(me.loc.success, me.loc.featureUpdated);
                             } else {
                                 me.showMessage(me.loc.error, me.loc.updateError);
