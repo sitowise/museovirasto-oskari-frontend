@@ -35,11 +35,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 el = jQuery(
                     '<div class="mapplugin coordinates">' +
                     '    <div>' + crsText + '</div>' +
-                    '    <div>' +
+                    '    <div class="compassCoordinate">' +
                     '      <div>' + loc.compass.N + '</div>' +
                     '      <div></div>' +
                     '    </div>' +
-                    '    <div>' +
+                    '    <div class="compassCoordinate">' +
                     '      <div>' + loc.compass.E + '</div>' +
                     '      <div></div>' +
                     '    </div>' +
