@@ -145,11 +145,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             tabContent.find('div.nba-searchButton').append(searchButton.getElement());
 
             
-            //showAllResultsLink.bind('click', function () {
-            //    me._showAllResultsOnMap();
-            //    return false;
-            //});
-            //tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
+            showAllResultsLink.bind('click', function () {
+                me._showAllResultsOnMap();
+                return false;
+            });
+            tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
 
             this.progressSpinner.insertTo(tabContent.find('div.nba-progressSpinner'));
 
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
                 searchInput = jQuery(me.tabContent.find('#nba-registers-search-input'));
-            //debugger;
+
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
             //resultGrid.find('div.resultsTitle').append("Search results: " + results.length + " search results for the search " + searchInput.val());
@@ -175,11 +175,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridModel.addData({
                     'id': result.id,
                     'desc': result.desc.trim(),
-                    'x': result.coordinateX,
-                    'y': result.coordinateY,
+                    //'x': result.coordinateX,
+                    //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
-                    'mapLayerID': result.mapLayerID,
-                    'mapLayerID2': result.mapLayerID2
+                    'mapLayers': result.mapLayers,
+                    'bounds': result.bounds
                 });
             });
 
@@ -189,35 +189,32 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idLink = jQuery('<a>' + name + '</a>');
                 idLink.bind('click', function () {
-                    //debugger;
                     //showing layer for the register
-                    var layer = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID);
-                    if (layer != null) {
-                        me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
-                    } else {
-                        //TODO show error
-                    }
-
-                    //TODO change way of loading multiple layers for one register
-                    if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
-                        var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
-                        if (layer2 != null) {
-                            me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
+                    for (var i = 0; i < data.mapLayers.length; i++) {
+                        var mapLayerId = data.mapLayers[i].mapLayerID,
+                            layer = me.sandbox.findMapLayerFromAllAvailable();
+                        if (layer != null) {
+                            me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
                         } else {
                             //TODO show error
                         }
                     }
 
                     //TODO probably need to be converted to current coordinate system
-                    var x = data.x,
-                        y = data.y,
-                        zoomLevel = 7;
-                    //FIXME
-                    me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
+                    //var x = data.x,
+                        //y = data.y,
+                        //zoomLevel = 7;
+                    var extent = new OpenLayers.Bounds(data.bounds),
+                        center = extent.getCenterLonLat(),
+                        x = center.lon,
+                        y = center.lat;
+                    
+                    //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
+                    me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
                     //create infobox
                     //TODO probably need to be converted to current coordinate system
-                    var lonlat = new OpenLayers.LonLat(data.x, data.y),
+                    var lonlat = new OpenLayers.LonLat(x, y),
                     //var lonlat = new OpenLayers.LonLat(24.6603626, 60.2241869),
                         infoBoxContent = {
                             html: me._getInfoBoxHtml(data),
@@ -302,62 +299,82 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             }
 
             this.resultsContainer = this._renderResultGrid(results);
-        }//,
+        },
 
-        //_showAllResultsOnMap: function () {
-        //    var me = this;
-        //    var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+        _showAllResultsOnMap: function () {
+            var me = this,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
+                format = new OpenLayers.Format.WKT({}),
+                feature,
+                featureJson,
+                extent,
+                features = [],
+                layers = [];
 
-        //    //1. get result items
+            //1. get result items
+            if (me.resultsGrid != null) {
+                var items = me.resultsGrid.getDataModel().getData();
 
-        //    if (me.resultsGrid != null) {
-        //        var items = me.resultsGrid.getDataModel().getData();
-        //        var features = [];
+                for (var i = 0; i < items.length; i++) {
+                    var data = items[i];
 
-        //        for (var i = 0; i < items.length; i++) {
-        //            var data = items[i];
+                    //2. get layerIds of the items for turning on them later
+                    for (var j = 0; j < data.mapLayers.length; j++) {
 
-        //            //2. get layers based on layerId of the items
-        //            var layers = [];
-        //            layers.push(item.mapLayerID);
-        //            /*
-        //            var layer = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID);
-        //            if (layer != null) {
-        //                me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
-        //            } else {
-        //                //TODO show error
-        //            }
+                        var mapLayerId = data.mapLayers[j].mapLayerID;
 
-        //            //TODO change way of loading multiple layers for one register
-        //            if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
-        //                var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
-        //                if (layer2 != null) {
-        //                    me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
-        //                } else {
-        //                    //TODO show error
-        //                }
-        //            }*/
+                        if (layers.indexOf(mapLayerId) == -1) layers.push(mapLayerId);
 
-        //            var oLayers1 = mapModule.getOLMapLayers(data.mapLayerID);
-        //            //var oLayers2 = this.mapModule.getOLMapLayers(data.mapLayerID2);
+                        if (data.mapLayers[j].toHighlight) {
+                            featureJson = {
+                                attribute: data.mapLayers[j].attribute,
+                                itemId: data.id,
+                                layerId: mapLayerId
+                            };
 
-        //            //3. find features in the layers by the 'KOHDE_ID' attribute
-        //            features = oLayers1.getFeaturesByAttribute('KOHDE_ID', data.id);
+                            features.push(featureJson);
+                        }
+                    }
 
-        //            //4. TODO highlight found features
-        //        }
+                    //3. Create feature and add to fake layer
+                    feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
+                    registerSearchLayer.addFeatures([feature]);
+                }
 
-        //        //5. calculate bounding box for the features (create separate vector layer and get extent from it)
-        //        var vectorLayer = new OpenLayers.Layer.Vector("Overlay");
-        //        vectorLayer.addFeatures(features);
-        //        //map.addLayer(vectorLayer);
+                //4. calculate bounding box from fake layer
+                extent = registerSearchLayer.getDataExtent();
+                center = extent.getCenterLonLat();
 
-        //        var extent = vectorLayer.getDataExtent();
-                
-        //        //6. TODO extend the extent with 35%
+                //5. TODO extend the extent with 35%
 
-        //        //7. zoom map to the extent
-        //        mapModule.getMap().zoomToExtent(extent);
-        //    }
-        //}
+                //6. zoom map to the extent
+                me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+
+                //7. Add map layers to map
+                for (var i = 0; i < layers.length; i++) {
+                    var layer = me.sandbox.findMapLayerFromAllAvailable(layers[i]);
+                    if (layer != null) {
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [layers[i], true]);
+                    } else {
+                        //TODO show error
+                    }
+                }
+
+                //8. find features in the layers by the identyfying attribute and highlight it
+                for (var i = 0; i < features.length; i++) {
+                    var filters = {
+                        filters: [{
+                            attribute: features[i].attribute,
+                            caseSensitive: false,
+                            operator: "=",
+                            value: features[i].itemId
+                        }]
+                    };
+
+                    var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
+                    me.sandbox.notifyAll(evt);
+                }
+            }
+        }
     });
