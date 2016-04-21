@@ -31,7 +31,6 @@ function () {
      * @method afterStart
      */
     afterStart: function (sandbox) {
-        //debugger;
         //var conf = this.conf;
         //TODO create request and request handler for other bundles to getting external service url and make link to external service configurable
         var me = this,
@@ -78,33 +77,26 @@ function () {
     },
 
     _showRegistryItemOnMap: function (data) {
-        //debugger;
         //TODO probably need to be converted to current coordinate system
         var me = this,
-            x = data.coordinateX,
-            y = data.coordinateY,
-            zoomLevel = 7;
+            zoomLevel = 7,
+            extent = new OpenLayers.Bounds(data.bounds),
+            center = extent.getCenterLonLat(),
+            x = center.lon,
+            y = center.lat;
 
         //showing layer for the register
-        var layer = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID);
-        if (layer != null) {
-            me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID, true]);
-        } else {
-            //TODO show error
-        }
-
-        //TODO change way of loading multiple layers for one register
-        if (data.mapLayerID2 != null && data.mapLayerID2 != '') {
-            var layer2 = me.sandbox.findMapLayerFromAllAvailable(data.mapLayerID2);
-            if (layer2 != null) {
-                me.sandbox.postRequestByName('AddMapLayerRequest', [data.mapLayerID2, true]);
+        for (var i = 0; i < data.mapLayers.length; i++) {
+            var mapLayerId = data.mapLayers[i].mapLayerID,
+                layer = me.sandbox.findMapLayerFromAllAvailable();
+            if (layer != null) {
+                me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
             } else {
                 //TODO show error
             }
         }
 
-        //FIXME
-        me.getSandbox().postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
+        me.getSandbox().postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
         //create infobox
         //TODO probably need to be converted to current coordinate system
