@@ -177,7 +177,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             saveBtn.setHandler(function () {
                 if(me.edited) {
                     if(me.data.itemtype === 'AncientMonument') {
-                        postData = {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData)};
+                        var edited = {'id': me.itemData.id, 'edited': me.itemData._edited, 'subItems': [], 'areas': []};
+                        $.each(me.itemData.subItems, function(index, item) {
+                            if(item._edited) {
+                                edited.subItems.push(item.id);
+                            }
+                        });
+                        $.each(me.itemData.areas, function(index, item) {
+                            if(item._edited) {
+                                edited.areas.push(item.id);
+                            }
+                        });
+                        postData = {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited)};
                     }
                     $.ajax({
                         url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
@@ -245,7 +256,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 areaRow.find('.areaSelectionType').append(me._formatData(me.loc.ancientMonument.areaSelectionType, data.areas[i].areaSelectionType));
                 areaRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.areas[i].description));
                 areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
-                areaRow.find('.tools').append(me._getEditTools({'area': true, 'id': undefined, 'type': 'area', feature: data.areas[i]}));
+                areaRow.find('.tools').append(me._getEditTools({'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i]}));
 
                 area.append(areaRow);
             }
