@@ -157,3 +157,13 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 .field-invalid {
   border: 1px solid red !important;
 }
+
+  .nba-registry-editor-coordinates-popup-content div.clear {
+    clear: both; }
+  .nba-registry-editor-coordinates-popup-content .description {
+    font-style: italic; }
+  .nba-registry-editor-coordinates-popup-content .srs-select {
+      width: 170px;
+  }
+  .nba-registry-editor-coordinates-popup-content .margintop {
+    margin-top: 10px; }

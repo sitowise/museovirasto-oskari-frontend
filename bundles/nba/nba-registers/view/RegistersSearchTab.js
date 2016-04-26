@@ -179,7 +179,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
-                    'bounds': result.bounds
+                    'bounds': result.bounds,
                     'itemtype': result.itemtype
                 });
             });
