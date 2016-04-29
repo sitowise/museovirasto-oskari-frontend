@@ -23,6 +23,7 @@ jQuery(document).ready(function() {
     Oskari.setPreloaded(window.preloaded);
 
     jQuery.ajax({
+        cache: false,
         type : 'GET',
         dataType : 'json',
         data : getAppSetupParams,
