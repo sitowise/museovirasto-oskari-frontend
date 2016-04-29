@@ -78,5 +78,4 @@ Oskari.registerLocalization(
 					"save": "Tallenna"
 				}
 			}
-		}
-	});
+		});
