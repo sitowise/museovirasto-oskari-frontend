@@ -22,6 +22,12 @@
     background-position: -56px 0px !important;
 }
 
+.add-point-xy {
+    width: 28px;
+    height: 28px;
+    background-image: url('/Oskari/bundles/framework/coordinatetool/resources/images/coordinates-style1-dark.png') !important;
+}
+
 .analysis-selection-edit {
     width: 28px;
     height: 28px;

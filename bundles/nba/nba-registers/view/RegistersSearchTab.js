@@ -179,7 +179,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
-                    'bounds': result.bounds
+                    'bounds': result.bounds,
+                    'itemtype': result.itemtype
                 });
             });
 
@@ -227,6 +228,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     return false;
                 });
                 return idLink;
+            });
+            
+            grid.setColumnValueRenderer('actions', function (name, data) {
+                //FIXME: needs to check if user has specific role
+                if (me.sandbox.getUser().isLoggedIn()) {
+                    var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                    idLink.bind('click', function () {
+                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                        return false;
+                    });
+                    return idLink;
+                }
             });
 
             grid.setColumnUIName('id', gridTexts.id);
