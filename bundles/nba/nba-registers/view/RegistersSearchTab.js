@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     me._handleRegistryItemsResults(results);
                 },
                 function () {
-                    this.progressSpinner.stop();
+                    me.progressSpinner.stop();
                     //TODO handle error
                 });
         },

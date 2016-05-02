@@ -41,6 +41,7 @@ Oskari.registerLocalization(
 					"success": "Päivitys onnistui",
 					"featureUpdated": "Kohteen päivitys onnistui",
 					"searchError": "Kohteen hakeminen epäonnistui",
+					"selectError": "Valitse kartalta vain yksi kohde",
 					"geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
 					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot"
 				},
