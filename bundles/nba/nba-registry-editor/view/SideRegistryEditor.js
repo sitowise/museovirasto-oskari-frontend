@@ -305,7 +305,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
                 container.append(pointButton);
 
-                pointXYButton.on('click', function() {
+                pointXYButton.on('click', function () {
+                    me.editFeature = conf.feature;
                     me._showCoordinatesPopUp();
                     me._dialog.moveTo('div#' + this.id, 'top');
                 });
@@ -579,8 +580,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             //create point
             feature = wktFormat.read('POINT (' + convertedCoordinates.lonlat.lon + ' ' + convertedCoordinates.lonlat.lat + ')');
             geometry = JSON.parse(geojsonFormat.write(feature)).geometry;
-            me.itemData.geometry = geometry;
-            me.itemData._edited = true;
+            me.editFeature.geometry = geometry;
+            me.editFeature._edited = true;
             me.edited = true;
         },
 
