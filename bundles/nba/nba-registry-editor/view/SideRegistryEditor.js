@@ -394,7 +394,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
                                     me._showParameterUpdateDialog(currentSelectButton.id, geod);
                                 } else {
-                                    me.showMessage(me.loc.error, 'You selected wrong type of geometry');
+                                    //me.showMessage(me.loc.error, 'You selected wrong type of geometry');
+                                    me.showMessage(me.loc.error, 'Valittu kohde on v‰‰r‰n tyyppinen');
                                 }
                             }
                         }
