@@ -25,7 +25,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentMainItem': jQuery('<div class="item ancientMonumentMainItem"><div class="name"/><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="createDate"/><div class="modifyDate"/><div class="classification"/><div class="municipalityName"/><div class="url"/><div class="subType"/><div class="tools"/></div>'),
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaSelectionType"/><div class="createDate"/><div class="tools"/></div>'),
+                'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
                 'ancientMonumentSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.surveyingType + '<input type="text" id="surveyingType"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="text" id="surveyingAccuracy"></label>'),
+                'ancientMonumentAreaSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.name + '<input type="text" id="name"></label></br><label>' + me.loc.ancientMonument.municipalityName + '<input type="text" id="municipalityName"></label></br><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.classification + '<input type="text" id="classification"></label></br><label>' + me.loc.ancientMonument.copyright + '<input type="text" id="copyright"></label></br><label>' + me.loc.ancientMonument.digiMk + '<input type="text" id="digiMk"></label></br><label>' + me.loc.ancientMonument.digiMkYear + '<input type="text" id="digiMkYear"></label></br><label>' + me.loc.ancientMonument.digitizationAuthor + '<input type="text" id="digitizationAuthor"></label></br><label>' + me.loc.ancientMonument.digitizationDate + '<input type="text" id="digitizationDate"></label></br><label>' + me.loc.ancientMonument.areaSelectionType + '<input type="text" id="areaSelectionType"></label></br><label>' + me.loc.ancientMonument.areaSelectionSource + '<input type="text" id="areaSelectionSource"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="text" id="surveyingAccuracy"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<input type="text" id="surveyingType"></label>'),
                 'buttons': jQuery('<div class=buttons/>'),
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -266,6 +268,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 area.append(areaRow);
             }
+            
+            var newAreaRow = me.templates.ancientMonumentAreaItemAdd.clone();
+            newAreaRow.find('.tools').append(me._getEditTools({'area': true, 'id': -1, 'type': 'area', feature: {}}));
+            area.append(newAreaRow)
+            
             content.find(".content").append(itemDetails);
             content.find(".content").append(buttons);
         },
@@ -301,6 +308,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
+                    if(typeof me.editFeature._type === 'undefined') {
+                        me.editFeature._type = conf.type;
+                    }
                 });
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
                 container.append(pointButton);
@@ -309,6 +319,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     me.editFeature = conf.feature;
                     me._showCoordinatesPopUp();
                     me._dialog.moveTo('div#' + this.id, 'top');
+                    if(typeof me.editFeature._type === 'undefined') {
+                        me.editFeature._type = conf.type;
+                    }
                 });
                 pointXYButton.attr('id', 'pointxy-' + conf.type + "-" + conf.id);
                 container.append(pointXYButton);
@@ -325,6 +338,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
+                    if(typeof me.editFeature._type === 'undefined') {
+                        me.editFeature._type = conf.type;
+                    }
                 });
                 lineButton.attr('id', 'line-' + conf.type + "-" + conf.id);
                 container.append(lineButton);
@@ -341,6 +357,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
+                    if(typeof me.editFeature._type === 'undefined') {
+                        me.editFeature._type = conf.type;
+                    }
                 });
                 areaButton.attr('id', 'area-' + conf.type + "-" + conf.id);
                 container.append(areaButton);
@@ -428,8 +447,29 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             
                 me.edited = true;
                 me.editFeature.geometry = JSON.parse(geometry);
-                me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
-                me.editFeature.surveyingType = content.find("#surveyingType").val();
+                
+                if(me.editFeature._type === 'area') {
+                    if(typeof me.editFeature.id === 'undefined') {
+                        me.itemData.areas.push(me.editFeature)
+                    }
+                    me.editFeature.name = content.find("#name").val();
+                    me.editFeature.municipalityName = content.find("#municipalityName").val();
+                    me.editFeature.description = content.find("#description").val();
+                    me.editFeature.classification = content.find("#classification").val();
+                    me.editFeature.copyright = content.find("#copyright").val();
+                    me.editFeature.digiMk = content.find("#digiMk").val();
+                    me.editFeature.digiMkYear = content.find("#digiMkYear").val();
+                    me.editFeature.digitizationAuthor = content.find("#digitizationAuthor").val();
+                    me.editFeature.digitizationDate = content.find("#digitizationDate").val();
+                    me.editFeature.areaSelectionType = content.find("#areaSelectionType").val();
+                    me.editFeature.areaSelectionSource = content.find("#areaSelectionSource").val();
+                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
+                    me.editFeature.surveyingType = content.find("#surveyingType").val();
+                } else {
+                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
+                    me.editFeature.surveyingType = content.find("#surveyingType").val();
+                }
+                
                 me.editFeature._edited = true;
 
                 me.sendStopDrawRequest(true);
@@ -442,7 +482,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find('div.infoText').html(me.loc.geometryDetailsInfo);
 
             if(me.itemData.itemtype === 'AncientMonument') {
-                me._renderAncientMonumentDetails(content);
+                if(me.editFeature._type === 'area') {
+                    me._renderAncientMonumentAreaDetails(content);
+                } else {
+                    me._renderAncientMonumentDetails(content);
+                }
             }
 
             dialog.show(title, content, buttons);
@@ -452,6 +496,25 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _renderAncientMonumentDetails: function(content) {
             var me = this,
                 template = me.templates.ancientMonumentSurveyingDetails.clone();
+            template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
+            template.find("#surveyingType").val(me.editFeature.surveyingType);
+            content.append(template);
+        },
+        
+        _renderAncientMonumentAreaDetails: function(content) {
+            var me = this,
+                template = me.templates.ancientMonumentAreaSurveyingDetails.clone();
+            template.find("#name").val(me.editFeature.name);
+            template.find("#municipalityName").val(me.editFeature.municipalityName);
+            template.find("#description").val(me.editFeature.description);
+            template.find("#classification").val(me.editFeature.classification);
+            template.find("#copyright").val(me.editFeature.copyright);
+            template.find("#digiMk").val(me.editFeature.digiMk);
+            template.find("#digiMkYear").val(me.editFeature.digiMkYear);
+            template.find("#digitizationAuthor").val(me.editFeature.digitizationAuthor);
+            template.find("#digitizationDate").val(me.editFeature.digitizationDate);
+            template.find("#areaSelectionType").val(me.editFeature.areaSelectionType);
+            template.find("#areaSelectionSource").val(me.editFeature.areaSelectionSource);
             template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
             template.find("#surveyingType").val(me.editFeature.surveyingType);
             content.append(template);

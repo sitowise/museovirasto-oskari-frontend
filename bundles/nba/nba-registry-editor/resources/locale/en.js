@@ -25,7 +25,14 @@ Oskari.registerLocalization(
 						"areaSelectionSource": "areaSelectionSource",
 						"sourceDating": "sourceDating",
 						"digiMk": "digiMk",
-						"areaSelectionType": "areaSelectionType"
+						"areaSelectionType": "areaSelectionType",
+						"name": "name",
+						"municipalityName": "municipalityName",
+						"copyright": "copyright",
+						"digiMkYear": "digiMkYear",
+						"digitizationAuthor": "digitizationAuthor",
+						"digitizationDate": "digitizationDate",
+						"addNew": "Add new"
 					},
 					"error": "Error",
 					"noEditsDone": "No edits have been done. Edit features before saving.",

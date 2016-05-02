@@ -25,7 +25,14 @@ Oskari.registerLocalization(
 						"areaSelectionSource": "areaSelectionSource",
 						"sourceDating": "sourceDating",
 						"digiMk": "digiMk",
-						"areaSelectionType": "areaSelectionType"
+						"areaSelectionType": "areaSelectionType",
+						"name": "Nimi",
+						"municipalityName": "Kunta",
+						"copyright": "copyright",
+						"digiMkYear": "digiMkYear",
+						"digitizationAuthor": "digitizationAuthor",
+						"digitizationDate": "digitizationDate",
+						"addNew": "Lisää uusi"
 					},
 					"error": "Virhe",
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
