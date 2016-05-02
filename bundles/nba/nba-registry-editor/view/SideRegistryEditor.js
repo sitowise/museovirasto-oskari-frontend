@@ -28,7 +28,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
                 'ancientMonumentSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.surveyingType + '<input type="number" id="surveyingType"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="number" id="surveyingAccuracy"></label>'),
                 'ancientMonumentAreaSurveyingDetails': jQuery('<input type="text" id="name" placeholder="'+ me.loc.ancientMonument.name +'"></br>' + '<input type="text" id="municipalityName" placeholder="'+ me.loc.ancientMonument.municipalityName +'"></br>' + '<input type="text" id="description" placeholder="'+ me.loc.ancientMonument.description +'"></br>' + '<input type="number" id="classification" placeholder="'+ me.loc.ancientMonument.classification +'"></br>' + '<input type="text" id="copyright" placeholder="'+ me.loc.ancientMonument.copyright +'"></br>' + '<input type="text" id="digiMk" placeholder="'+ me.loc.ancientMonument.digiMk +'"></br>' + '<input type="text" id="digiMkYear" placeholder="'+ me.loc.ancientMonument.digiMkYear +'"></br>' + '<input type="text" id="digitizationAuthor" placeholder="'+ me.loc.ancientMonument.digitizationAuthor +'"></br>' + '<input type="date" id="digitizationDate" placeholder="'+ me.loc.ancientMonument.digitizationDate +'"></br>' + '<input type="number" id="areaSelectionType" placeholder="'+ me.loc.ancientMonument.areaSelectionType +'"></br>' + '<input type="number" id="areaSelectionSource" placeholder="'+ me.loc.ancientMonument.areaSelectionSource +'"></br>' + '<input type="number" id="surveyingAccuracy" placeholder="'+ me.loc.ancientMonument.surveyingAccuracy +'"></br>' + '<input type="number" id="surveyingType" placeholder="'+ me.loc.ancientMonument.surveyingType +'">'),
-                'buttons': jQuery('<div class=buttons/>')
+                'buttons': jQuery('<div class=buttons/>'),
+                'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
+                    '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="X"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="Y"></input></div><div class="clear"></div></div>' +
+                    '</div>')
         };
         me.template = jQuery(
             '<div class="content-editor">' +
@@ -44,6 +49,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.editFeature = null; //current item in editing, can be main item, sub item or area item
         me.edited = false; //true if something has been edited
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        me._coordsConvertionEnabled = false;
     }, {
         __name: 'RegistryEditor',
         /**
@@ -319,8 +325,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
                 container.append(pointButton);
 
-                pointXYButton.on('click', function() {
-                    me.showMessage("Enter coordinates", "Add here tool to input coordinates");
+                pointXYButton.on('click', function () {
+                    me.editFeature = conf.feature;
+                    me._showCoordinatesPopUp();
                     me._dialog.moveTo('div#' + this.id, 'top');
                     if(typeof me.editFeature._type === 'undefined') {
                         me.editFeature._type = conf.type;
@@ -598,6 +605,166 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
             template.find("#surveyingType").val(me.editFeature.surveyingType);
             content.append(template);
+        },
+
+        _showCoordinatesPopUp: function () {
+            var me = this,
+                popupContent = me.templates.coordinatePopupContent.clone(),
+                title = me.loc.coordinatePopup.title,
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SubmitButton'),
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                buttons = null,
+                lon = null,
+                lat = null,
+                selectedProjection = null;
+
+            me.closeDialog();
+            me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+            popupContent.find('.description').html(me.loc.coordinatePopup.description);
+            
+            //TODO: Add projections array to app config. Example:
+            var conf = {
+                projections : [
+                    {
+                        "name": "EPSG:3067",
+                        "text": "ETRS89-TM35FIN (EPSG:3067)",
+                        "definition": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                        "default": false
+                    },
+                    {
+                        "name": "EPSG:4326",
+                        "text": "WGS84 (EPSG:4326)",
+                        "definition": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+                        "default": true
+                    },
+                    {
+                        "name": "EPSG:2393",
+                        "text": "YKJ (EPSG:2393)",
+                        "definition": "+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=3500000 +y_0=0 +ellps=intl +units=m +no_defs",
+                        "default": false
+                    }
+                ]
+            };
+
+            // Set the dropdown with supported projections
+            if (conf && conf.projections && conf.projections.length > 0) {
+                me._coordsConvertionEnabled = true;
+
+                $.each(conf.projections, function (i, item) {
+
+                    popupContent.find('.srs-select').append($('<option>', {
+                        value: item.name,
+                        text: item.text
+                    }));
+
+                    if (item.default) {
+                        popupContent.find('.srs-select option[value="' + item.name + '"]').prop("selected", "selected");
+                    }
+
+                    Proj4js.defs[item.name] = item.definition;
+                });
+
+            } else {
+                me._coordsConvertionEnabled = false;
+
+                popupContent.find('.srs-select').append($('<option>', {
+                    value: crs,
+                    text: crsText,
+                    selected: "selected"
+                }));
+            }
+
+            //buttons
+            saveBtn.setTitle(me.loc.coordinatePopup.saveObject)
+            saveBtn.setHandler(function () {
+
+                lon = parseFloat(popupContent.find('.lon-input').val());
+                lat = parseFloat(popupContent.find('.lat-input').val());
+                selectedProjection = popupContent.find('.srs-select').val();
+                
+                if (lon != null && !isNaN(lon) && lat != null && !isNaN(lat)) {
+                    me._addPointFromCoordinates(lon, lat, selectedProjection);
+                    me._dialog.close(true);
+                    me._dialog = null;
+                } else {
+                    me.showMessage(me.loc.error, me.loc.coordinatePopup.missingCoordsError);
+                }
+
+            });
+
+            cancelBtn.setHandler(function () {
+                me._dialog.close(true);
+                me._dialog = null;
+            });
+
+            buttons = [cancelBtn, saveBtn];
+            
+            me._dialog.show(title, popupContent, buttons);
+        },
+
+        _addPointFromCoordinates: function (lon, lat, crs) {
+            var me = this,
+                coordinates,
+                convertedCoordinates,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                currentProjection = mapModule.getProjection(),
+                wktFormat = new OpenLayers.Format.WKT({}),
+                geojsonFormat = new OpenLayers.Format.GeoJSON({});
+                feature = null,
+
+
+            coordinates = {
+                'lonlat':
+                    {
+                        'lon': lon,
+                        'lat': lat
+                    }
+            };
+            if (me._coordsConvertionEnabled) {
+                convertedCoordinates = me._convertCoordinates(crs, currentProjection, coordinates);
+            } else {
+                convertedCoordinates = coordinates;
+            }
+
+            //create point
+            feature = wktFormat.read('POINT (' + convertedCoordinates.lonlat.lon + ' ' + convertedCoordinates.lonlat.lat + ')');
+            geometry = JSON.parse(geojsonFormat.write(feature)).geometry;
+            me.editFeature.geometry = geometry;
+            me.editFeature._edited = true;
+            me.edited = true;
+        },
+
+        /**
+         * Converts coordinates from one projection to another
+         * @method @private _convertCoordinates
+         * @param {string} sourceSrs source projection
+         * @param {string} destSrs destination projection
+         * @param {Object} coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         * @return {Object} converted coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         */
+        _convertCoordinates: function (sourceSrsName, destSrsName, coordinates) {
+            var me = this,
+                source,
+                dest,
+                point,
+                convertedCoords;
+
+            if (me._coordsConvertionEnabled) {
+                source = new Proj4js.Proj(sourceSrsName),
+                dest = new Proj4js.Proj(destSrsName),
+                point = new Proj4js.Point(coordinates.lonlat.lon, coordinates.lonlat.lat),
+                convertedCoords = Proj4js.transform(source, dest, point);
+
+                return {
+                    'lonlat': {
+                        'lon': convertedCoords.x,
+                        'lat': convertedCoords.y
+                    }
+                };
+            } else {
+                return coordinates;
+            }
         },
 
         /**

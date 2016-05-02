@@ -43,7 +43,13 @@ Oskari.registerLocalization(
 					"searchError": "Kohteen hakeminen epäonnistui",
 					"selectError": "Valitse kartalta vain yksi kohde",
 					"geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
-					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot"
+					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot",
+					"coordinatePopup": {
+					    "title": "Anna pisteen koordinaatit",
+					    "description": "Valitse projektio ja koordinaatit",
+					    "saveObject": "Tallenna kohde",
+					    "missingCoordsError": "Anna pisteen koordinaatit"
+					}
 				},
 				"tools": {
 					"point": {

@@ -43,7 +43,13 @@ Oskari.registerLocalization(
 					"searchError": "Could not find registry item",
 					"selectError": "Select only one feature on the map",
 					"geometryDetailsInfo": "Update registry information for geometry",
-					"geometryDetailsInfoTitle": "Update registry information"
+					"geometryDetailsInfoTitle": "Update registry information",
+					"coordinatePopup": {
+					    "title": "Enter the coordinates of point",
+					    "description": "Select the projection and coordinates",
+					    "saveObject": "Save object",
+					    "missingCoordsError": "Enter the coordinates of point"
+					}
 				},
 				"tools": {
 					"point": {
