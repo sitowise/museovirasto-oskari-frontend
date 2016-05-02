@@ -17,7 +17,7 @@ Oskari.registerLocalization(
 						"surveyingType": "Paikannustapa",
 						"modifyDate": "Muokattu",
 						"url": "Url",
-						"classification": "Lajityypi",
+						"classification": "Lajityyppi",
 						"municipalityName": "Kunta",
 						"objectName": "Nimi",
 						"subType": "Alatyyppi",
