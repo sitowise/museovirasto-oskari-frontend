@@ -257,9 +257,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         _getInfoBoxHtml: function (result) {
             //TODO make localization
             //TODO fix styling and layout
-            var template = '<h3>fid: ' + result.id + '</h3>' +
+            var template = '<h3>Tunnus: ' + result.id + '</h3>' +
                             //'<h3>Shape: ' + result.id + '</h3>' +
-                            '<h3>Mjtunnus: ' + result.id + '</h3>' +
+                            '<h3>Kohdetunnus: ' + result.id + '</h3>' +
                             '<h3>Kohdenimi: ' + result.desc + '</h3>' +
                             '<h3>Rekisteritiedot: <a href="' + result.nbaUrl + '" target="_blank">Linkki rekisteritietoihin</a></h3>';
             return template;
@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     me._handleRegistryItemsResults(results);
                 },
                 function () {
-                    this.progressSpinner.stop();
+                    me.progressSpinner.stop();
                     //TODO handle error
                 });
         },

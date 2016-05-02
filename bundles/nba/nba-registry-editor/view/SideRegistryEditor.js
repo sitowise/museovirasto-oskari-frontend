@@ -53,6 +53,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         getName: function () {
             return this.__name;
         },
+
+        /** 			
+	    * @method getSandbox 			
+	    * @return {Oskari.mapframework.sandbox.Sandbox} 			
+	    */ 			
+        getSandbox: function () { 			
+            return this.sandbox; 			
+        }, 
+
         showMessage: function(title, content, buttons, isModal) {
             var me = this;
             this.closeDialog();
@@ -289,7 +298,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointButton = $("<div />").addClass('add-point tool'),
                 pointXYButton = $("<div />").addClass('add-point-xy tool'),
                 lineButton = $("<div />").addClass('add-line tool'),
-                areaButton = $("<div />").addClass('add-area tool');
+                areaButton = $("<div />").addClass('add-area tool'),
+                selectButton = $("<div />").addClass('tool-feature-selection tool');
 
             if(typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
@@ -358,6 +368,75 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 container.append(areaButton);
             }
 
+            selectButton.on('click', function () {
+                var currentSelectButton = this;
+
+                var onFinishSelectionCallback = function () {
+                    var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
+                            geometryFilters = [];
+                    //debugger;
+                    for (var i = 0; i < selectedLayers.length; i++) {
+                        var layer = selectedLayers[i];
+
+                        if (layer.getClickedGeometries !== null && layer.getClickedGeometries !== undefined && layer.getClickedGeometries().length > 0) {
+
+                            if (layer.getClickedGeometries().length > 1) {
+                                me.showMessage(me.loc.error, me.loc.selectError);
+                            } else {
+                                var geometry = layer.getClickedGeometries()[0][1];
+                                //check if geometry suits to proper type
+                                var wktFormat = new OpenLayers.Format.WKT({});
+                                var geojsonFormat = new OpenLayers.Format.GeoJSON({});
+                                var feature = wktFormat.read(geometry);
+                                var geod = JSON.parse(geojsonFormat.write(feature)).geometry;
+                                var isPoint = geojsonFormat.isValidType(geod, 'Point');
+
+                                if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
+                                    me._showParameterUpdateDialog(currentSelectButton.id, geod);
+                                } else {
+                                    me.showMessage(me.loc.error, 'You selected wrong type of geometry');
+                                }
+                            }
+                        }
+
+                    }
+
+                    //FIXME Following is for testing:
+                    //debugger;
+                    /*var geometry = "MULTIPOLYGON (((397995.2485 6692773.3084, 404040.8453 6693140.8219, 403912.2156 6689281.9302, 407330.0911 6684008.1117, 410564.2098 6674765.1474, 401431.4996 6675022.4069, 403452.8238 6683328.2117, 403599.8292 6685514.917, 403526.3265 6685753.8007, 402240.0293 6685790.5521, 400163.578 6685220.9062, 398895.6565 6687407.6114, 396966.2107 6688510.1519, 395334.031 6690193.8206, 397499.1053 6690182.3383, 398050.3755 6690751.9842, 398087.1268 6691266.5031, 397094.8404 6691597.2652, 397995.2485 6692773.3084)))";
+                    var wktFormat = new OpenLayers.Format.WKT({});
+                    var geojsonFormat = new OpenLayers.Format.GeoJSON({});
+                    var feature = wktFormat.read(geometry);
+                    var geod = JSON.parse(geojsonFormat.write(feature)).geometry;
+                    var isPoint = geojsonFormat.isValidType(geod, 'Point');
+
+                    if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
+                        me._showParameterUpdateDialog(currentSelectButton.id, geod);
+                    } else {
+                        me.showMessage(me.loc.error, 'You selected wrong type of geometry');
+                    }*/
+                    
+                };
+                var popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', me);
+                popupHandler.showSelectionTools(onFinishSelectionCallback);
+
+                me.editFeature = conf.feature;
+                if (typeof me.editFeature._type === 'undefined') {
+                    me.editFeature._type = conf.type;
+                }
+            });
+            selectButton.attr('id', 'select-' + conf.type + "-" + conf.id);
+            container.append(selectButton);
+
+            /*if (!this.selectionPlugin) {
+                var config = {
+                    id: "FeatureData"
+                };
+                this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
+                mapModule.registerPlugin(this.selectionPlugin);
+                mapModule.startPlugin(this.selectionPlugin);
+            }*/
+
             return container;
         },
 
@@ -395,9 +474,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             finishBtn.setTitle(locBtns.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
+                var drawing = me.instance.plugins.drawPlugin.getDrawing(),
+                    format = new OpenLayers.Format.GeoJSON(),
+                    geometry = format.write(drawing);
+
                 me._dialog.close(true);
                 me._dialog = null;
-                me._showParameterUpdateDialog(id);
+
+                me._showParameterUpdateDialog(id, geometry);
             });
             buttons.push(finishBtn);
 
@@ -408,7 +492,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             dialog.moveTo('div#' + id, 'top');
         },
         
-        _showParameterUpdateDialog: function(id) {
+        /**
+         * @method _showParameterUpdateDialog
+         * Show a dialog to fill proper attributes of the feature
+         * @param id DOM element id of the tool button
+         * @param geometry new geometry in GeoJson format
+         */
+        _showParameterUpdateDialog: function(id, geometry) {
             var me = this;
 
             var locBtns = me.instance.getLocalization('buttons'),
@@ -434,10 +524,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             finishBtn.setTitle(locBtns.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
-                var drawing = me.instance.plugins.drawPlugin.getDrawing(),
-                    format = new OpenLayers.Format.GeoJSON(),
-                    geometry = format.write(drawing);
-            
                 me.edited = true;
                 me.editFeature.geometry = JSON.parse(geometry);
                 

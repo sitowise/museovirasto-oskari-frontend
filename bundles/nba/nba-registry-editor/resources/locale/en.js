@@ -41,6 +41,7 @@ Oskari.registerLocalization(
 					"success": "Success",
 					"featureUpdated": "Feature was succesfully updated",
 					"searchError": "Could not find registry item",
+					"selectError": "Select only one feature on the map",
 					"geometryDetailsInfo": "Update registry information for geometry",
 					"geometryDetailsInfoTitle": "Update registry information"
 				},

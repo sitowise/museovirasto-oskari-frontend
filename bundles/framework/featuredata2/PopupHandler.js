@@ -135,7 +135,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
          * @method showSelectionTools
          * Handles tool button click -> opens selection tool dialog
          */
-        "showSelectionTools": function () {
+        "showSelectionTools": function (onCloseCallback) {
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 popupLoc = this.loc.title,
@@ -192,6 +192,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
+
+                if (onCloseCallback != null) { 			
+                    onCloseCallback(); 			
+                } 
+
                 //destroy the active sketch, disable the selected control
                 me.WFSLayerService.setSelectionToolsActive(false);
                 me.selectionPlugin.drawLayer.removeAllFeatures();
