@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         this.tabContent = this._initContent();
         //this.resultsContainer = this._initResultGrid();
         this._getRegisters();
+        this.editorRoles = [ "Admin", "Pääkäyttäjä", "Ylläpitäjä", "Viraston muokkaaja", "Ulk. viranomaismuokkaaja", "Ulk. muu muokkaaja" ];
     }, {
         _templates: {
             tabContent: '<div class="nba-searchContainer">'
@@ -231,14 +232,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             });
             
             grid.setColumnValueRenderer('actions', function (name, data) {
-                //FIXME: needs to check if user has specific role
                 if (me.sandbox.getUser().isLoggedIn()) {
-                    var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
-                    idLink.bind('click', function () {
-                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                        return false;
-                    });
-                    return idLink;
+                    var userRoles = me.sandbox.getUser().getRoles();
+                    for(var i = 0; i < userRoles.length; ++i) {
+                        if($.inArray(userRoles[i].name, me.editorRoles) > -1) {
+                            var editLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                            editLink.bind('click', function () {
+                                me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                                return false;
+                            });
+                            return editLink;
+                        }
+                    }
                 }
             });
 
