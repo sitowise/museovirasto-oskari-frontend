@@ -181,7 +181,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
-                    'itemtype': result.itemtype
+                    'itemtype': result.itemtype,
+                    'actions': ''
                 });
             });
 
