@@ -350,9 +350,17 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         }
                     }
 
-                    //3. Create feature and add to fake layer
-                    feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
-                    registerSearchLayer.addFeatures([feature]);
+                    if (data.bounds != null) {
+                        var bounds = new OpenLayers.Bounds(data.bounds);
+                        var geometry = bounds.toGeometry();
+                        var wktFormat = new OpenLayers.Format.WKT({});
+                        var wkt = wktFormat.extractGeometry(geometry);
+
+                        //3. Create feature and add to fake layer
+                        //feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
+                        feature = format.read(wkt);
+                        registerSearchLayer.addFeatures([feature]);
+                    }
                 }
 
                 //4. calculate bounding box from fake layer
