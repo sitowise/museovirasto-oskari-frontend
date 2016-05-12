@@ -15,6 +15,8 @@ Oskari.registerLocalization(
 						"id": "Id",
 						"surveyingAccuracy": "Surveying Accuracy",
 						"surveyingType": "Surveying Type",
+						"surveyingAccuracyArea": "Surveying Accuracy",
+						"surveyingTypeArea": "Surveying Type",
 						"modifyDate": "Modify Date",
 						"url": "Url",
 						"classification": "Classification",
@@ -32,7 +34,29 @@ Oskari.registerLocalization(
 						"digiMkYear": "digiMkYear",
 						"digitizationAuthor": "digitizationAuthor",
 						"digitizationDate": "digitizationDate",
-						"addNew": "Add new"
+						"addNew": "Add new",
+						"surveyingAccuracyValues": {
+							"11000": "Ei tiedossa",
+							"11001": "Tarkka  (< 10 m)",
+							"11002": "Ohjeellinen (10 - 100 m)",
+							"11003": "Suuntaa antava (100 - 1000 m)",
+							"11004": "> 1000 m"
+						},
+						"surveyingTypeValues": {
+							"1": "Maastomittaus",
+							"2": "Tarkastus",
+							"3": "Muu lähde"
+						},
+						"surveyingAccuracyValuesArea": {
+							"1": "Tarkka",
+							"2": "Ohjeellinen",
+							"3": "Suuntaa antava" 
+						},
+						"surveyingTypeValuesArea": {
+							"1": "Maastomittaus",
+							"2": "Tarkastus",
+							"3": "Muu lähde"
+						}
 					},
 					"error": "Error",
 					"noEditsDone": "No edits have been done. Edit features before saving.",
@@ -45,10 +69,10 @@ Oskari.registerLocalization(
 					"geometryDetailsInfo": "Update registry information for geometry",
 					"geometryDetailsInfoTitle": "Update registry information",
 					"coordinatePopup": {
-					    "title": "Enter the coordinates of point",
-					    "description": "Select the projection and coordinates",
-					    "saveObject": "Save object",
-					    "missingCoordsError": "Enter the coordinates of point"
+						"title": "Enter the coordinates of point",
+						"description": "Select the projection and coordinates",
+						"saveObject": "Save object",
+						"missingCoordsError": "Enter the coordinates of point"
 					}
 				},
 				"tools": {
