@@ -26,9 +26,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaSelectionType"/><div class="createDate"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
-                'ancientMonumentSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.surveyingType + '<input type="text" id="surveyingType"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="text" id="surveyingAccuracy"></label>'),
-                'ancientMonumentAreaSurveyingDetails': jQuery('<label>' + me.loc.ancientMonument.name + '<input type="text" id="name"></label></br><label>' + me.loc.ancientMonument.municipalityName + '<input type="text" id="municipalityName"></label></br><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.classification + '<input type="text" id="classification"></label></br><label>' + me.loc.ancientMonument.copyright + '<input type="text" id="copyright"></label></br><label>' + me.loc.ancientMonument.digiMk + '<input type="text" id="digiMk"></label></br><label>' + me.loc.ancientMonument.digiMkYear + '<input type="text" id="digiMkYear"></label></br><label>' + me.loc.ancientMonument.digitizationAuthor + '<input type="text" id="digitizationAuthor"></label></br><label>' + me.loc.ancientMonument.digitizationDate + '<input type="text" id="digitizationDate"></label></br><label>' + me.loc.ancientMonument.areaSelectionType + '<input type="text" id="areaSelectionType"></label></br><label>' + me.loc.ancientMonument.areaSelectionSource + '<input type="text" id="areaSelectionSource"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="text" id="surveyingAccuracy"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<input type="text" id="surveyingType"></label>'),
-                'buttons': jQuery('<div class=buttons/>')
+                'ancientMonumentSurveyingDetails': jQuery('<div><label>' + me.loc.ancientMonument.surveyingType + '<input type="number" id="surveyingType"></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<input type="number" id="surveyingAccuracy"></label></div>'),
+                'ancientMonumentAreaSurveyingDetails': jQuery('<div><input type="text" id="name" placeholder="' + me.loc.ancientMonument.name + '"></br>' + '<input type="text" id="municipalityName" placeholder="' + me.loc.ancientMonument.municipalityName + '"></br>' + '<input type="text" id="description" placeholder="' + me.loc.ancientMonument.description + '"></br>' + '<input type="number" id="classification" placeholder="' + me.loc.ancientMonument.classification + '"></br>' + '<input type="text" id="copyright" placeholder="' + me.loc.ancientMonument.copyright + '"></br>' + '<input type="text" id="digiMk" placeholder="' + me.loc.ancientMonument.digiMk + '"></br>' + '<input type="text" id="digiMkYear" placeholder="' + me.loc.ancientMonument.digiMkYear + '"></br>' + '<input type="text" id="digitizationAuthor" placeholder="' + me.loc.ancientMonument.digitizationAuthor + '"></br>' + '<input type="date" id="digitizationDate" placeholder="' + me.loc.ancientMonument.digitizationDate + '"></br>' + '<input type="number" id="areaSelectionType" placeholder="' + me.loc.ancientMonument.areaSelectionType + '"></br>' + '<input type="number" id="areaSelectionSource" placeholder="' + me.loc.ancientMonument.areaSelectionSource + '"></br>' + '<input type="number" id="surveyingAccuracy" placeholder="' + me.loc.ancientMonument.surveyingAccuracy + '"></br>' + '<input type="number" id="surveyingType" placeholder="' + me.loc.ancientMonument.surveyingType + '"></div>'),
+                'buttons': jQuery('<div class=buttons/>'),
+                'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
+                    '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="X"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="Y"></input></div><div class="clear"></div></div>' +
+                    '</div>')
         };
         me.template = jQuery(
             '<div class="content-editor">' +
@@ -44,6 +49,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.editFeature = null; //current item in editing, can be main item, sub item or area item
         me.edited = false; //true if something has been edited
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        me._coordsConvertionEnabled = false;
     }, {
         __name: 'RegistryEditor',
         /**
@@ -319,8 +325,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
                 container.append(pointButton);
 
-                pointXYButton.on('click', function() {
-                    me.showMessage("Enter coordinates", "Add here tool to input coordinates");
+                pointXYButton.on('click', function () {
+                    me.editFeature = conf.feature;
+                    me._showCoordinatesPopUp();
                     me._dialog.moveTo('div#' + this.id, 'top');
                     if(typeof me.editFeature._type === 'undefined') {
                         me.editFeature._type = conf.type;
@@ -392,7 +399,20 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 var isPoint = geojsonFormat.isValidType(geod, 'Point');
 
                                 if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
-                                    me._showParameterUpdateDialog(currentSelectButton.id, geod);
+
+                                    var attributes = me._getLayerAttributes(layer);
+                                    var selectedFeature = null;
+                                    var fields = layer.getFields();
+                                    var activeFeatures = layer.getActiveFeatures();
+
+                                    //maybe here is better way to get selected feature
+                                    for (var k = 0; k < activeFeatures.length; k++) {
+                                        if (activeFeatures[k][0] == layer.getClickedGeometries()[0][0]) {
+                                            selectedFeature = activeFeatures[k];
+                                        }
+                                    }
+
+                                    me._showParameterUpdateDialog(currentSelectButton.id, geod, attributes, selectedFeature, fields);
                                 } else {
                                     //me.showMessage(me.loc.error, 'You selected wrong type of geometry');
                                     me.showMessage(me.loc.error, 'Valittu kohde on väärän tyyppinen');
@@ -439,6 +459,27 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }*/
 
             return container;
+        },
+
+        _getLayerAttributes: function (layer) {
+            // Make copies of fields and locales
+            var fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0) : [],
+                locales = (layer.getLocales && layer.getLocales()) ? layer.getLocales().slice(0) : [],
+                attributes = [],
+                i;
+
+            for (i = 0; i < fields.length; i += 1) {
+                // Get only the fields which originate from the service,
+                // that is, exclude those which are added by Oskari (starts with '__').
+                if (!fields[i].match(/^__/)) {
+                    attributes.push({
+                        id: fields[i],
+                        name: (locales[i] || fields[i])
+                    });
+                }
+            }
+
+            return attributes;
         },
 
         _showDrawHelper: function (drawMode, id, isEdit) {
@@ -499,7 +540,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          * @param id DOM element id of the tool button
          * @param geometry new geometry in GeoJson format
          */
-        _showParameterUpdateDialog: function(id, geometry) {
+        _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields) {
             var me = this;
 
             var locBtns = me.instance.getLocalization('buttons'),
@@ -563,9 +604,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             if(me.itemData.itemtype === 'AncientMonument') {
                 if(me.editFeature._type === 'area') {
-                    me._renderAncientMonumentAreaDetails(content);
+                    me._renderAncientMonumentAreaDetails(content, attributes, selectedFeature, fields);
                 } else {
-                    me._renderAncientMonumentDetails(content);
+                    me._renderAncientMonumentDetails(content, attributes, selectedFeature, fields);
                 }
             }
 
@@ -573,15 +614,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             dialog.moveTo('div#' + id, 'top');
         },
         
-        _renderAncientMonumentDetails: function(content) {
+        _renderAncientMonumentDetails: function (content, attributes, selectedFeature, fields) {
             var me = this,
                 template = me.templates.ancientMonumentSurveyingDetails.clone();
             template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
             template.find("#surveyingType").val(me.editFeature.surveyingType);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
+
             content.append(template);
         },
         
-        _renderAncientMonumentAreaDetails: function(content) {
+        _renderAncientMonumentAreaDetails: function (content, attributes, selectedFeature, fields) {
             var me = this,
                 template = me.templates.ancientMonumentAreaSurveyingDetails.clone();
             template.find("#name").val(me.editFeature.name);
@@ -597,7 +644,223 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             template.find("#areaSelectionSource").val(me.editFeature.areaSelectionSource);
             template.find("#surveyingAccuracy").val(me.editFeature.surveyingAccuracy);
             template.find("#surveyingType").val(me.editFeature.surveyingType);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
+
             content.append(template);
+        },
+
+        _addDropdownsToTemplate: function (template, attributes, selectedFeature, fields) {
+            var me = this;
+            //template.find("input[type=text]").each(function () {
+            template.find("input").each(function () {
+
+                var input = $(this);
+                var attrSelect = jQuery('<select></select>');
+                me._appendOptionValues(attrSelect, 'Select attribute value', attributes);
+                attrSelect.on('change', function () {
+
+                    var attrIndex = fields.indexOf($(this).val());
+
+                    var attrValue = selectedFeature[attrIndex];
+
+                    input.val(attrValue);
+                });
+
+                input.before(attrSelect);
+
+            });
+        },
+
+        _appendOptionValues: function (select, placeHolder, values) {
+            var option = jQuery("<option></option>"),
+                i;
+            // Append the first, empty value to work as a placeholder
+            if (placeHolder) {
+                option.attr('value', '');
+                option.attr('disabled', 'disabled');
+                option.attr('selected', 'selected');
+                option.html(placeHolder);
+                select.append(option);
+            }
+
+            // Iterate the list of given values
+            for (i = 0; values && i < values.length; ++i) {
+                option = jQuery("<option></option>");
+                // Array of strings.
+                if (typeof values[i] === 'string') {
+                    option.attr('value', values[i]);
+                    option.html(values[i]);
+                } else {
+                    // Otherwise we're assuming an array of objects.
+                    option.attr('value', values[i].id);
+                    option.html(values[i].name);
+                }
+                select.append(option);
+            }
+        },
+
+        _showCoordinatesPopUp: function () {
+            var me = this,
+                popupContent = me.templates.coordinatePopupContent.clone(),
+                title = me.loc.coordinatePopup.title,
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SubmitButton'),
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                buttons = null,
+                lon = null,
+                lat = null,
+                selectedProjection = null;
+
+            me.closeDialog();
+            me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+            popupContent.find('.description').html(me.loc.coordinatePopup.description);
+            
+            //TODO: Add projections array to app config. Example:
+            var conf = {
+                projections : [
+                    {
+                        "name": "EPSG:3067",
+                        "text": "ETRS89-TM35FIN (EPSG:3067)",
+                        "definition": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                        "default": false
+                    },
+                    {
+                        "name": "EPSG:4326",
+                        "text": "WGS84 (EPSG:4326)",
+                        "definition": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+                        "default": true
+                    },
+                    {
+                        "name": "EPSG:2393",
+                        "text": "YKJ (EPSG:2393)",
+                        "definition": "+proj=tmerc +lat_0=0 +lon_0=27 +k=1 +x_0=3500000 +y_0=0 +ellps=intl +units=m +no_defs",
+                        "default": false
+                    }
+                ]
+            };
+
+            // Set the dropdown with supported projections
+            if (conf && conf.projections && conf.projections.length > 0) {
+                me._coordsConvertionEnabled = true;
+
+                $.each(conf.projections, function (i, item) {
+
+                    popupContent.find('.srs-select').append($('<option>', {
+                        value: item.name,
+                        text: item.text
+                    }));
+
+                    if (item.default) {
+                        popupContent.find('.srs-select option[value="' + item.name + '"]').prop("selected", "selected");
+                    }
+
+                    Proj4js.defs[item.name] = item.definition;
+                });
+
+            } else {
+                me._coordsConvertionEnabled = false;
+
+                popupContent.find('.srs-select').append($('<option>', {
+                    value: crs,
+                    text: crsText,
+                    selected: "selected"
+                }));
+            }
+
+            //buttons
+            saveBtn.setTitle(me.loc.coordinatePopup.saveObject)
+            saveBtn.setHandler(function () {
+
+                lon = parseFloat(popupContent.find('.lon-input').val());
+                lat = parseFloat(popupContent.find('.lat-input').val());
+                selectedProjection = popupContent.find('.srs-select').val();
+                
+                if (lon != null && !isNaN(lon) && lat != null && !isNaN(lat)) {
+                    me._addPointFromCoordinates(lon, lat, selectedProjection);
+                    me._dialog.close(true);
+                    me._dialog = null;
+                } else {
+                    me.showMessage(me.loc.error, me.loc.coordinatePopup.missingCoordsError);
+                }
+
+            });
+
+            cancelBtn.setHandler(function () {
+                me._dialog.close(true);
+                me._dialog = null;
+            });
+
+            buttons = [cancelBtn, saveBtn];
+            
+            me._dialog.show(title, popupContent, buttons);
+        },
+
+        _addPointFromCoordinates: function (lon, lat, crs) {
+            var me = this,
+                coordinates,
+                convertedCoordinates,
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                currentProjection = mapModule.getProjection(),
+                wktFormat = new OpenLayers.Format.WKT({}),
+                geojsonFormat = new OpenLayers.Format.GeoJSON({});
+                feature = null,
+
+
+            coordinates = {
+                'lonlat':
+                    {
+                        'lon': lon,
+                        'lat': lat
+                    }
+            };
+            if (me._coordsConvertionEnabled) {
+                convertedCoordinates = me._convertCoordinates(crs, currentProjection, coordinates);
+            } else {
+                convertedCoordinates = coordinates;
+            }
+
+            //create point
+            feature = wktFormat.read('POINT (' + convertedCoordinates.lonlat.lon + ' ' + convertedCoordinates.lonlat.lat + ')');
+            geometry = JSON.parse(geojsonFormat.write(feature)).geometry;
+            me.editFeature.geometry = geometry;
+            me.editFeature._edited = true;
+            me.edited = true;
+        },
+
+        /**
+         * Converts coordinates from one projection to another
+         * @method @private _convertCoordinates
+         * @param {string} sourceSrs source projection
+         * @param {string} destSrs destination projection
+         * @param {Object} coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         * @return {Object} converted coordinates lon and lat object {lonlat: { lat: 0, lon: 0}}
+         */
+        _convertCoordinates: function (sourceSrsName, destSrsName, coordinates) {
+            var me = this,
+                source,
+                dest,
+                point,
+                convertedCoords;
+
+            if (me._coordsConvertionEnabled) {
+                source = new Proj4js.Proj(sourceSrsName),
+                dest = new Proj4js.Proj(destSrsName),
+                point = new Proj4js.Point(coordinates.lonlat.lon, coordinates.lonlat.lat),
+                convertedCoords = Proj4js.transform(source, dest, point);
+
+                return {
+                    'lonlat': {
+                        'lon': convertedCoords.x,
+                        'lat': convertedCoords.y
+                    }
+                };
+            } else {
+                return coordinates;
+            }
         },
 
         /**

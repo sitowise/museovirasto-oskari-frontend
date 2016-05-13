@@ -1,6 +1,22 @@
+.drawHelper {
+    width: 450px;
+}
+
 #contentMap.mapContentEditorMode > #mapdiv, #contentMap.mapContentEditorMode > div.row-fluid {
   position: relative;
   left: 212px; }
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 10px 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 200px;
+}
+
 #contentMap div.content-editor {
   background: #FFF;
   position: absolute;
@@ -157,3 +173,13 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 .field-invalid {
   border: 1px solid red !important;
 }
+
+  .nba-registry-editor-coordinates-popup-content div.clear {
+    clear: both; }
+  .nba-registry-editor-coordinates-popup-content .description {
+    font-style: italic; }
+  .nba-registry-editor-coordinates-popup-content .srs-select {
+      width: 170px;
+  }
+  .nba-registry-editor-coordinates-popup-content .margintop {
+    margin-top: 10px; }
