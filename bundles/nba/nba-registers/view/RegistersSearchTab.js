@@ -78,13 +78,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             tabContent.find('div.limitResultsToArea').append(checkboxLabel);
             //tabContent.find('div.searchDescription').append(searchDesc);
 
-            //add search input
-            searchInput.setIds(null, "nba-registers-search-input");
-            searchInput.setPlaceholder(searchPlaceholder);
-            searchInput.addClearButton();
-
-            //add search button
-            searchButton.setHandler(function () {
+            var doSearch = function () {
                 var selectElement = me.getContent().find('div.registerSelect select'),
                     checkboxElement =  tabContent.find('#limitResultsToAreaCheckbox');
 
@@ -140,7 +134,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     me._getRegistryItems(params);
                 }
-            });
+            }
+            
+            //add search input
+            searchInput.setIds(null, "nba-registers-search-input");
+            searchInput.setPlaceholder(searchPlaceholder);
+            searchInput.addClearButton();
+            searchInput.bindEnterKey(doSearch);
+
+            //add search button
+            searchButton.setHandler(doSearch);
 
             tabContent.find('div.nba-searchInput').append(searchInput.getField());
             tabContent.find('div.nba-searchButton').append(searchButton.getElement());
