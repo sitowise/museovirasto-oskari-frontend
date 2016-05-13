@@ -1,3 +1,7 @@
+.drawHelper {
+    width: 450px;
+}
+
 #contentMap.mapContentEditorMode > #mapdiv, #contentMap.mapContentEditorMode > div.row-fluid {
   position: relative;
   left: 212px; }
@@ -5,11 +9,12 @@
 input[type=text], select {
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    margin: 8px 10px 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    width: 200px;
 }
 
 #contentMap div.content-editor {
