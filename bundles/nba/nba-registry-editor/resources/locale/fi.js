@@ -15,6 +15,8 @@ Oskari.registerLocalization(
 						"id": "Tunnus",
 						"surveyingAccuracy": "Paikannustarkkuus",
 						"surveyingType": "Paikannustapa",
+						"surveyingAccuracyArea": "Rajaustarkkuus",
+						"surveyingTypeArea": "Rajaustapa",
 						"modifyDate": "Muokattu",
 						"url": "Url",
 						"classification": "Lajityyppi",
@@ -32,7 +34,29 @@ Oskari.registerLocalization(
 						"digiMkYear": "DigiMkVuosi",
 						"digitizationAuthor": "Digitoija",
 						"digitizationDate": "Digipvm",
-						"addNew": "Lisää uusi"
+						"addNew": "Lisää uusi",
+						"surveyingAccuracyValues": {
+							"11000": "Ei tiedossa",
+							"11001": "Tarkka  (< 10 m)",
+							"11002": "Ohjeellinen (10 - 100 m)",
+							"11003": "Suuntaa antava (100 - 1000 m)",
+							"11004": "> 1000 m"
+						},
+						"surveyingTypeValues": {
+							"1": "Maastomittaus",
+							"2": "Tarkastus",
+							"3": "Muu lähde"
+						},
+						"surveyingAccuracyValuesArea": {
+							"1": "Tarkka",
+							"2": "Ohjeellinen",
+							"3": "Suuntaa antava" 
+						},
+						"surveyingTypeValuesArea": {
+							"1": "Maastomittaus",
+							"2": "Tarkastus",
+							"3": "Muu lähde"
+						}
 					},
 					"error": "Virhe",
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
@@ -45,10 +69,10 @@ Oskari.registerLocalization(
 					"geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
 					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot",
 					"coordinatePopup": {
-					    "title": "Anna pisteen koordinaatit",
-					    "description": "Valitse projektio ja koordinaatit",
-					    "saveObject": "Tallenna kohde",
-					    "missingCoordsError": "Anna pisteen koordinaatit"
+						"title": "Anna pisteen koordinaatit",
+						"description": "Valitse projektio ja koordinaatit",
+						"saveObject": "Tallenna kohde",
+						"missingCoordsError": "Anna pisteen koordinaatit"
 					}
 				},
 				"tools": {
