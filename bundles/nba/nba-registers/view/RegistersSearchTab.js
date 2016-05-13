@@ -24,6 +24,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         this.tabContent = this._initContent();
         //this.resultsContainer = this._initResultGrid();
         this._getRegisters();
+        this.editorRoles = [ "Admin", "Pääkäyttäjä", "Ylläpitäjä", "Viraston muokkaaja", "Ulk. viranomaismuokkaaja", "Ulk. muu muokkaaja" ];
     }, {
         _templates: {
             tabContent: '<div class="nba-searchContainer">'
@@ -180,7 +181,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
-                    'itemtype': result.itemtype
+                    'itemtype': result.itemtype,
+                    'actions': ''
                 });
             });
 
@@ -224,21 +226,25 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         popupId = "nba-register-search-result";
 
                     //TODO make localization 'Kohdetiedot'
-                    me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Register item details", [infoBoxContent], lonlat, true]);
+                    me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
                     return false;
                 });
                 return idLink;
             });
             
             grid.setColumnValueRenderer('actions', function (name, data) {
-                //FIXME: needs to check if user has specific role
                 if (me.sandbox.getUser().isLoggedIn()) {
-                    var idLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
-                    idLink.bind('click', function () {
-                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                        return false;
-                    });
-                    return idLink;
+                    var userRoles = me.sandbox.getUser().getRoles();
+                    for(var i = 0; i < userRoles.length; ++i) {
+                        if($.inArray(userRoles[i].name, me.editorRoles) > -1) {
+                            var editLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                            editLink.bind('click', function () {
+                                me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                                return false;
+                            });
+                            return editLink;
+                        }
+                    }
                 }
             });
 
@@ -350,9 +356,17 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         }
                     }
 
-                    //3. Create feature and add to fake layer
-                    feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
-                    registerSearchLayer.addFeatures([feature]);
+                    if (data.bounds != null) {
+                        var bounds = new OpenLayers.Bounds(data.bounds);
+                        var geometry = bounds.toGeometry();
+                        var wktFormat = new OpenLayers.Format.WKT({});
+                        var wkt = wktFormat.extractGeometry(geometry);
+
+                        //3. Create feature and add to fake layer
+                        //feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
+                        feature = format.read(wkt);
+                        registerSearchLayer.addFeatures([feature]);
+                    }
                 }
 
                 //4. calculate bounding box from fake layer

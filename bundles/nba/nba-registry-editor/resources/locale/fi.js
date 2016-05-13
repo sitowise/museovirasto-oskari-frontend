@@ -8,7 +8,7 @@ Oskari.registerLocalization(
 				"RegistryEditorView": {
 					"title": "Rekisteritietojen muokkaus",
 					"ancientMonument": {
-						"main": "Pääkohteet",
+						"main": "Pääkohde",
 						"sub": "Alakohteet",
 						"area": "Aluerajaukset",
 						"description": "Kuvaus",
@@ -17,21 +17,21 @@ Oskari.registerLocalization(
 						"surveyingType": "Paikannustapa",
 						"modifyDate": "Muokattu",
 						"url": "Url",
-						"classification": "Luokka",
+						"classification": "Lajityyppi",
 						"municipalityName": "Kunta",
 						"objectName": "Nimi",
 						"subType": "Alatyyppi",
 						"createDate": "Luotu",
-						"areaSelectionSource": "areaSelectionSource",
+						"areaSelectionSource": "Rajauslähde",
 						"sourceDating": "sourceDating",
 						"digiMk": "digiMk",
-						"areaSelectionType": "areaSelectionType",
+						"areaSelectionType": "Rajaustyyppi",
 						"name": "Nimi",
 						"municipalityName": "Kunta",
-						"copyright": "copyright",
-						"digiMkYear": "digiMkYear",
-						"digitizationAuthor": "digitizationAuthor",
-						"digitizationDate": "digitizationDate",
+						"copyright": "Copyright",
+						"digiMkYear": "DigiMkVuosi",
+						"digitizationAuthor": "Digitoija",
+						"digitizationDate": "Digipvm",
 						"addNew": "Lisää uusi"
 					},
 					"error": "Virhe",
@@ -43,7 +43,13 @@ Oskari.registerLocalization(
 					"searchError": "Kohteen hakeminen epäonnistui",
 					"selectError": "Valitse kartalta vain yksi kohde",
 					"geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
-					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot"
+					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot",
+					"coordinatePopup": {
+					    "title": "Anna pisteen koordinaatit",
+					    "description": "Valitse projektio ja koordinaatit",
+					    "saveObject": "Tallenna kohde",
+					    "missingCoordsError": "Anna pisteen koordinaatit"
+					}
 				},
 				"tools": {
 					"point": {
@@ -79,4 +85,5 @@ Oskari.registerLocalization(
 					"save": "Tallenna"
 				}
 			}
-		});
+		}
+	);

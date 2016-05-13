@@ -398,7 +398,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 var geod = JSON.parse(geojsonFormat.write(feature)).geometry;
                                 var isPoint = geojsonFormat.isValidType(geod, 'Point');
 
-                                if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
+                                if ((me.editFeature._type != 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
 
                                     var attributes = me._getLayerAttributes(layer);
                                     var selectedFeature = null;
@@ -412,7 +412,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                         }
                                     }
 
-                                    me._showParameterUpdateDialog(currentSelectButton.id, geod, attributes, selectedFeature, fields);
+                                    me._showParameterUpdateDialog(currentSelectButton.id, JSON.stringify(geod), attributes, selectedFeature, fields);
                                 } else {
                                     //me.showMessage(me.loc.error, 'You selected wrong type of geometry');
                                     me.showMessage(me.loc.error, 'Valittu kohde on v‰‰r‰n tyyppinen');
