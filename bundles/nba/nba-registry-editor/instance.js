@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 me.showRegistryEditorRequestHandler
             );
             
-            var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: me.drawPluginId, multipart: true}),
+            var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: me.drawPluginId, multipart: true, requests: false}),
                 mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             this.plugins.drawPlugin = drawPlugin;
             mapModule.registerPlugin(drawPlugin);

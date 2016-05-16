@@ -26,8 +26,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaSelectionType"/><div class="createDate"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
-                'ancientMonumentSurveyingDetails': jQuery('<div><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
-                'ancientMonumentAreaSurveyingDetails': jQuery('<div><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingTypeArea + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '<select id="surveyingAccuracy"/></label></div>'),
+                'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
+                'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingTypeArea + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '<select id="surveyingAccuracy"/></label></div>'),
                 'buttons': jQuery('<div class=buttons/>'),
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -105,12 +105,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             var me = this,
                 conf = jQuery.extend(true, {}, config);
 
-
-            var startRequest = me.instance.sandbox.getRequestBuilder('DrawPlugin.StartDrawingRequest')(conf);
-            me.instance.sandbox.request(me, startRequest);
+            me.instance.plugins.drawPlugin.startDrawing(config);
             //Drawing needs to be stopped and restarted once to make editing geometry selectable
             me.sendStopDrawRequest(true);
-            me.instance.sandbox.request(me, startRequest);
+            me.instance.plugins.drawPlugin.startDrawing(config);
             me.instance.enableGfi(false);
             me._showDrawHelper(conf.drawMode, id, typeof conf.geometry !== 'undefined');
         },
@@ -122,8 +120,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          */
         sendStopDrawRequest: function (isCancel) {
             var me = this;
-            var request = this.instance.sandbox.getRequestBuilder('DrawPlugin.StopDrawingRequest')(isCancel);
-            this.instance.sandbox.request(this, request);
+            if (isCancel) {
+                // we wish to clear the drawing without sending further events
+                me.instance.plugins.drawPlugin.stopDrawing();
+            } else {
+                // pressed finished drawing, act like dblclick
+                me.instance.plugins.drawPlugin.forceFinishDraw();
+            }
         },
 
         /**

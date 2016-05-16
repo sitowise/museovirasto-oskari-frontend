@@ -1,4 +1,4 @@
-.drawHelper {
+div.itemDetails .drawHelper {
     width: 450px;
 }
 
@@ -6,10 +6,9 @@
   position: relative;
   left: 212px; }
 
-input[type=text], select {
+div.itemDetails input[type=text], div.itemDetails select {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 10px 8px 0;
+    margin: 8px 10px 8px 10px;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
