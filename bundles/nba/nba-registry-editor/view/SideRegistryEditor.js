@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.itemData = null;  //full item data from registry
         me.templates = {
                 'drawHelper': jQuery('<div class="drawHelper"><div class="infoText"></div></div>'),
+                //Ancient Monument templates
                 'ancientMonument': jQuery('<div id="ancientMonument"><div id="main"><h4>' + me.loc.ancientMonument.main + '</h4></div><div id="sub"><h4>' + me.loc.ancientMonument.sub + '</h4></div><div id="area"><h4>' + me.loc.ancientMonument.area + '</h4></div></div>'),
                 'ancientMonumentMainItem': jQuery('<div class="item ancientMonumentMainItem"><div class="name"/><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="createDate"/><div class="modifyDate"/><div class="classification"/><div class="municipalityName"/><div class="url"/><div class="subType"/><div class="tools"/></div>'),
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
@@ -28,6 +29,34 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
                 'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
                 'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingTypeArea + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '<select id="surveyingAccuracy"/></label></div>'),
+                //Ancient Monument Maintenance templates
+                'maintenance': jQuery('<div id="maintenance"><div id="main"><h4>' + me.loc.maintenance.main + '</h4></div><div id="sub"><h4>' + me.loc.maintenance.sub + '</h4></div>'),
+                'maintenanceMainItem': jQuery('<div class="item maintenanceMainItem">'
+                    + '<div class="id"/>'
+                    + '<div class="name"/>'
+                    + '<div class="municipalityName"/>'
+                    + '<div class="subType"/>'
+                    + '<div class="maintainingEntity"/>'
+                    + '<div class="pointDescription"/>'
+                    + '<div class="pointAuthor"/>'
+                    + '<div class="pointCreateDate"/>'
+                    + '<div class="pointModifyDate"/>'
+                    + '<div class="pointSurveyingAccuracy"/>'
+                    + '<div class="pointSurveyingType"/>'
+                    + '<div class="areaCreateDate"/>'
+                    + '<div class="areaModifyDate"/>'
+                    + '<div class="tools"/></div>'),
+                'maintenanceSubItem': jQuery('<div class="item maintenanceSubItem"><div class="id"/><div class="createDate"/><div class="modifyDate"/><div class="tools"/></div>'),
+                'maintenanceSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.maintenance.description + '<input type="text" id="description"></label></br><label>' + me.loc.maintenance.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.maintenance.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
+                //Building heritage
+                'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h4>' + me.loc.buildingHeritage.main + '</h4></div><div id="sub"><h4>' + me.loc.buildingHeritage.sub + '</h4></div><div id="area"><h4>' + me.loc.buildingHeritage.area + '</h4></div></div>'),
+                'buildingHeritageMainItem': jQuery('<div class="item buildingHeritageMainItem"><div class="name"/><div class="id"/><div class="municipalityName"/></div>'),
+                'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="createDate"/><div class="author"/><div class="tools"/></div>'),
+                'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="createDate"/><div class="author"/><div class="tools"/></div>'),
+                'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem">' + me.loc.buildingHeritage.addNew + '<div class="tools"/></div>'),
+                'buildingHeritagePointSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.buildingHeritage.name + '<input type="text" id="name"></label></br><label>' + me.loc.buildingHeritage.description + '<input type="text" id="description"></label></br><label>' + me.loc.buildingHeritage.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.buildingHeritage.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></br><label>' + me.loc.buildingHeritage.conservationGroup + '<input type="text" id="conservationGroup"></label></br><label>' + me.loc.buildingHeritage.conservationStatus + '<input type="text" id="conservationStatus"></label></br></div>'),
+                'buildingHeritageAreaSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.buildingHeritage.name + '<input type="text" id="name"></label></br><label>' + me.loc.buildingHeritage.description + '<input type="text" id="description"></label></br><label>' + me.loc.buildingHeritage.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.buildingHeritage.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></br><label>' + me.loc.buildingHeritage.conservationGroup + '<input type="text" id="conservationGroup"></label></br><label>' + me.loc.buildingHeritage.conservationStatus + '<input type="text" id="conservationStatus"></label></br></div>'),
+                //common templates
                 'buttons': jQuery('<div class=buttons/>'),
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -161,9 +190,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find(".content").empty();
             me.progressSpinner.insertTo(content.find(".content"));
             me.progressSpinner.start();
-            
+
             if(me.data.itemtype === 'AncientMonument') {
                 postData = {'action_route': 'GetRegistryItems', 'registerName': 'ancientMonument', 'id': me.data.id};
+            } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
+                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'ancientMaintenance', 'id': me.data.id };
+            } else if (me.data.itemtype === 'BuildingHeritageItem') {
+                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'buildingHeritage', 'id': me.data.id };
             }
 
             $.ajax({
@@ -174,8 +207,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     me.progressSpinner.stop();
                     content.find(".content").empty();
                     me.itemData = data;
+
                     if(data.itemtype === 'AncientMonument') {
                         me._renderAncientMonument(data, content);
+                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
+                        me._renderMaintenance(data, content);
+                    } else if (data.itemtype === 'BuildingHeritageItem') {
+                        me._renderBuildingHeritage(data, content);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -289,6 +327,188 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find(".content").append(buttons);
         },
 
+        _renderMaintenance: function (data, content) {
+            var me = this,
+                itemDetails = me.templates.maintenance.clone(),
+                main = itemDetails.find("#main"),
+                sub = itemDetails.find("#sub"),
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
+                buttons = me.templates.buttons.clone(),
+                postData = null;
+
+            saveBtn.setHandler(function () {
+                if (me.edited) {
+                    if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
+                        var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subAreas': []};
+                        $.each(me.itemData.subAreas, function (index, item) {
+                            if (item._edited) {
+                                edited.subAreas.push(item.id);
+                            }
+                        });
+                        postData = { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+                    }
+                    $.ajax({
+                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
+                        data: postData,
+                        type: 'POST',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data.updated) {
+                                me._refreshData(me.data.id);
+                                me.showMessage(me.loc.success, me.loc.featureUpdated);
+                            } else {
+                                me.showMessage(me.loc.error, me.loc.updateError);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            me.showMessage(me.loc.error, me.loc.updateError);
+                        }
+                    });
+                } else {
+                    me.showMessage(me.loc.error, me.loc.noEditsDone);
+                }
+            });
+
+            buttons.append(saveBtn.getButton());
+
+            var mainItemRow = me.templates.maintenanceMainItem.clone();
+
+            mainItemRow.find('.id').append(me._formatData(me.loc.maintenance.id, data.id));
+            mainItemRow.find('.name').append(me._formatData(me.loc.maintenance.objectName, data.objectName));
+            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.maintenance.municipalityName, data.municipalityName));
+            mainItemRow.find('.subType').append(me._formatData(me.loc.maintenance.subType, data.subType));
+            mainItemRow.find('.maintainingEntity').append(me._formatData(me.loc.maintenance.maintainingEntity, data.maintainingEntity));
+            mainItemRow.find('.pointDescription').append(me._formatData(me.loc.maintenance.pointDescription, data.pointDescription));
+            mainItemRow.find('.pointAuthor').append(me._formatData(me.loc.maintenance.pointAuthor, data.pointAuthor));
+            mainItemRow.find('.pointCreateDate').append(me._formatData(me.loc.maintenance.pointCreateDate, data.pointCreateDate));
+            mainItemRow.find('.pointModifyDate').append(me._formatData(me.loc.maintenance.pointModifyDate, data.pointModifyDate));
+            mainItemRow.find('.pointSurveyingAccuracy').append(me._formatData(me.loc.maintenance.pointSurveyingAccuracy, data.pointSurveyingAccuracy));
+            mainItemRow.find('.pointSurveyingType').append(me._formatData(me.loc.maintenance.pointSurveyingType, data.pointSurveyingType));
+            mainItemRow.find('.areaCreateDate').append(me._formatData(me.loc.maintenance.areaCreateDate, data.areaCreateDate));
+            mainItemRow.find('.areaModifyDate').append(me._formatData(me.loc.maintenance.areaModifyDate, data.areaModifyDate));
+
+            mainItemRow.find('.tools').append(me._getEditTools({ 'point': true, 'area': true, 'id': data.id, 'type': 'main', feature: data }));
+
+            main.append(mainItemRow);
+
+            for (var i = 0; i < data.subAreas.length; ++i) {
+                var subItemRow = me.templates.maintenanceSubItem.clone();
+
+                subItemRow.find('.id').append(me._formatData(me.loc.maintenance.id, data.subAreas[i].objectId));
+                subItemRow.find('.createDate').append(me._formatData(me.loc.maintenance.createDate, data.subAreas[i].createDate));
+                subItemRow.find('.modifyDate').append(me._formatData(me.loc.maintenance.modifyDate, data.subAreas[i].modifyDate));
+
+                subItemRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i] }));
+
+                sub.append(subItemRow);
+            }
+
+            content.find(".content").append(itemDetails);
+            content.find(".content").append(buttons);
+        },
+
+        _renderBuildingHeritage: function (data, content) {
+            var me = this,
+                itemDetails = me.templates.buildingHeritage.clone(),
+                main = itemDetails.find("#main"),
+                sub = itemDetails.find("#sub"),
+                area = itemDetails.find('#area'),
+                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
+                buttons = me.templates.buttons.clone(),
+                postData = null;
+
+            saveBtn.setHandler(function () {
+                if (me.edited) {
+                    if (me.data.itemtype === 'BuildingHeritageItem') {
+                        var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
+                        $.each(me.itemData.points, function (index, item) {
+                            if (item._edited) {
+                                edited.points.push(item.id);
+                            }
+                        });
+                        $.each(me.itemData.areas, function (index, item) {
+                            if (item._edited) {
+                                edited.areas.push(item.id);
+                            }
+                        });
+                        postData = { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+                    }
+                    $.ajax({
+                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
+                        data: postData,
+                        type: 'POST',
+                        success: function (data, textStatus, jqXHR) {
+                            if (data.updated) {
+                                me._refreshData(me.data.id);
+                                me.showMessage(me.loc.success, me.loc.featureUpdated);
+                            } else {
+                                me.showMessage(me.loc.error, me.loc.updateError);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            me.showMessage(me.loc.error, me.loc.updateError);
+                        }
+                    });
+                } else {
+                    me.showMessage(me.loc.error, me.loc.noEditsDone);
+                }
+            });
+
+            buttons.append(saveBtn.getButton());
+
+            var mainItemRow = me.templates.buildingHeritageMainItem.clone();
+
+            mainItemRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.id));
+            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.buildingHeritage.municipalityName, data.municipalityName));
+            mainItemRow.find('.name').append(me._formatData(me.loc.buildingHeritage.objectName, data.objectName));
+
+            main.append(mainItemRow);
+
+            for (var i = 0; i < data.points.length; ++i) {
+                var subItemRow = me.templates.buildingHeritagePoint.clone();
+
+                subItemRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.points[i].objectId));
+                subItemRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.points[i].objectName));
+                subItemRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.points[i].description));
+                subItemRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].conservationGroup]));
+                subItemRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].conservationStatus]));
+                subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
+                subItemRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].surveyingType]));
+                subItemRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].modifyDate]));
+                subItemRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].createDate]));
+                subItemRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].author]));
+
+                subItemRow.find('.tools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
+
+                sub.append(subItemRow);
+            }
+
+            for (var i = 0; i < data.areas.length; ++i) {
+                var areaRow = me.templates.buildingHeritageArea.clone();
+
+                areaRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.areas[i].objectId));
+                areaRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.areas[i].objectName));
+                areaRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.areas[i].description));
+                areaRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].conservationGroup]));
+                areaRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].conservationStatus]));
+                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValues[data.areas[i].surveyingAccuracy]));
+                areaRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].surveyingType]));
+                areaRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].modifyDate]));
+                areaRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].createDate]));
+                areaRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].author]));
+
+                areaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
+
+                area.append(areaRow);
+            }
+
+            var newAreaRow = me.templates.buildingHeritageAreaAdd.clone();
+            newAreaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
+            area.append(newAreaRow)
+
+            content.find(".content").append(itemDetails);
+            content.find(".content").append(buttons);
+        },
+
         _formatData: function(label, data) {
             var ret = label + ": ";
             if(typeof data !== 'undefined' && data !== null) {
@@ -313,9 +533,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             if(typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
                     var geometry = undefined;
-                    if(typeof conf.feature.geometry !== 'undefined') {
+                    if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
+                    } else if (conf.feature.pointGeometry != null) {
+                        geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.pointGeometry).clone();
                     }
+
                     me.sendDrawRequest({
                         drawMode: 'point',
                         geometry: geometry
@@ -362,9 +585,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             if(typeof conf.area !== 'undefined' && conf.area) {
                 areaButton.on('click', function() {
                     var geometry = undefined;
-                    if(typeof conf.feature.geometry !== 'undefined') {
+                    if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
+                    } else if (conf.feature.areaGeometry != null) {
+                        geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.areaGeometry).clone();
                     }
+
                     me.sendDrawRequest({
                         drawMode: 'area',
                         geometry: geometry
@@ -384,7 +610,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 var onFinishSelectionCallback = function () {
                     var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
                             geometryFilters = [];
-                    //debugger;
+                    
                     for (var i = 0; i < selectedLayers.length; i++) {
                         var layer = selectedLayers[i];
 
@@ -545,7 +771,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          */
         _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields) {
             var me = this;
-
             var locBtns = me.instance.getLocalization('buttons'),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this._dialog = dialog;
@@ -569,18 +794,49 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             finishBtn.setTitle(locBtns.finish);
             finishBtn.addClass('primary');
             finishBtn.setHandler(function () {
+                
                 me.edited = true;
-                me.editFeature.geometry = JSON.parse(geometry);
                 
-                if(me.editFeature._type === 'area') {
-                    if(typeof me.editFeature.id === 'undefined') {
-                        me.itemData.areas.push(me.editFeature)
+                if (me.itemData.itemtype === 'AncientMonument') {
+                    if (me.editFeature._type === 'area') {
+                        if (typeof me.editFeature.id === 'undefined') {
+                            me.itemData.areas.push(me.editFeature)
+                        }
                     }
-                }
+
+                    me.editFeature.geometry = JSON.parse(geometry);
+                    me.editFeature.description = content.find("#description").val();
+                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
+                    me.editFeature.surveyingType = content.find("#surveyingType").val();
                 
-                me.editFeature.description = content.find("#description").val();
-                me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
-                me.editFeature.surveyingType = content.find("#surveyingType").val();
+                } else if (me.itemData.itemtype === 'AncientMonumentMaintenanceItem') {
+
+                    if (geometry != null) {
+                        if (JSON.parse(geometry).type == 'Point' || JSON.parse(geometry).type == 'MultiPoint') {
+                            me.editFeature.pointGeometry = JSON.parse(geometry);
+                            me.editFeature.pointDescription = content.find("#description").val();
+                            me.editFeature.pointSurveyingAccuracy = content.find("#surveyingAccuracy").val();
+                            me.editFeature.pointSurveyingType = content.find("#surveyingType").val();
+                        } else {
+                            me.editFeature.areaGeometry = JSON.parse(geometry);
+                        }
+                    }
+
+                } else if (me.itemData.itemtype === 'BuildingHeritageItem') {
+                    if (me.editFeature._type === 'area') {
+                        if (typeof me.editFeature.id === 'undefined') {
+                            me.itemData.areas.push(me.editFeature)
+                        }
+                    }
+
+                    me.editFeature.geometry = JSON.parse(geometry);
+                    me.editFeature.description = content.find("#description").val();
+                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
+                    me.editFeature.surveyingType = content.find("#surveyingType").val();
+                    me.editFeature.conservationStatus = content.find("#conservationStatus").val();
+                    me.editFeature.conservationGroup = content.find("#conservationGroup").val();
+                    me.editFeature.objectName = content.find("#name").val();
+                }
 
                 me.editFeature._edited = true;
 
@@ -598,6 +854,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     me._renderAncientMonumentAreaDetails(content, attributes, selectedFeature, fields);
                 } else {
                     me._renderAncientMonumentDetails(content, attributes, selectedFeature, fields);
+                }
+            } else if (me.itemData.itemtype === 'AncientMonumentMaintenanceItem') {
+                if (me.editFeature._type === 'main') {
+                    me._renderMaintenanceDetails(content, attributes, selectedFeature, fields);
+                }
+            } else if (me.itemData.itemtype === 'BuildingHeritageItem') {
+                if (me.editFeature._type === 'area') {
+                    me._renderBuildingHeritageAreaDetails(content, attributes, selectedFeature, fields);
+                } else {
+                    me._renderBuildingHeritageDetails(content, attributes, selectedFeature, fields);
                 }
             }
 
@@ -664,6 +930,114 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 }
                 typeSelect.append(option);
              });
+
+            template.find("#description").val(me.editFeature.description);
+            accuracySelect.val(me.editFeature.surveyingAccuracy);
+            typeSelect.val(me.editFeature.surveyingType);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
+
+            content.append(template);
+        },
+
+        _renderMaintenanceDetails: function (content, attributes, selectedFeature, fields) {
+            var me = this,
+                template = me.templates.maintenanceSurveyingDetails.clone(),
+                accuracySelect = template.find("#surveyingAccuracy"),
+                typeSelect = template.find("#surveyingType");
+            
+            $.each(me.loc.maintenance.surveyingAccuracyValues, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.pointSurveyingAccuracy) {
+                    option.prop('selected', true);
+                }
+                accuracySelect.append(option);
+            });
+            
+            $.each(me.loc.maintenance.surveyingTypeValues, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.pointSurveyingType) {
+                    option.prop('selected', true);
+                }
+                typeSelect.append(option);
+            });
+
+            template.find("#description").val(me.editFeature.pointDescription);
+            accuracySelect.val(me.editFeature.pointSurveyingAccuracy);
+            typeSelect.val(me.editFeature.pointSurveyingType);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
+
+            content.append(template);
+        },
+
+        _renderBuildingHeritageDetails: function (content, attributes, selectedFeature, fields) {
+            var me = this,
+                template = me.templates.buildingHeritageSurveyingDetails.clone(),
+                accuracySelect = template.find("#surveyingAccuracy"),
+                typeSelect = template.find("#surveyingType");
+
+            $.each(me.loc.buildingHeritage.surveyingAccuracyValues, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.surveyingAccuracy) {
+                    option.prop('selected', true);
+                }
+                accuracySelect.append(option);
+            });
+
+            $.each(me.loc.buildingHeritage.surveyingTypeValues, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.surveyingType) {
+                    option.prop('selected', true);
+                }
+                typeSelect.append(option);
+            });
+
+            template.find("#description").val(me.editFeature.description);
+            accuracySelect.val(me.editFeature.surveyingAccuracy);
+            typeSelect.val(me.editFeature.surveyingType);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
+
+            content.append(template);
+        },
+
+        _renderBuildingHeritageAreaDetails: function (content, attributes, selectedFeature, fields) {
+            var me = this,
+                template = me.templates.buildingHeritageAreaSurveyingDetails.clone(),
+                accuracySelect = template.find("#surveyingAccuracy"),
+                typeSelect = template.find("#surveyingType");
+
+            $.each(me.loc.buildingHeritage.surveyingAccuracyValuesArea, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.surveyingAccuracy) {
+                    option.prop('selected', true);
+                }
+                accuracySelect.append(option);
+            });
+
+            $.each(me.loc.buildingHeritage.surveyingTypeValuesArea, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editFeature.surveyingType) {
+                    option.prop('selected', true);
+                }
+                typeSelect.append(option);
+            });
 
             template.find("#description").val(me.editFeature.description);
             accuracySelect.val(me.editFeature.surveyingAccuracy);
