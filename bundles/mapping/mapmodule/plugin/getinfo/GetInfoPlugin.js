@@ -354,6 +354,8 @@ Oskari.clazz.define(
 
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
+            } else if(data.via === 'registry') {
+                fragments = this._formatRegistryFeaturesForInfoBox(data);
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }

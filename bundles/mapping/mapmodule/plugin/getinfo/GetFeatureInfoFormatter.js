@@ -336,6 +336,51 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     },
 
     /**
+     * @method _formatRegistryFeaturesForInfoBox
+     */
+    _formatRegistryFeaturesForInfoBox: function (data) {
+        var me = this,
+            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
+            fields,
+            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds'],
+            type = 'wfslayer',
+            result,
+            markup;
+
+        if (data.features === 'empty' || layer === null || layer === undefined) {
+            return;
+        }
+        result = _.map(data.features, function (feature) {
+            fields = Object.keys(feature);
+            var feat = _.chain(fields)
+                .filter(function (key) {
+                    return !_.contains(hiddenFields, key);
+                })
+                .foldl(function (obj, key) {
+                    var value = feature[key];
+                    if(_.isArray(value)) {
+                        value = value.join(", ");
+                    }
+                    obj[key] = value;
+                    return obj;
+                }, {})
+                .value();
+
+            markup = me._json2html(feat);
+            
+            return {
+                markup: markup,
+                layerId: data.layerId,
+                layerName: layer.getName(),
+                type: type,
+                isMyPlace: false
+            };
+        });
+
+        return result;
+    },
+
+    /**
      * Formats the html to show for my places layers' gfi dialog.
      *
      * @method _formatMyPlacesGfi

@@ -313,6 +313,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
             topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
+            //ugly, maybe use a service or event to set ids?
+            registryLayers = sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers,
             selectionMode = data.data.keepPrevious,
             featureIds = [],
             selectFeatures;
@@ -341,6 +343,43 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
+        } else if(data.data.features !== "empty" && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
+            var registry = registryLayers[data.data.layerId], //{name: "", idAttribute: ""}
+                fields = layer.getFields(),
+                fieldNum = -1,
+                ids = [],
+                registryData = {"reqId": data.data.reqId,
+                                "features": [],
+                                "layerId": data.data.layerId,
+                                "lonlat": this.lonlat,
+                                "via": "registry"};
+
+            _.forEach(fields, function(value, key) {
+                if(value === registry.idAttribute) {
+                    fieldNum = key;
+                    return false;
+                }
+            });
+
+            _.forEach(data.data.features, function(value, key) {
+                ids.push(value[fieldNum]);
+            });
+                
+            $.ajax({
+                url: sandbox.getAjaxUrl(),
+                data: {'action_route': 'GetRegistryItems', 'registerName': registry.name, 'id': ids.join()},
+                type: 'GET',
+                success: function(data, textStatus, jqXHR) {
+                    if(!_.isArray(data)) {
+                        data = [data];
+                    }
+
+                    registryData.features = data;
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                    var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
+                    sandbox.notifyAll(infoEvent);
+                }
+            });
         } else {
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
