@@ -344,7 +344,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
         } else if(data.data.features !== "empty" && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
-            var registry = registryLayers[data.data.layerId], //{name: "", idAttribute: ""}
+            var registry = registryLayers[data.data.layerId], //{name: "", idAttribute: "", itemType: ""}
                 fields = layer.getFields(),
                 fieldNum = -1,
                 ids = [],
@@ -352,6 +352,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                 "features": [],
                                 "layerId": data.data.layerId,
                                 "lonlat": this.lonlat,
+                                "registry": registry,
                                 "via": "registry"};
 
             _.forEach(fields, function(value, key) {
