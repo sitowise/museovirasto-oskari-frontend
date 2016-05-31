@@ -173,6 +173,60 @@ Oskari.registerLocalization(
 					    "conservationStatus": "conservationStatus",
 					    "author": "author"
 					},
+					"rky2000": {
+					    "main": "Pääkohde",
+					    "sub": "Alakohteet",
+					    "area": "Aluerajaukset",
+					    "description": "Kuvaus",
+					    "id": "Tunnus",
+					    "surveyingAccuracy": "Paikannustarkkuus",
+					    "surveyingType": "Paikannustapa",
+					    "surveyingAccuracyArea": "Rajaustarkkuus",
+					    "surveyingTypeArea": "Rajaustapa",
+					    "modifyDate": "Muokattu",
+					    "url": "Url",
+					    "classification": "Lajityyppi",
+					    "municipalityName": "Kunta",
+					    "objectName": "Nimi",
+					    "subType": "Alatyyppi",
+					    "createDate": "Luotu",
+					    "areaSelectionSource": "Rajauslähde",
+					    "sourceDating": "sourceDating",
+					    "digiMk": "digiMk",
+					    "areaSelectionType": "Rajaustyyppi",
+					    "name": "Nimi",
+					    "municipalityName": "Kunta",
+					    "copyright": "Copyright",
+					    "digiMkYear": "DigiMkVuosi",
+					    "digitizationAuthor": "Digitoija",
+					    "digitizationDate": "Digipvm",
+					    "addNew": "Lisää uusi",
+					    "surveyingAccuracyValues": {
+					        "11000": "Ei tiedossa",
+					        "11001": "Tarkka  (< 10 m)",
+					        "11002": "Ohjeellinen (10 - 100 m)",
+					        "11003": "Suuntaa antava (100 - 1000 m)",
+					        "11004": "> 1000 m"
+					    },
+					    "surveyingTypeValues": {
+					        "1": "Maastomittaus",
+					        "2": "Tarkastus",
+					        "3": "Muu lähde"
+					    },
+					    "surveyingAccuracyValuesArea": {
+					        "1": "Tarkka",
+					        "2": "Ohjeellinen",
+					        "3": "Suuntaa antava"
+					    },
+					    "surveyingTypeValuesArea": {
+					        "1": "Maastomittaus",
+					        "2": "Tarkastus",
+					        "3": "Muu lähde"
+					    },
+					    "conservationGroup": "conservationGroup",
+					    "conservationStatus": "conservationStatus",
+					    "author": "author"
+					},
 					"error": "Virhe",
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
 					"link": "Linkki",

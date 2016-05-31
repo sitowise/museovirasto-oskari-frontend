@@ -173,6 +173,61 @@ Oskari.registerLocalization(
 					    "conservationStatus": "conservationStatus",
                         "author": "author"
 					},
+					"rky2000": {
+					    "main": "Main items",
+					    "point": "Points",
+					    "area": "Areas",
+                        "line": "Lines",
+					    "description": "Description",
+					    "id": "Id",
+					    "surveyingAccuracy": "Surveying Accuracy",
+					    "surveyingType": "Surveying Type",
+					    "surveyingAccuracyArea": "Surveying Accuracy",
+					    "surveyingTypeArea": "Surveying Type",
+					    "modifyDate": "Modify Date",
+					    "url": "Url",
+					    "classification": "Classification",
+					    "municipalityName": "Municipality",
+					    "objectName": "Name",
+					    "subType": "Subtype",
+					    "createDate": "Create Date",
+					    "areaSelectionSource": "areaSelectionSource",
+					    "sourceDating": "sourceDating",
+					    "digiMk": "digiMk",
+					    "areaSelectionType": "areaSelectionType",
+					    "name": "name",
+					    "municipalityName": "municipalityName",
+					    "copyright": "copyright",
+					    "digiMkYear": "digiMkYear",
+					    "digitizationAuthor": "digitizationAuthor",
+					    "digitizationDate": "digitizationDate",
+					    "addNew": "Add new",
+					    "surveyingAccuracyValues": {
+					        "11000": "Ei tiedossa",
+					        "11001": "Tarkka  (< 10 m)",
+					        "11002": "Ohjeellinen (10 - 100 m)",
+					        "11003": "Suuntaa antava (100 - 1000 m)",
+					        "11004": "> 1000 m"
+					    },
+					    "surveyingTypeValues": {
+					        "1": "Maastomittaus",
+					        "2": "Tarkastus",
+					        "3": "Muu lähde"
+					    },
+					    "surveyingAccuracyValuesArea": {
+					        "1": "Tarkka",
+					        "2": "Ohjeellinen",
+					        "3": "Suuntaa antava"
+					    },
+					    "surveyingTypeValuesArea": {
+					        "1": "Maastomittaus",
+					        "2": "Tarkastus",
+					        "3": "Muu lähde"
+					    },
+					    "conservationGroup": "conservationGroup",
+					    "conservationStatus": "conservationStatus",
+					    "author": "author"
+					},
 					"error": "Error",
 					"noEditsDone": "No edits have been done. Edit features before saving.",
 					"link": "Link",
