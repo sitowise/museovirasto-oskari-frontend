@@ -31,9 +31,9 @@ div.itemDetails input[type=text], div.itemDetails select {
   /* sidebar has 3, we want to open it on top of this */
   z-index: 2;
   width: 382px; }
-  #contentMap div.content-editor div.content {
+  #contentMap div.content-editor div.content-registry-item {
     padding: 10px; }
-  #contentMap div.content-editor div.content div.item {
+  #contentMap div.content-editor div.content-registry-item div.item {
     padding: 10px; }
 div.content-editor input[type=text] {
   width: 260px; }
@@ -73,7 +73,7 @@ div.content-editor div.tool label, div.content-editor div.data label, div.conten
 div.content-editor div.tool input[type="button"], div.content-editor div.data input[type="button"] {
   margin-top: 5px;
   margin-bottom: 5px; }
-div.content-editor > div.content {
+div.content-editor > div.content-registry-item {
   overflow: auto;
   height: 89%; }
 div.content-editor > div.header {
@@ -136,7 +136,7 @@ div.content-editor ul.selectedLayersList {
     margin-left: -1.3em; }
 div.content-editor .toolrow {
   border-top: 0; }
-div.content-editor .content > div {
+div.content-editor .content-registry-item > div {
   margin-bottom: 20px; }
 div.content-editor div.form div.field input {
   width: 100%;
@@ -156,8 +156,10 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 
 div.content-editor .registryItemActionButton {
     display: block;
-    width: 140px;
+    width: 180px;
     margin-bottom: 5px;
+    font-size: 12px;
+    padding: 2px;
 }
 
 /* Buttons */

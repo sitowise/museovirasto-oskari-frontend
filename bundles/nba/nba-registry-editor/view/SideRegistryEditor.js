@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             '    </div>' +
             '    <h3></h3>' +
             '  </div>' +
-            '  <div class="content">' +
+            '  <div class="content-registry-item">' +
             '  </div>' +
             '</div>');
         me._dialog = null;
@@ -218,8 +218,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 content = me.mainPanel,
                 postData = null;
             
-            content.find(".content").empty();
-            me.progressSpinner.insertTo(content.find(".content"));
+            content.find(".content-registry-item").empty();
+            me.progressSpinner.insertTo(content.find(".content-registry-item"));
             me.progressSpinner.start();
 
             if(me.data.itemtype === 'AncientMonument') {
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 type: 'GET',
                 success: function(data, textStatus, jqXHR) {
                     me.progressSpinner.stop();
-                    content.find(".content").empty();
+                    content.find(".content-registry-item").empty();
                     me.itemData = data;
 
                     if(data.itemtype === 'AncientMonument') {
@@ -307,7 +307,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 }
             });
 
-            buttons.append(saveBtn.getButton());
+            buttons.append(saveBtn.getElement());
 
             var mainItemRow = me.templates.ancientMonumentMainItem.clone();
 
@@ -380,8 +380,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             newAreaRow.find('.tools').append(me._getEditTools({'area': true, 'id': -1, 'type': 'area', feature: {}}));
             area.append(newAreaRow)
             
-            content.find(".content").append(itemDetails);
-            content.find(".content").append(buttons);
+            content.find(".content-registry-item").append(itemDetails);
+            content.find(".content-registry-item").append(buttons);
         },
 
         _renderMaintenance: function (data, content) {
@@ -471,8 +471,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             subAccordion.insertTo(sub);
 
-            content.find(".content").append(itemDetails);
-            content.find(".content").append(buttons);
+            content.find(".content-registry-item").append(itemDetails);
+            content.find(".content-registry-item").append(buttons);
         },
 
         _renderBuildingHeritage: function (data, content) {
@@ -597,8 +597,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             newAreaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
             area.append(newAreaRow)
 
-            content.find(".content").append(itemDetails);
-            content.find(".content").append(buttons);
+            content.find(".content-registry-item").append(itemDetails);
+            content.find(".content-registry-item").append(buttons);
         },
 
         _renderRKY2000: function (data, content) {
@@ -617,7 +617,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 postData = null;
 
             saveBtn.setHandler(function () {
-                debugger;
                 if (me.edited) {
                     if (me.data.itemtype === 'RKY2000') {
                         var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
@@ -643,7 +642,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         data: postData,
                         type: 'POST',
                         success: function (data, textStatus, jqXHR) {
-                            debugger;
                             if (data.updated) {
                                 me._refreshData(me.data.id);
                                 me.showMessage(me.loc.success, me.loc.featureUpdated);
@@ -652,7 +650,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             }
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            debugger;
                             me.showMessage(me.loc.error, me.loc.updateError);
                         }
                     });
@@ -762,8 +759,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             newLineRow.find('.tools').append(me._getEditTools({ 'line': true, 'id': -1, 'type': 'line', feature: {} }));
             line.append(newLineRow)
 
-            content.find(".content").append(itemDetails);
-            content.find(".content").append(buttons);
+            content.find(".content-registry-item").append(itemDetails);
+            content.find(".content-registry-item").append(buttons);
         },
 
         _formatData: function(label, data) {
