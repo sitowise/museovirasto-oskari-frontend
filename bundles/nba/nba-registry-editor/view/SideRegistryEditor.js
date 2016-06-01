@@ -27,8 +27,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="description"/><div class="id"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaSelectionType"/><div class="createDate"/><div class="tools"/></div>'),
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem">' + me.loc.ancientMonument.addNew + '<div class="tools"/></div>'),
-                'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
-                'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.ancientMonument.description + '<input type="text" id="description"></label></br><label>' + me.loc.ancientMonument.surveyingTypeArea + '<select id="surveyingType"/></label></br><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '<select id="surveyingAccuracy"/></label></div>'),
+                'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
+                    + '<div><label>' + me.loc.ancientMonument.surveyingType + '</label><select id="surveyingType"/></div>'
+                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
+                'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
+                    + '<div><label>' + me.loc.ancientMonument.surveyingTypeArea + '</label><select id="surveyingType"/></label></div>'
+                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '</label><select id="surveyingAccuracy"/></div>'),
                 //Ancient Monument Maintenance templates
                 'maintenance': jQuery('<div id="maintenance"><div id="main"><h4>' + me.loc.maintenance.main + '</h4></div><div id="sub"><h4>' + me.loc.maintenance.sub + '</h4></div>'),
                 'maintenanceMainItem': jQuery('<div class="item maintenanceMainItem">'
@@ -47,21 +53,40 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     + '<div class="areaModifyDate"/>'
                     + '<div class="tools"/></div>'),
                 'maintenanceSubItem': jQuery('<div class="item maintenanceSubItem"><div class="id"/><div class="createDate"/><div class="modifyDate"/><div class="tools"/></div>'),
-                'maintenanceSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.maintenance.description + '<input type="text" id="description"></label></br><label>' + me.loc.maintenance.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.maintenance.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
+                'maintenanceSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.maintenance.description + '</label><input type="text" id="description">'
+                    + '<div><label>' + me.loc.maintenance.surveyingType + '</label><select id="surveyingType"/></div>'
+                    + '<div><label>' + me.loc.maintenance.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
                 //Building heritage
                 'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h4>' + me.loc.buildingHeritage.main + '</h4></div><div id="sub"><h4>' + me.loc.buildingHeritage.sub + '</h4></div><div id="area"><h4>' + me.loc.buildingHeritage.area + '</h4></div></div>'),
                 'buildingHeritageMainItem': jQuery('<div class="item buildingHeritageMainItem"><div class="name"/><div class="id"/><div class="municipalityName"/></div>'),
                 'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="createDate"/><div class="author"/><div class="tools"/></div>'),
                 'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="createDate"/><div class="author"/><div class="tools"/></div>'),
                 'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem">' + me.loc.buildingHeritage.addNew + '<div class="tools"/></div>'),
-                'buildingHeritagePointSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.buildingHeritage.name + '<input type="text" id="name"></label></br><label>' + me.loc.buildingHeritage.description + '<input type="text" id="description"></label></br><label>' + me.loc.buildingHeritage.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.buildingHeritage.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></br><label>' + me.loc.buildingHeritage.conservationGroup + '<input type="text" id="conservationGroup"></label></br><label>' + me.loc.buildingHeritage.conservationStatus + '<input type="text" id="conservationStatus"></label></br></div>'),
-                'buildingHeritageAreaSurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.buildingHeritage.name + '<input type="text" id="name"></label></br><label>' + me.loc.buildingHeritage.description + '<input type="text" id="description"></label></br><label>' + me.loc.buildingHeritage.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.buildingHeritage.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></br><label>' + me.loc.buildingHeritage.conservationGroup + '<input type="text" id="conservationGroup"></label></br><label>' + me.loc.buildingHeritage.conservationStatus + '<input type="text" id="conservationStatus"></label></br></div>'),
+                'buildingHeritagePointSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.buildingHeritage.name + '</label><input type="text" id="name"></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.description + '</label><input type="text" id="description"></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.surveyingType + '</label><select id="surveyingType"/></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.conservationGroup + '</label><input type="text" id="conservationGroup"></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.conservationStatus + '</label><input type="text" id="conservationStatus"></div></div>'),
+                'buildingHeritageAreaSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.buildingHeritage.name + '</label><input type="text" id="name"></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.description + '</label><input type="text" id="description"></label></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.surveyingType + '</label><select id="surveyingType"/></label></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></label></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.conservationGroup + '</label><input type="text" id="conservationGroup"></label></div>'
+                    + '<div><label>' + me.loc.buildingHeritage.conservationStatus + '</label><input type="text" id="conservationStatus"></label></div></div>'),
                 //RKY 2000
                 'rky2000': jQuery('<div id="rky2000"><div id="main"><h4>' + me.loc.rky2000.main + '</h4></div><div id="point"><h4>' + me.loc.rky2000.point + '</h4></div><div id="area"><h4>' + me.loc.rky2000.area + '</h4></div><div id="line"><h4>' + me.loc.rky2000.line + '</h4></div></div>'),
                 'rky2000MainItem': jQuery('<div class="item rky2000MainItem"><div class="id"/></div>'),
                 'rky2000Geometry': jQuery('<div class="item rky2000Geometry"><div class="id"/><div class="name"/><div class="description"/><div class="surveyingAccuracy"/><div class="surveyingType"/><div class="modifyDate"/><div class="createDate"/><div class="author"/><div class="tools"/></div>'),
                 'rky2000GeometryAdd': jQuery('<div class="item newItem rky2000GeometryItem">' + me.loc.rky2000.addNew + '<div class="tools"/></div>'),
-                'rky2000SurveyingDetails': jQuery('<div class="itemDetails"><label>' + me.loc.rky2000.name + '<input type="text" id="name"></label></br><label>' + me.loc.rky2000.description + '<input type="text" id="description"></label></br><label>' + me.loc.rky2000.surveyingType + '<select id="surveyingType"/></label></br><label>' + me.loc.rky2000.surveyingAccuracy + '<select id="surveyingAccuracy"/></label></div>'),
+                'rky2000SurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.rky2000.name + '</label><input type="text" id="name"></div>'
+                    + '<div><label>' + me.loc.rky2000.description + '</label><input type="text" id="description"></div>'
+                    + '<div><label>' + me.loc.rky2000.surveyingType + '</label><select id="surveyingType"/></div>'
+                    + '<div><label>' + me.loc.rky2000.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
                 //common templates
                 'buttons': jQuery('<div class=buttons/>'),
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
@@ -235,6 +260,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _renderAncientMonument: function(data, content) {
             var me = this,
                 itemDetails = me.templates.ancientMonument.clone(),
+                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                panel,
                 main = itemDetails.find("#main"),
                 sub = itemDetails.find("#sub"),
                 area = itemDetails.find('#area'),
@@ -307,10 +335,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, me.loc.ancientMonument.surveyingAccuracyValues[data.subItems[i].surveyingAccuracy]));
                 subItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, me.loc.ancientMonument.surveyingTypeValues[data.subItems[i].surveyingType]));
 
-                subItemRow.find('.tools').append(me._getEditTools({'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i]}));
+                subItemRow.find('.tools').append(me._getEditTools({ 'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i] }));
 
-                sub.append(subItemRow);
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.subItems[i].description);
+                panel.setContent(subItemRow);
+                panel.setVisible(true);
+                panel.open();
+
+                //sub.append(subItemRow);
+                subAccordion.addPanel(panel);
             }
+
+            subAccordion.insertTo(sub);
 
             for(var i = 0; i < data.areas.length; ++i) {
                 var areaRow = me.templates.ancientMonumentAreaItem.clone();
@@ -326,8 +363,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
                 areaRow.find('.tools').append(me._getEditTools({'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i]}));
 
-                area.append(areaRow);
+                //area.append(areaRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.areas[i].description);
+                panel.setContent(areaRow);
+                panel.setVisible(true);
+                panel.close();
+
+                areaAccordion.addPanel(panel);
             }
+
+            areaAccordion.insertTo(area);
             
             var newAreaRow = me.templates.ancientMonumentAreaItemAdd.clone();
             newAreaRow.find('.tools').append(me._getEditTools({'area': true, 'id': -1, 'type': 'area', feature: {}}));
@@ -340,6 +387,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _renderMaintenance: function (data, content) {
             var me = this,
                 itemDetails = me.templates.maintenance.clone(),
+                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                panel,
                 main = itemDetails.find("#main"),
                 sub = itemDetails.find("#sub"),
                 saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
@@ -409,8 +458,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 subItemRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i] }));
 
-                sub.append(subItemRow);
+                //sub.append(subItemRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.subAreas[i].description);
+                panel.setContent(subItemRow);
+                panel.setVisible(true);
+                panel.close();
+
+                subAccordion.addPanel(panel);
             }
+
+            subAccordion.insertTo(sub);
 
             content.find(".content").append(itemDetails);
             content.find(".content").append(buttons);
@@ -419,6 +478,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _renderBuildingHeritage: function (data, content) {
             var me = this,
                 itemDetails = me.templates.buildingHeritage.clone(),
+                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                panel,
                 main = itemDetails.find("#main"),
                 sub = itemDetails.find("#sub"),
                 area = itemDetails.find('#area'),
@@ -489,8 +551,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 subItemRow.find('.tools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
 
-                sub.append(subItemRow);
+                //sub.append(subItemRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.points[i].description);
+                panel.setContent(subItemRow);
+                panel.setVisible(true);
+                panel.close();
+
+                subAccordion.addPanel(panel);
             }
+
+            subAccordion.insertTo(sub);
 
             for (var i = 0; i < data.areas.length; ++i) {
                 var areaRow = me.templates.buildingHeritageArea.clone();
@@ -508,8 +580,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 areaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
 
-                area.append(areaRow);
+                //area.append(areaRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.areas[i].description);
+                panel.setContent(areaRow);
+                panel.setVisible(true);
+                panel.close();
+
+                areaAccordion.addPanel(panel);
             }
+
+            areaAccordion.insertTo(area);
 
             var newAreaRow = me.templates.buildingHeritageAreaAdd.clone();
             newAreaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
@@ -522,6 +604,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _renderRKY2000: function (data, content) {
             var me = this,
                 itemDetails = me.templates.rky2000.clone(),
+                pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                lineAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                panel,
                 main = itemDetails.find("#main"),
                 point = itemDetails.find("#point"),
                 area = itemDetails.find('#area'),
@@ -597,8 +683,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 pointRow.find('.tools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
 
-                sub.append(pointRow);
+                //point.append(pointRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.points[i].description);
+                panel.setContent(pointRow);
+                panel.setVisible(true);
+                panel.close();
+
+                pointAccordion.addPanel(panel);
             }
+
+            pointAccordion.insertTo(point);
 
             var newPointRow = me.templates.rky2000GeometryAdd.clone();
             newPointRow.find('.tools').append(me._getEditTools({ 'point': true, 'id': -1, 'type': 'point', feature: {} }));
@@ -618,8 +714,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 areaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
 
-                area.append(areaRow);
+                //area.append(areaRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.areas[i].description);
+                panel.setContent(areaRow);
+                panel.setVisible(true);
+                panel.close();
+
+                areaAccordion.addPanel(panel);
             }
+
+            areaAccordion.insertTo(area);
 
             var newAreaRow = me.templates.rky2000GeometryAdd.clone();
             newAreaRow.find('.tools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
@@ -639,8 +745,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 lineRow.find('.tools').append(me._getEditTools({ 'line': true, 'id': data.lines[i].id, 'type': 'line', feature: data.lines[i] }));
 
-                line.append(lineRow);
+                //line.append(lineRow);
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.lines[i].description);
+                panel.setContent(lineRow);
+                panel.setVisible(true);
+                panel.close();
+
+                lineAccordion.addPanel(panel);
             }
+
+            lineAccordion.insertTo(line);
 
             var newLineRow = me.templates.rky2000GeometryAdd.clone();
             newLineRow.find('.tools').append(me._getEditTools({ 'line': true, 'id': -1, 'type': 'line', feature: {} }));
@@ -665,11 +781,20 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _getEditTools: function(conf) {
             var me = this,
                 container = jQuery('<div class=toolrow></div>'),
-                pointButton = $("<div />").addClass('add-point tool'),
+                locBtns = me.instance.getLocalization('buttons'),
+                /*pointButton = $("<div />").addClass('add-point tool'),
                 pointXYButton = $("<div />").addClass('add-point-xy tool'),
                 lineButton = $("<div />").addClass('add-line tool'),
                 areaButton = $("<div />").addClass('add-area tool'),
-                selectButton = $("<div />").addClass('tool-feature-selection tool');
+                selectButton = $("<div />").addClass('tool-feature-selection tool');*/
+
+                pointButton = $('<button type="button">' + locBtns.addNewPoint + '</button>').addClass('registryItemActionButton'),
+                pointXYButton = $('<button type="button">' + locBtns.createWithXY + '</button>').addClass('registryItemActionButton'),
+                lineButton = $('<button type="button">' + locBtns.addNewLine + '</button>').addClass('registryItemActionButton'),
+                areaButton = $('<button type="button">' + locBtns.addNewArea + '</button>').addClass('registryItemActionButton'),
+                selectButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton');
+
+                
 
             if(typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
@@ -690,6 +815,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }
                 });
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
+                if (conf.feature.geometry != null) {
+                    pointButton.html(locBtns.editGeometry);
+                }
                 container.append(pointButton);
 
                 pointXYButton.on('click', function () {
@@ -720,6 +848,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }
                 });
                 lineButton.attr('id', 'line-' + conf.type + "-" + conf.id);
+                if (conf.feature.geometry != null) {
+                    lineButton.html(locBtns.editGeometry);
+                }
                 container.append(lineButton);
             }
 
@@ -742,6 +873,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }
                 });
                 areaButton.attr('id', 'area-' + conf.type + "-" + conf.id);
+                if (conf.feature.geometry != null) {
+                    areaButton.html(locBtns.editGeometry);
+                }
                 container.append(areaButton);
             }
 

@@ -6,6 +6,12 @@ div.itemDetails .drawHelper {
   position: relative;
   left: 212px; }
 
+div.itemDetails label {
+  display: inline-block;
+  width: 180px;
+  text-align: left;
+}
+
 div.itemDetails input[type=text], div.itemDetails select {
     width: 100%;
     margin: 8px 10px 8px 10px;
@@ -147,6 +153,12 @@ div.content-editor div.buttons, div.publisher div.startview div.buttons {
   margin-top: 10px; }
 div.content-editor div.buttons input, div.publisher div.startview div.buttons input {
   margin: 5px 2px; }
+
+div.content-editor .registryItemActionButton {
+    display: block;
+    width: 140px;
+    margin-bottom: 5px;
+}
 
 /* Buttons */
 .content-editor-buttons {

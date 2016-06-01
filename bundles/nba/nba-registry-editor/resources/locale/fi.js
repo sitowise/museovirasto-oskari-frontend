@@ -275,7 +275,14 @@ Oskari.registerLocalization(
 					"cancel": "Peruuta",
 					"close": "Lopeta",
 					"finish": "Tallenna kohde",
-					"save": "Tallenna"
+					"save": "Tallenna",
+					"addNewPoint": "Digitoi piste",
+					"addNewArea": "Digitoi alue",
+					"addNewLine": "Digitoi viiva",
+					"addNewGeometry": "Digitoi",
+					"editGeometry": "Muokkaa geometriaa",
+					"copyGeometry": "Kopioi geometria kartalta",
+					"createWithXY": "Luo piste koordinaateista"
 				}
 			}
 		}

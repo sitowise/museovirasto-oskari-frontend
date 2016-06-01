@@ -276,7 +276,14 @@ Oskari.registerLocalization(
 					"cancel": "Cancel",
 					"close": "Cancel",
 					"finish": "Save",
-					"save": "Save"
+					"save": "Save",
+					"addNewPoint": "Add new point",
+					"addNewArea": "Add new area",
+					"addNewLine": "Add new line",
+					"addNewGeometry": "Add new geometry",
+					"editGeometry": "Edit geometry",
+					"copyGeometry": "Copy geometry",
+					"createWithXY": "Create with XY"
 				}
 			}
 		});
