@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             _.each(results, function (result) {
                 gridModel.addData({
                     'id': result.id,
-                    'desc': result.desc.trim(),
+                    'desc': result.desc != null ? result.desc.trim() : '',
                     //'x': result.coordinateX,
                     //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setVisibleFields(['id', 'desc', 'actions']);
 
             grid.setColumnValueRenderer('id', function (name, data) {
-                var idLink = jQuery('<a>' + name + '</a>');
+                var idLink = jQuery('<a href="#">' + name + '</a>');
                 idLink.bind('click', function () {
                     //showing layer for the register
                     for (var i = 0; i < data.mapLayers.length; i++) {
@@ -240,9 +240,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     var userRoles = me.sandbox.getUser().getRoles();
                     for(var i = 0; i < userRoles.length; ++i) {
                         if($.inArray(userRoles[i].name, me.editorRoles) > -1) {
-                            var editLink = jQuery('<a>' + me.loc.grid.editItems + '</a>');
+                            var editLink = jQuery('<a href="#">' + me.loc.grid.editItems + '</a>');
                             editLink.bind('click', function () {
                                 me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                                //close Search bundle after moving to registry editor
+                                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+
                                 return false;
                             });
                             return editLink;
