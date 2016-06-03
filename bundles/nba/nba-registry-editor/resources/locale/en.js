@@ -8,7 +8,7 @@ Oskari.registerLocalization(
 				"RegistryEditorView": {
 					"title": "Registry editor",
 					"ancientMonument": {
-						"main": "Main items",
+						"main": "Main item",
 						"sub": "Sub items",
 						"area": "Areas",
 						"description": "Description",
@@ -243,7 +243,8 @@ Oskari.registerLocalization(
 						"description": "Select the projection and coordinates",
 						"saveObject": "Save object",
 						"missingCoordsError": "Enter the coordinates of point"
-					}
+					},
+				    "noItemsFound": "No items found"
 				},
 				"tools": {
 					"point": {

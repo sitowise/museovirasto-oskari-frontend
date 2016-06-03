@@ -196,3 +196,26 @@ div.content-editor .registryItemActionButton {
   }
   .nba-registry-editor-coordinates-popup-content .margintop {
     margin-top: 10px; }
+
+
+  #contentMap > div.content-editor > div.content-registry-item .registryItemAttrLabel {
+    display: inline-block;
+    width: 160px;
+    font-weight: bold;
+    margin-right: 6px;
+  }
+
+  #contentMap > div.content-editor > div.content-registry-item .registryItemTools {
+      margin: 12px;
+  }
+
+  #contentMap > div.content-editor > div.content-registry-item .noItemsFound {
+      padding-left: 10px;
+  }
+
+  #contentMap > div.content-editor > div.content-registry-item #sub, 
+  #contentMap > div.content-editor > div.content-registry-item #area, 
+  #contentMap > div.content-editor > div.content-registry-item #point, 
+  #contentMap > div.content-editor > div.content-registry-item #line {
+      margin-bottom: 12px;
+  }

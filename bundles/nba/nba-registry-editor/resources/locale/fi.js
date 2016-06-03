@@ -242,7 +242,8 @@ Oskari.registerLocalization(
 						"description": "Valitse projektio ja koordinaatit",
 						"saveObject": "Tallenna kohde",
 						"missingCoordsError": "Anna pisteen koordinaatit"
-					}
+					},
+					"noItemsFound": "Kohteita ei löytynyt"
 				},
 				"tools": {
 					"point": {
