@@ -313,6 +313,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer = sandbox.findMapLayerFromSelectedMapLayers(data.data.layerId),
             topWFSLayerId = me.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
+            //ugly, maybe use a service or event to set ids?
+            registryLayers = sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers,
             selectionMode = data.data.keepPrevious,
             featureIds = [],
             selectFeatures;
@@ -341,6 +343,75 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
+        } else if(data.data.features !== "empty" && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
+            var registry = registryLayers[data.data.layerId], //{name: "", idAttribute: "", itemType: ""}
+                fields = layer.getFields(),
+                idFieldNum = -1,
+                subIdFieldNum = -1,
+                ids = [],
+                subIds = [],
+                subIdAttribute = 'Alakohdetunnus',
+                registryData = {"reqId": data.data.reqId,
+                                "features": [],
+                                "layerId": data.data.layerId,
+                                "lonlat": this.lonlat,
+                                "registry": registry,
+                                "via": "registry"};
+            
+            if(registry.itemType === 'area') {
+                subIdAttribute = 'OBJECTID';
+            }
+            
+            _.forEach(fields, function(value, key) {
+                if(value === registry.idAttribute) {
+                    idFieldNum = key;
+                }
+                
+                if(value === subIdAttribute) {
+                    subIdFieldNum = key;
+                }
+            });
+
+            _.forEach(data.data.features, function(value, key) {
+                ids.push(value[idFieldNum]);
+                subIds.push(value[subIdFieldNum]);
+            });
+
+            $.ajax({
+                url: sandbox.getAjaxUrl(),
+                data: {'action_route': 'GetRegistryItems', 'registerName': registry.name, 'id': ids.join()},
+                type: 'GET',
+                success: function(data, textStatus, jqXHR) {
+                    var features = [];
+                    
+                    if(!_.isArray(data)) {
+                        data = [data];
+                    }
+                    
+                    if(registry.itemType === 'sub') {
+                        $.each(data, function (index, value){
+                            features = features.concat($.grep(value.subItems, function(obj, key) {
+                                return $.inArray(""+obj.id, subIds) > -1;
+                            }));
+                        });
+
+                    } else if(registry.itemType === 'area') {
+                        $.each(data, function (index, value){
+                            features = features.concat($.grep(value.areas, function(obj, key) {
+                                return $.inArray(""+obj.id, subIds) > -1;
+                            }));
+                        });
+                    } else {
+                        features = data;
+                    }
+                    
+                    registryData.features = features;
+                    
+                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                    var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
+                    sandbox.notifyAll(infoEvent);
+                }
+            });
         } else {
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
