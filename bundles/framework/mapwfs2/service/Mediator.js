@@ -373,45 +373,55 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             });
 
             _.forEach(data.data.features, function(value, key) {
-                ids.push(value[idFieldNum]);
-                subIds.push(value[subIdFieldNum]);
-            });
-
-            $.ajax({
-                url: sandbox.getAjaxUrl(),
-                data: {'action_route': 'GetRegistryItems', 'registerName': registry.name, 'id': ids.join()},
-                type: 'GET',
-                success: function(data, textStatus, jqXHR) {
-                    var features = [];
-                    
-                    if(!_.isArray(data)) {
-                        data = [data];
-                    }
-                    
-                    if(registry.itemType === 'sub') {
-                        $.each(data, function (index, value){
-                            features = features.concat($.grep(value.subItems, function(obj, key) {
-                                return $.inArray(""+obj.id, subIds) > -1;
-                            }));
-                        });
-
-                    } else if(registry.itemType === 'area') {
-                        $.each(data, function (index, value){
-                            features = features.concat($.grep(value.areas, function(obj, key) {
-                                return $.inArray(""+obj.id, subIds) > -1;
-                            }));
-                        });
-                    } else {
-                        features = data;
-                    }
-                    
-                    registryData.features = features;
-                    
-                    me.WFSLayerService.emptyWFSFeatureSelections(layer);
-                    var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
-                    sandbox.notifyAll(infoEvent);
+                if(typeof value[idFieldNum] !== 'undefined') {
+                    ids.push(value[idFieldNum]);
+                    subIds.push(value[subIdFieldNum]);
                 }
             });
+
+            if(ids.length > 0) {
+                $.ajax({
+                    url: sandbox.getAjaxUrl(),
+                    data: {'action_route': 'GetRegistryItems', 'registerName': registry.name, 'id': ids.join()},
+                    type: 'GET',
+                    success: function(data, textStatus, jqXHR) {
+                        var features = [];
+
+                        if(!_.isArray(data)) {
+                            data = [data];
+                        }
+
+                        if(registry.itemType === 'sub') {
+                            $.each(data, function (index, value){
+                                features = features.concat($.grep(value.subItems, function(obj, key) {
+                                    return $.inArray(""+obj.id, subIds) > -1;
+                                }));
+                            });
+
+                        } else if(registry.itemType === 'area') {
+                            $.each(data, function (index, value){
+                                features = features.concat($.grep(value.areas, function(obj, key) {
+                                    return $.inArray(""+obj.id, subIds) > -1;
+                                }));
+                            });
+                        } else {
+                            features = data;
+                        }
+
+                        registryData.features = features;
+
+                        me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                        var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
+                        sandbox.notifyAll(infoEvent);
+                    }
+                });
+            } else {
+                // FIXME: pass coordinates from server in response, but not like this
+                data.data.lonlat = this.lonlat;
+                me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+                sandbox.notifyAll(infoEvent);
+            }
         } else {
             // FIXME: pass coordinates from server in response, but not like this
             data.data.lonlat = this.lonlat;
