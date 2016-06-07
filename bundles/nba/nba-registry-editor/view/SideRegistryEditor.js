@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonument': jQuery('<div id="ancientMonument"><div id="main"><h3>' + me.loc.ancientMonument.main + '</h3></div><div id="sub"><h3>' + me.loc.ancientMonument.sub + '</h3></div><div id="area"><h3>' + me.loc.ancientMonument.area + '</h3></div></div>'),
                 'ancientMonumentMainItem': jQuery('<div class="item ancientMonumentMainItem"><div class="id"/><div class="name"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="classification"/><div class="municipalityName"/><div class="url"/><div class="subType"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
                 'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="id"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="registryItemTools"/></div>'),
-                'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="areaSelectionType"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
+                'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="areaSelectionType"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaChangeReason"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
                 'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem"><h4>' + me.loc.ancientMonument.addNew + '</h4><div class="registryItemTools"/></div>'),
                 'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails">'
                     + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
@@ -34,7 +34,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails">'
                     + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
                     + '<div><label>' + me.loc.ancientMonument.surveyingTypeArea + '</label><select id="surveyingType"/></label></div>'
-                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '</label><select id="surveyingAccuracy"/></div>'),
+                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '</label><select id="surveyingAccuracy"/></div>'
+                    + '<div><label>' + me.loc.ancientMonument.areaChangeReason + '</label><input type="text" id="areaChangeReason"></div>'),
                 //Ancient Monument Maintenance templates
                 'maintenance': jQuery('<div id="maintenance"><div id="main"><h3>' + me.loc.maintenance.main + '</h3></div><div id="sub"><h3>' + me.loc.maintenance.sub + '</h3></div>'),
                 'maintenanceMainItem': jQuery('<div class="item maintenanceMainItem">'
@@ -88,7 +89,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     + '<div><label>' + me.loc.rky2000.surveyingType + '</label><select id="surveyingType"/></div>'
                     + '<div><label>' + me.loc.rky2000.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
                 //common templates
-                'buttons': jQuery('<div class=buttons/>'),
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
                     '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="X"></input></div><div class="clear"></div></div>' +
@@ -172,6 +172,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             me.instance.plugins.drawPlugin.startDrawing(config);
             me.instance.enableGfi(false);
             me._showDrawHelper(conf.drawMode, id, typeof conf.geometry !== 'undefined');
+
+            //zoom to geometry which is being edited
+            if (conf.geometry != null && conf.geometry.bounds) {
+                var center = conf.geometry.bounds.getCenterLonLat();
+                me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, conf.geometry.bounds, false]);
+            }
         },
         /**
          * @method sendStopDrawRequest
@@ -267,55 +273,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 panel,
                 main = itemDetails.find("#main"),
                 sub = itemDetails.find("#sub"),
-                area = itemDetails.find('#area'),
-                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
-                buttons = me.templates.buttons.clone(),
-                postData = null;
-
-            cancelBtn.setHandler(function () {
-                me.instance.setEditorMode(false);
-            });
-            buttons.append(cancelBtn.getElement());
-
-            saveBtn.setHandler(function () {
-                if(me.edited) {
-                    if(me.data.itemtype === 'AncientMonument') {
-                        var edited = {'id': me.itemData.id, 'edited': me.itemData._edited, 'subItems': [], 'areas': []};
-                        $.each(me.itemData.subItems, function(index, item) {
-                            if(item._edited) {
-                                edited.subItems.push(item.id);
-                            }
-                        });
-                        $.each(me.itemData.areas, function(index, item) {
-                            if(item._edited) {
-                                edited.areas.push(item.id);
-                            }
-                        });
-                        postData = {'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited)};
-                    }
-                    $.ajax({
-                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
-                        data: postData,
-                        type: 'POST',
-                        success: function(data, textStatus, jqXHR) {
-                            if(data.updated) {
-                                me._refreshData(me.data.id);
-                                me.showMessage(me.loc.success, me.loc.featureUpdated);
-                            } else {
-                                me.showMessage(me.loc.error, me.loc.updateError);
-                            }
-                        },
-                        error: function(jqXHR, textStatus, errorThrown) {
-                            me.showMessage(me.loc.error, me.loc.updateError);
-                        }
-                    });
-                } else {
-                    me.showMessage(me.loc.error, me.loc.noEditsDone);
-                }
-            });
-
-            buttons.append(saveBtn.getElement());
+                area = itemDetails.find('#area');
 
             var mainItemRow = me.templates.ancientMonumentMainItem.clone();
 
@@ -372,6 +330,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 areaRow.find('.digiMk').append(me._formatData(me.loc.ancientMonument.digiMk, data.areas[i].digiMk));
                 areaRow.find('.areaSelectionType').append(me._formatData(me.loc.ancientMonument.areaSelectionType, data.areas[i].areaSelectionType));
                 areaRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.areas[i].description));
+                areaRow.find('.areaChangeReason').append(me._formatData(me.loc.ancientMonument.areaChangeReason, data.areas[i].areaChangeReason));
                 areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
                 areaRow.find('.registryItemTools').append(me._getEditTools({'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i]}));
 
@@ -397,7 +356,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             area.append(newAreaRow)
             
             content.find(".content-registry-item").append(itemDetails);
-            content.find(".content-registry-item").append(buttons);
         },
 
         _renderMaintenance: function (data, content) {
@@ -407,45 +365,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel,
                 main = itemDetails.find("#main"),
-                sub = itemDetails.find("#sub"),
-                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
-                buttons = me.templates.buttons.clone(),
-                postData = null;
-
-            saveBtn.setHandler(function () {
-                if (me.edited) {
-                    if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
-                        var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subAreas': []};
-                        $.each(me.itemData.subAreas, function (index, item) {
-                            if (item._edited) {
-                                edited.subAreas.push(item.id);
-                            }
-                        });
-                        postData = { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                    }
-                    $.ajax({
-                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
-                        data: postData,
-                        type: 'POST',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data.updated) {
-                                me._refreshData(me.data.id);
-                                me.showMessage(me.loc.success, me.loc.featureUpdated);
-                            } else {
-                                me.showMessage(me.loc.error, me.loc.updateError);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            me.showMessage(me.loc.error, me.loc.updateError);
-                        }
-                    });
-                } else {
-                    me.showMessage(me.loc.error, me.loc.noEditsDone);
-                }
-            });
-
-            buttons.append(saveBtn.getButton());
+                sub = itemDetails.find("#sub");
 
             var mainItemRow = me.templates.maintenanceMainItem.clone();
 
@@ -494,7 +414,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }
 
             content.find(".content-registry-item").append(itemDetails);
-            content.find(".content-registry-item").append(buttons);
         },
 
         _renderBuildingHeritage: function (data, content) {
@@ -506,55 +425,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 panel,
                 main = itemDetails.find("#main"),
                 sub = itemDetails.find("#sub"),
-                area = itemDetails.find('#area'),
-                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
-                buttons = me.templates.buttons.clone(),
-                postData = null;
-
-            cancelBtn.setHandler(function () {
-                me.instance.setEditorMode(false);
-            });
-            buttons.append(cancelBtn.getElement());
-
-            saveBtn.setHandler(function () {
-                if (me.edited) {
-                    if (me.data.itemtype === 'BuildingHeritageItem') {
-                        var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
-                        $.each(me.itemData.points, function (index, item) {
-                            if (item._edited) {
-                                edited.points.push(item.id);
-                            }
-                        });
-                        $.each(me.itemData.areas, function (index, item) {
-                            if (item._edited) {
-                                edited.areas.push(item.id);
-                            }
-                        });
-                        postData = { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                    }
-                    $.ajax({
-                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
-                        data: postData,
-                        type: 'POST',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data.updated) {
-                                me._refreshData(me.data.id);
-                                me.showMessage(me.loc.success, me.loc.featureUpdated);
-                            } else {
-                                me.showMessage(me.loc.error, me.loc.updateError);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            me.showMessage(me.loc.error, me.loc.updateError);
-                        }
-                    });
-                } else {
-                    me.showMessage(me.loc.error, me.loc.noEditsDone);
-                }
-            });
-
-            buttons.append(saveBtn.getButton());
+                area = itemDetails.find('#area');
 
             var mainItemRow = me.templates.buildingHeritageMainItem.clone();
 
@@ -635,7 +506,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             area.append(newAreaRow)
 
             content.find(".content-registry-item").append(itemDetails);
-            content.find(".content-registry-item").append(buttons);
         },
 
         _renderRKY2000: function (data, content) {
@@ -649,60 +519,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 main = itemDetails.find("#main"),
                 point = itemDetails.find("#point"),
                 area = itemDetails.find('#area'),
-                line = itemDetails.find('#line'),
-                saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton'),
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
-                buttons = me.templates.buttons.clone(),
-                postData = null;
-
-            cancelBtn.setHandler(function () {
-                me.instance.setEditorMode(false);
-            });
-            buttons.append(cancelBtn.getElement());
-
-            saveBtn.setHandler(function () {
-                if (me.edited) {
-                    if (me.data.itemtype === 'RKY2000') {
-                        var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
-                        $.each(me.itemData.points, function (index, item) {
-                            if (item._edited) {
-                                edited.points.push(item.id);
-                            }
-                        });
-                        $.each(me.itemData.areas, function (index, item) {
-                            if (item._edited) {
-                                edited.areas.push(item.id);
-                            }
-                        });
-                        $.each(me.itemData.lines, function (index, item) {
-                            if (item._edited) {
-                                edited.lines.push(item.id);
-                            }
-                        });
-                        postData = { 'registerName': 'rky2000', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                    }
-                    $.ajax({
-                        url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
-                        data: postData,
-                        type: 'POST',
-                        success: function (data, textStatus, jqXHR) {
-                            if (data.updated) {
-                                me._refreshData(me.data.id);
-                                me.showMessage(me.loc.success, me.loc.featureUpdated);
-                            } else {
-                                me.showMessage(me.loc.error, me.loc.updateError);
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            me.showMessage(me.loc.error, me.loc.updateError);
-                        }
-                    });
-                } else {
-                    me.showMessage(me.loc.error, me.loc.noEditsDone);
-                }
-            });
-
-            buttons.append(saveBtn.getButton());
+                line = itemDetails.find('#line');
 
             var mainItemRow = me.templates.rky2000MainItem.clone();
 
@@ -816,7 +633,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             line.append(newLineRow)
 
             content.find(".content-registry-item").append(itemDetails);
-            content.find(".content-registry-item").append(buttons);
         },
 
         _formatData: function(label, data) {
@@ -1088,7 +904,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find('div.infoText').html(message);
 
             dialog.show(title, content, buttons);
-            dialog.moveTo('div#' + id, 'top');
+            dialog.moveTo('button#' + id, 'top');
         },
         
         /**
@@ -1130,6 +946,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         if (typeof me.editFeature.id === 'undefined') {
                             me.itemData.areas.push(me.editFeature)
                         }
+
+                        me.editFeature.areaChangeReason = content.find("#areaChangeReason").val();
                     }
 
                     me.editFeature.geometry = JSON.parse(geometry);
@@ -1194,6 +1012,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 me.sendStopDrawRequest(true);
                 me._dialog.close(true);
                 me._dialog = null;
+
+                me._saveRegistryItem();
             });
             buttons.push(finishBtn);
 
@@ -1222,6 +1042,46 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             dialog.show(title, content, buttons);
             dialog.moveTo('div#' + id, 'top');
+        },
+
+        _saveRegistryItem: function () {
+            var me = this;
+
+            if (me.edited) {
+                var postData = null;
+                if (me.data.itemtype === 'AncientMonument') {
+                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subItems': [], 'areas': [] };
+                    $.each(me.itemData.subItems, function (index, item) {
+                        if (item._edited) {
+                            edited.subItems.push(item.id);
+                        }
+                    });
+                    $.each(me.itemData.areas, function (index, item) {
+                        if (item._edited) {
+                            edited.areas.push(item.id);
+                        }
+                    });
+                    postData = { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+                }
+                $.ajax({
+                    url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
+                    data: postData,
+                    type: 'POST',
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.updated) {
+                            me._refreshData(me.data.id);
+                            me.showMessage(me.loc.success, me.loc.featureUpdated);
+                        } else {
+                            me.showMessage(me.loc.error, me.loc.updateError);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        me.showMessage(me.loc.error, me.loc.updateError);
+                    }
+                });
+            } else {
+                me.showMessage(me.loc.error, me.loc.noEditsDone);
+            }
         },
         
         _renderAncientMonumentDetails: function (content, attributes, selectedFeature, fields) {

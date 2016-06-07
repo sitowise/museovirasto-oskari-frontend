@@ -195,28 +195,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idLink = jQuery('<a href="#">' + name + '</a>');
                 idLink.bind('click', function () {
-                    //showing layer for the register
-                    for (var i = 0; i < data.mapLayers.length; i++) {
-                        var mapLayerId = data.mapLayers[i].mapLayerID,
-                            layer = me.sandbox.findMapLayerFromAllAvailable();
-                        if (layer != null) {
-                            me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
-                        } else {
-                            //TODO show error
-                        }
-                    }
 
-                    //TODO probably need to be converted to current coordinate system
-                    //var x = data.x,
-                        //y = data.y,
-                        //zoomLevel = 7;
-                    var extent = new OpenLayers.Bounds(data.bounds),
-                        center = extent.getCenterLonLat(),
-                        x = center.lon,
-                        y = center.lat;
-                    
-                    //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
-                    me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+                    me._zoomToObject(data);
 
                     //create infobox
                     //TODO probably need to be converted to current coordinate system
@@ -242,6 +222,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         if($.inArray(userRoles[i].name, me.editorRoles) > -1) {
                             var editLink = jQuery('<a href="#">' + me.loc.grid.editItems + '</a>');
                             editLink.bind('click', function () {
+
+                                //zoom to object
+                                me._zoomToObject(data);
+                                //TODO: highlight object
+
                                 me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
                                 //close Search bundle after moving to registry editor
                                 me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
@@ -264,6 +249,32 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             this.resultsGrid = grid;
 
             return resultGrid;
+        },
+
+        _zoomToObject: function (data) {
+            var me = this;
+            //showing layer for the register
+            for (var i = 0; i < data.mapLayers.length; i++) {
+                var mapLayerId = data.mapLayers[i].mapLayerID,
+                    layer = me.sandbox.findMapLayerFromAllAvailable();
+                if (layer != null) {
+                    me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                } else {
+                    //TODO show error
+                }
+            }
+
+            //TODO probably need to be converted to current coordinate system
+            //var x = data.x,
+            //y = data.y,
+            //zoomLevel = 7;
+            var extent = new OpenLayers.Bounds(data.bounds),
+                center = extent.getCenterLonLat(),
+                x = center.lon,
+                y = center.lat;
+
+            //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
+            me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
         },
 
         _getInfoBoxHtml: function (result) {

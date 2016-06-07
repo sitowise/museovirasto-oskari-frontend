@@ -156,7 +156,7 @@ div.content-editor div.buttons input, div.publisher div.startview div.buttons in
 
 div.content-editor .registryItemActionButton {
     display: block;
-    width: 180px;
+    width: 100%;
     margin-bottom: 5px;
     font-size: 12px;
     padding: 2px;
@@ -218,4 +218,6 @@ div.content-editor .registryItemActionButton {
   #contentMap > div.content-editor > div.content-registry-item #point, 
   #contentMap > div.content-editor > div.content-registry-item #line {
       margin-bottom: 12px;
+      border: 1px solid #DCDCDC;
+      padding: 6px;
   }
