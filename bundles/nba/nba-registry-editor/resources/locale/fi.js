@@ -56,7 +56,8 @@ Oskari.registerLocalization(
 							"1": "Maastomittaus",
 							"2": "Tarkastus",
 							"3": "Muu lähde"
-						}
+						},
+						"areaChangeReason": "areaChangeReason"
 					},
 					"maintenance": {
 					    "main": "Pääkohde",
@@ -242,7 +243,8 @@ Oskari.registerLocalization(
 						"description": "Valitse projektio ja koordinaatit",
 						"saveObject": "Tallenna kohde",
 						"missingCoordsError": "Anna pisteen koordinaatit"
-					}
+					},
+					"noItemsFound": "Kohteita ei löytynyt"
 				},
 				"tools": {
 					"point": {
