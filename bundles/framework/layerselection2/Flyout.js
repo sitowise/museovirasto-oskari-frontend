@@ -353,7 +353,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 if (hasOpts) {
                     if (layer.getCurrentStyle()) {
                         sel.val(layer.getCurrentStyle().getName());
+
+                        //Remove style called 'default' if a custom style is set as default
+                        if (layer.getCurrentStyle().getName() != 'default') {
+                            sel.find('[value="default"]').remove();
+                        }
                     }
+
                     sel.trigger('change');
                     stylesel.show();
                 }

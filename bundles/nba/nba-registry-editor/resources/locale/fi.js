@@ -57,7 +57,7 @@ Oskari.registerLocalization(
 							"2": "Tarkastus",
 							"3": "Muu lähde"
 						},
-						"areaChangeReason": "areaChangeReason"
+						"areaChangeReason": "Rajausmuutoksen perustelu"
 					},
 					"maintenance": {
 					    "main": "Pääkohde",
