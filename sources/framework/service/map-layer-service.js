@@ -988,8 +988,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 // set the default style
                 layer.selectStyle(jsonLayer.style);
-            }
-            if(defaultStyle) {
+            } else if (defaultStyle) {
                 layer.addStyle(defaultStyle);
                 layer.selectStyle(defaultStyle.getName());
             }
