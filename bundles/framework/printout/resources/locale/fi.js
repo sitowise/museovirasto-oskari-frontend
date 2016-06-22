@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                     {
                         "id": "pageCoordinates",
                         "label": "Näytä koordinaatit",
-                        "tooltip": "Näytä tulosteessa sen keskipisteen koordinaatit.",
+                        "tooltip": "Näytä tulosteessa vasemman alakulman koordinaatit.",
                         "checked": "checked"
                     }
                 ]

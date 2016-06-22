@@ -118,7 +118,7 @@ Oskari.registerLocalization(
                     {
                         "id": "pageCoordinates",
                         "label": "Show a coordinates in the map printout.",
-                        "tooltip": "You can add the center coordinates to the printout.",
+                        "tooltip": "You can add the lower left coordinates to the printout.",
                         "checked": "checked"
                     }
                 ]
