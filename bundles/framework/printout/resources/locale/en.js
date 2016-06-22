@@ -114,6 +114,12 @@ Oskari.registerLocalization(
                         "label": "Show a date in the map printout.",
                         "tooltip": "You can add a date to the printout.",
                         "checked": "checked"
+                    },
+                    {
+                        "id": "pageCoordinates",
+                        "label": "Show a coordinates in the map printout.",
+                        "tooltip": "You can add the center coordinates to the printout.",
+                        "checked": "checked"
                     }
                 ]
             },

@@ -114,6 +114,12 @@ Oskari.registerLocalization(
                         "label": "Näytä päivämäärä",
                         "tooltip": "Näytä tulosteessa sen laatimispäivämäärä.",
                         "checked": "checked"
+                    },
+                    {
+                        "id": "pageCoordinates",
+                        "label": "Näytä koordinaatit",
+                        "tooltip": "Näytä tulosteessa sen keskipisteen koordinaatit.",
+                        "checked": "checked"
                     }
                 ]
             },
