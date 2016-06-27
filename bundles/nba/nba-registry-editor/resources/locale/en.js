@@ -233,6 +233,8 @@ Oskari.registerLocalization(
 					"noEditsDone": "No edits have been done. Edit features before saving.",
 					"link": "Link",
 					"updateError": "Feature update failed",
+					"areaIntersects": "Feature update failed, because area geometry intersects another feature.",
+					"subAreaIntersects": "Feature update failed, because subarea geometry intersects another feature.",
 					"success": "Success",
 					"featureUpdated": "Feature was succesfully updated",
 					"searchError": "Could not find registry item",
@@ -253,7 +255,7 @@ Oskari.registerLocalization(
 						"tooltip": "Draw a point and add it to feature.",
 						"add": "Draw a point by clicking the map.",
 						"next": "You can draw several points in one feature.",
-						"edit": "You can move points to another location by clicking them with a mouse.",
+						"edit": "Feature already has a point geometry. You can move points to another location by clicking them with a mouse.",
 						"save": "Save"
 					},
 					"line": {
@@ -261,7 +263,7 @@ Oskari.registerLocalization(
 						"tooltip": "Draw a line and add it to feature.",
 						"add": "Draw a line to the map. Click breaking points. Finally double-click an ending point and click \"Save\".",
 						"next": "You can move breaking points to another location by clicking them with a mouse.",
-						"edit": "You can move breaking points to another location by clicking them with a mouse.",
+						"edit": "Feature already has a line geometry. You can move breaking points to another location by clicking them with a mouse.",
 						"save": "Save"
 					},
 					"area": {
@@ -269,7 +271,7 @@ Oskari.registerLocalization(
 						"tooltip": "Draw an area and add it to feature.",
 						"add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save\". You can draw a hole to an area by keeping \"Alt\"-key down.",
 						"next": "You can draw several areas in one feature.",
-						"edit": "You can move breaking points to another location by clicking them with a mouse.",
+						"edit": "Feature already has an area geometry. You can move breaking points to another location by clicking them with a mouse.",
 						"save": "Save"
 					}
 				},

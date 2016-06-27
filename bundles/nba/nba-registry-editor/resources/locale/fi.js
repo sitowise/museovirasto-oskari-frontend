@@ -232,6 +232,8 @@ Oskari.registerLocalization(
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
 					"link": "Linkki",
 					"updateError": "Kohteen päivittäminen epäonnistui",
+					"areaIntersects": "Kohteen päivittäminen epäonnistui, koska aluegeometria leikkaa toista kohdetta.",
+					"subAreaIntersects": "Kohteen päivittäminen epäonnistui, koska osa-aluegeometria leikkaa toista kohdetta.",
 					"success": "Päivitys onnistui",
 					"featureUpdated": "Kohteen päivitys onnistui",
 					"searchError": "Kohteen hakeminen epäonnistui",
@@ -252,7 +254,7 @@ Oskari.registerLocalization(
 						"tooltip": "Piirrä piste ja lisää se kohteeseen.",
 						"add": "Piirrä piste klikkaamalla karttaa.",
 						"next": "Voit piirtää samaan kohteeseen useita pisteitä.",
-						"edit": "Voit siirtää pistettä raahaamalla sitä hiirellä.",
+						"edit": "Kohteella on jo tallennettuna piste. Voit siirtää pistettä raahaamalla sitä hiirellä.",
 						"save": "Tallenna"
 					},
 					"line": {
@@ -260,7 +262,7 @@ Oskari.registerLocalization(
 						"tooltip": "Piirrä viiva ja lisää se kohteeseen.",
 						"add": "Piirrä viiva kartalle. Klikkaa viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä tai paina \"Tallenna kohde\".",
 						"next": "Voit piirtää samaan kohteeseen useita viivoja.",
-						"edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
+						"edit": "Kohteella on jo tallennettuna viiva. Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
 						"save": "Tallenna"
 					},
 					"area": {
@@ -268,7 +270,7 @@ Oskari.registerLocalization(
 						"tooltip": "Piirrä alue ja lisää se kohteeseen.",
 						"add": "Piirrä alue kartalle. Klikkaa alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä tai paina \"Tallenna kohde\". Voit piirtää alueeseen reiän pitämällä ALT-näppäintä pohjassa reiän piirtämisen ajan.",
 						"next": "Voit piirtää samaan kohteeseen useita alueita.",
-						"edit": "Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
+						"edit": "Kohteella on jo tallennettuna alue. Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
 						"save": "Tallenna"
 					}
 				},

@@ -1072,7 +1072,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me._refreshData(me.data.id);
                             me.showMessage(me.loc.success, me.loc.featureUpdated);
                         } else {
-                            me.showMessage(me.loc.error, me.loc.updateError);
+                            var errorMessage = me.loc.updateError;
+                            if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
+                                errorMessage = me.loc[data.error];
+                            }
+                            me.showMessage(me.loc.error, errorMessage);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
