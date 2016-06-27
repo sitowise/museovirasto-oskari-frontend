@@ -345,6 +345,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 feature,
                 featureJson,
                 extent,
+                center,
                 features = [],
                 layers = [];
 
