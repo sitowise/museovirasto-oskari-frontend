@@ -240,6 +240,7 @@ Oskari.registerLocalization(
 					"selectError": "Valitse kartalta vain yksi kohde",
 					"geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
 					"geometryDetailsInfoTitle": "Päivitä rekisteritiedot",
+					"featureHasGeometry": "Kohteella on jo tallennettu geometria. Haluatko muokata geometriaa?",
 					"coordinatePopup": {
 						"title": "Anna pisteen koordinaatit",
 						"description": "Valitse projektio ja koordinaatit",
@@ -286,7 +287,8 @@ Oskari.registerLocalization(
 					"addNewGeometry": "Digitoi",
 					"editGeometry": "Muokkaa geometriaa",
 					"copyGeometry": "Kopioi geometria kartalta",
-					"createWithXY": "Luo piste koordinaateista"
+					"createWithXY": "Luo piste koordinaateista",
+					"continue": "Jatka"
 				}
 			}
 		}

@@ -690,11 +690,37 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 container.append(pointButton);
 
                 pointXYButton.on('click', function () {
-                    me.editFeature = conf.feature;
-                    me._showCoordinatesPopUp();
-                    me._dialog.moveTo('div#' + this.id, 'top');
-                    if(typeof me.editFeature._type === 'undefined') {
-                        me.editFeature._type = conf.type;
+                    var cont = function() {
+                        me.editFeature = conf.feature;
+                        me._showCoordinatesPopUp();
+                        me._dialog.moveTo('div#' + this.id, 'top');
+                        if(typeof me.editFeature._type === 'undefined') {
+                            me.editFeature._type = conf.type;
+                        }
+                    };
+                    if(typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) {
+                        cont();
+                    } else {
+                        var title = me.loc.error,
+                            content = me.loc.featureHasGeometry,
+                            continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                            cancelButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                            buttons = [cancelButton, continueButton];
+
+                        cancelButton.setHandler(function() {
+                            me._dialog.close(true);
+                            me._dialog = null;
+                        });
+
+                        continueButton.setTitle(me.instance.getLocalization('buttons')["continue"]);
+                        continueButton.addClass('primary');
+                        continueButton.setHandler(function() {
+                            me._dialog.close(true);
+                            me._dialog = null;
+                            cont();
+                        });
+
+                        me.showMessage(title, content, buttons);
                     }
                 });
                 pointXYButton.attr('id', 'pointxy-' + conf.type + "-" + conf.id);
@@ -811,12 +837,40 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }*/
                     
                 };
-                var popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', me);
-                popupHandler.showSelectionTools(onFinishSelectionCallback);
 
-                me.editFeature = conf.feature;
-                if (typeof me.editFeature._type === 'undefined') {
-                    me.editFeature._type = conf.type;
+                var cont = function() {
+                    var popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', me);
+                    popupHandler.showSelectionTools(onFinishSelectionCallback);
+
+                    me.editFeature = conf.feature;
+                    if (typeof me.editFeature._type === 'undefined') {
+                        me.editFeature._type = conf.type;
+                    }
+                };
+                
+                if(typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) {
+                    cont();
+                } else {
+                    var title = me.loc.error,
+                        content = me.loc.featureHasGeometry,
+                        continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                        cancelButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                        buttons = [cancelButton, continueButton];
+
+                    cancelButton.setHandler(function() {
+                        me._dialog.close(true);
+                        me._dialog = null;
+                    });
+
+                    continueButton.setTitle(me.instance.getLocalization('buttons')["continue"]);
+                    continueButton.addClass('primary');
+                    continueButton.setHandler(function() {
+                        me._dialog.close(true);
+                        me._dialog = null;
+                        cont();
+                    });
+
+                    me.showMessage(title, content, buttons);
                 }
             });
             selectButton.attr('id', 'select-' + conf.type + "-" + conf.id);
