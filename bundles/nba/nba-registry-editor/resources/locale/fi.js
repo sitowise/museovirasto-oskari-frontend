@@ -232,6 +232,8 @@ Oskari.registerLocalization(
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
 					"link": "Linkki",
 					"updateError": "Kohteen päivittäminen epäonnistui",
+					"areaIntersects": "Kohteen päivittäminen epäonnistui, koska aluegeometria leikkaa toista kohdetta.",
+					"subAreaIntersects": "Kohteen päivittäminen epäonnistui, koska osa-aluegeometria leikkaa toista kohdetta.",
 					"success": "Päivitys onnistui",
 					"featureUpdated": "Kohteen päivitys onnistui",
 					"searchError": "Kohteen hakeminen epäonnistui",

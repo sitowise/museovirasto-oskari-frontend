@@ -233,6 +233,8 @@ Oskari.registerLocalization(
 					"noEditsDone": "No edits have been done. Edit features before saving.",
 					"link": "Link",
 					"updateError": "Feature update failed",
+					"areaIntersects": "Feature update failed, because area geometry intersects another feature.",
+					"subAreaIntersects": "Feature update failed, because subarea geometry intersects another feature.",
 					"success": "Success",
 					"featureUpdated": "Feature was succesfully updated",
 					"searchError": "Could not find registry item",
