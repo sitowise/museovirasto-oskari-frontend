@@ -241,6 +241,7 @@ Oskari.registerLocalization(
 					"selectError": "Select only one feature on the map",
 					"geometryDetailsInfo": "Update registry information for geometry",
 					"geometryDetailsInfoTitle": "Update registry information",
+					"featureHasGeometry": "Feature already has a geometry. Do you want to continue editing?",
 					"coordinatePopup": {
 						"title": "Enter the coordinates of point",
 						"description": "Select the projection and coordinates",
@@ -287,7 +288,8 @@ Oskari.registerLocalization(
 					"addNewGeometry": "Add new geometry",
 					"editGeometry": "Edit geometry",
 					"copyGeometry": "Copy geometry",
-					"createWithXY": "Create with XY"
+					"createWithXY": "Create with XY",
+					"continue": "Continue"
 				}
 			}
 		});
