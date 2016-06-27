@@ -79,18 +79,68 @@ function () {
     _showRegistryItemOnMap: function (data) {
         //TODO probably need to be converted to current coordinate system
         var me = this,
-            zoomLevel = 7,
-            extent = new OpenLayers.Bounds(data.bounds),
-            center = extent.getCenterLonLat(),
-            x = center.lon,
-            y = center.lat;
+            //zoomLevel = 7,
+            //extent = new OpenLayers.Bounds(data.bounds),
+            //center = extent.getCenterLonLat(),
+            //x = center.lon,
+            //y = center.lat,
+            layers = [],
+            features = [],
+            extent,
+            center,
+            registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
+            format = new OpenLayers.Format.WKT({}),
+            feature,
+            featureJson;
+
+        if (!$.isArray(data)) {
+            data = [data];
+        }
+
+        for (var x = 0; x < data.length; x++) {
+
+            for (var j = 0; j < data[x].mapLayers.length; j++) {
+                var mapLayerId = data[x].mapLayers[j].mapLayerID;
+                if (layers.indexOf(mapLayerId) == -1) {
+                    layers.push(mapLayerId);
+                }
+
+                if (data[x].mapLayers[j].toHighlight) {
+                    featureJson = {
+                        attribute: data[x].mapLayers[j].attribute,
+                        itemId: data[x].id,
+                        layerId: mapLayerId
+                    };
+
+                    features.push(featureJson);
+                }
+            }
+
+            if (data[x].bounds != null) {
+                var bounds = new OpenLayers.Bounds(data[x].bounds);
+                var geometry = bounds.toGeometry();
+                var wktFormat = new OpenLayers.Format.WKT({});
+                var wkt = wktFormat.extractGeometry(geometry);
+
+                //Create feature and add to fake layer
+                //feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
+                feature = format.read(wkt);
+                registerSearchLayer.addFeatures([feature]);
+            }
+        }
+
+        //calculate bounding box from fake layer
+        extent = registerSearchLayer.getDataExtent();
+        center = extent.getCenterLonLat();
+
+        //zoom map to the extent
+        me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
         //showing layer for the register
-        for (var i = 0; i < data.mapLayers.length; i++) {
-            var mapLayerId = data.mapLayers[i].mapLayerID,
-                layer = me.sandbox.findMapLayerFromAllAvailable();
+        for (var i = 0; i < layers.length; i++) {
+            var layer = me.sandbox.findMapLayerFromAllAvailable(layers[i]);
             if (layer != null) {
-                me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                me.sandbox.postRequestByName('AddMapLayerRequest', [layers[i], true]);
             } else {
                 //TODO show error
             }
@@ -98,6 +148,23 @@ function () {
 
         me.getSandbox().postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
+        //find features in the layers by the identyfying attribute and highlight it
+        for (var i = 0; i < features.length; i++) {
+            var filters = {
+                filters: [{
+                    attribute: features[i].attribute,
+                    //attribute: 'OBJECTID',
+                    caseSensitive: false,
+                    operator: "=",
+                    value: features[i].itemId
+                }]
+            };
+
+            var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
+            me.sandbox.notifyAll(evt);
+        }
+
+        /*
         //create infobox
         //TODO probably need to be converted to current coordinate system
         var lonlat = new OpenLayers.LonLat(x, y),
@@ -110,6 +177,7 @@ function () {
 
         //TODO make localization 'Kohdetiedot'
         me.getSandbox().postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
+        */
     },
 
     _getInfoBoxHtml: function (result) {
