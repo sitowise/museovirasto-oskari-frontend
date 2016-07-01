@@ -111,6 +111,7 @@ Oskari.registerLocalization(
             "metaInfoId": "Metadata file identifier",
             "wmsName": "Unique name",
             "wmsNameDesc": "The unique name is a technical identifier. It is fetched automatically from the GetCapabilities response.",
+            "orderNumber": "Order number",
             "username": "Username",
             "password": "Password",
             "attributes": "Attributes",

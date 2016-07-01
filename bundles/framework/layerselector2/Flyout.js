@@ -417,8 +417,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
-                nameA = a.getName().toLowerCase();
-                nameB = b.getName().toLowerCase();
+                if(a.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
+                    nameA = ""+a.getLayerOrderNumber();
+                } else {
+                    nameA = a.getName().toLowerCase();
+                }
+
+                if(b.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
+                    nameB = ""+b.getLayerOrderNumber();
+                } else {
+                    nameB = b.getName().toLowerCase();
+                }
             }
             if (nameA < nameB) {
                 return -1;

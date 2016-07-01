@@ -288,7 +288,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (newLayerConf.params) {
                 layer.setParams(newLayerConf.params);
             }
-            
+
+            if (newLayerConf.layerOrderNumber) {
+                layer.setLayerOrderNumber(newLayerConf.layerOrderNumber);
+            }
+
             // wms specific
             // TODO: we need to figure this out some other way
             // we could remove the old layer and create a new one in admin bundle
@@ -655,6 +659,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setName(baseMapJson.name);
 
+            layer.setLayerOrderNumber(mapLayerJson.layerOrderNumber);
+
             baseLayer.setMaxScale(baseMapJson.maxScale);
             baseLayer.setMinScale(baseMapJson.minScale);
 
@@ -793,6 +799,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if(mapLayerJson.layerName) {
                 layer.setLayerName(mapLayerJson.layerName);
             }
+
+            layer.setLayerOrderNumber(mapLayerJson.layerOrderNumber);
 
             if (mapLayerJson.opacity !== null && mapLayerJson.opacity !== undefined) {
                 layer.setOpacity(mapLayerJson.opacity);

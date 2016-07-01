@@ -601,6 +601,8 @@ define([
                     data.layerUrl = form.find('#add-layer-interface').val();
                 }
 
+                data.layerOrderNumber = form.find('#add-layer-layerOrderNumber').val();
+
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
