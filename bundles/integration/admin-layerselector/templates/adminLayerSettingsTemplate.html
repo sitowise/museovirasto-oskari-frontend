@@ -153,6 +153,17 @@
             </div>
         </div>
     </div>
+    <div class="add-layer-record add-layer-separation">
+        <div class="add-layer-label-area">
+            <label for="add-layer-layerOrderNumber" class="add-layer-label" title="<%= instance.getLocalization('admin').orderNumber %>"><%= instance.getLocalization('admin').orderNumber %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <div class="input-controls">
+                <input type="text" id="add-layer-layerOrderNumber" required class="add-layer-input long" placeholder="<%= instance.getLocalization('admin').orderNumber %>" value="<%= model.getLayerOrderNumber() %>" />
+                <div class="icon-close"></div>
+            </div>
+        </div>
+    </div>
     <% } %>
 
     <div class="add-layer-record">

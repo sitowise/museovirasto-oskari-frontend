@@ -111,6 +111,7 @@ Oskari.registerLocalization(
             "metaInfoId": "Metatiedon tiedosto&shy;tunniste",
             "wmsName": "Karttatason yksilöivä nimi",
             "wmsNameDesc": "Karttatason on yksilöivä nimi on tekninen tunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
+            "orderNumber": "Järjestysnumero",
             "username": "Käyttäjätunnus",
             "password": "Salasana",
             "attributes": "Attribuutit",
