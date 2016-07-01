@@ -65,6 +65,7 @@ Oskari.clazz.define(
         me._organizationName = null;
         me._dataUrl = null;
         me._orderNumber = null;
+        me._layerOrderNumber = null;
 
         /*
          * Array of sublayers. Notice that only type BASE_LAYER can
@@ -504,6 +505,20 @@ Oskari.clazz.define(
          */
         getOrderNumber: function () {
             return this._orderNumber;
+        },
+        /**
+         * @method setOrderNumber
+         * @param {Number} orderNumber
+         */
+        setLayerOrderNumber: function (orderNumber) {
+            this._layerOrderNumber = orderNumber;
+        },
+        /**
+         * @method getOrderNumber
+         * @return {Number} orderNumber
+         */
+        getLayerOrderNumber: function () {
+            return this._layerOrderNumber;
         },
         /**
          * @method isVisible
