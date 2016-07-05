@@ -342,7 +342,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         var me = this,
             layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
             fields,
-            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds'],
+            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds', 'filtered'],
             type = 'wfslayer',
             result,
             markup;
