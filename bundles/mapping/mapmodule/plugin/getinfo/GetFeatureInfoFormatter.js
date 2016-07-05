@@ -342,10 +342,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         var me = this,
             layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
             fields,
-            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds'],
+            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds', 'filtered', 'lines', 'points', 'subAreas'],
             type = 'wfslayer',
             result,
-            markup;
+            markup,
+            locale = me._getRegistryLocale(data.registry.name, data.registry.itemType);
 
         if (data.features === 'empty' || layer === null || layer === undefined) {
             return;
@@ -358,10 +359,17 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 })
                 .foldl(function (obj, key) {
                     var value = feature[key];
+                    var name = key;
+                    if(locale[key]) {
+                        name = locale[key];
+                    }
+                    if(locale.hasOwnProperty(key + "Values") && locale[key + "Values"].hasOwnProperty(value)) {
+                        value = locale[key + "Values"][value];
+                    }
                     if(_.isArray(value)) {
                         value = value.join(", ");
                     }
-                    obj[key] = value;
+                    obj[name] = value;
                     return obj;
                 }, {})
                 .value();
@@ -378,6 +386,28 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         });
 
         return result;
+    },
+    
+    _getRegistryLocale: function(registryName, itemType) {
+        var loc = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
+        switch(registryName) {
+        case "ancientMonument":
+            return loc.ancientMonument;
+            break;
+        case "rky2000":
+        case "rky1993":
+            return loc.rky2000;
+            break;
+        case "maintenance":
+            return loc.maintenance;
+            break;
+        case "buildingHeritage":
+            return loc.buildingHeritage;
+            break;
+        default:
+            return loc.ancientMonument;
+        break;
+        }
     },
 
     /**
