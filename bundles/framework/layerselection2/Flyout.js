@@ -754,31 +754,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             }
             if (layer.getMetadataIdentifier() || subLmeta) {
                 tools.find('div.icon-info').bind('click', function () {
-                    var rn = 'catalogue.ShowMetadataRequest',
-                        uuid = layer.getMetadataIdentifier(),
-                        additionalUuids = [],
-                        additionalUuidsCheck = {};
-
-                    additionalUuidsCheck[uuid] = true;
-
-                    subLayers = layer.getSubLayers();
-                    if (subLayers && subLayers.length > 0) {
-                        for (s = 0; s < subLayers.length; s += 1) {
-                            subUuid = subLayers[s].getMetadataIdentifier();
-                            if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
-                                additionalUuidsCheck[subUuid] = true;
-                                additionalUuids.push({
-                                    uuid: subUuid
-                                });
+                    if(layer.getMetadataIdentifier().indexOf('http') == 0 ||
+                            layer.getMetadataIdentifier().indexOf('/') == 0)) {
+                        window.open(layer.getMetadataIdentifier());
+                    } else {
+                        var rn = 'catalogue.ShowMetadataRequest',
+                            uuid = layer.getMetadataIdentifier(),
+                            additionalUuids = [],
+                            additionalUuidsCheck = {};
+    
+                        additionalUuidsCheck[uuid] = true;
+    
+                        subLayers = layer.getSubLayers();
+                        if (subLayers && subLayers.length > 0) {
+                            for (s = 0; s < subLayers.length; s += 1) {
+                                subUuid = subLayers[s].getMetadataIdentifier();
+                                if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
+                                    additionalUuidsCheck[subUuid] = true;
+                                    additionalUuids.push({
+                                        uuid: subUuid
+                                    });
+                                }
                             }
                         }
+    
+                        sandbox.postRequestByName(rn, [{
+                                uuid: uuid
+                            },
+                            additionalUuids
+                        ]);
                     }
-
-                    sandbox.postRequestByName(rn, [{
-                            uuid: uuid
-                        },
-                        additionalUuids
-                    ]);
                 });
             }
 
