@@ -754,7 +754,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             }
             if (layer.getMetadataIdentifier() || subLmeta) {
                 tools.find('div.icon-info').bind('click', function () {
-                    if(layer.getMetadataIdentifier().indexOf('http') == 0) {
+                    if(layer.getMetadataIdentifier().indexOf('http') == 0 ||
+                            layer.getMetadataIdentifier().indexOf('/') == 0)) {
                         window.open(layer.getMetadataIdentifier());
                     } else {
                         var rn = 'catalogue.ShowMetadataRequest',

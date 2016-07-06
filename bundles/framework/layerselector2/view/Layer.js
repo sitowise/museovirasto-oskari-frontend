@@ -168,7 +168,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 layerInfo = tools.find('div.layer-info');
                 layerInfo.addClass('icon-info');
                 layerInfo.click(function () {
-                    if(layer.getMetadataIdentifier().indexOf('http') == 0) {
+                    if(layer.getMetadataIdentifier().indexOf('http') == 0 ||
+                            layer.getMetadataIdentifier().indexOf('/') == 0) {
                         window.open(layer.getMetadataIdentifier());
                     } else {
                         rn = 'catalogue.ShowMetadataRequest';
