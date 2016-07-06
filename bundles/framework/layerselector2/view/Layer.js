@@ -168,31 +168,35 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 layerInfo = tools.find('div.layer-info');
                 layerInfo.addClass('icon-info');
                 layerInfo.click(function () {
-                    rn = 'catalogue.ShowMetadataRequest';
-                    uuid = layer.getMetadataIdentifier();
-                    additionalUuids = [];
-                    additionalUuidsCheck = {};
-                    additionalUuidsCheck[uuid] = true;
-                    subLayers = layer.getSubLayers();
-                    if (subLayers && subLayers.length > 0) {
-                        for (s = 0; s < subLayers.length; s += 1) {
-                            subUuid = subLayers[s].getMetadataIdentifier();
-                            if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
-                                additionalUuidsCheck[subUuid] = true;
-                                additionalUuids.push({
-                                    uuid: subUuid
-                                });
-
+                    if(layer.getMetadataIdentifier().indexOf('http') == 0) {
+                        window.open(layer.getMetadataIdentifier());
+                    } else {
+                        rn = 'catalogue.ShowMetadataRequest';
+                        uuid = layer.getMetadataIdentifier();
+                        additionalUuids = [];
+                        additionalUuidsCheck = {};
+                        additionalUuidsCheck[uuid] = true;
+                        subLayers = layer.getSubLayers();
+                        if (subLayers && subLayers.length > 0) {
+                            for (s = 0; s < subLayers.length; s += 1) {
+                                subUuid = subLayers[s].getMetadataIdentifier();
+                                if (subUuid && subUuid !== "" && !additionalUuidsCheck[subUuid]) {
+                                    additionalUuidsCheck[subUuid] = true;
+                                    additionalUuids.push({
+                                        uuid: subUuid
+                                    });
+    
+                                }
                             }
+    
                         }
-
+    
+                        sandbox.postRequestByName(rn, [{
+                                uuid: uuid
+                            },
+                            additionalUuids
+                        ]);
                     }
-
-                    sandbox.postRequestByName(rn, [{
-                            uuid: uuid
-                        },
-                        additionalUuids
-                    ]);
                 });
             }
 
