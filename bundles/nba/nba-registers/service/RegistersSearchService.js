@@ -37,10 +37,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.service.RegistersSearchServ
         },
 
         getRegistryItems: function (params, successCb, errorCb) {
-            var url = this.sandbox.getAjaxUrl() + '&action_route=GetRegistryItems&keyword=' + params.keyword + '&registries=' + params.registries + '&geometry=' + params.geometry;
+            var url = this.sandbox.getAjaxUrl();
             jQuery.ajax({
                 dataType: "json",
-                type: "GET",
+                type: "POST",
+                data: {
+                    'action_route': 'GetRegistryItems',
+                    'keyword': params.keyword,
+                    'registries':  params.registries,
+                    'geometry': params.geometry
+                },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType("application/json");
