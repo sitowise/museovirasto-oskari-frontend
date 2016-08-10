@@ -102,7 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             formatOptionTool: '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
             legend: '<div class="printout_legend_cont printout_settings_cont"><div class="printout_legend_label"></div></div>',
             legendOptionTool: '<div class="tool ">' + '<input type="radio" name="legend" />' + '<label></label></div>',
-            title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
+            title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text" maxlength="40"></div>',
             option: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
             sizeOptionTool: '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
         },
