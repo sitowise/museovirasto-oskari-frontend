@@ -200,8 +200,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     //create infobox
                     //TODO probably need to be converted to current coordinate system
-                    var lonlat = new OpenLayers.LonLat(x, y),
-                    //var lonlat = new OpenLayers.LonLat(24.6603626, 60.2241869),
+                    var extent = new OpenLayers.Bounds(data.bounds),
+                        center = extent.getCenterLonLat(),
+                        x = center.lon,
+                        y = center.lat,
+                        lonlat = new OpenLayers.LonLat(x, y),
+                        //var lonlat = new OpenLayers.LonLat(24.6603626, 60.2241869),
                         infoBoxContent = {
                             html: me._getInfoBoxHtml(data),
                             actions: {}
