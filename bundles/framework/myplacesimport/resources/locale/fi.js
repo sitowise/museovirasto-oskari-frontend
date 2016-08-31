@@ -54,21 +54,28 @@ Oskari.registerLocalization(
                 "description": "Kuvaus",
                 "source": "Tietolähde",
                 "remove": "Poista",
-                "removeButton": "Poista"
+                "removeButton": "Poista",
+                "edit": "Muokka"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",
-                "delete": "Poista"
+                "delete": "Poista",
+                "edit": "Muokka",
+                "save": "Tallenna",
+                "zoomToData": "Zoom to data"
             },
             "notification": {
                 "deletedTitle": "Poista aineisto",
-                "deletedMsg": "Aineisto on poistettu."
+                "deletedMsg": "Aineisto on poistettu.",
+                "editedTitle": "Dataset edit",
+                "editedMsg": "The dataset has been changed."
             },
             "error": {
                 "title": "Virhe",
-                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi."
+                "generic": "Aineiston lataus epäonnistui järjestelmässä tapahtuneen virheen vuoksi.",
+                "save": "An error occured while saving"
             }
         },
         "layer": {
