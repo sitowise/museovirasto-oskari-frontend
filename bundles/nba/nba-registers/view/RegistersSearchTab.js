@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //showing layer for the register
             for (var i = 0; i < data.mapLayers.length; i++) {
                 var mapLayerId = data.mapLayers[i].mapLayerID,
-                    layer = me.sandbox.findMapLayerFromAllAvailable();
+                    layer = me.sandbox.findMapLayerFromAllAvailable(mapLayerId);
                 if (layer != null) {
                     me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
                 } else {
@@ -279,6 +279,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
             //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
             me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+
+            //show marker
+            var reqBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            if (reqBuilder) {
+                var marker = {
+                    x: center.lon,
+                    y: center.lat,
+                    color: "000000",
+                    msg: '',
+                    shape: 4,
+                    size: 5
+                };
+                var request = reqBuilder(marker, 'registry-search-result');
+                me.getSandbox().request('MainMapModule', request);
+            }
         },
 
         _getInfoBoxHtml: function (result) {

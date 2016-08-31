@@ -164,6 +164,21 @@ function () {
             me.sandbox.notifyAll(evt);
         }
 
+        //show marker
+        var reqBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+        if (reqBuilder) {
+            var marker = {
+                x: center.lon,
+                y: center.lat,
+                color: "000000",
+                msg: '',
+                shape: 4,
+                size: 5
+            };
+            var request = reqBuilder(marker, 'registry-search-result');
+            me.getSandbox().request('MainMapModule', request);
+        }
+
         /*
         //create infobox
         //TODO probably need to be converted to current coordinate system
