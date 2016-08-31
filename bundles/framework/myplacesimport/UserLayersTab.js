@@ -18,10 +18,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         me.loc = localization;
         me.layerMetaType = 'USERLAYER';
         me.visibleFields = [
-            'name', 'description', 'source', 'remove'
+            'name', 'description', 'source', 'edit', 'remove', 'zoomToData'
         ];
         me.grid = undefined;
         me.container = undefined;
+        me.errorDialog = null;
 
         // templates
         me.template = {};
@@ -69,6 +70,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 });
                 return link;
             });
+            grid.setColumnValueRenderer('edit', function (name, data) {
+                var link = me.template.link.clone();
+
+                link.append(me.loc.buttons['edit']).bind('click', function () {
+                    if (data) {
+                        me._showEditPopUp(data);
+                    }
+                    return false;
+                });
+                return link;
+            });
+            grid.setColumnValueRenderer('zoomToData', function (name, data) {
+                var link = me.template.link.clone();
+
+                link.append(me.loc.buttons['zoomToData']).bind('click', function () {
+                    if (data) {
+                        me._zoomToData(data);
+                    }
+                    return false;
+                });
+                return link;
+            });
+
             // setup localization
             _.each(this.visibleFields, function (field) {
                 grid.setColumnUIName(field, me.loc.grid[field]);
@@ -136,11 +160,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     if (response && response.result === 'success') {
                         me._deleteSuccess(layerId);
                     } else {
-                        me._deleteFailure();
+                        me._operationFailure();
                     }
                 },
                 error: function () {
-                    me._deleteFailure();
+                    me._operationFailure();
                 }
             });
         },
@@ -182,13 +206,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         },
         /**
          * Failure callback for backend operation.
-         * @method _deleteFailure
+         * @method _operationFailure
          * @private
          */
-        _deleteFailure: function () {
+        _operationFailure: function (errorText) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = dialog.createCloseButton(this.loc.buttons.ok);
-            dialog.show(this.loc.error.title, this.loc.error.generic, [okBtn]);
+
+            if (errorText == null) {
+                errorText = this.loc.error.generic;
+            }
+            dialog.show(this.loc.error.title, errorText, [okBtn]);
         },
         /**
          * Renders current user layers to a grid model and returns it.
@@ -201,7 +229,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             var service = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 layers = service.getAllLayersByMetaType(this.layerMetaType),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-
             gridModel.setIdField('id');
 
             _.each(layers, function (layer) {
@@ -211,7 +238,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                         'name': layer.getName(),
                         'description': layer.getDescription(),
                         'source': layer.getSource(),
-                        'isBase': layer.isBaseLayer()
+                        'isBase': layer.isBaseLayer(),
+                        'bounds': layer.getBounds()
                     });
                     return;
                 }
@@ -228,10 +256,137 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                         'name': layer.getName(),
                         'description': layer.getDescription(),
                         'source': layer.getSource(),
-                        'isBase': layer.isBaseLayer()
+                        'isBase': layer.isBaseLayer(),
+                        'bounds': layer.getBounds()
                     });
                 }
             });
             return gridModel;
+        },
+
+        _showEditPopUp: function (data) {
+            var me = this,
+				sandbox = this.instance.getSandbox(),
+				dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+				cancelBtn = dialog.createCloseButton(me.loc.buttons['cancel']),
+				saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+            var content = jQuery('<div id="editUserLayerPopup"></div>');
+
+            //Description
+            var descField = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'descField');
+            descField.getField().find('input').before('<br />');
+            descField.setLabel(me.loc.grid['description']);
+            content.append(descField.getField());
+
+            if (data) {
+                descField.setValue(data.description);
+            }
+
+            //Data source
+            var sourceField = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'sourceField');
+            sourceField.getField().find('input').before('<br />');
+            sourceField.setLabel(me.loc.grid['source']);
+            content.append(sourceField.getField());
+
+            if (data) {
+                sourceField.setValue(data.source);
+            }
+
+            saveBtn.addClass('primary');
+            saveBtn.setTitle(me.loc.buttons['save']);
+            saveBtn.setHandler(function () {
+                var savingData = {};
+                if (data) {
+                    savingData.id = data.id;
+                }
+                
+                savingData.description = descField.getValue();
+                savingData.source = sourceField.getValue();
+
+                var successCb = function (response) {
+                    
+                    // show msg to user about successful edit
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(me.loc.notification.editedTitle, me.loc.notification.editedMsg);
+                    dialog.fadeout(3000);
+                    
+                    //remove and add user layer again
+                    var mapLayerService = me.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    mapLayerService.removeLayer(response.id);
+                    me.instance.getService().addLayerToService(response, false, function(mapLayer) {
+                        // refresh the tab
+                        me.refresh();
+                        // Request the layer to be added to the map.
+                        var requestBuilder = me.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+                        if (requestBuilder) {
+                            var request = requestBuilder(mapLayer.getId());
+                            me.instance.sandbox.request(me.instance, request);
+                        }
+                    });
+                };
+
+                var errorCb = function () {
+                    me._operationFailure(me.loc.error["save"]);
+                };
+
+                me._saveUserLayer(savingData, successCb, errorCb);
+                dialog.close();
+            });
+
+            dialog.show(me.loc.grid["edit"], content, [saveBtn, cancelBtn]);
+            dialog.makeModal();
+        },
+
+        _saveUserLayer: function (data, successCb, errorCb) {
+            var me = this;
+            var url = me.instance.sandbox.getAjaxUrl() + 'action_route=UpdateUserLayer';
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: url,
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                data: {
+                    "id": data.id,
+                    "description": data.description,
+                    "datasource": data.source,
+                },
+                success: function (response) {
+                    if (typeof successCb === 'function') {
+                        successCb(response);
+                    }
+                },
+                error: function (jqXHR, textStatus) {
+                    if (typeof errorCb === 'function' && jqXHR.status !== 0) {
+                        errorCb(jqXHR, textStatus);
+                    }
+                }
+            });
+        },
+
+        _zoomToData: function (data) {
+            var me = this,
+                geojsonFormat = new OpenLayers.Format.GeoJSON(),
+                feature,
+                registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
+                extent,
+                center;
+            debugger;
+            if (data.bounds != null) {
+                
+                feature = geojsonFormat.read(data.bounds);
+                registerSearchLayer.addFeatures([feature[0]]);
+
+                //calculate bounding box from fake layer
+                extent = registerSearchLayer.getDataExtent();
+                center = extent.getCenterLonLat();
+
+                //zoom map to the extent
+                me.instance.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+            }
         }
     });

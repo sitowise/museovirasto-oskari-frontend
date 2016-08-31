@@ -15,6 +15,7 @@ function() {
     this.description = undefined;
     this.source = undefined;
     this.renderingElement = undefined;
+    this.bounds = undefined;
 }, {
     setDescription: function(desc) {
         this.description = desc;
@@ -33,7 +34,13 @@ function() {
     },
     getRenderingElement: function() {
         return this.renderingElement;
-    }
+    },
+    setBounds: function(bounds) {
+        this.bounds = bounds;
+    },
+    getBounds: function() {
+        return this.bounds;
+    },
 }, {
     "extend": ["Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer"]
 });

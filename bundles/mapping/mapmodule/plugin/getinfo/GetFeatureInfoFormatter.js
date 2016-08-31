@@ -281,7 +281,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
             isMyPlace = layer.isLayerOfType('myplaces'),
             fields = layer.getFields().slice(),
-            hiddenFields = ['__fid', '__centerX', '__centerY'],
+            //hiddenFields = ['__fid', '__centerX', '__centerY'],
+            hiddenFields = (layer.isLayerOfType('USERLAYER') ? ['__fid'] : ['__fid', '__centerX', '__centerY']),
             type = 'wfslayer',
             result,
             markup;

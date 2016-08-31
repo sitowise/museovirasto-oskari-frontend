@@ -54,21 +54,28 @@ Oskari.registerLocalization(
                 "description": "Description",
                 "source": "Data source",
                 "remove": "Delete",
-                "removeButton": "Delete"
+                "removeButton": "Delete",
+                "edit": "Edit"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",
-                "delete": "Delete"
+                "delete": "Delete",
+                "edit": "Edit",
+                "save": "Save",
+                "zoomToData": "Zoom to data"
             },
             "notification": {
                 "deletedTitle": "Dataset Delete",
-                "deletedMsg": "The dataset has been deleted."
+                "deletedMsg": "The dataset has been deleted.",
+                "editedTitle": "Dataset edit",
+                "editedMsg": "The dataset has been changed."
             },
             "error": {
                 "title": "Error",
-                "generic": "A system error occurred."
+                "generic": "A system error occurred.",
+                "save": "An error occured while saving"
             }
         },
         "layer": {
