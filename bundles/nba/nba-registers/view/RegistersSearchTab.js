@@ -281,7 +281,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
             //show marker
-            var reqBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
                 var marker = {
                     x: center.lon,
@@ -292,7 +292,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     size: 5
                 };
                 var request = reqBuilder(marker, 'registry-search-result');
-                me.getSandbox().request('MainMapModule', request);
+                me.sandbox.request('MainMapModule', request);
             }
         },
 
