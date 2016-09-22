@@ -393,16 +393,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
                         if(registry.itemType === 'sub') {
                             $.each(data, function (index, value){
-                                features = features.concat($.grep(value.subItems, function(obj, key) {
+                                var newFeatures = $.grep(value.subItems, function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
-                                }));
+                                });
+                                $.each(newFeatures, function (i, feature) {
+                                    feature.id = value.id; //show main feature id in infobox
+                                });
+                                features = features.concat(newFeatures);
                             });
 
                         } else if(registry.itemType === 'area') {
                             $.each(data, function (index, value){
-                                features = features.concat($.grep(value.areas, function(obj, key) {
+                                var newFeatures = $.grep(value.areas, function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
-                                }));
+                                });
+                                $.each(newFeatures, function (i, feature) {
+                                    feature.id = value.id; //show main feature id in infobox
+                                });
+                                features = features.concat(newFeatures);
                             });
                         } else {
                             features = data;
