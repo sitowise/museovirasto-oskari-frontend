@@ -184,15 +184,39 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
-                    'itemtype': result.itemtype,
-                    'actions': ''
+                    'itemtype': result.itemtype
                 });
             });
 
             grid.setDataModel(gridModel);
-            grid.setVisibleFields(['id', 'desc', 'actions']);
+            grid.setVisibleFields(['id', 'desc']);
 
             grid.setColumnValueRenderer('id', function (name, data) {
+                var idColumnDiv = jQuery('<div></div>');
+
+                if (me.sandbox.getUser().isLoggedIn()) {
+                    var userRoles = me.sandbox.getUser().getRoles();
+                    for (var i = 0; i < userRoles.length; ++i) {
+                        if ($.inArray(userRoles[i].name, me.editorRoles) > -1) {
+                            var editLink = jQuery('<a href="#" class="nba-edit-link" />');
+                            editLink.bind('click', function () {
+
+                                //zoom to object
+                                me._zoomToObject(data);
+                                //TODO: highlight object
+
+                                me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                                //close Search bundle after moving to registry editor
+                                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+
+                                return false;
+                            });
+                            //return editLink;
+                            idColumnDiv.append(editLink);
+                        }
+                    }
+                }
+
                 var idLink = jQuery('<a href="#">' + name + '</a>');
                 idLink.bind('click', function () {
 
@@ -216,36 +240,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
                     return false;
                 });
-                return idLink;
-            });
-            
-            grid.setColumnValueRenderer('actions', function (name, data) {
-                if (me.sandbox.getUser().isLoggedIn()) {
-                    var userRoles = me.sandbox.getUser().getRoles();
-                    for(var i = 0; i < userRoles.length; ++i) {
-                        if($.inArray(userRoles[i].name, me.editorRoles) > -1) {
-                            var editLink = jQuery('<a href="#">' + me.loc.grid.editItems + '</a>');
-                            editLink.bind('click', function () {
 
-                                //zoom to object
-                                me._zoomToObject(data);
-                                //TODO: highlight object
+                idColumnDiv.append(idLink);
 
-                                me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                                //close Search bundle after moving to registry editor
-                                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
-
-                                return false;
-                            });
-                            return editLink;
-                        }
-                    }
-                }
+                return idColumnDiv;
             });
 
             grid.setColumnUIName('id', gridTexts.id);
             grid.setColumnUIName('desc', gridTexts.desc);
-            grid.setColumnUIName('actions', gridTexts.actions);
             grid.renderTo(resultGrid.find('div.grid'));
 
             this.tabContent.append(resultGrid);

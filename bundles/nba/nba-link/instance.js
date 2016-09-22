@@ -165,7 +165,7 @@ function () {
         }
 
         //show marker
-        var reqBuilder = me.getSandbox().getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
         if (reqBuilder) {
             var marker = {
                 x: center.lon,
@@ -176,7 +176,7 @@ function () {
                 size: 5
             };
             var request = reqBuilder(marker, 'registry-search-result');
-            me.getSandbox().request('MainMapModule', request);
+            me.sandbox.request('MainMapModule', request);
         }
 
         /*
