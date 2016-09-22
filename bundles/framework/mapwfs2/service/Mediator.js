@@ -396,6 +396,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                 features = features.concat($.grep(value.subItems, function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
                                 }));
+                                $.each(features, function (i, feature) {
+                                    feature.id = value.id; //show main feature id in infobox
+                                });
                             });
 
                         } else if(registry.itemType === 'area') {
@@ -403,6 +406,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                 features = features.concat($.grep(value.areas, function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
                                 }));
+                                $.each(features, function (i, feature) {
+                                    feature.id = value.id; //show main feature id in infobox
+                                });
                             });
                         } else {
                             features = data;
