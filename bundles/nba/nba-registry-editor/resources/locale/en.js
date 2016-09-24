@@ -229,6 +229,20 @@ Oskari.registerLocalization(
 					    "conservationStatus": "conservationStatus",
 					    "author": "author"
 					},
+					"projectRegistry": {
+					    "main": "Main items",
+                        "point": "Points",
+                        "area": "Areas",
+                        "addNew": "Add new",
+                        "description": "Description",
+                        "type": "Type",
+                        "id": "Id",
+                        "municipalityName": "Municipality",
+                        "objectName": "Name",
+                        "modifyDate": "Modify Date",
+                        "createDate": "Create Date",
+                        "author": "author"
+					},
 					"error": "Error",
 					"noEditsDone": "No edits have been done. Edit features before saving.",
 					"link": "Link",

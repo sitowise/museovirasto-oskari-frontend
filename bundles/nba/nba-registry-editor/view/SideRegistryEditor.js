@@ -88,6 +88,17 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     + '<div><label>' + me.loc.rky2000.description + '</label><input type="text" id="description"></div>'
                     + '<div><label>' + me.loc.rky2000.surveyingType + '</label><select id="surveyingType"/></div>'
                     + '<div><label>' + me.loc.rky2000.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
+                //Project Registry
+                'projectRegistry': jQuery('<div id="projectRegistry"><div id="main"><h3>' + me.loc.projectRegistry.main + '</h4></div><div id="point"><h4>' + me.loc.projectRegistry.point + '</h4></div><div id="area"><h4>' + me.loc.projectRegistry.area + '</h4></div></div>'),
+                'projectRegistryMainItem': jQuery('<div class="item projectRegistryMainItem"><div class="id"/><div class="name"/><div class="municipalityName"/></div>'),
+                'projectRegistryPoint': jQuery('<div class="item projectRegistryPoint"><div class="id"/><div class="description"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
+                'projectRegistryArea': jQuery('<div class="item projectRegistryAreaItem"><div class="id"/><div class="description"/><div class="type"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
+                'projectRegistrySubItemAdd': jQuery('<div class="item newItem projectRegistrySubItem"><h4>' + me.loc.projectRegistry.addNew + '</h4><div class="registryItemTools"/></div>'),
+                'projectRegistryPointSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></div>'),
+                'projectRegistryAreaSurveyingDetails': jQuery('<div class="itemDetails">'
+                    + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></label></div>'
+                    + '<div><label>' + me.loc.projectRegistry.type + '</label><select id="type"/></label></div>'),
                 //common templates
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -237,6 +248,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 postData = { 'action_route': 'GetRegistryItems', 'registerName': 'buildingHeritage', 'id': me.data.id };
             } else if (me.data.itemtype === 'RKY2000') {
                 postData = { 'action_route': 'GetRegistryItems', 'registerName': 'rky2000', 'id': me.data.id };
+            } else if (me.data.itemtype === 'ProjectItem') {
+                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'project', 'id': me.data.id };
             }
 
             $.ajax({
@@ -256,6 +269,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         me._renderBuildingHeritage(data, content);
                     } else if (data.itemtype === 'RKY2000') {
                         me._renderRKY2000(data, content);
+                    } else if (data.itemtype === 'ProjectItem') {
+                        me._renderProject(data, content);
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
@@ -631,6 +646,89 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             var newLineRow = me.templates.rky2000GeometryAdd.clone();
             newLineRow.find('.registryItemTools').append(me._getEditTools({ 'line': true, 'id': -1, 'type': 'line', feature: {} }));
             line.append(newLineRow)
+
+            content.find(".content-registry-item").append(itemDetails);
+        },
+
+        _renderProject: function (data, content) {
+            var me = this,
+                itemDetails = me.templates.projectRegistry.clone(),
+                noItemsFoundElem = me.templates.noItemsFound.clone(),
+                pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
+                panel,
+                main = itemDetails.find("#main"),
+                point = itemDetails.find("#point"),
+                area = itemDetails.find('#area');
+
+            var mainItemRow = me.templates.projectRegistryMainItem.clone();
+
+            mainItemRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.id));
+            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.projectRegistry.municipalityName, data.municipalityName));
+            mainItemRow.find('.name').append(me._formatData(me.loc.projectRegistry.objectName, data.objectName));
+
+            main.append(mainItemRow);
+
+            for (var i = 0; i < data.points.length; ++i) {
+                var pointItemRow = me.templates.projectRegistryPoint.clone();
+
+                pointItemRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.points[i].objectId));
+                pointItemRow.find('.description').append(me._formatData(me.loc.projectRegistry.description, data.points[i].description));
+                pointItemRow.find('.modifyDate').append(me._formatData(me.loc.projectRegistry.modifyDate, data.points[i].modifyDate));
+                pointItemRow.find('.createDate').append(me._formatData(me.loc.projectRegistry.createDate, data.points[i].createDate));
+                pointItemRow.find('.author').append(me._formatData(me.loc.projectRegistry.author, data.points[i].author));
+
+                pointItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'point', feature: data.points[i] }));
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
+                panel.setContent(pointItemRow);
+                panel.setVisible(true);
+                panel.close();
+
+                pointAccordion.addPanel(panel);
+            }
+
+            pointAccordion.insertTo(point);
+
+            if (data.points.length == 0) {
+                point.append(noItemsFoundElem);
+            }
+
+            var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
+            newPointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': -1, 'type': 'point', feature: {} }));
+            point.append(newPointRow)
+
+            for (var i = 0; i < data.areas.length; ++i) {
+                var areaRow = me.templates.projectRegistryArea.clone();
+
+                areaRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.areas[i].objectId));
+                areaRow.find('.description').append(me._formatData(me.loc.projectRegistry.description, data.areas[i].description));
+                areaRow.find('.type').append(me._formatData(me.loc.projectRegistry.type, data.areas[i].type));
+                areaRow.find('.modifyDate').append(me._formatData(me.loc.projectRegistry.modifyDate, data.areas[i].modifyDate));
+                areaRow.find('.createDate').append(me._formatData(me.loc.projectRegistry.createDate, data.areas[i].createDate));
+                areaRow.find('.author').append(me._formatData(me.loc.projectRegistry.author, data.areas[i].author));
+
+                areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
+
+                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
+                panel.setContent(areaRow);
+                panel.setVisible(true);
+                panel.close();
+
+                areaAccordion.addPanel(panel);
+            }
+
+            areaAccordion.insertTo(area);
+
+            if (data.areas.length == 0) {
+                area.append(noItemsFoundElem);
+            }
+
+            var newAreaRow = me.templates.projectRegistrySubItemAdd.clone();
+            newAreaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
+            area.append(newAreaRow)
 
             content.find(".content-registry-item").append(itemDetails);
         },
@@ -1059,6 +1157,23 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
                     me.editFeature.surveyingType = content.find("#surveyingType").val();
                     me.editFeature.objectName = content.find("#name").val();
+
+                } else if (me.itemData.itemtype === 'ProjectItem') {
+                    if (me.editFeature._type === 'point') {
+                        if (typeof me.editFeature.id === 'undefined') {
+                            me.itemData.points.push(me.editFeature)
+                        }
+                    } else if (me.editFeature._type === 'area') {
+                        if (typeof me.editFeature.id === 'undefined') {
+                            me.itemData.areas.push(me.editFeature)
+                        }
+
+                        me.editFeature.type = content.find("#type").val();
+                    }
+
+                    me.editFeature.geometry = JSON.parse(geometry);
+                    me.editFeature.description = content.find("#description").val();
+
                 }
 
                 me.editFeature._edited = true;
@@ -1092,6 +1207,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 }
             } else if (me.itemData.itemtype === 'RKY2000') {
                 me._renderRKY2000SurveyingDetails(content, attributes, selectedFeature, fields);
+            } else if (me.itemData.itemtype === 'ProjectItem') {
+                if (me.editFeature._type === 'area') {
+                    me._renderProjectRegistryAreaDetails(content, attributes, selectedFeature, fields);
+                } else {
+                    me._renderProjectRegistryDetails(content, attributes, selectedFeature, fields);
+                }
             }
 
             dialog.show(title, content, buttons);
@@ -1355,6 +1476,35 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 //add dropdowns
                 me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
+
+            content.append(template);
+        },
+
+        _renderProjectRegistryDetails: function (content, attributes, selectedFeature, fields) {
+            var me = this,
+                template = me.templates.projectRegistrySurveyingDetails.clone();
+
+            template.find("#description").val(me.editFeature.description);
+
+            //if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+            //    me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            //}
+
+            content.append(template);
+        },
+
+        _renderProjectRegistryAreaDetails: function (content, attributes, selectedFeature, fields) {
+            var me = this,
+                template = me.templates.projectRegistryAreaSurveyingDetails.clone();
+
+            template.find("#description").val(me.editFeature.description);
+            template.find("#type").val(me.editFeature.type);
+
+            //if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+            //    me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            //}
 
             content.append(template);
         },
