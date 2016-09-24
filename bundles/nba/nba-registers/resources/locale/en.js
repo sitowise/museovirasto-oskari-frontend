@@ -22,9 +22,20 @@
             "grid": {
                 "id": "ID",
                 "desc": "Description",
+                "registry": "Registry",
+                "municipality": "Municipality",
                 "actions": "Actions",
                 "editItems": "Edit items",
-            }//,
+            },
+            "registryNames": {
+                "AncientMonument": "Ancient Monument",
+                "AncientMonumentMaintenanceItem": "Ancient Monument Maintenance",
+                "BuildingHeritageItem": "Building Heritage",
+                "RKY1993": "RKY1993",
+                "RKY2000": "RKY2000",
+                "WorldHeritageItem": "World Heritage",
+                "ProjectItem": "Project"
+            }
             //"searchSummary": "Hakutulokset: {0} hakutulosta haulle {1}"
             /*
             "searchTitle": "Search term",

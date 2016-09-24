@@ -22,9 +22,20 @@
             "grid": {
                 "id": "Tunnus",
                 "desc": "Kuvaus",
+                "registry": "Rekisteri",
+                "municipality": "Kunta",
                 "actions": "Toiminnot",
                 "editItems": "Muokkaa kohdetta",
-            }//,
+            },
+            "registryNames": {
+                "AncientMonument": "Muinaisjäännösrekisteri",
+                "AncientMonumentMaintenanceItem": "Muinaisjaann. hoitorekisteri",
+                "BuildingHeritageItem": "Rakennusperintorekisteri",
+                "RKY1993": "RKY1993",
+                "RKY2000": "RKY2000",
+                "WorldHeritageItem": "Maailmanperintökohteet",
+                "ProjectItem": "Project"
+            }
             //"searchSummary": "Hakutulokset: {0} hakutulosta haulle {1}"
             //"errors": {
             //}
