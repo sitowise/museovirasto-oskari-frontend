@@ -109,7 +109,8 @@ function () {
                     featureJson = {
                         attribute: data[x].mapLayers[j].attribute,
                         itemId: data[x].id,
-                        layerId: mapLayerId
+                        layerId: mapLayerId,
+                        bounds: data[x].bounds
                     };
 
                     features.push(featureJson);
@@ -132,7 +133,7 @@ function () {
         //calculate bounding box from fake layer
         extent = registerSearchLayer.getDataExtent();
         center = extent.getCenterLonLat();
-
+        
         //zoom map to the extent
         me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
@@ -146,7 +147,11 @@ function () {
             }
         }
 
-        me.getSandbox().postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+        //remove all markers
+        var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+        if (removeMarkersReqBuilder) {
+            me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+        }
 
         //find features in the layers by the identyfying attribute and highlight it
         for (var i = 0; i < features.length; i++) {
@@ -162,21 +167,24 @@ function () {
 
             var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
             me.sandbox.notifyAll(evt);
-        }
 
-        //show marker
-        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-        if (reqBuilder) {
-            var marker = {
-                x: center.lon,
-                y: center.lat,
-                color: "000000",
-                msg: '',
-                shape: 4,
-                size: 5
-            };
-            var request = reqBuilder(marker, 'registry-search-result');
-            me.sandbox.request('MainMapModule', request);
+            //show marker
+            var bounds = new OpenLayers.Bounds(features[i].bounds);
+            var boundsCenter = bounds.getCenterLonLat();
+
+            var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+            if (reqBuilder) {
+                var marker = {
+                    x: boundsCenter.lon,
+                    y: boundsCenter.lat,
+                    color: "000000",
+                    msg: '',
+                    shape: 4,
+                    size: 5
+                };
+                var request = reqBuilder(marker, 'registry-search-result-' + i);
+                me.sandbox.request('MainMapModule', request);
+            }
         }
 
         /*

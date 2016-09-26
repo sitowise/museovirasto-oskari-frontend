@@ -282,6 +282,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
             me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
+            //remove all markers
+            var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (removeMarkersReqBuilder) {
+                me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+            }
+
             //show marker
             var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
@@ -388,7 +394,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                             featureJson = {
                                 attribute: data.mapLayers[j].attribute,
                                 itemId: data.id,
-                                layerId: mapLayerId
+                                layerId: mapLayerId,
+                                bounds: data.bounds
                             };
 
                             features.push(featureJson);
@@ -427,6 +434,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     }
                 }
 
+                //remove all markers
+                var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                if (removeMarkersReqBuilder) {
+                    me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+                }
+
                 //8. find features in the layers by the identyfying attribute and highlight it
                 for (var i = 0; i < features.length; i++) {
                     var filters = {
@@ -440,6 +453,24 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
                     me.sandbox.notifyAll(evt);
+
+                    //show marker
+                    var bounds = new OpenLayers.Bounds(features[i].bounds);
+                    var boundsCenter = bounds.getCenterLonLat();
+
+                    var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                    if (reqBuilder) {
+                        var marker = {
+                            x: boundsCenter.lon,
+                            y: boundsCenter.lat,
+                            color: "000000",
+                            msg: '',
+                            shape: 4,
+                            size: 5
+                        };
+                        var request = reqBuilder(marker, 'registry-search-result-' + i);
+                        me.sandbox.request('MainMapModule', request);
+                    }
                 }
             }
         }
