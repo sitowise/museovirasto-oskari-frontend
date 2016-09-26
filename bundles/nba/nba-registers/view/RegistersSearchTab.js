@@ -301,11 +301,37 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         _getInfoBoxHtml: function (result) {
             //TODO make localization
             //TODO fix styling and layout
-            var template = '<h3>Tunnus: ' + result.id + '</h3>' +
+            var me = this,
+                template = '<h3>Tunnus: ' + result.id + '</h3>' +
                             //'<h3>Shape: ' + result.id + '</h3>' +
                             '<h3>Kohdetunnus: ' + result.id + '</h3>' +
                             '<h3>Kohdenimi: ' + result.desc + '</h3>' +
                             '<h3>Rekisteritiedot: <a href="' + result.nbaUrl + '" target="_blank">Linkki rekisteritietoihin</a></h3>';
+
+            if (me.sandbox.getUser().isLoggedIn()) {
+                var userRoles = me.sandbox.getUser().getRoles(),
+                    editorRole = false;
+
+                for (var i = 0; i < userRoles.length; ++i) {
+                    if ($.inArray(userRoles[i].name, me.editorRoles) > -1) {
+                        editorRole = true;
+                        break;
+                    }
+                }
+
+                var editLink = jQuery('<h3>Muokka: <a href="#" class="nba-edit-link" /></h3>');
+                editLink.bind('click', function () {
+
+                    me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [result]);
+                    //close Search bundle after moving to registry editor
+                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+
+                    return false;
+                });
+                //return editLink;
+                template += editLink;
+            }
+
             return template;
         },
 
