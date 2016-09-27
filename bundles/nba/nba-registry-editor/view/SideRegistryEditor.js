@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></div>'),
                 'projectRegistryAreaSurveyingDetails': jQuery('<div class="itemDetails">'
                     + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></label></div>'
-                    + '<div><label>' + me.loc.projectRegistry.type + '</label><select id="type"/></label></div>'),
+                    + '<div><label>' + me.loc.projectRegistry.type + '</label><input type="text" id="type"/></label></div>'),
                 //common templates
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -668,6 +668,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             mainItemRow.find('.name').append(me._formatData(me.loc.projectRegistry.objectName, data.objectName));
 
             main.append(mainItemRow);
+            
+            if (data.points == null) {
+                data.points = [];
+            }
 
             for (var i = 0; i < data.points.length; ++i) {
                 var pointItemRow = me.templates.projectRegistryPoint.clone();
@@ -698,6 +702,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
             newPointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': -1, 'type': 'point', feature: {} }));
             point.append(newPointRow)
+
+            if (data.areas == null) {
+                data.areas = [];
+            }
 
             for (var i = 0; i < data.areas.length; ++i) {
                 var areaRow = me.templates.projectRegistryArea.clone();
@@ -1237,6 +1245,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         }
                     });
                     postData = { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+                } else if (me.data.itemtype === 'ProjectItem') {
+                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
+                    $.each(me.itemData.points, function (index, item) {
+                        if (item._edited) {
+                            edited.points.push(item.id);
+                        }
+                    });
+                    $.each(me.itemData.areas, function (index, item) {
+                        if (item._edited) {
+                            edited.areas.push(item.id);
+                        }
+                    });
+                    postData = { 'registerName': 'project', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
                 }
                 $.ajax({
                     url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
@@ -1482,7 +1503,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
         _renderProjectRegistryDetails: function (content, attributes, selectedFeature, fields) {
             var me = this,
-                template = me.templates.projectRegistrySurveyingDetails.clone();
+                template = me.templates.projectRegistryPointSurveyingDetails.clone();
 
             template.find("#description").val(me.editFeature.description);
 
