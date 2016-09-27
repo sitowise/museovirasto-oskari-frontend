@@ -88,11 +88,11 @@ img::-moz-selection {
 /* Logo is only in the portal version afaik so this could be moved there? */
 #logo {
   /*padding: 30px 0 35px 10px;*/
+  border-right: 1px solid #d3d3d3;
 }
 
 #logo a img{
-  width: 169px;
-  border-right: 1px solid #d3d3d3;
+  width: 100%;
 }
 
 #logo p {
