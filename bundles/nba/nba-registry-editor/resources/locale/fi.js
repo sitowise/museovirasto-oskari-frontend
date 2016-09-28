@@ -228,6 +228,20 @@ Oskari.registerLocalization(
 					    "conservationStatus": "conservationStatus",
 					    "author": "author"
 					},
+					"projectRegistry": {
+					    "main": "Pääkohde",
+                        "point": "Points",//??
+                        "area": "Aluerajaukset",
+                        "addNew": "Lisää uusi",
+                        "description": "Kuvaus",
+                        "type": "Type",//??
+                        "id": "Tunnus",
+                        "municipalityName": "Kunta",
+                        "objectName": "Nimi",
+                        "modifyDate": "Muokattu",
+                        "createDate": "Luotu",
+                        "author": "author"
+					},
 					"error": "Virhe",
 					"noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
 					"link": "Linkki",
