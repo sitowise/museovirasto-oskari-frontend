@@ -184,12 +184,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
-                    'itemtype': result.itemtype
+                    'itemtype': result.itemtype,
+                    'registry': me.loc.registryNames[result.itemtype],
+                    'municipality': result.municipality
                 });
             });
 
             grid.setDataModel(gridModel);
-            grid.setVisibleFields(['id', 'desc']);
+            grid.setVisibleFields(['id', 'desc', 'registry', 'municipality']);
 
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idColumnDiv = jQuery('<div></div>');
@@ -267,6 +269,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
             grid.setColumnUIName('id', gridTexts.id);
             grid.setColumnUIName('desc', gridTexts.desc);
+            grid.setColumnUIName('registry', gridTexts.registry);
+            grid.setColumnUIName('municipality', gridTexts.municipality);
             grid.renderTo(resultGrid.find('div.grid'));
 
             this.tabContent.append(resultGrid);
