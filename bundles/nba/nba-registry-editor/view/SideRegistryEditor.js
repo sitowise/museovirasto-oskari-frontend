@@ -1053,6 +1053,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     format = new OpenLayers.Format.GeoJSON(),
                     geometry = format.write(drawing);
 
+                //in case of MultiPoint geometry get only first Point
+                if (JSON.parse(geometry).type === "MultiPoint") {
+                    geometry = format.write(drawing.components[0]);
+                }
+
                 me._dialog.close(true);
                 me._dialog = null;
 
