@@ -236,6 +236,25 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         },
                         popupId = "nba-register-search-result";
 
+                    if (me.sandbox.getUser().isLoggedIn()) {
+                        var userRoles = me.sandbox.getUser().getRoles(),
+                            editorRole = false;
+
+                        for (var i = 0; i < userRoles.length; ++i) {
+                            if ($.inArray(userRoles[i].name, me.editorRoles) > -1) {
+                                editorRole = true;
+                                break;
+                            }
+                        }
+
+                        //TODO make localization
+                        infoBoxContent.actions['Muokka'] = function () {
+                            me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                            //close Search bundle after moving to registry editor
+                            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+                        };
+                    }
+
                     //TODO make localization 'Kohdetiedot'
                     me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
                     return false;
@@ -312,6 +331,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                             '<h3>Kohdetunnus: ' + result.id + '</h3>' +
                             '<h3>Kohdenimi: ' + result.desc + '</h3>' +
                             '<h3>Rekisteritiedot: <a href="' + result.nbaUrl + '" target="_blank">Linkki rekisteritietoihin</a></h3>';
+
             return template;
         },
 
