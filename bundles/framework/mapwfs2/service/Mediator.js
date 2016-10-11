@@ -385,6 +385,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                     data: {'action_route': 'GetRegistryItems', 'registerName': registry.name, 'id': ids.join()},
                     type: 'GET',
                     success: function(data, textStatus, jqXHR) {
+                        if(data === "null") {
+                            return;
+                        }
+                        
                         var features = [];
 
                         if(!_.isArray(data)) {
@@ -397,17 +401,44 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                     return $.inArray(""+obj.id, subIds) > -1;
                                 });
                                 $.each(newFeatures, function (i, feature) {
+                                    //populate subItem with data from main object
+                                    for(var attr in value) {
+                                        if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
+                                            feature[attr] = value[attr];
+                                        }
+                                    }
                                     feature.id = value.id; //show main feature id in infobox
                                 });
                                 features = features.concat(newFeatures);
                             });
-
+                        } else if(registry.itemType === 'point') {
+                            $.each(data, function (index, value){
+                                var newFeatures = $.grep(value.points, function(obj, key) {
+                                    return $.inArray(""+obj.id, subIds) > -1;
+                                });
+                                $.each(newFeatures, function (i, feature) {
+                                    //populate point with data from main object
+                                    for(var attr in value) {
+                                        if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
+                                            feature[attr] = value[attr];
+                                        }
+                                    }
+                                    feature.id = value.id; //show main feature id in infobox
+                                });
+                                features = features.concat(newFeatures);
+                            });
                         } else if(registry.itemType === 'area') {
                             $.each(data, function (index, value){
                                 var newFeatures = $.grep(value.areas, function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
                                 });
                                 $.each(newFeatures, function (i, feature) {
+                                    //populate area with data from main object
+                                    for(var attr in value) {
+                                        if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
+                                            feature[attr] = value[attr];
+                                        }
+                                    }
                                     feature.id = value.id; //show main feature id in infobox
                                 });
                                 features = features.concat(newFeatures);
