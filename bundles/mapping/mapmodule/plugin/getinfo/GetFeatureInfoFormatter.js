@@ -405,6 +405,12 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         case "buildingHeritage":
             return loc.buildingHeritage;
             break;
+        case "project":
+            return loc.projectRegistry;
+            break;
+        case "worldHeritage":
+            return loc.worldHeritage;
+            break;
         default:
             return loc.ancientMonument;
         break;
