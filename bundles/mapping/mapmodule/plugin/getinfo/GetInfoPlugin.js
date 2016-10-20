@@ -350,18 +350,36 @@ Oskari.clazz.define(
                 contentData = {},
                 fragments = [],
                 colourScheme,
-                font;
+                font,
+                actions = {},
+                editorRoles = this.getSandbox().findRegisteredModuleInstance('nba-registers').conf.editorRoles,
+                loc = Oskari.getLocalization("nba-registers").gfiPopup;
 
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else if(data.via === 'registry') {
                 fragments = this._formatRegistryFeaturesForInfoBox(data);
+
+                //if user has permissions add edit action for all registry items
+                if (this._hasUserPermissions(editorRoles) && data.features != null && fragments.length) {
+                    for (var i = 0; i < data.features.length; i++) {
+                        var itemData = {
+                            id: data.features[i].id,
+                            itemtype: data.features[i].itemtype
+                        };
+
+                        actions[loc.editItem] = function () {
+                            Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
+                        };
+                    }
+                }
+
             } else {
                 fragments = this._formatWFSFeaturesForInfoBox(data);
             }
 
             if (fragments.length) {
-                contentData.actions = {};
+                contentData.actions = actions;
                 contentData.html = this._renderFragments(fragments);
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
@@ -488,6 +506,23 @@ Oskari.clazz.define(
                     }, 0);
                 }
             }
+        },
+
+        _hasUserPermissions: function (allowedRoles) {
+            var me = this,
+                userRoles = me.getSandbox().getUser().getRoles(),
+                hasPermissions = false;
+
+            if (me.getSandbox().getUser().isLoggedIn()) {
+                for (var i = 0; i < userRoles.length; i++) {
+                    if ($.inArray(userRoles[i].name, allowedRoles) > -1) {
+                        hasPermissions = true;
+                        break;
+                    }
+                }
+            }
+
+            return hasPermissions;
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
