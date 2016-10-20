@@ -69,6 +69,9 @@
                 "village": "Region",
                 "type": "Type"
             }*/
+        },
+        "gfiPopup": {
+            "editItem": "Edit item"
         }
     }
 }

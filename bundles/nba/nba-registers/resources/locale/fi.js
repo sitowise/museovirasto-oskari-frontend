@@ -71,6 +71,9 @@
                 "village": "Region",
                 "type": "Type"
             }*/
+        },
+        "gfiPopup": {
+            "editItem": "Muokkaa kohde"
         }
     }
 }

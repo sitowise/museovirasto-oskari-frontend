@@ -24,7 +24,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         this.tabContent = this._initContent();
         //this.resultsContainer = this._initResultGrid();
         this._getRegisters();
-        this.editorRoles = [ "Admin", "Pääkäyttäjä", "Ylläpitäjä", "Viraston muokkaaja", "Ulk. viranomaismuokkaaja", "Ulk. muu muokkaaja" ];
     }, {
         _templates: {
             tabContent: '<div class="nba-searchContainer">'
@@ -166,7 +165,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridTexts = this.loc['grid'],
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
-                searchInput = jQuery(me.tabContent.find('#nba-registers-search-input'));
+                searchInput = jQuery(me.tabContent.find('#nba-registers-search-input')),
+                editorRoles = me.instance.conf.editorRoles;
 
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
@@ -196,27 +196,22 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idColumnDiv = jQuery('<div></div>');
 
-                if (me.sandbox.getUser().isLoggedIn()) {
-                    var userRoles = me.sandbox.getUser().getRoles();
-                    for (var i = 0; i < userRoles.length; ++i) {
-                        if ($.inArray(userRoles[i].name, me.editorRoles) > -1) {
-                            var editLink = jQuery('<a href="#" class="nba-edit-link" />');
-                            editLink.bind('click', function () {
+                if (me._hasUserPermissions(editorRoles)) {
+                    var editLink = jQuery('<a href="#" class="nba-edit-link" />');
+                    editLink.bind('click', function () {
 
-                                //zoom to object
-                                me._zoomToObject(data);
-                                //TODO: highlight object
+                        //zoom to object
+                        me._zoomToObject(data);
+                        //TODO: highlight object
 
-                                me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                                //close Search bundle after moving to registry editor
-                                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                        //close Search bundle after moving to registry editor
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
 
-                                return false;
-                            });
-                            //return editLink;
-                            idColumnDiv.append(editLink);
-                        }
-                    }
+                        return false;
+                    });
+                    //return editLink;
+                    idColumnDiv.append(editLink);
                 }
 
                 var idLink = jQuery('<a href="#">' + name + '</a>');
@@ -224,41 +219,40 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     me._zoomToObject(data);
 
-                    //create infobox
-                    //TODO probably need to be converted to current coordinate system
+                    //show GFI popup
+                    var registry = {};
+
+                    if (data.itemtype === 'AncientMonument') {
+                        registry.name = 'ancientMonument';
+                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
+                        registry.name = 'maintenance';
+                    } else if (data.itemtype === 'BuildingHeritageItem') {
+                        registry.name = 'buildingHeritage';
+                    } else if (data.itemtype === 'RKY2000') {
+                        registry.name = 'rky2000';
+                    } else if (data.itemtype === 'ProjectItem') {
+                        registry.name = 'project';
+                    } else if (data.itemtype === 'RKY1993') {
+                        registry.name = 'rky1993';
+                    } else if (data.itemtype === 'WorldHeritageItem') {
+                        registry.name = 'worldHeritage';
+                    }
+
                     var extent = new OpenLayers.Bounds(data.bounds),
                         center = extent.getCenterLonLat(),
                         x = center.lon,
                         y = center.lat,
                         lonlat = new OpenLayers.LonLat(x, y),
-                        //var lonlat = new OpenLayers.LonLat(24.6603626, 60.2241869),
-                        infoBoxContent = {
-                            html: me._getInfoBoxHtml(data),
-                            actions: {}
+                        registryData = {
+                            "via": "registry",
+                            "features": [data],
+                            "lonlat": lonlat,
+                            "registry": registry,
                         },
-                        popupId = "nba-register-search-result";
+                        infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
 
-                    if (me.sandbox.getUser().isLoggedIn()) {
-                        var userRoles = me.sandbox.getUser().getRoles(),
-                            editorRole = false;
+                    me.sandbox.notifyAll(infoEvent);
 
-                        for (var i = 0; i < userRoles.length; ++i) {
-                            if ($.inArray(userRoles[i].name, me.editorRoles) > -1) {
-                                editorRole = true;
-                                break;
-                            }
-                        }
-
-                        //TODO make localization
-                        infoBoxContent.actions['Muokka'] = function () {
-                            me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
-                            //close Search bundle after moving to registry editor
-                            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
-                        };
-                    }
-
-                    //TODO make localization 'Kohdetiedot'
-                    me.sandbox.postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
                     return false;
                 });
 
@@ -327,16 +321,28 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             }
         },
 
-        _getInfoBoxHtml: function (result) {
-            //TODO make localization
-            //TODO fix styling and layout
-            var template = '<h3>Tunnus: ' + result.id + '</h3>' +
-                            //'<h3>Shape: ' + result.id + '</h3>' +
-                            '<h3>Kohdetunnus: ' + result.id + '</h3>' +
-                            '<h3>Kohdenimi: ' + result.desc + '</h3>' +
-                            '<h3>Rekisteritiedot: <a href="' + result.nbaUrl + '" target="_blank">Linkki rekisteritietoihin</a></h3>';
+        /**
+         * @method _hasUserPermissions
+         * Checks if any of the user's roles is contained in allowedRoles array
+         *
+         * @param {Array} allowedRoles array of role names
+         *            
+         */
+        _hasUserPermissions: function (allowedRoles) {
+            var me = this,
+                userRoles = me.sandbox.getUser().getRoles(),
+                hasPermissions = false;
 
-            return template;
+            if (me.sandbox.getUser().isLoggedIn()) {
+                for (var i = 0; i < userRoles.length; i++) {
+                    if ($.inArray(userRoles[i].name, allowedRoles) > -1) {
+                        hasPermissions = true;
+                        break;
+                    }
+                }
+            }
+
+            return hasPermissions;
         },
 
         _getRegisters: function () {
