@@ -201,9 +201,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     editLink.bind('click', function () {
 
                         //zoom to object
-                        me._zoomToObject(data);
-                        //TODO: highlight object
+                        me._zoomToObject(data, false);
 
+                        //open registry editor
                         me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
                         //close Search bundle after moving to registry editor
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
@@ -217,41 +217,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 var idLink = jQuery('<a href="#">' + name + '</a>');
                 idLink.bind('click', function () {
 
-                    me._zoomToObject(data);
-
-                    //show GFI popup
-                    var registry = {};
-
-                    if (data.itemtype === 'AncientMonument') {
-                        registry.name = 'ancientMonument';
-                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
-                        registry.name = 'maintenance';
-                    } else if (data.itemtype === 'BuildingHeritageItem') {
-                        registry.name = 'buildingHeritage';
-                    } else if (data.itemtype === 'RKY2000') {
-                        registry.name = 'rky2000';
-                    } else if (data.itemtype === 'ProjectItem') {
-                        registry.name = 'project';
-                    } else if (data.itemtype === 'RKY1993') {
-                        registry.name = 'rky1993';
-                    } else if (data.itemtype === 'WorldHeritageItem') {
-                        registry.name = 'worldHeritage';
-                    }
-
-                    var extent = new OpenLayers.Bounds(data.bounds),
-                        center = extent.getCenterLonLat(),
-                        x = center.lon,
-                        y = center.lat,
-                        lonlat = new OpenLayers.LonLat(x, y),
-                        registryData = {
-                            "via": "registry",
-                            "features": [data],
-                            "lonlat": lonlat,
-                            "registry": registry,
-                        },
-                        infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
-
-                    me.sandbox.notifyAll(infoEvent);
+                    //zoom to object and show GFI popup
+                    me._zoomToObject(data, true);
 
                     return false;
                 });
@@ -274,50 +241,79 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             return resultGrid;
         },
 
-        _zoomToObject: function (data) {
-            var me = this;
-            //showing layer for the register
-            for (var i = 0; i < data.mapLayers.length; i++) {
-                var mapLayerId = data.mapLayers[i].mapLayerID,
-                    layer = me.sandbox.findMapLayerFromAllAvailable(mapLayerId);
-                if (layer != null) {
-                    me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
-                } else {
-                    //TODO show error
+        _zoomToObject: function (data, showGfi) {
+            if (data != null && data.bounds != null) {
+                var me = this,
+                    extent = new OpenLayers.Bounds(data.bounds),
+                    center = extent.getCenterLonLat(),
+                    x = center.lon,
+                    y = center.lat,
+                    lonlat = new OpenLayers.LonLat(x, y);
+
+                //showing layer for the register
+                for (var i = 0; i < data.mapLayers.length; i++) {
+                    var mapLayerId = data.mapLayers[i].mapLayerID,
+                        layer = me.sandbox.findMapLayerFromAllAvailable(mapLayerId);
+                    if (layer != null) {
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                    } else {
+                        //TODO show error
+                    }
                 }
-            }
 
-            //TODO probably need to be converted to current coordinate system
-            //var x = data.x,
-            //y = data.y,
-            //zoomLevel = 7;
-            var extent = new OpenLayers.Bounds(data.bounds),
-                center = extent.getCenterLonLat(),
-                x = center.lon,
-                y = center.lat;
+                //move and zoom the map
+                me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
-            //me.sandbox.postRequestByName('MapMoveRequest', [x, y, zoomLevel]);
-            me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
+                //remove all markers
+                var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                if (removeMarkersReqBuilder) {
+                    me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+                }
 
-            //remove all markers
-            var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
-            if (removeMarkersReqBuilder) {
-                me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
-            }
+                //show new marker
+                var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                if (reqBuilder) {
+                    var marker = {
+                        x: center.lon,
+                        y: center.lat,
+                        color: "000000",
+                        msg: '',
+                        shape: 4,
+                        size: 5
+                    };
+                    var request = reqBuilder(marker, 'registry-search-result');
+                    me.sandbox.request('MainMapModule', request);
+                }
 
-            //show marker
-            var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-            if (reqBuilder) {
-                var marker = {
-                    x: center.lon,
-                    y: center.lat,
-                    color: "000000",
-                    msg: '',
-                    shape: 4,
-                    size: 5
-                };
-                var request = reqBuilder(marker, 'registry-search-result');
-                me.sandbox.request('MainMapModule', request);
+                //show GFI popup
+                if (showGfi) {
+                    var registry = {};
+                    if (data.itemtype === 'AncientMonument') {
+                        registry.name = 'ancientMonument';
+                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
+                        registry.name = 'maintenance';
+                    } else if (data.itemtype === 'BuildingHeritageItem') {
+                        registry.name = 'buildingHeritage';
+                    } else if (data.itemtype === 'RKY2000') {
+                        registry.name = 'rky2000';
+                    } else if (data.itemtype === 'ProjectItem') {
+                        registry.name = 'project';
+                    } else if (data.itemtype === 'RKY1993') {
+                        registry.name = 'rky1993';
+                    } else if (data.itemtype === 'WorldHeritageItem') {
+                        registry.name = 'worldHeritage';
+                    }
+
+                    var registryData = {
+                        "via": "registry",
+                        "features": [data],
+                        "lonlat": lonlat,
+                        "registry": registry
+                    };
+                    var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
+
+                    me.sandbox.notifyAll(infoEvent);
+                }
             }
         },
 
