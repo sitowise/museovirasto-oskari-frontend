@@ -36,7 +36,8 @@
                 "WorldHeritageItem": "Maailmanperintökohteet",
                 "ProjectItem": "Project",
                 "HistoricalMunicipality": "Resurssi",
-                "KYSItem": "Resurssi"
+                "KYSItem": "Resurssi",
+                "ProvincialMuseum": "Resurssi"
             }
         }
     }

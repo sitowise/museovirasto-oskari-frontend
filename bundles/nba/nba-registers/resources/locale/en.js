@@ -36,7 +36,8 @@
                 "WorldHeritageItem": "World Heritage",
                 "ProjectItem": "Project",
                 "HistoricalMunicipality": "Resource",
-                "KYSItem": "Resource"
+                "KYSItem": "Resource",
+                "ProvincialMuseum": "Resource"
             }
         }
     }
