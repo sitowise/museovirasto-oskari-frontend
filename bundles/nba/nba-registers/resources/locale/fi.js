@@ -22,7 +22,7 @@
             "grid": {
                 "id": "Tunnus",
                 "desc": "Kuvaus",
-                "registry": "Rekisteri",
+                "registry": "Tietolähde",
                 "municipality": "Kunta",
                 "actions": "Toiminnot",
                 "editItems": "Muokkaa kohdetta",
