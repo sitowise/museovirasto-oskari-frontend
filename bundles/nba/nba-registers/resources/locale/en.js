@@ -37,7 +37,9 @@
                 "ProjectItem": "Project",
                 "HistoricalMunicipality": "Resource",
                 "KYSItem": "Resource",
-                "ProvincialMuseum": "Resource"
+                "ProvincialMuseum": "Resource",
+                "Municipality250": "Resource",
+                "Region": "Resource"
             }
         }
     }
