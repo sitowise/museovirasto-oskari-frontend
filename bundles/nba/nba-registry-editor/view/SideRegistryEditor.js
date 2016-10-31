@@ -64,20 +64,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
                 'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
                 'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem"><h4>' + me.loc.buildingHeritage.addNew + '</h4><div class="registryItemTools"/></div>'),
-                'buildingHeritagePointSurveyingDetails': jQuery('<div class="itemDetails">'
+                'buildingHeritageSurveyingDetails': jQuery('<div class="itemDetails">'
                     + '<div><label>' + me.loc.buildingHeritage.name + '</label><input type="text" id="name"></div>'
                     + '<div><label>' + me.loc.buildingHeritage.description + '</label><input type="text" id="description"></div>'
                     + '<div><label>' + me.loc.buildingHeritage.surveyingType + '</label><select id="surveyingType"/></div>'
                     + '<div><label>' + me.loc.buildingHeritage.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div>'
                     + '<div><label>' + me.loc.buildingHeritage.conservationGroup + '</label><input type="text" id="conservationGroup"></div>'
                     + '<div><label>' + me.loc.buildingHeritage.conservationStatus + '</label><input type="text" id="conservationStatus"></div></div>'),
-                'buildingHeritageAreaSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.buildingHeritage.name + '</label><input type="text" id="name"></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.description + '</label><input type="text" id="description"></label></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.surveyingType + '</label><select id="surveyingType"/></label></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></label></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.conservationGroup + '</label><input type="text" id="conservationGroup"></label></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.conservationStatus + '</label><input type="text" id="conservationStatus"></label></div></div>'),
                 //RKY 2000
                 'rky2000': jQuery('<div id="rky2000"><div id="main"><h4>' + me.loc.rky2000.main + '</h4></div><div id="point"><h4>' + me.loc.rky2000.point + '</h4></div><div id="area"><h4>' + me.loc.rky2000.area + '</h4></div><div id="line"><h4>' + me.loc.rky2000.line + '</h4></div></div>'),
                 'rky2000MainItem': jQuery('<div class="item rky2000MainItem"><div class="id"/></div>'),
@@ -251,6 +244,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             } else if (me.data.itemtype === 'ProjectItem') {
                 postData = { 'action_route': 'GetRegistryItems', 'registerName': 'project', 'id': me.data.id };
             }
+            //TODO missing RKY1993, WorldHeritage, Resource
 
             $.ajax({
                 url: me.instance.sandbox.getAjaxUrl(),
@@ -271,7 +265,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         me._renderRKY2000(data, content);
                     } else if (data.itemtype === 'ProjectItem') {
                         me._renderProject(data, content);
-                    }
+                    }//TODO missing RKY1993, WorldHeritage, Resource
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     me.showMessage(me.loc.error, me.loc.searchError);
@@ -393,8 +387,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             mainItemRow.find('.pointAuthor').append(me._formatData(me.loc.maintenance.pointAuthor, data.pointAuthor));
             mainItemRow.find('.pointCreateDate').append(me._formatData(me.loc.maintenance.pointCreateDate, data.pointCreateDate));
             mainItemRow.find('.pointModifyDate').append(me._formatData(me.loc.maintenance.pointModifyDate, data.pointModifyDate));
-            mainItemRow.find('.pointSurveyingAccuracy').append(me._formatData(me.loc.maintenance.pointSurveyingAccuracy, data.pointSurveyingAccuracy));
-            mainItemRow.find('.pointSurveyingType').append(me._formatData(me.loc.maintenance.pointSurveyingType, data.pointSurveyingType));
+            mainItemRow.find('.pointSurveyingAccuracy').append(me._formatData(me.loc.maintenance.pointSurveyingAccuracy, me.loc.maintenance.surveyingAccuracyValues[data.pointSurveyingAccuracy]));
+            mainItemRow.find('.pointSurveyingType').append(me._formatData(me.loc.maintenance.pointSurveyingType, me.loc.maintenance.surveyingTypeValues[data.pointSurveyingType]));
             mainItemRow.find('.areaCreateDate').append(me._formatData(me.loc.maintenance.areaCreateDate, data.areaCreateDate));
             mainItemRow.find('.areaModifyDate').append(me._formatData(me.loc.maintenance.areaModifyDate, data.areaModifyDate));
 
@@ -456,13 +450,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 subItemRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.points[i].objectId));
                 subItemRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.points[i].objectName));
                 subItemRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.points[i].description));
-                subItemRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].conservationGroup]));
-                subItemRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].conservationStatus]));
+                subItemRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, data.points[i].conservationGroup));
+                subItemRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, data.points[i].conservationStatus));
                 subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
                 subItemRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].surveyingType]));
-                subItemRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].modifyDate]));
-                subItemRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].createDate]));
-                subItemRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].author]));
+                subItemRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, data.points[i].modifyDate));
+                subItemRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, data.points[i].createDate));
+                subItemRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, data.points[i].author));
 
                 subItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
 
@@ -489,13 +483,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 areaRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.areas[i].objectId));
                 areaRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.areas[i].objectName));
                 areaRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.areas[i].description));
-                areaRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].conservationGroup]));
-                areaRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].conservationStatus]));
-                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValues[data.areas[i].surveyingAccuracy]));
-                areaRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].surveyingType]));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].modifyDate]));
-                areaRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].createDate]));
-                areaRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, me.loc.buildingHeritage.surveyingTypeValues[data.areas[i].author]));
+                areaRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, data.areas[i].conservationGroup));
+                areaRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, data.areas[i].conservationStatus));
+                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
+                areaRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValuesArea[data.areas[i].surveyingType]));
+                areaRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, data.areas[i].modifyDate));
+                areaRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, data.areas[i].createDate));
+                areaRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, data.areas[i].author));
 
                 areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
 
@@ -550,9 +544,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.points[i].description));
                 pointRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
                 pointRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValues[data.points[i].surveyingType]));
-                pointRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, me.loc.rky2000.surveyingTypeValues[data.points[i].modifyDate]));
-                pointRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, me.loc.rky2000.surveyingTypeValues[data.points[i].createDate]));
-                pointRow.find('.author').append(me._formatData(me.loc.rky2000.author, me.loc.rky2000.surveyingTypeValues[data.points[i].author]));
+                pointRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.points[i].modifyDate));
+                pointRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.points[i].createDate));
+                pointRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.points[i].author));
 
                 pointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
 
@@ -583,11 +577,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 areaRow.find('.id').append(me._formatData(me.loc.rky2000.id, data.areas[i].objectId));
                 areaRow.find('.name').append(me._formatData(me.loc.rky2000.name, data.areas[i].objectName));
                 areaRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.areas[i].description));
-                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValues[data.areas[i].surveyingAccuracy]));
-                areaRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValues[data.areas[i].surveyingType]));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, me.loc.rky2000.surveyingTypeValues[data.areas[i].modifyDate]));
-                areaRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, me.loc.rky2000.surveyingTypeValues[data.areas[i].createDate]));
-                areaRow.find('.author').append(me._formatData(me.loc.rky2000.author, me.loc.rky2000.surveyingTypeValues[data.areas[i].author]));
+                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
+                areaRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValuesArea[data.areas[i].surveyingType]));
+                areaRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.areas[i].modifyDate));
+                areaRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.areas[i].createDate));
+                areaRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.areas[i].author));
 
                 areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
 
@@ -620,9 +614,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 lineRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.lines[i].description));
                 lineRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValues[data.lines[i].surveyingAccuracy]));
                 lineRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValues[data.lines[i].surveyingType]));
-                lineRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, me.loc.rky2000.surveyingTypeValues[data.lines[i].modifyDate]));
-                lineRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, me.loc.rky2000.surveyingTypeValues[data.lines[i].createDate]));
-                lineRow.find('.author').append(me._formatData(me.loc.rky2000.author, me.loc.rky2000.surveyingTypeValues[data.lines[i].author]));
+                lineRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.lines[i].modifyDate));
+                lineRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.lines[i].createDate));
+                lineRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.lines[i].author));
 
                 lineRow.find('.registryItemTools').append(me._getEditTools({ 'line': true, 'id': data.lines[i].id, 'type': 'line', feature: data.lines[i] }));
 
@@ -957,7 +951,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 if(typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) {
                     cont();
                 } else {
-                    var title = me.loc.error,
+                    var title = me.loc.warning,
                         content = me.loc.featureHasGeometry,
                         continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                         cancelButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
@@ -1250,6 +1244,59 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         }
                     });
                     postData = { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+
+                } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
+
+                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subareas': [] };
+                    $.each(me.itemData.subareas, function (index, item) {
+                        if (item._edited) {
+                            edited.subareas.push(item.id);
+                        }
+                    });
+                    postData = { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+
+
+                } else if (me.data.itemtype === 'BuildingHeritageItem') {
+
+                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
+                    $.each(me.itemData.points, function (index, item) {
+                        if (item._edited) {
+                            edited.points.push(item.id);
+                        }
+                    });
+                    $.each(me.itemData.areas, function (index, item) {
+                        if (item._edited) {
+                            edited.areas.push(item.id);
+                        }
+                    });
+                    postData = { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+
+                } else if (me.data.itemtype === 'RKY1993') {
+                    //Not implemented yet in API
+                    //postData = { 'registerName': 'rky1993', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+                } else if (me.data.itemtype === 'RKY2000') {
+
+                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
+                    $.each(me.itemData.points, function (index, item) {
+                        if (item._edited) {
+                            edited.points.push(item.id);
+                        }
+                    });
+                    $.each(me.itemData.areas, function (index, item) {
+                        if (item._edited) {
+                            edited.areas.push(item.id);
+                        }
+                    });
+                    $.each(me.itemData.lines, function (index, item) {
+                        if (item._edited) {
+                            edited.lines.push(item.id);
+                        }
+                    });
+                    postData = { 'registerName': 'rky2000', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+
+                } else if (me.data.itemtype === 'WorldHeritageItem') {
+                    //TODO in frontend and backend
+                    //postData = { 'registerName': 'worldHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
                 } else if (me.data.itemtype === 'ProjectItem') {
                     var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
                     $.each(me.itemData.points, function (index, item) {
@@ -1263,6 +1310,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         }
                     });
                     postData = { 'registerName': 'project', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
+
+                } else if (me.data.itemtype === 'HistoricalMunicipality' || me.data.itemtype === 'KYSItem') {
+                    //Not implemented yet in API
+                    //postData = { 'registerName': 'resource', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
                 }
                 $.ajax({
                     url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
@@ -1350,6 +1401,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
              });
 
             template.find("#description").val(me.editFeature.description);
+            template.find("#areaChangeReason").val(me.editFeature.areaChangeReason);
             accuracySelect.val(me.editFeature.surveyingAccuracy);
             typeSelect.val(me.editFeature.surveyingType);
 
@@ -1422,6 +1474,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
 
             template.find("#description").val(me.editFeature.description);
+            template.find("#name").val(me.editFeature.objectName);
+            template.find("#conservationGroup").val(me.editFeature.conservationGroup);
+            template.find("#conservationStatus").val(me.editFeature.conservationStatus);
             accuracySelect.val(me.editFeature.surveyingAccuracy);
             typeSelect.val(me.editFeature.surveyingType);
 
@@ -1435,7 +1490,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
         _renderBuildingHeritageAreaDetails: function (content, attributes, selectedFeature, fields) {
             var me = this,
-                template = me.templates.buildingHeritageAreaSurveyingDetails.clone(),
+                template = me.templates.buildingHeritageSurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
                 typeSelect = template.find("#surveyingType");
 
@@ -1458,6 +1513,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
 
             template.find("#description").val(me.editFeature.description);
+            template.find("#name").val(me.editFeature.objectName);
+            template.find("#conservationGroup").val(me.editFeature.conservationGroup);
+            template.find("#conservationStatus").val(me.editFeature.conservationStatus);
             accuracySelect.val(me.editFeature.surveyingAccuracy);
             typeSelect.val(me.editFeature.surveyingType);
 
@@ -1494,7 +1552,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
 
             template.find("#description").val(me.editFeature.description);
-            template.find("#name").val(me.editFeature.name);
+            template.find("#name").val(me.editFeature.objectName);
             accuracySelect.val(me.editFeature.surveyingAccuracy);
             typeSelect.val(me.editFeature.surveyingType);
 

@@ -22,7 +22,7 @@
             "grid": {
                 "id": "ID",
                 "desc": "Description",
-                "registry": "Registry",
+                "registry": "Data source",
                 "municipality": "Municipality",
                 "actions": "Actions",
                 "editItems": "Edit items",
@@ -69,6 +69,9 @@
                 "village": "Region",
                 "type": "Type"
             }*/
+        },
+        "gfiPopup": {
+            "editItem": "Edit item"
         }
     }
 }

@@ -342,6 +342,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
     _formatRegistryFeaturesForInfoBox: function (data) {
         var me = this,
             layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
+            layerName = (layer != null && layer != undefined) ? layer.getName() : '',
             fields,
             hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemtype', 'geometry', 'mapLayers', 'bounds', 'filtered', 'lines', 'points', 'subAreas'],
             type = 'wfslayer',
@@ -349,7 +350,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             markup,
             locale = me._getRegistryLocale(data.registry.name, data.registry.itemType);
 
-        if (data.features === 'empty' || layer === null || layer === undefined) {
+        if (data.features === 'empty') {
             return;
         }
         result = _.map(data.features, function (feature) {
@@ -380,7 +381,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return {
                 markup: markup,
                 layerId: data.layerId,
-                layerName: layer.getName(),
+                layerName: layerName,
                 type: type,
                 isMyPlace: false
             };
