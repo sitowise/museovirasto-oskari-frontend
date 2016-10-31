@@ -369,7 +369,10 @@ Oskari.clazz.define(
                         };
 
                         actions[loc.editItem] = function () {
+                            //open registry editor
                             Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
+                            //close Search bundle after moving to registry editor
+                            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
                         };
                     }
                 }

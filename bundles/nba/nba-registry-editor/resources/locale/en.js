@@ -24,40 +24,45 @@ Oskari.registerLocalization(
 						"objectName": "Name",
 						"subType": "Subtype",
 						"createDate": "Create Date",
-						"areaSelectionSource": "areaSelectionSource",
-						"sourceDating": "sourceDating",
-						"digiMk": "digiMk",
-						"areaSelectionType": "areaSelectionType",
-						"name": "name",
-						"municipalityName": "municipalityName",
-						"copyright": "copyright",
-						"digiMkYear": "digiMkYear",
-						"digitizationAuthor": "digitizationAuthor",
-						"digitizationDate": "digitizationDate",
+						"areaSelectionSource": "Area selection source",
+						"sourceDating": "Source Dating",
+						"digiMk": "DigiMk",
+						"areaSelectionType": "Area Selection Type",
+						"name": "Name",
+						"municipalityName": "Municipality name",
+						"copyright": "Copyright",
+						"digiMkYear": "DigiMk Year",
+						"digitizationAuthor": "Digitization Author",
+						"digitizationDate": "Digitization Date",
+						"dating": "Dating",
+						"type": "Type",
+						"nbaUrl": "NBA URL",
+						"coordinateX": "X",
+						"coordinateY": "Y",
 						"addNew": "Add new",
 						"surveyingAccuracyValues": {
-							"11000": "Ei tiedossa",
-							"11001": "Tarkka  (< 10 m)",
-							"11002": "Ohjeellinen (10 - 100 m)",
-							"11003": "Suuntaa antava (100 - 1000 m)",
+							"11000": "Not known",
+							"11001": "Precise (< 10 m)",
+							"11002": "Indicatory (10 - 100 m)",
+							"11003": "Approximate (100 - 1000 m)",
 							"11004": "> 1000 m"
 						},
 						"surveyingTypeValues": {
-							"1": "Maastomittaus",
-							"2": "Tarkastus",
-							"3": "Muu lähde"
+							"1": "Terrain measurement",
+							"2": "Inspection",
+							"3": "Other source"
 						},
 						"surveyingAccuracyValuesArea": {
-							"1": "Tarkka",
-							"2": "Ohjeellinen",
-							"3": "Suuntaa antava" 
+							"1": "Precise",
+							"2": "Indicatory",
+							"3": "Approximate" 
 						},
 						"surveyingTypeValuesArea": {
-							"1": "Maastomittaus",
-							"2": "Tarkastus",
-							"3": "Muu lähde"
+							"1": "Terrain measurement",
+							"2": "Inspection",
+							"3": "Other source"
 						},
-						"areaChangeReason": "areaChangeReason"
+						"areaChangeReason": "Area change reason"
 					},
 					"maintenance": {
 					    "main": "Main items",
@@ -71,54 +76,56 @@ Oskari.registerLocalization(
 					    "surveyingTypeArea": "Surveying Type",
 					    "modifyDate": "Modify Date",
 					    "url": "Url",
+					    "nbaUrl": "NBA URL",
 					    "classification": "Classification",
 					    "municipalityName": "Municipality",
 					    "objectName": "Name",
 					    "subType": "Subtype",
 					    "createDate": "Create Date",
-					    "areaSelectionSource": "areaSelectionSource",
-					    "sourceDating": "sourceDating",
-					    "digiMk": "digiMk",
-					    "areaSelectionType": "areaSelectionType",
-					    "name": "name",
-					    "municipalityName": "municipalityName",
-					    "copyright": "copyright",
-					    "digiMkYear": "digiMkYear",
-					    "digitizationAuthor": "digitizationAuthor",
-					    "digitizationDate": "digitizationDate",
+					    "areaSelectionSource": "Area selection source",
+					    "sourceDating": "Source Dating",
+					    "digiMk": "DigiMk",
+					    "areaSelectionType": "Area Selection type",
+					    "name": "Name",
+					    "municipalityName": "Municipality name",
+					    "copyright": "Copyright",
+					    "digiMkYear": "DigiMk Year",
+					    "digitizationAuthor": "Digitization author",
+					    "digitizationDate": "Digitization date",
 					    "addNew": "Add new",
 					    "surveyingAccuracyValues": {
-					        "11000": "Ei tiedossa",
-					        "11001": "Tarkka  (< 10 m)",
-					        "11002": "Ohjeellinen (10 - 100 m)",
-					        "11003": "Suuntaa antava (100 - 1000 m)",
+					        "11000": "Not known",
+					        "11001": "Precise (< 10 m)",
+					        "11002": "Indicatory (10 - 100 m)",
+					        "11003": "Approximate (100 - 1000 m)",
 					        "11004": "> 1000 m"
 					    },
 					    "surveyingTypeValues": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
 					    "surveyingAccuracyValuesArea": {
-					        "1": "Tarkka",
-					        "2": "Ohjeellinen",
-					        "3": "Suuntaa antava"
+					        "1": "Precise",
+					        "2": "Indicatory",
+					        "3": "Approximate"
 					    },
 					    "surveyingTypeValuesArea": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
-					    "maintainingEntity": "maintainingEntity",
-					    "pointDescription": "pointDescription",
-					    "pointAuthor": "pointAuthor",
-					    "pointCreateDate": "pointCreateDate",
-					    "pointModifyDate": "pointModifyDate",
-					    "pointSurveyingAccuracy": "pointSurveyingAccuracy",
-					    "pointSurveyingType": "pointSurveyingType",
-					    "areaCreateDate": "areaCreateDate",
-					    "areaModifyDate": "areaModifyDate",
-					    "modifyDate": "modifyDate"
+					    "maintainingEntity": "Maintaining entity",
+					    "pointDescription": "Point description",
+					    "pointAuthor": "Point author",
+					    "pointCreateDate": "Point create date",
+					    "pointModifyDate": "Point modify date",
+					    "pointSurveyingAccuracy": "Point surveying accuracy",
+					    "pointSurveyingType": "Point surveying type",
+					    "areaCreateDate": "Area create date",
+					    "areaModifyDate": "Area modify date",
+					    "coordinateX": "X",
+					    "coordinateY": "Y"
 					},
 					"buildingHeritage": {
 					    "main": "Main items",
@@ -132,53 +139,56 @@ Oskari.registerLocalization(
 					    "surveyingTypeArea": "Surveying Type",
 					    "modifyDate": "Modify Date",
 					    "url": "Url",
+					    "nbaUrl": "NBA URL",
 					    "classification": "Classification",
 					    "municipalityName": "Municipality",
 					    "objectName": "Name",
 					    "subType": "Subtype",
 					    "createDate": "Create Date",
-					    "areaSelectionSource": "areaSelectionSource",
-					    "sourceDating": "sourceDating",
-					    "digiMk": "digiMk",
-					    "areaSelectionType": "areaSelectionType",
-					    "name": "name",
-					    "municipalityName": "municipalityName",
-					    "copyright": "copyright",
-					    "digiMkYear": "digiMkYear",
-					    "digitizationAuthor": "digitizationAuthor",
-					    "digitizationDate": "digitizationDate",
+					    "areaSelectionSource": "Area selection source",
+					    "sourceDating": "Source dating",
+					    "digiMk": "DigiMk",
+					    "areaSelectionType": "Area selection type",
+					    "name": "Name",
+					    "municipalityName": "Municipality name",
+					    "copyright": "Copyright",
+					    "digiMkYear": "DigiMk Year",
+					    "digitizationAuthor": "Digitization author",
+					    "digitizationDate": "Digitization date",
 					    "addNew": "Add new",
 					    "surveyingAccuracyValues": {
-					        "11000": "Ei tiedossa",
-					        "11001": "Tarkka  (< 10 m)",
-					        "11002": "Ohjeellinen (10 - 100 m)",
-					        "11003": "Suuntaa antava (100 - 1000 m)",
+					        "11000": "Not known",
+					        "11001": "Precise (< 10 m)",
+					        "11002": "Indicatory (10 - 100 m)",
+					        "11003": "Approximate (100 - 1000 m)",
 					        "11004": "> 1000 m"
 					    },
 					    "surveyingTypeValues": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
 					    "surveyingAccuracyValuesArea": {
-					        "1": "Tarkka",
-					        "2": "Ohjeellinen",
-					        "3": "Suuntaa antava"
+					        "1": "Precise",
+					        "2": "Indicatory",
+					        "3": "Approximate"
 					    },
 					    "surveyingTypeValuesArea": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
-					    "conservationGroup": "conservationGroup",
-					    "conservationStatus": "conservationStatus",
-                        "author": "author"
+					    "conservationGroup": "Conservation group",
+					    "conservationStatus": "Conservation status",
+					    "author": "Author",
+					    "coordinateX": "X",
+					    "coordinateY": "Y"
 					},
 					"rky2000": {
 					    "main": "Main items",
 					    "point": "Points",
 					    "area": "Areas",
-                        "line": "Lines",
+					    "line": "Lines",
 					    "description": "Description",
 					    "id": "Id",
 					    "surveyingAccuracy": "Surveying Accuracy",
@@ -187,47 +197,56 @@ Oskari.registerLocalization(
 					    "surveyingTypeArea": "Surveying Type",
 					    "modifyDate": "Modify Date",
 					    "url": "Url",
+					    "nbaUrl": "NBA URL",
 					    "classification": "Classification",
 					    "municipalityName": "Municipality",
 					    "objectName": "Name",
 					    "subType": "Subtype",
 					    "createDate": "Create Date",
-					    "areaSelectionSource": "areaSelectionSource",
-					    "sourceDating": "sourceDating",
-					    "digiMk": "digiMk",
-					    "areaSelectionType": "areaSelectionType",
-					    "name": "name",
-					    "municipalityName": "municipalityName",
-					    "copyright": "copyright",
-					    "digiMkYear": "digiMkYear",
-					    "digitizationAuthor": "digitizationAuthor",
-					    "digitizationDate": "digitizationDate",
+					    "areaSelectionSource": "Area selection source",
+					    "sourceDating": "Source dating",
+					    "digiMk": "DigiMk",
+					    "areaSelectionType": "Area selection type",
+					    "name": "Name",
+					    "municipalityName": "Municipality name",
+					    "copyright": "Copyright",
+					    "digiMkYear": "digiMk Year",
+					    "digitizationAuthor": "Digitization author",
+					    "digitizationDate": "Digitization date",
 					    "addNew": "Add new",
 					    "surveyingAccuracyValues": {
-					        "11000": "Ei tiedossa",
-					        "11001": "Tarkka  (< 10 m)",
-					        "11002": "Ohjeellinen (10 - 100 m)",
-					        "11003": "Suuntaa antava (100 - 1000 m)",
+					        "11000": "Not known",
+					        "11001": "Precise (< 10 m)",
+					        "11002": "Indicatory (10 - 100 m)",
+					        "11003": "Approximate (100 - 1000 m)",
 					        "11004": "> 1000 m"
 					    },
 					    "surveyingTypeValues": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
 					    "surveyingAccuracyValuesArea": {
-					        "1": "Tarkka",
-					        "2": "Ohjeellinen",
-					        "3": "Suuntaa antava"
+					        "1": "Precise",
+					        "2": "Indicatory",
+					        "3": "Approximate"
 					    },
 					    "surveyingTypeValuesArea": {
-					        "1": "Maastomittaus",
-					        "2": "Tarkastus",
-					        "3": "Muu lähde"
+					        "1": "Terrain measurement",
+					        "2": "Inspection",
+					        "3": "Other source"
 					    },
-					    "conservationGroup": "conservationGroup",
-					    "conservationStatus": "conservationStatus",
-					    "author": "author"
+					    "conservationGroup": "Conservation group",
+					    "conservationStatus": "Conservation status",
+					    "author": "Author",
+					    "coordinateX": "X",
+					    "coordinateY": "Y"
+					},
+					"worldHeritage": {
+					    "objectName": "Name",
+					    "id": "Id",
+					    "areaSelectionSource": "Area selection source",
+					    "objectType": "Object type"
 					},
 					"projectRegistry": {
 					    "main": "Main items",
@@ -241,9 +260,42 @@ Oskari.registerLocalization(
                         "objectName": "Name",
                         "modifyDate": "Modify Date",
                         "createDate": "Create Date",
-                        "author": "author"
+                        "author": "author",
+                        "nbaUrl": "NBA URL",
+                        "projectCategorySpecification": "Specifier",
+                        "year": "Research Year",
+                        "projectCategoryCode": "Research category",
+                        "projectCategoryCodeValues": {
+                            "12000": "Ei määritelty",
+                            "12001": "Prospektointi",
+                            "12002": "Näytteiden otto",
+                            "12003": "Arkeologinen valvonta",
+                            "12005": "Kartoitus",
+                            "12006": "Inventointi",
+                            "12007": "Koekaivaus",
+                            "12008": "Kaivaus",
+                            "12009": "VA-kaivaus",
+                            "12010": "VA-inventointi",
+                            "12011": "Tarkastussukellus",
+                            "12012": "Mittausdokumentointi",
+                            "12013": "Valokuvadokumentointi"
+                        },
+                        "projectOrganization": "Operator",
+                        "stageCode": "Work stage",
+                        "stageCodeValues": {
+                            "17000": "Ei määritelty",
+                            "17001": "Lupa myönnetty",
+                            "17002": "Esityövaihe",
+                            "17003": "Kenttätyövaihe",
+                            "17004": "Jälkityövaihe",
+                            "17005": "Raportti jätetty",
+                            "17006": "Raportti puuttuu"
+                        },
+                        "coordinateX": "X",
+                        "coordinateY": "Y"
 					},
 					"error": "Error",
+					"warning": "Warning",
 					"noEditsDone": "No edits have been done. Edit features before saving.",
 					"link": "Link",
 					"updateError": "Feature update failed",
@@ -306,4 +358,5 @@ Oskari.registerLocalization(
 					"continue": "Continue"
 				}
 			}
-		});
+		}
+    );
