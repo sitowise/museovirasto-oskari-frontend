@@ -348,7 +348,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             type = 'wfslayer',
             result,
             markup,
-            locale = me._getRegistryLocale(data.registry.name, data.registry.itemType);
+            locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
 
         if (data.features === 'empty') {
             return;
@@ -388,34 +388,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         });
 
         return result;
-    },
-    
-    _getRegistryLocale: function(registryName, itemType) {
-        var loc = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
-        switch(registryName) {
-        case "ancientMonument":
-            return loc.ancientMonument;
-            break;
-        case "rky2000":
-        case "rky1993":
-            return loc.rky2000;
-            break;
-        case "maintenance":
-            return loc.maintenance;
-            break;
-        case "buildingHeritage":
-            return loc.buildingHeritage;
-            break;
-        case "project":
-            return loc.projectRegistry;
-            break;
-        case "worldHeritage":
-            return loc.worldHeritage;
-            break;
-        default:
-            return loc.ancientMonument;
-        break;
-        }
     },
 
     /**
@@ -508,7 +480,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 valpres = '';
                 switch (vType) {
                 case 'string':
-                    if (value.indexOf('http://') === 0) {
+                    if (value.indexOf('http://') === 0 || value.indexOf('https://') === 0) {
                         valpres = this.template.linkOutside.clone();
                         valpres.attr('href', value);
                         valpres.append(value);

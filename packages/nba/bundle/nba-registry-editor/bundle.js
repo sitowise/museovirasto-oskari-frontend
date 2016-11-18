@@ -46,6 +46,24 @@ function () {
             "src": "../../../../bundles/nba/nba-registry-editor/view/SideRegistryEditor.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/RegistryItemViewProtocol.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/AncientMonumentView.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/AncientMonumentMaintenanceView.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/BuildingHeritageView.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/ProjectView.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/view/registryItem/RKY2000View.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/nba/nba-registry-editor/request/ShowRegistryEditorRequest.js"
         }, {
             "type": "text/javascript",

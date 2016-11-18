@@ -8,9 +8,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
      *
      * @param {Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleInstance} instance
      * Reference to component that created this view
-     * @param {Object} localization
+     * @param {Object} loc
      * Localization data in JSON format
-     * @param {string} layerId
+     * @param {Object} data
+     * Item data from search ui
      */
     function (instance, localization, data) {
         var me = this;
@@ -21,77 +22,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         me.itemData = null;  //full item data from registry
         me.templates = {
                 'drawHelper': jQuery('<div class="drawHelper"><div class="infoText"></div></div>'),
-                //Ancient Monument templates
-                'ancientMonument': jQuery('<div id="ancientMonument"><div id="main"><h3>' + me.loc.ancientMonument.main + '</h3></div><div id="sub"><h3>' + me.loc.ancientMonument.sub + '</h3></div><div id="area"><h3>' + me.loc.ancientMonument.area + '</h3></div></div>'),
-                'ancientMonumentMainItem': jQuery('<div class="item ancientMonumentMainItem"><div class="id"/><div class="name"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="classification"/><div class="municipalityName"/><div class="url"/><div class="subType"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
-                'ancientMonumentSubItem': jQuery('<div class="item ancientMonumentSubItem"><div class="id"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="registryItemTools"/></div>'),
-                'ancientMonumentAreaItem': jQuery('<div class="item ancientMonumentAreaItem"><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="areaSelectionType"/><div class="areaSelectionSource"/><div class="sourceDating"/><div class="digiMk"/><div class="areaChangeReason"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
-                'ancientMonumentAreaItemAdd': jQuery('<div class="item newItem ancientMonumentAreaItem"><h4>' + me.loc.ancientMonument.addNew + '</h4><div class="registryItemTools"/></div>'),
-                'ancientMonumentSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
-                    + '<div><label>' + me.loc.ancientMonument.surveyingType + '</label><select id="surveyingType"/></div>'
-                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
-                'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.ancientMonument.description + '</label><input type="text" id="description"></div>'
-                    + '<div><label>' + me.loc.ancientMonument.surveyingTypeArea + '</label><select id="surveyingType"/></label></div>'
-                    + '<div><label>' + me.loc.ancientMonument.surveyingAccuracyArea + '</label><select id="surveyingAccuracy"/></div>'
-                    + '<div><label>' + me.loc.ancientMonument.areaChangeReason + '</label><input type="text" id="areaChangeReason"></div>'),
-                //Ancient Monument Maintenance templates
-                'maintenance': jQuery('<div id="maintenance"><div id="main"><h3>' + me.loc.maintenance.main + '</h3></div><div id="sub"><h3>' + me.loc.maintenance.sub + '</h3></div>'),
-                'maintenanceMainItem': jQuery('<div class="item maintenanceMainItem">'
-                    + '<div class="id"/>'
-                    + '<div class="name"/>'
-                    + '<div class="municipalityName"/>'
-                    + '<div class="subType"/>'
-                    + '<div class="maintainingEntity"/>'
-                    + '<div class="pointDescription"/>'
-                    + '<div class="pointAuthor"/>'
-                    + '<div class="pointSurveyingType"/>'
-                    + '<div class="pointSurveyingAccuracy"/>'
-                    + '<div class="pointCreateDate"/>'
-                    + '<div class="areaModifyDate"/>'
-                    + '<div class="areaCreateDate"/>'
-                    + '<div class="pointModifyDate"/>'
-                    + '<div class="registryItemTools"/></div>'),
-                'maintenanceSubItem': jQuery('<div class="item maintenanceSubItem"><div class="id"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
-                'maintenanceSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.maintenance.description + '</label><input type="text" id="description">'
-                    + '<div><label>' + me.loc.maintenance.surveyingType + '</label><select id="surveyingType"/></div>'
-                    + '<div><label>' + me.loc.maintenance.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
-                //Building heritage
-                'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h3>' + me.loc.buildingHeritage.main + '</h4></div><div id="sub"><h4>' + me.loc.buildingHeritage.sub + '</h4></div><div id="area"><h4>' + me.loc.buildingHeritage.area + '</h4></div></div>'),
-                'buildingHeritageMainItem': jQuery('<div class="item buildingHeritageMainItem"><div class="id"/><div class="name"/><div class="municipalityName"/></div>'),
-                'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-                'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-                'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem"><h4>' + me.loc.buildingHeritage.addNew + '</h4><div class="registryItemTools"/></div>'),
-                'buildingHeritageSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.buildingHeritage.name + '</label><input type="text" id="name"></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.description + '</label><input type="text" id="description"></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.surveyingType + '</label><select id="surveyingType"/></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.conservationGroup + '</label><input type="text" id="conservationGroup"></div>'
-                    + '<div><label>' + me.loc.buildingHeritage.conservationStatus + '</label><input type="text" id="conservationStatus"></div></div>'),
-                //RKY 2000
-                'rky2000': jQuery('<div id="rky2000"><div id="main"><h4>' + me.loc.rky2000.main + '</h4></div><div id="point"><h4>' + me.loc.rky2000.point + '</h4></div><div id="area"><h4>' + me.loc.rky2000.area + '</h4></div><div id="line"><h4>' + me.loc.rky2000.line + '</h4></div></div>'),
-                'rky2000MainItem': jQuery('<div class="item rky2000MainItem"><div class="id"/></div>'),
-                'rky2000Geometry': jQuery('<div class="item rky2000Geometry"><div class="id"/><div class="name"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-                'rky2000GeometryAdd': jQuery('<div class="item newItem rky2000GeometryItem"><h4>' + me.loc.rky2000.addNew + '</h4><div class="registryItemTools"/></div>'),
-                'rky2000SurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.rky2000.name + '</label><input type="text" id="name"></div>'
-                    + '<div><label>' + me.loc.rky2000.description + '</label><input type="text" id="description"></div>'
-                    + '<div><label>' + me.loc.rky2000.surveyingType + '</label><select id="surveyingType"/></div>'
-                    + '<div><label>' + me.loc.rky2000.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
-                //Project Registry
-                'projectRegistry': jQuery('<div id="projectRegistry"><div id="main"><h3>' + me.loc.projectRegistry.main + '</h4></div><div id="point"><h4>' + me.loc.projectRegistry.point + '</h4></div><div id="area"><h4>' + me.loc.projectRegistry.area + '</h4></div></div>'),
-                'projectRegistryMainItem': jQuery('<div class="item projectRegistryMainItem"><div class="id"/><div class="name"/><div class="municipalityName"/></div>'),
-                'projectRegistryPoint': jQuery('<div class="item projectRegistryPoint"><div class="id"/><div class="description"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-                'projectRegistryArea': jQuery('<div class="item projectRegistryAreaItem"><div class="id"/><div class="description"/><div class="type"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-                'projectRegistrySubItemAdd': jQuery('<div class="item newItem projectRegistrySubItem"><h4>' + me.loc.projectRegistry.addNew + '</h4><div class="registryItemTools"/></div>'),
-                'projectRegistryPointSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></div>'),
-                'projectRegistryAreaSurveyingDetails': jQuery('<div class="itemDetails">'
-                    + '<div><label>' + me.loc.projectRegistry.description + '</label><input type="text" id="description"></label></div>'
-                    + '<div><label>' + me.loc.projectRegistry.type + '</label><input type="text" id="type"/></label></div>'),
                 //common templates
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
@@ -112,9 +42,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             '</div>');
         me._dialog = null;
         me.editFeature = null; //current item in editing, can be main item, sub item or area item
-        me.edited = false; //true if something has been edited
         me.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         me._coordsConvertionEnabled = false;
+        me.registerView = null; //current register view class
     }, {
         __name: 'RegistryEditor',
         /**
@@ -227,515 +157,51 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _refreshData: function(id) {
             var me = this,
                 content = me.mainPanel,
-                postData = null;
+                postData = null,
+                itemDetails;
             
             content.find(".content-registry-item").empty();
             me.progressSpinner.insertTo(content.find(".content-registry-item"));
             me.progressSpinner.start();
 
-            if(me.data.itemtype === 'AncientMonument') {
-                postData = {'action_route': 'GetRegistryItems', 'registerName': 'ancientMonument', 'id': me.data.id};
+            me._setRegisterView();
+
+            if (me.registerView != null) {
+                $.ajax({
+                    url: me.instance.sandbox.getAjaxUrl(),
+                    data: { 'action_route': 'GetRegistryItems', 'registerName': me.registerView.getRegisterName(), 'id': me.data.id },
+                    type: 'GET',
+                    success: function (data, textStatus, jqXHR) {
+                        me.progressSpinner.stop();
+                        content.find(".content-registry-item").empty();
+                        me.itemData = data;
+                        itemDetails = me.registerView.render(data);
+                        content.find(".content-registry-item").append(itemDetails);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        me.showMessage(me.loc.error, me.loc.searchError);
+                    }
+                });
+            }
+        },
+
+        _setRegisterView: function () {
+            var me = this;
+            me.registerView = null;
+            if (me.data.itemtype === 'AncientMonument') {
+                me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentView', me, me.loc);
             } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
-                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'ancientMaintenance', 'id': me.data.id };
+                me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentMaintenanceView', me, me.loc);
             } else if (me.data.itemtype === 'BuildingHeritageItem') {
-                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'buildingHeritage', 'id': me.data.id };
+                me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritageView', me, me.loc);
             } else if (me.data.itemtype === 'RKY2000') {
-                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'rky2000', 'id': me.data.id };
+                me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View', me, me.loc);
             } else if (me.data.itemtype === 'ProjectItem') {
-                postData = { 'action_route': 'GetRegistryItems', 'registerName': 'project', 'id': me.data.id };
-            }
-            //TODO missing RKY1993, WorldHeritage, Resource
-
-            $.ajax({
-                url: me.instance.sandbox.getAjaxUrl(),
-                data: postData,
-                type: 'GET',
-                success: function(data, textStatus, jqXHR) {
-                    me.progressSpinner.stop();
-                    content.find(".content-registry-item").empty();
-                    me.itemData = data;
-
-                    if(data.itemtype === 'AncientMonument') {
-                        me._renderAncientMonument(data, content);
-                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
-                        me._renderMaintenance(data, content);
-                    } else if (data.itemtype === 'BuildingHeritageItem') {
-                        me._renderBuildingHeritage(data, content);
-                    } else if (data.itemtype === 'RKY2000') {
-                        me._renderRKY2000(data, content);
-                    } else if (data.itemtype === 'ProjectItem') {
-                        me._renderProject(data, content);
-                    }//TODO missing RKY1993, WorldHeritage, Resource
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    me.showMessage(me.loc.error, me.loc.searchError);
-                }
-            });
-        },
-        
-        _renderAncientMonument: function(data, content) {
-            var me = this,
-                itemDetails = me.templates.ancientMonument.clone(),
-                noItemsFoundElem = me.templates.noItemsFound.clone(),
-                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                panel,
-                main = itemDetails.find("#main"),
-                sub = itemDetails.find("#sub"),
-                area = itemDetails.find('#area');
-
-            var mainItemRow = me.templates.ancientMonumentMainItem.clone();
-
-            mainItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.description));
-            mainItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.id));
-            mainItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, me.loc.ancientMonument.surveyingAccuracyValues[data.surveyingAccuracy]));
-            mainItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, me.loc.ancientMonument.surveyingTypeValues[data.surveyingType]));
-            mainItemRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.modifyDate));
-            mainItemRow.find('.url').append(me._formatData(me.loc.ancientMonument.url, data.nbaUrl));
-            mainItemRow.find('.classification').append(me._formatData(me.loc.ancientMonument.classification, data.classification));
-            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.ancientMonument.municipalityName, data.municipalityName));
-            mainItemRow.find('.name').append(me._formatData(me.loc.ancientMonument.objectName, data.objectName));
-            mainItemRow.find('.subType').append(me._formatData(me.loc.ancientMonument.subType, data.subType.join(", ")));
-            mainItemRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.createDate));
-
-            mainItemRow.find('.registryItemTools').append(me._getEditTools({'point': true, 'id': data.id, 'type': 'main', feature: data}));
-
-            main.append(mainItemRow);
-
-            for(var i = 0; i < data.subItems.length; ++i) {
-                var subItemRow = me.templates.ancientMonumentSubItem.clone();
-
-                subItemRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.subItems[i].description));
-                subItemRow.find('.id').append(me._formatData(me.loc.ancientMonument.id, data.subItems[i].objectId));
-                subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, me.loc.ancientMonument.surveyingAccuracyValues[data.subItems[i].surveyingAccuracy]));
-                subItemRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, me.loc.ancientMonument.surveyingTypeValues[data.subItems[i].surveyingType]));
-
-                subItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i] }));
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.subItems[i].id + ' / ' + data.subItems[i].name);
-                panel.setContent(subItemRow);
-                panel.setVisible(true);
-                panel.open();
-
-                //sub.append(subItemRow);
-                subAccordion.addPanel(panel);
-            }
-
-            subAccordion.insertTo(sub);
-
-            if (data.subItems.length == 0) {
-                sub.append(noItemsFoundElem);
-            }
-
-            for(var i = 0; i < data.areas.length; ++i) {
-                var areaRow = me.templates.ancientMonumentAreaItem.clone();
-
-                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.ancientMonument.surveyingAccuracy, me.loc.ancientMonument.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
-                areaRow.find('.surveyingType').append(me._formatData(me.loc.ancientMonument.surveyingType, me.loc.ancientMonument.surveyingTypeValuesArea[data.areas[i].surveyingType]));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.ancientMonument.modifyDate, data.areas[i].modifyDate));
-                areaRow.find('.areaSelectionSource').append(me._formatData(me.loc.ancientMonument.areaSelectionSource, data.areas[i].areaSelectionSource));
-                areaRow.find('.sourceDating').append(me._formatData(me.loc.ancientMonument.sourceDating, data.areas[i].sourceDating));
-                areaRow.find('.digiMk').append(me._formatData(me.loc.ancientMonument.digiMk, data.areas[i].digiMk));
-                areaRow.find('.areaSelectionType').append(me._formatData(me.loc.ancientMonument.areaSelectionType, data.areas[i].areaSelectionType));
-                areaRow.find('.description').append(me._formatData(me.loc.ancientMonument.description, data.areas[i].description));
-                areaRow.find('.areaChangeReason').append(me._formatData(me.loc.ancientMonument.areaChangeReason, data.areas[i].areaChangeReason));
-                areaRow.find('.createDate').append(me._formatData(me.loc.ancientMonument.createDate, data.areas[i].createDate));
-                areaRow.find('.registryItemTools').append(me._getEditTools({'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i]}));
-
-                //area.append(areaRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
-                panel.setContent(areaRow);
-                panel.setVisible(true);
-                panel.close();
-
-                areaAccordion.addPanel(panel);
-            }
-
-            areaAccordion.insertTo(area);
-
-            if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
-            }
-            
-            var newAreaRow = me.templates.ancientMonumentAreaItemAdd.clone();
-            newAreaRow.find('.registryItemTools').append(me._getEditTools({'area': true, 'id': -1, 'type': 'area', feature: {}}));
-            area.append(newAreaRow)
-            
-            content.find(".content-registry-item").append(itemDetails);
+                me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.ProjectView', me, me.loc);
+            }//TODO missing WorldHeritage, Resource
         },
 
-        _renderMaintenance: function (data, content) {
-            var me = this,
-                itemDetails = me.templates.maintenance.clone(),
-                noItemsFoundElem = me.templates.noItemsFound.clone(),
-                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                panel,
-                main = itemDetails.find("#main"),
-                sub = itemDetails.find("#sub");
-
-            var mainItemRow = me.templates.maintenanceMainItem.clone();
-
-            mainItemRow.find('.id').append(me._formatData(me.loc.maintenance.id, data.id));
-            mainItemRow.find('.name').append(me._formatData(me.loc.maintenance.objectName, data.objectName));
-            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.maintenance.municipalityName, data.municipalityName));
-            mainItemRow.find('.subType').append(me._formatData(me.loc.maintenance.subType, data.subType));
-            mainItemRow.find('.maintainingEntity').append(me._formatData(me.loc.maintenance.maintainingEntity, data.maintainingEntity));
-            mainItemRow.find('.pointDescription').append(me._formatData(me.loc.maintenance.pointDescription, data.pointDescription));
-            mainItemRow.find('.pointAuthor').append(me._formatData(me.loc.maintenance.pointAuthor, data.pointAuthor));
-            mainItemRow.find('.pointCreateDate').append(me._formatData(me.loc.maintenance.pointCreateDate, data.pointCreateDate));
-            mainItemRow.find('.pointModifyDate').append(me._formatData(me.loc.maintenance.pointModifyDate, data.pointModifyDate));
-            mainItemRow.find('.pointSurveyingAccuracy').append(me._formatData(me.loc.maintenance.pointSurveyingAccuracy, me.loc.maintenance.surveyingAccuracyValues[data.pointSurveyingAccuracy]));
-            mainItemRow.find('.pointSurveyingType').append(me._formatData(me.loc.maintenance.pointSurveyingType, me.loc.maintenance.surveyingTypeValues[data.pointSurveyingType]));
-            mainItemRow.find('.areaCreateDate').append(me._formatData(me.loc.maintenance.areaCreateDate, data.areaCreateDate));
-            mainItemRow.find('.areaModifyDate').append(me._formatData(me.loc.maintenance.areaModifyDate, data.areaModifyDate));
-
-            mainItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'area': true, 'id': data.id, 'type': 'main', feature: data }));
-
-            main.append(mainItemRow);
-
-            for (var i = 0; i < data.subAreas.length; ++i) {
-                var subItemRow = me.templates.maintenanceSubItem.clone();
-
-                subItemRow.find('.id').append(me._formatData(me.loc.maintenance.id, data.subAreas[i].objectId));
-                subItemRow.find('.createDate').append(me._formatData(me.loc.maintenance.createDate, data.subAreas[i].createDate));
-                subItemRow.find('.modifyDate').append(me._formatData(me.loc.maintenance.modifyDate, data.subAreas[i].modifyDate));
-
-                subItemRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i] }));
-
-                //sub.append(subItemRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.subAreas[i].id + ' / ' + data.subAreas[i].name);
-                panel.setContent(subItemRow);
-                panel.setVisible(true);
-                panel.close();
-
-                subAccordion.addPanel(panel);
-            }
-
-            subAccordion.insertTo(sub);
-
-            if (data.subAreas.length == 0) {
-                sub.append(noItemsFoundElem);
-            }
-
-            content.find(".content-registry-item").append(itemDetails);
-        },
-
-        _renderBuildingHeritage: function (data, content) {
-            var me = this,
-                itemDetails = me.templates.buildingHeritage.clone(),
-                noItemsFoundElem = me.templates.noItemsFound.clone(),
-                subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                panel,
-                main = itemDetails.find("#main"),
-                sub = itemDetails.find("#sub"),
-                area = itemDetails.find('#area');
-
-            var mainItemRow = me.templates.buildingHeritageMainItem.clone();
-
-            mainItemRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.id));
-            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.buildingHeritage.municipalityName, data.municipalityName));
-            mainItemRow.find('.name').append(me._formatData(me.loc.buildingHeritage.objectName, data.objectName));
-
-            main.append(mainItemRow);
-
-            for (var i = 0; i < data.points.length; ++i) {
-                var subItemRow = me.templates.buildingHeritagePoint.clone();
-
-                subItemRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.points[i].objectId));
-                subItemRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.points[i].objectName));
-                subItemRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.points[i].description));
-                subItemRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, data.points[i].conservationGroup));
-                subItemRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, data.points[i].conservationStatus));
-                subItemRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
-                subItemRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValues[data.points[i].surveyingType]));
-                subItemRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, data.points[i].modifyDate));
-                subItemRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, data.points[i].createDate));
-                subItemRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, data.points[i].author));
-
-                subItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
-
-                //sub.append(subItemRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
-                panel.setContent(subItemRow);
-                panel.setVisible(true);
-                panel.close();
-
-                subAccordion.addPanel(panel);
-            }
-
-            subAccordion.insertTo(sub);
-
-            if (data.points.length == 0) {
-                sub.append(noItemsFoundElem);
-            }
-
-            for (var i = 0; i < data.areas.length; ++i) {
-                var areaRow = me.templates.buildingHeritageArea.clone();
-
-                areaRow.find('.id').append(me._formatData(me.loc.buildingHeritage.id, data.areas[i].objectId));
-                areaRow.find('.name').append(me._formatData(me.loc.buildingHeritage.name, data.areas[i].objectName));
-                areaRow.find('.description').append(me._formatData(me.loc.buildingHeritage.description, data.areas[i].description));
-                areaRow.find('.conservationGroup').append(me._formatData(me.loc.buildingHeritage.conservationGroup, data.areas[i].conservationGroup));
-                areaRow.find('.conservationStatus').append(me._formatData(me.loc.buildingHeritage.conservationStatus, data.areas[i].conservationStatus));
-                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.buildingHeritage.surveyingAccuracy, me.loc.buildingHeritage.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
-                areaRow.find('.surveyingType').append(me._formatData(me.loc.buildingHeritage.surveyingType, me.loc.buildingHeritage.surveyingTypeValuesArea[data.areas[i].surveyingType]));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.buildingHeritage.modifyDate, data.areas[i].modifyDate));
-                areaRow.find('.createDate').append(me._formatData(me.loc.buildingHeritage.createDate, data.areas[i].createDate));
-                areaRow.find('.author').append(me._formatData(me.loc.buildingHeritage.author, data.areas[i].author));
-
-                areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
-
-                //area.append(areaRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
-                panel.setContent(areaRow);
-                panel.setVisible(true);
-                panel.close();
-
-                areaAccordion.addPanel(panel);
-            }
-
-            areaAccordion.insertTo(area);
-
-            if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
-            }
-
-            var newAreaRow = me.templates.buildingHeritageAreaAdd.clone();
-            newAreaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
-            area.append(newAreaRow)
-
-            content.find(".content-registry-item").append(itemDetails);
-        },
-
-        _renderRKY2000: function (data, content) {
-            var me = this,
-                itemDetails = me.templates.rky2000.clone(),
-                noItemsFoundElem = me.templates.noItemsFound.clone(),
-                pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                lineAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                panel,
-                main = itemDetails.find("#main"),
-                point = itemDetails.find("#point"),
-                area = itemDetails.find('#area'),
-                line = itemDetails.find('#line');
-
-            var mainItemRow = me.templates.rky2000MainItem.clone();
-
-            mainItemRow.find('.id').append(me._formatData(me.loc.rky2000.id, data.id));
-
-            main.append(mainItemRow);
-
-            for (var i = 0; i < data.points.length; ++i) {
-                var pointRow = me.templates.rky2000Geometry.clone();
-
-                pointRow.find('.id').append(me._formatData(me.loc.rky2000.id, data.points[i].objectId));
-                pointRow.find('.name').append(me._formatData(me.loc.rky2000.name, data.points[i].objectName));
-                pointRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.points[i].description));
-                pointRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
-                pointRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValues[data.points[i].surveyingType]));
-                pointRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.points[i].modifyDate));
-                pointRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.points[i].createDate));
-                pointRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.points[i].author));
-
-                pointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
-
-                //point.append(pointRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
-                panel.setContent(pointRow);
-                panel.setVisible(true);
-                panel.close();
-
-                pointAccordion.addPanel(panel);
-            }
-
-            pointAccordion.insertTo(point);
-
-            if (data.points.length == 0) {
-                point.append(noItemsFoundElem);
-            }
-
-            var newPointRow = me.templates.rky2000GeometryAdd.clone();
-            newPointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': -1, 'type': 'point', feature: {} }));
-            point.append(newPointRow)
-
-            for (var i = 0; i < data.areas.length; ++i) {
-                var areaRow = me.templates.rky2000Geometry.clone();
-
-                areaRow.find('.id').append(me._formatData(me.loc.rky2000.id, data.areas[i].objectId));
-                areaRow.find('.name').append(me._formatData(me.loc.rky2000.name, data.areas[i].objectName));
-                areaRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.areas[i].description));
-                areaRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
-                areaRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValuesArea[data.areas[i].surveyingType]));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.areas[i].modifyDate));
-                areaRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.areas[i].createDate));
-                areaRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.areas[i].author));
-
-                areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
-
-                //area.append(areaRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
-                panel.setContent(areaRow);
-                panel.setVisible(true);
-                panel.close();
-
-                areaAccordion.addPanel(panel);
-            }
-
-            areaAccordion.insertTo(area);
-
-            if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
-            }
-
-            var newAreaRow = me.templates.rky2000GeometryAdd.clone();
-            newAreaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
-            area.append(newAreaRow)
-
-            for (var i = 0; i < data.lines.length; ++i) {
-                var lineRow = me.templates.rky2000Geometry.clone();
-
-                lineRow.find('.id').append(me._formatData(me.loc.rky2000.id, data.lines[i].objectId));
-                lineRow.find('.name').append(me._formatData(me.loc.rky2000.name, data.lines[i].objectName));
-                lineRow.find('.description').append(me._formatData(me.loc.rky2000.description, data.lines[i].description));
-                lineRow.find('.surveyingAccuracy').append(me._formatData(me.loc.rky2000.surveyingAccuracy, me.loc.rky2000.surveyingAccuracyValues[data.lines[i].surveyingAccuracy]));
-                lineRow.find('.surveyingType').append(me._formatData(me.loc.rky2000.surveyingType, me.loc.rky2000.surveyingTypeValues[data.lines[i].surveyingType]));
-                lineRow.find('.modifyDate').append(me._formatData(me.loc.rky2000.modifyDate, data.lines[i].modifyDate));
-                lineRow.find('.createDate').append(me._formatData(me.loc.rky2000.createDate, data.lines[i].createDate));
-                lineRow.find('.author').append(me._formatData(me.loc.rky2000.author, data.lines[i].author));
-
-                lineRow.find('.registryItemTools').append(me._getEditTools({ 'line': true, 'id': data.lines[i].id, 'type': 'line', feature: data.lines[i] }));
-
-                //line.append(lineRow);
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.lines[i].id + ' / ' + data.lines[i].name);
-                panel.setContent(lineRow);
-                panel.setVisible(true);
-                panel.close();
-
-                lineAccordion.addPanel(panel);
-            }
-
-            lineAccordion.insertTo(line);
-
-            if (data.lines.length == 0) {
-                line.append(noItemsFoundElem);
-            }
-
-            var newLineRow = me.templates.rky2000GeometryAdd.clone();
-            newLineRow.find('.registryItemTools').append(me._getEditTools({ 'line': true, 'id': -1, 'type': 'line', feature: {} }));
-            line.append(newLineRow)
-
-            content.find(".content-registry-item").append(itemDetails);
-        },
-
-        _renderProject: function (data, content) {
-            var me = this,
-                itemDetails = me.templates.projectRegistry.clone(),
-                noItemsFoundElem = me.templates.noItemsFound.clone(),
-                pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                panel,
-                main = itemDetails.find("#main"),
-                point = itemDetails.find("#point"),
-                area = itemDetails.find('#area');
-
-            var mainItemRow = me.templates.projectRegistryMainItem.clone();
-
-            mainItemRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.id));
-            mainItemRow.find('.municipalityName').append(me._formatData(me.loc.projectRegistry.municipalityName, data.municipalityName));
-            mainItemRow.find('.name').append(me._formatData(me.loc.projectRegistry.objectName, data.objectName));
-
-            main.append(mainItemRow);
-            
-            if (data.points == null) {
-                data.points = [];
-            }
-
-            for (var i = 0; i < data.points.length; ++i) {
-                var pointItemRow = me.templates.projectRegistryPoint.clone();
-
-                pointItemRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.points[i].objectId));
-                pointItemRow.find('.description').append(me._formatData(me.loc.projectRegistry.description, data.points[i].description));
-                pointItemRow.find('.modifyDate').append(me._formatData(me.loc.projectRegistry.modifyDate, data.points[i].modifyDate));
-                pointItemRow.find('.createDate').append(me._formatData(me.loc.projectRegistry.createDate, data.points[i].createDate));
-                pointItemRow.find('.author').append(me._formatData(me.loc.projectRegistry.author, data.points[i].author));
-
-                pointItemRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'point', feature: data.points[i] }));
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
-                panel.setContent(pointItemRow);
-                panel.setVisible(true);
-                panel.close();
-
-                pointAccordion.addPanel(panel);
-            }
-
-            pointAccordion.insertTo(point);
-
-            if (data.points.length == 0) {
-                point.append(noItemsFoundElem);
-            }
-
-            var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
-            newPointRow.find('.registryItemTools').append(me._getEditTools({ 'point': true, 'id': -1, 'type': 'point', feature: {} }));
-            point.append(newPointRow)
-
-            if (data.areas == null) {
-                data.areas = [];
-            }
-
-            for (var i = 0; i < data.areas.length; ++i) {
-                var areaRow = me.templates.projectRegistryArea.clone();
-
-                areaRow.find('.id').append(me._formatData(me.loc.projectRegistry.id, data.areas[i].objectId));
-                areaRow.find('.description').append(me._formatData(me.loc.projectRegistry.description, data.areas[i].description));
-                areaRow.find('.type').append(me._formatData(me.loc.projectRegistry.type, data.areas[i].type));
-                areaRow.find('.modifyDate').append(me._formatData(me.loc.projectRegistry.modifyDate, data.areas[i].modifyDate));
-                areaRow.find('.createDate').append(me._formatData(me.loc.projectRegistry.createDate, data.areas[i].createDate));
-                areaRow.find('.author').append(me._formatData(me.loc.projectRegistry.author, data.areas[i].author));
-
-                areaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'area', feature: data.areas[i] }));
-
-                panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
-                panel.setContent(areaRow);
-                panel.setVisible(true);
-                panel.close();
-
-                areaAccordion.addPanel(panel);
-            }
-
-            areaAccordion.insertTo(area);
-
-            if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
-            }
-
-            var newAreaRow = me.templates.projectRegistrySubItemAdd.clone();
-            newAreaRow.find('.registryItemTools').append(me._getEditTools({ 'area': true, 'id': -1, 'type': 'area', feature: {} }));
-            area.append(newAreaRow)
-
-            content.find(".content-registry-item").append(itemDetails);
-        },
-
-        _formatData: function(label, data) {
+        formatData: function(label, data) {
             var ret = '<div class="registryItemAttrLabel">' + label + "</div>";
             if(typeof data !== 'undefined' && data !== null) {
                 if(data.startsWith && data.startsWith("http")) {
@@ -747,61 +213,80 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             return ret;
         },
 
-        _getEditTools: function(conf) {
+        /**
+         * @method getEditTools
+         * Add buttons for editing registry item or subitem.
+         *
+         * @param {Object} conf - configuration object for tools. Available properties:
+         *      - point (true/false)
+         *      - area (true/false)
+         *      - line (true/false)
+         *      - feature (Object)
+         *      - type ('main'/'sub')
+         *      - id
+         */
+        getEditTools: function(conf) {
             var me = this,
+                geometryType,
                 container = jQuery('<div class=toolrow></div>'),
                 locBtns = me.instance.getLocalization('buttons'),
                 /*pointButton = $("<div />").addClass('add-point tool'),
                 pointXYButton = $("<div />").addClass('add-point-xy tool'),
                 lineButton = $("<div />").addClass('add-line tool'),
                 areaButton = $("<div />").addClass('add-area tool'),
-                selectButton = $("<div />").addClass('tool-feature-selection tool');*/
-
+                copyButton = $("<div />").addClass('tool-feature-selection tool');*/
                 pointButton = $('<button type="button">' + locBtns.addNewPoint + '</button>').addClass('registryItemActionButton'),
                 pointXYButton = $('<button type="button">' + locBtns.createWithXY + '</button>').addClass('registryItemActionButton'),
                 lineButton = $('<button type="button">' + locBtns.addNewLine + '</button>').addClass('registryItemActionButton'),
                 areaButton = $('<button type="button">' + locBtns.addNewArea + '</button>').addClass('registryItemActionButton'),
-                selectButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton');
+                copyButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton');
 
                 
 
-            if(typeof conf.point !== 'undefined' && conf.point) {
+            if (typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
                     var geometry = undefined;
+                    geometryType = 'point';
                     if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
                     } else if (conf.feature.pointGeometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.pointGeometry).clone();
                     }
-
+                    
                     me.sendDrawRequest({
-                        drawMode: 'point',
+                        drawMode: geometryType,
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
                     if(typeof me.editFeature._type === 'undefined') {
                         me.editFeature._type = conf.type;
                     }
+                    me.editFeature._geometryType = geometryType;
                 });
                 pointButton.attr('id', 'point-' + conf.type + "-" + conf.id);
-                if (conf.feature.geometry != null) {
-                    pointButton.html(locBtns.editGeometry);
+                if (conf.feature.geometry != null || conf.feature.pointGeometry != null) {
+                    pointButton.html(locBtns.editPoint);
                 }
                 container.append(pointButton);
 
                 pointXYButton.on('click', function () {
-                    var cont = function() {
-                        me.editFeature = conf.feature;
-                        me._showCoordinatesPopUp();
-                        me._dialog.moveTo('div#' + this.id, 'top');
-                        if(typeof me.editFeature._type === 'undefined') {
-                            me.editFeature._type = conf.type;
-                        }
-                    };
-                    if(typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) {
+                    geometryType = 'point';
+
+                    var pointxyButtonId = this.id,
+                        cont = function() {
+                            me.editFeature = conf.feature;
+                            me._showCoordinatesPopUp(pointxyButtonId);
+                            me._dialog.moveTo('div#' + this.id, 'top');
+                            if(typeof me.editFeature._type === 'undefined') {
+                                me.editFeature._type = conf.type;
+                            }
+                            me.editFeature._geometryType = geometryType;
+                        };
+
+                    if ((typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) && (typeof conf.feature.pointGeometry === 'undefined' || conf.feature.pointGeometry === null)) {
                         cont();
                     } else {
-                        var title = me.loc.error,
+                        var title = me.loc.warning,
                             content = me.loc.featureHasGeometry,
                             continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                             cancelButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
@@ -827,55 +312,59 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 container.append(pointXYButton);
             }
 
-            if(typeof conf.line !== 'undefined' && conf.line) {
+            if (typeof conf.line !== 'undefined' && conf.line) {
                 lineButton.on('click', function() {
+                    geometryType = 'line';
                     var geometry = undefined;
                     if(typeof conf.feature.geometry !== 'undefined') {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
                     }
                     me.sendDrawRequest({
-                        drawMode: 'line',
+                        drawMode: geometryType,
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
                     if(typeof me.editFeature._type === 'undefined') {
                         me.editFeature._type = conf.type;
                     }
+                    me.editFeature._geometryType = geometryType;
                 });
                 lineButton.attr('id', 'line-' + conf.type + "-" + conf.id);
                 if (conf.feature.geometry != null) {
-                    lineButton.html(locBtns.editGeometry);
+                    lineButton.html(locBtns.editLine);
                 }
                 container.append(lineButton);
             }
 
-            if(typeof conf.area !== 'undefined' && conf.area) {
+            if (typeof conf.area !== 'undefined' && conf.area) {
                 areaButton.on('click', function() {
+                    geometryType = 'area';
                     var geometry = undefined;
                     if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
                     } else if (conf.feature.areaGeometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.areaGeometry).clone();
                     }
-
+                    
                     me.sendDrawRequest({
-                        drawMode: 'area',
+                        drawMode: geometryType,
                         geometry: geometry
                     }, this.id);
                     me.editFeature = conf.feature;
                     if(typeof me.editFeature._type === 'undefined') {
                         me.editFeature._type = conf.type;
                     }
+                    me.editFeature._geometryType = geometryType;
                 });
                 areaButton.attr('id', 'area-' + conf.type + "-" + conf.id);
-                if (conf.feature.geometry != null) {
-                    areaButton.html(locBtns.editGeometry);
+                if (conf.feature.geometry != null || conf.feature.areaGeometry != null) {
+                    areaButton.html(locBtns.editArea);
                 }
                 container.append(areaButton);
             }
 
-            selectButton.on('click', function () {
-                var currentSelectButton = this;
+            copyButton.on('click', function () {
+                var currentCopyButton = this;
 
                 var onFinishSelectionCallback = function () {
                     var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
@@ -889,15 +378,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             if (layer.getClickedGeometries().length > 1) {
                                 me.showMessage(me.loc.error, me.loc.selectError);
                             } else {
-                                var geometry = layer.getClickedGeometries()[0][1];
                                 //check if geometry suits to proper type
-                                var wktFormat = new OpenLayers.Format.WKT({});
-                                var geojsonFormat = new OpenLayers.Format.GeoJSON({});
-                                var feature = wktFormat.read(geometry);
-                                var geod = JSON.parse(geojsonFormat.write(feature)).geometry;
-                                var isPoint = geojsonFormat.isValidType(geod, 'Point');
+                                var geometry = layer.getClickedGeometries()[0][1],//WKT string
+                                    wktFormat = new OpenLayers.Format.WKT({}),
+                                    feature = wktFormat.read(geometry),//vector feature
+                                    geojsonFormat = new OpenLayers.Format.GeoJSON({}),
+                                    geoJsonFeature = geojsonFormat.write(feature.geometry);//GeoJSON string
 
-                                if ((me.editFeature._type != 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
+                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, geoJsonFeature);
+
+                                if (me.editFeature._geometryType != null) {
 
                                     var attributes = me._getLayerAttributes(layer);
                                     var selectedFeature = null;
@@ -911,31 +401,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                         }
                                     }
 
-                                    me._showParameterUpdateDialog(currentSelectButton.id, JSON.stringify(geod), attributes, selectedFeature, fields);
+                                    me._showParameterUpdateDialog(currentCopyButton.id, geoJsonFeature, attributes, selectedFeature, fields);
                                 } else {
-                                    //me.showMessage(me.loc.error, 'You selected wrong type of geometry');
-                                    me.showMessage(me.loc.error, 'Valittu kohde on väärän tyyppinen');
+                                    me.showMessage(me.loc.error, me.loc.wrongGeometryError);
                                 }
                             }
                         }
 
                     }
-
-                    //FIXME Following is for testing:
-                    //debugger;
-                    /*var geometry = "MULTIPOLYGON (((397995.2485 6692773.3084, 404040.8453 6693140.8219, 403912.2156 6689281.9302, 407330.0911 6684008.1117, 410564.2098 6674765.1474, 401431.4996 6675022.4069, 403452.8238 6683328.2117, 403599.8292 6685514.917, 403526.3265 6685753.8007, 402240.0293 6685790.5521, 400163.578 6685220.9062, 398895.6565 6687407.6114, 396966.2107 6688510.1519, 395334.031 6690193.8206, 397499.1053 6690182.3383, 398050.3755 6690751.9842, 398087.1268 6691266.5031, 397094.8404 6691597.2652, 397995.2485 6692773.3084)))";
-                    var wktFormat = new OpenLayers.Format.WKT({});
-                    var geojsonFormat = new OpenLayers.Format.GeoJSON({});
-                    var feature = wktFormat.read(geometry);
-                    var geod = JSON.parse(geojsonFormat.write(feature)).geometry;
-                    var isPoint = geojsonFormat.isValidType(geod, 'Point');
-
-                    if ((!me.editFeature._type == 'area' && isPoint) || (me.editFeature._type == 'area' && !isPoint)) {
-                        me._showParameterUpdateDialog(currentSelectButton.id, geod);
-                    } else {
-                        me.showMessage(me.loc.error, 'You selected wrong type of geometry');
-                    }*/
-                    
                 };
 
                 var cont = function() {
@@ -948,7 +421,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }
                 };
                 
-                if(typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) {
+                if ((typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null)
+                    && (typeof conf.feature.pointGeometry === 'undefined' || conf.feature.pointGeometry === null)
+                    && (typeof conf.feature.areaGeometry === 'undefined' || conf.feature.areaGeometry === null)) {
                     cont();
                 } else {
                     var title = me.loc.warning,
@@ -973,8 +448,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     me.showMessage(title, content, buttons);
                 }
             });
-            selectButton.attr('id', 'select-' + conf.type + "-" + conf.id);
-            container.append(selectButton);
+            copyButton.attr('id', 'copy-' + conf.type + "-" + conf.id);
+            container.append(copyButton);
 
             /*if (!this.selectionPlugin) {
                 var config = {
@@ -986,6 +461,24 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }*/
 
             return container;
+        },
+
+        _getGeometryTypeForCopy(conf, geoJsonFeature) {
+            var geojsonFormat = new OpenLayers.Format.GeoJSON({}),
+                geod = JSON.parse(geoJsonFeature);
+            
+            if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geod, 'Polygon') || geojsonFormat.isValidType(geod, 'MultiPolygon'))) {
+                return 'area';
+
+            } else if (typeof conf.point !== 'undefined' && conf.point && (geojsonFormat.isValidType(geod, 'Point') || geojsonFormat.isValidType(geod, 'MultiPoint'))) {
+                return 'point';
+
+            } else if (typeof conf.line !== 'undefined' && conf.line && (geojsonFormat.isValidType(geod, 'LineString') || geojsonFormat.isValidType(geod, 'MultiLineString'))) {
+                return 'line';
+
+            } else {
+                return null;
+            }
         },
 
         _getLayerAttributes: function (layer) {
@@ -1052,6 +545,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     geometry = format.write(drawing.components[0]);
                 }
 
+                //in case of MultiLineString geometry get only first LineString
+                if (JSON.parse(geometry).type === "MultiLineString") {
+                    geometry = format.write(drawing.components[0]);
+                }
+
                 me._dialog.close(true);
                 me._dialog = null;
 
@@ -1073,248 +571,66 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          * @param geometry new geometry in GeoJson format
          */
         _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields) {
-            var me = this;
-            var locBtns = me.instance.getLocalization('buttons'),
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            this._dialog = dialog;
+            var me = this,
+                locBtns = me.instance.getLocalization('buttons'),
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                buttons = [],
+                title = me.loc.geometryDetailsInfoTitle,
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields);
+                
+            //If edit form provided then show it and collect data for update. Otherwise save only geometry.
+            if (editForm != null) {
 
-            var buttons = [],
-                title = me.loc,
-                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
-            //cancelBtn.setTitle(locBtns.cancel);
-            cancelBtn.setHandler(function () {
-                // ask toolbar to select default tool
-                var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-                me.instance.sandbox.request(me, toolbarRequest);
+                me._dialog = dialog,
+
+                cancelBtn.setHandler(function () {
+                    // ask toolbar to select default tool
+                    var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                    me.instance.sandbox.request(me, toolbarRequest);
+                    me.sendStopDrawRequest(true);
+                    dialog.close(true);
+                    me._dialog = null;
+                });
+                buttons.push(cancelBtn);
+
+                finishBtn.setTitle(locBtns.finish);
+                finishBtn.addClass('primary');
+                finishBtn.setHandler(function () {
+
+                    me.editFeature._edited = true;
+                    
+                    me.registerView.collectDataForUpdate(content, geometry);
+
+                    me.sendStopDrawRequest(true);
+                    me._dialog.close(true);
+                    me._dialog = null;
+
+                    me._saveRegistryItem();
+                });
+                buttons.push(finishBtn);
+
+                var content = me.templates.drawHelper.clone();
+                content.find('div.infoText').html(me.loc.geometryDetailsInfo);
+                content.append(editForm);
+
+                dialog.show(title, content, buttons);
+                dialog.moveTo('div#' + id, 'top');
+
+            } else {
                 me.sendStopDrawRequest(true);
-                dialog.close(true);
-                me._dialog = null;
-            });
-            buttons.push(cancelBtn);
-
-            var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-            finishBtn.setTitle(locBtns.finish);
-            finishBtn.addClass('primary');
-            finishBtn.setHandler(function () {
-                
-                me.edited = true;
-                
-                if (me.itemData.itemtype === 'AncientMonument') {
-                    if (me.editFeature._type === 'area') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.areas.push(me.editFeature)
-                        }
-
-                        me.editFeature.areaChangeReason = content.find("#areaChangeReason").val();
-                    }
-
-                    me.editFeature.geometry = JSON.parse(geometry);
-                    me.editFeature.description = content.find("#description").val();
-                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
-                    me.editFeature.surveyingType = content.find("#surveyingType").val();
-                
-                } else if (me.itemData.itemtype === 'AncientMonumentMaintenanceItem') {
-
-                    if (geometry != null) {
-                        if (JSON.parse(geometry).type == 'Point' || JSON.parse(geometry).type == 'MultiPoint') {
-                            me.editFeature.pointGeometry = JSON.parse(geometry);
-                            me.editFeature.pointDescription = content.find("#description").val();
-                            me.editFeature.pointSurveyingAccuracy = content.find("#surveyingAccuracy").val();
-                            me.editFeature.pointSurveyingType = content.find("#surveyingType").val();
-                        } else {
-                            me.editFeature.areaGeometry = JSON.parse(geometry);
-                        }
-                    }
-
-                } else if (me.itemData.itemtype === 'BuildingHeritageItem') {
-                    if (me.editFeature._type === 'area') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.areas.push(me.editFeature)
-                        }
-                    }
-
-                    me.editFeature.geometry = JSON.parse(geometry);
-                    me.editFeature.description = content.find("#description").val();
-                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
-                    me.editFeature.surveyingType = content.find("#surveyingType").val();
-                    me.editFeature.conservationStatus = content.find("#conservationStatus").val();
-                    me.editFeature.conservationGroup = content.find("#conservationGroup").val();
-                    me.editFeature.objectName = content.find("#name").val();
-
-                } else if (me.itemData.itemtype === 'RKY2000') {
-                    if (me.editFeature._type === 'point') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.points.push(me.editFeature)
-                        }
-                    }
-                    if (me.editFeature._type === 'area') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.areas.push(me.editFeature)
-                        }
-                    }
-                    if (me.editFeature._type === 'line') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.lines.push(me.editFeature)
-                        }
-                    }
-
-                    me.editFeature.geometry = JSON.parse(geometry);
-                    me.editFeature.description = content.find("#description").val();
-                    me.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
-                    me.editFeature.surveyingType = content.find("#surveyingType").val();
-                    me.editFeature.objectName = content.find("#name").val();
-
-                } else if (me.itemData.itemtype === 'ProjectItem') {
-                    if (me.editFeature._type === 'point') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.points.push(me.editFeature)
-                        }
-                    } else if (me.editFeature._type === 'area') {
-                        if (typeof me.editFeature.id === 'undefined') {
-                            me.itemData.areas.push(me.editFeature)
-                        }
-
-                        me.editFeature.type = content.find("#type").val();
-                    }
-
-                    me.editFeature.geometry = JSON.parse(geometry);
-                    me.editFeature.description = content.find("#description").val();
-
-                }
-
                 me.editFeature._edited = true;
-
-                me.sendStopDrawRequest(true);
-                me._dialog.close(true);
-                me._dialog = null;
-
+                me.registerView.collectDataForUpdate(null, geometry);
                 me._saveRegistryItem();
-            });
-            buttons.push(finishBtn);
-
-            var content = me.templates.drawHelper.clone();
-            content.find('div.infoText').html(me.loc.geometryDetailsInfo);
-
-            if(me.itemData.itemtype === 'AncientMonument') {
-                if(me.editFeature._type === 'area') {
-                    me._renderAncientMonumentAreaDetails(content, attributes, selectedFeature, fields);
-                } else {
-                    me._renderAncientMonumentDetails(content, attributes, selectedFeature, fields);
-                }
-            } else if (me.itemData.itemtype === 'AncientMonumentMaintenanceItem') {
-                if (me.editFeature._type === 'main') {
-                    me._renderMaintenanceDetails(content, attributes, selectedFeature, fields);
-                }
-            } else if (me.itemData.itemtype === 'BuildingHeritageItem') {
-                if (me.editFeature._type === 'area') {
-                    me._renderBuildingHeritageAreaDetails(content, attributes, selectedFeature, fields);
-                } else {
-                    me._renderBuildingHeritageDetails(content, attributes, selectedFeature, fields);
-                }
-            } else if (me.itemData.itemtype === 'RKY2000') {
-                me._renderRKY2000SurveyingDetails(content, attributes, selectedFeature, fields);
-            } else if (me.itemData.itemtype === 'ProjectItem') {
-                if (me.editFeature._type === 'area') {
-                    me._renderProjectRegistryAreaDetails(content, attributes, selectedFeature, fields);
-                } else {
-                    me._renderProjectRegistryDetails(content, attributes, selectedFeature, fields);
-                }
             }
-
-            dialog.show(title, content, buttons);
-            dialog.moveTo('div#' + id, 'top');
         },
 
         _saveRegistryItem: function () {
-            var me = this;
-
-            if (me.edited) {
-                var postData = null;
-                if (me.data.itemtype === 'AncientMonument') {
-                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subItems': [], 'areas': [] };
-                    $.each(me.itemData.subItems, function (index, item) {
-                        if (item._edited) {
-                            edited.subItems.push(item.id);
-                        }
-                    });
-                    $.each(me.itemData.areas, function (index, item) {
-                        if (item._edited) {
-                            edited.areas.push(item.id);
-                        }
-                    });
-                    postData = { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-
-                } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
-
-                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'subareas': [] };
-                    $.each(me.itemData.subareas, function (index, item) {
-                        if (item._edited) {
-                            edited.subareas.push(item.id);
-                        }
-                    });
-                    postData = { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-
-
-                } else if (me.data.itemtype === 'BuildingHeritageItem') {
-
-                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
-                    $.each(me.itemData.points, function (index, item) {
-                        if (item._edited) {
-                            edited.points.push(item.id);
-                        }
-                    });
-                    $.each(me.itemData.areas, function (index, item) {
-                        if (item._edited) {
-                            edited.areas.push(item.id);
-                        }
-                    });
-                    postData = { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-
-                } else if (me.data.itemtype === 'RKY1993') {
-                    //Not implemented yet in API
-                    //postData = { 'registerName': 'rky1993', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                } else if (me.data.itemtype === 'RKY2000') {
-
-                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
-                    $.each(me.itemData.points, function (index, item) {
-                        if (item._edited) {
-                            edited.points.push(item.id);
-                        }
-                    });
-                    $.each(me.itemData.areas, function (index, item) {
-                        if (item._edited) {
-                            edited.areas.push(item.id);
-                        }
-                    });
-                    $.each(me.itemData.lines, function (index, item) {
-                        if (item._edited) {
-                            edited.lines.push(item.id);
-                        }
-                    });
-                    postData = { 'registerName': 'rky2000', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-
-                } else if (me.data.itemtype === 'WorldHeritageItem') {
-                    //TODO in frontend and backend
-                    //postData = { 'registerName': 'worldHeritage', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                } else if (me.data.itemtype === 'ProjectItem') {
-                    var edited = { 'id': me.itemData.id, 'edited': me.itemData._edited, 'points': [], 'areas': [] };
-                    $.each(me.itemData.points, function (index, item) {
-                        if (item._edited) {
-                            edited.points.push(item.id);
-                        }
-                    });
-                    $.each(me.itemData.areas, function (index, item) {
-                        if (item._edited) {
-                            edited.areas.push(item.id);
-                        }
-                    });
-                    postData = { 'registerName': 'project', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-
-                } else if (me.data.itemtype === 'HistoricalMunicipality' || me.data.itemtype === 'KYSItem') {
-                    //Not implemented yet in API
-                    //postData = { 'registerName': 'resource', 'item': JSON.stringify(me.itemData), 'edited': JSON.stringify(edited) };
-                }
+            var me = this,
+                postData = me.registerView.preparePostData();
+                
+            if (postData != null) {
                 $.ajax({
                     url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
                     data: postData,
@@ -1336,264 +652,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     }
                 });
             } else {
-                me.showMessage(me.loc.error, me.loc.noEditsDone);
+                me.showMessage(me.loc.error, me.loc.updateError);
             }
         },
-        
-        _renderAncientMonumentDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.ancientMonumentSurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-            
-            $.each(me.loc.ancientMonument.surveyingAccuracyValues, function(key, value) {
-               var option = jQuery('<option/>');
-               option.attr({ 'value': key }).text(value);
-               if(value === me.editFeature.surveyingAccuracy) {
-                   option.prop('selected', true);
-               }
-               accuracySelect.append(option);
-            });
-            
-            $.each(me.loc.ancientMonument.surveyingTypeValues, function(key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if(value === me.editFeature.surveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-             });
 
-            template.find("#description").val(me.editFeature.description);
-            accuracySelect.val(me.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editFeature.surveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-        
-        _renderAncientMonumentAreaDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.ancientMonumentAreaSurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-            
-            $.each(me.loc.ancientMonument.surveyingAccuracyValuesArea, function(key, value) {
-               var option = jQuery('<option/>');
-               option.attr({ 'value': key }).text(value);
-               if(value === me.editFeature.surveyingAccuracy) {
-                   option.prop('selected', true);
-               }
-               accuracySelect.append(option);
-            });
-            
-            $.each(me.loc.ancientMonument.surveyingTypeValuesArea, function(key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if(value === me.editFeature.surveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-             });
-
-            template.find("#description").val(me.editFeature.description);
-            template.find("#areaChangeReason").val(me.editFeature.areaChangeReason);
-            accuracySelect.val(me.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editFeature.surveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-
-        _renderMaintenanceDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.maintenanceSurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-            
-            $.each(me.loc.maintenance.surveyingAccuracyValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.pointSurveyingAccuracy) {
-                    option.prop('selected', true);
-                }
-                accuracySelect.append(option);
-            });
-            
-            $.each(me.loc.maintenance.surveyingTypeValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.pointSurveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-            });
-
-            template.find("#description").val(me.editFeature.pointDescription);
-            accuracySelect.val(me.editFeature.pointSurveyingAccuracy);
-            typeSelect.val(me.editFeature.pointSurveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-
-        _renderBuildingHeritageDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.buildingHeritageSurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-
-            $.each(me.loc.buildingHeritage.surveyingAccuracyValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingAccuracy) {
-                    option.prop('selected', true);
-                }
-                accuracySelect.append(option);
-            });
-
-            $.each(me.loc.buildingHeritage.surveyingTypeValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-            });
-
-            template.find("#description").val(me.editFeature.description);
-            template.find("#name").val(me.editFeature.objectName);
-            template.find("#conservationGroup").val(me.editFeature.conservationGroup);
-            template.find("#conservationStatus").val(me.editFeature.conservationStatus);
-            accuracySelect.val(me.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editFeature.surveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-
-        _renderBuildingHeritageAreaDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.buildingHeritageSurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-
-            $.each(me.loc.buildingHeritage.surveyingAccuracyValuesArea, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingAccuracy) {
-                    option.prop('selected', true);
-                }
-                accuracySelect.append(option);
-            });
-
-            $.each(me.loc.buildingHeritage.surveyingTypeValuesArea, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-            });
-
-            template.find("#description").val(me.editFeature.description);
-            template.find("#name").val(me.editFeature.objectName);
-            template.find("#conservationGroup").val(me.editFeature.conservationGroup);
-            template.find("#conservationStatus").val(me.editFeature.conservationStatus);
-            accuracySelect.val(me.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editFeature.surveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-
-        _renderRKY2000SurveyingDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.rky2000SurveyingDetails.clone(),
-                accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
-
-            $.each(me.loc.rky2000.surveyingAccuracyValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingAccuracy) {
-                    option.prop('selected', true);
-                }
-                accuracySelect.append(option);
-            });
-
-            $.each(me.loc.rky2000.surveyingTypeValues, function (key, value) {
-                var option = jQuery('<option/>');
-                option.attr({ 'value': key }).text(value);
-                if (value === me.editFeature.surveyingType) {
-                    option.prop('selected', true);
-                }
-                typeSelect.append(option);
-            });
-
-            template.find("#description").val(me.editFeature.description);
-            template.find("#name").val(me.editFeature.objectName);
-            accuracySelect.val(me.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editFeature.surveyingType);
-
-            if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-                me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            }
-
-            content.append(template);
-        },
-
-        _renderProjectRegistryDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.projectRegistryPointSurveyingDetails.clone();
-
-            template.find("#description").val(me.editFeature.description);
-
-            //if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-            //    me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            //}
-
-            content.append(template);
-        },
-
-        _renderProjectRegistryAreaDetails: function (content, attributes, selectedFeature, fields) {
-            var me = this,
-                template = me.templates.projectRegistryAreaSurveyingDetails.clone();
-
-            template.find("#description").val(me.editFeature.description);
-            template.find("#type").val(me.editFeature.type);
-
-            //if (attributes != null && selectedFeature != null) {
-                //add dropdowns
-            //    me._addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            //}
-
-            content.append(template);
-        },
-
-        _addDropdownsToTemplate: function (template, attributes, selectedFeature, fields) {
+        addDropdownsToTemplate: function (template, attributes, selectedFeature, fields) {
             var me = this;
             //template.find("input[type=text]").each(function () {
             template.find("input").each(function () {
@@ -1643,7 +706,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }
         },
 
-        _showCoordinatesPopUp: function () {
+        _showCoordinatesPopUp: function (elementId) {
             var me = this,
                 popupContent = me.templates.coordinatePopupContent.clone(),
                 title = me.loc.coordinatePopup.title,
@@ -1720,9 +783,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 selectedProjection = popupContent.find('.srs-select').val();
                 
                 if (lon != null && !isNaN(lon) && lat != null && !isNaN(lat)) {
-                    me._addPointFromCoordinates(lon, lat, selectedProjection);
                     me._dialog.close(true);
                     me._dialog = null;
+                    me._addPointFromCoordinates(lon, lat, selectedProjection, elementId);
                 } else {
                     me.showMessage(me.loc.error, me.loc.coordinatePopup.missingCoordsError);
                 }
@@ -1739,24 +802,23 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             me._dialog.show(title, popupContent, buttons);
         },
 
-        _addPointFromCoordinates: function (lon, lat, crs) {
+        _addPointFromCoordinates: function (lon, lat, crs, elementId) {
             var me = this,
-                coordinates,
                 convertedCoordinates,
                 mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 currentProjection = mapModule.getProjection(),
                 wktFormat = new OpenLayers.Format.WKT({}),
                 geojsonFormat = new OpenLayers.Format.GeoJSON({});
                 feature = null,
+                geometry = null,
+                coordinates = {
+                    'lonlat':
+                        {
+                            'lon': lon,
+                            'lat': lat
+                        }
+                };
 
-
-            coordinates = {
-                'lonlat':
-                    {
-                        'lon': lon,
-                        'lat': lat
-                    }
-            };
             if (me._coordsConvertionEnabled) {
                 convertedCoordinates = me._convertCoordinates(crs, currentProjection, coordinates);
             } else {
@@ -1765,10 +827,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             //create point
             feature = wktFormat.read('POINT (' + convertedCoordinates.lonlat.lon + ' ' + convertedCoordinates.lonlat.lat + ')');
-            geometry = JSON.parse(geojsonFormat.write(feature)).geometry;
-            me.editFeature.geometry = geometry;
-            me.editFeature._edited = true;
-            me.edited = true;
+            geometry = geojsonFormat.write(feature.geometry);
+            me._showParameterUpdateDialog(elementId, geometry);
         },
 
         /**
