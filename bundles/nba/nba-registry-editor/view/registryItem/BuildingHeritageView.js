@@ -37,7 +37,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
         render: function (data) {
             var me = this,
                 itemDetails = me.templates.buildingHeritage.clone(),
-                noItemsFoundElem = me.editor.templates.noItemsFound.clone(),
                 subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel,
@@ -72,7 +71,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 //sub.append(subItemRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
+                panel.setTitle(data.points[i].id + ' / ' + data.points[i].objectName);
                 panel.setContent(subItemRow);
                 panel.setVisible(true);
                 panel.close();
@@ -83,7 +82,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             subAccordion.insertTo(sub);
 
             if (data.points.length == 0) {
-                sub.append(noItemsFoundElem);
+                sub.append(me.editor.templates.noItemsFound.clone());
             }
 
             for (var i = 0; i < data.areas.length; ++i) {
@@ -105,7 +104,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 //area.append(areaRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
+                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].objectName);
                 panel.setContent(areaRow);
                 panel.setVisible(true);
                 panel.close();
@@ -116,7 +115,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             areaAccordion.insertTo(area);
 
             if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
+                area.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newAreaRow = me.templates.buildingHeritageAreaAdd.clone();
@@ -153,14 +152,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
         },
 
         preparePostData() {
-            var edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+            var me = this,
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+                
             $.each(me.editor.itemData.points, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
             });
@@ -200,7 +201,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;
@@ -239,7 +240,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;

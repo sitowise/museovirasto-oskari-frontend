@@ -244,15 +244,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 
 
             if (typeof conf.point !== 'undefined' && conf.point) {
-                geometryType = 'point';
                 pointButton.on('click', function() {
                     var geometry = undefined;
+                    geometryType = 'point';
                     if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
                     } else if (conf.feature.pointGeometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.pointGeometry).clone();
                     }
-
+                    
                     me.sendDrawRequest({
                         drawMode: geometryType,
                         geometry: geometry
@@ -270,15 +270,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 container.append(pointButton);
 
                 pointXYButton.on('click', function () {
-                    var cont = function() {
-                        me.editFeature = conf.feature;
-                        me._showCoordinatesPopUp(this.id);
-                        me._dialog.moveTo('div#' + this.id, 'top');
-                        if(typeof me.editFeature._type === 'undefined') {
-                            me.editFeature._type = conf.type;
-                        }
-                        me.editFeature._geometryType = geometryType;
-                    };
+                    geometryType = 'point';
+
+                    var pointxyButtonId = this.id,
+                        cont = function() {
+                            me.editFeature = conf.feature;
+                            me._showCoordinatesPopUp(pointxyButtonId);
+                            me._dialog.moveTo('div#' + this.id, 'top');
+                            if(typeof me.editFeature._type === 'undefined') {
+                                me.editFeature._type = conf.type;
+                            }
+                            me.editFeature._geometryType = geometryType;
+                        };
+
                     if ((typeof conf.feature.geometry === 'undefined' || conf.feature.geometry === null) && (typeof conf.feature.pointGeometry === 'undefined' || conf.feature.pointGeometry === null)) {
                         cont();
                     } else {
@@ -309,8 +313,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }
 
             if (typeof conf.line !== 'undefined' && conf.line) {
-                geometryType = 'line';
                 lineButton.on('click', function() {
+                    geometryType = 'line';
                     var geometry = undefined;
                     if(typeof conf.feature.geometry !== 'undefined') {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
@@ -333,15 +337,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }
 
             if (typeof conf.area !== 'undefined' && conf.area) {
-                geometryType = 'area';
                 areaButton.on('click', function() {
+                    geometryType = 'area';
                     var geometry = undefined;
                     if(conf.feature.geometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.geometry).clone();
                     } else if (conf.feature.areaGeometry != null) {
                         geometry = (new OpenLayers.Format.GeoJSON()).parseGeometry(conf.feature.areaGeometry).clone();
                     }
-
+                    
                     me.sendDrawRequest({
                         drawMode: geometryType,
                         geometry: geometry
@@ -375,11 +379,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 me.showMessage(me.loc.error, me.loc.selectError);
                             } else {
                                 //check if geometry suits to proper type
-                                var geometry = layer.getClickedGeometries()[0][1],
+                                var geometry = layer.getClickedGeometries()[0][1],//WKT string
                                     wktFormat = new OpenLayers.Format.WKT({}),
-                                    feature = wktFormat.read(geometry);
+                                    feature = wktFormat.read(geometry),//vector feature
+                                    geojsonFormat = new OpenLayers.Format.GeoJSON({}),
+                                    geoJsonFeature = geojsonFormat.write(feature.geometry);//GeoJSON string
 
-                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, feature);
+                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, geoJsonFeature);
 
                                 if (me.editFeature._geometryType != null) {
 
@@ -395,7 +401,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                         }
                                     }
 
-                                    me._showParameterUpdateDialog(currentCopyButton.id, JSON.stringify(geod), attributes, selectedFeature, fields);
+                                    me._showParameterUpdateDialog(currentCopyButton.id, geoJsonFeature, attributes, selectedFeature, fields);
                                 } else {
                                     me.showMessage(me.loc.error, me.loc.wrongGeometryError);
                                 }
@@ -457,9 +463,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             return container;
         },
 
-        _getGeometryTypeForCopy(conf, feature) {
+        _getGeometryTypeForCopy(conf, geoJsonFeature) {
             var geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                geod = JSON.parse(geojsonFormat.write(feature)).geometry;
+                geod = JSON.parse(geoJsonFeature);
             
             if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geod, 'Polygon') || geojsonFormat.isValidType(geod, 'MultiPolygon'))) {
                 return 'area';
@@ -539,6 +545,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     geometry = format.write(drawing.components[0]);
                 }
 
+                //in case of MultiLineString geometry get only first LineString
+                if (JSON.parse(geometry).type === "MultiLineString") {
+                    geometry = format.write(drawing.components[0]);
+                }
+
                 me._dialog.close(true);
                 me._dialog = null;
 
@@ -568,7 +579,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields);
-
+                
+            //If edit form provided then show it and collect data for update. Otherwise save only geometry.
             if (editForm != null) {
 
                 me._dialog = dialog,
@@ -588,7 +600,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 finishBtn.setHandler(function () {
 
                     me.editFeature._edited = true;
-
+                    
                     me.registerView.collectDataForUpdate(content, geometry);
 
                     me.sendStopDrawRequest(true);
@@ -609,6 +621,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             } else {
                 me.sendStopDrawRequest(true);
                 me.editFeature._edited = true;
+                me.registerView.collectDataForUpdate(null, geometry);
                 me._saveRegistryItem();
             }
         },
@@ -616,8 +629,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _saveRegistryItem: function () {
             var me = this,
                 postData = me.registerView.preparePostData();
-
-            if (postData == null) {
+                
+            if (postData != null) {
                 $.ajax({
                     url: me.instance.sandbox.getAjaxUrl() + "action_route=UpdateRegistryItems",
                     data: postData,
@@ -770,9 +783,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 selectedProjection = popupContent.find('.srs-select').val();
                 
                 if (lon != null && !isNaN(lon) && lat != null && !isNaN(lat)) {
-                    me._addPointFromCoordinates(lon, lat, selectedProjection, elementId);
                     me._dialog.close(true);
                     me._dialog = null;
+                    me._addPointFromCoordinates(lon, lat, selectedProjection, elementId);
                 } else {
                     me.showMessage(me.loc.error, me.loc.coordinatePopup.missingCoordsError);
                 }
@@ -791,22 +804,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
         _addPointFromCoordinates: function (lon, lat, crs, elementId) {
             var me = this,
-                coordinates,
                 convertedCoordinates,
                 mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
                 currentProjection = mapModule.getProjection(),
                 wktFormat = new OpenLayers.Format.WKT({}),
                 geojsonFormat = new OpenLayers.Format.GeoJSON({});
                 feature = null,
+                geometry = null,
+                coordinates = {
+                    'lonlat':
+                        {
+                            'lon': lon,
+                            'lat': lat
+                        }
+                };
 
-
-            coordinates = {
-                'lonlat':
-                    {
-                        'lon': lon,
-                        'lat': lat
-                    }
-            };
             if (me._coordsConvertionEnabled) {
                 convertedCoordinates = me._convertCoordinates(crs, currentProjection, coordinates);
             } else {
@@ -815,8 +827,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
             //create point
             feature = wktFormat.read('POINT (' + convertedCoordinates.lonlat.lon + ' ' + convertedCoordinates.lonlat.lat + ')');
-            geometry = JSON.parse(geojsonFormat.write(feature)).geometry;
-            me.editFeature.geometry = geometry;
+            geometry = geojsonFormat.write(feature.geometry);
             me._showParameterUpdateDialog(elementId, geometry);
         },
 

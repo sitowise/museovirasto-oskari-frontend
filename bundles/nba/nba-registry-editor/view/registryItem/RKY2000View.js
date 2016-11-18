@@ -34,7 +34,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
         render: function (data) {
             var me = this,
                 itemDetails = me.templates.rky2000.clone(),
-                noItemsFoundElem = me.editor.templates.noItemsFound.clone(),
                 pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 lineAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
@@ -67,7 +66,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 //point.append(pointRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
+                panel.setTitle(data.points[i].id + ' / ' + data.points[i].objectName);
                 panel.setContent(pointRow);
                 panel.setVisible(true);
                 panel.close();
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             pointAccordion.insertTo(point);
 
             if (data.points.length == 0) {
-                point.append(noItemsFoundElem);
+                point.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newPointRow = me.templates.rky2000GeometryAdd.clone();
@@ -102,7 +101,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 //area.append(areaRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
+                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].objectName);
                 panel.setContent(areaRow);
                 panel.setVisible(true);
                 panel.close();
@@ -113,7 +112,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             areaAccordion.insertTo(area);
 
             if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
+                area.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newAreaRow = me.templates.rky2000GeometryAdd.clone();
@@ -137,7 +136,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 //line.append(lineRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.lines[i].id + ' / ' + data.lines[i].name);
+                panel.setTitle(data.lines[i].id + ' / ' + data.lines[i].objectName);
                 panel.setContent(lineRow);
                 panel.setVisible(true);
                 panel.close();
@@ -148,7 +147,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             lineAccordion.insertTo(line);
 
             if (data.lines.length == 0) {
-                line.append(noItemsFoundElem);
+                line.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newLineRow = me.templates.rky2000GeometryAdd.clone();
@@ -189,19 +188,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
         },
 
         preparePostData() {
-            var edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
+            var me = this,
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
+                
             $.each(me.editor.itemData.points, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
             });
             $.each(me.editor.itemData.lines, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.lines.push(item.id);
                 }
             });
@@ -239,7 +240,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;

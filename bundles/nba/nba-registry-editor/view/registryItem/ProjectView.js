@@ -35,7 +35,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
         render: function (data) {
             var me = this,
                 itemDetails = me.templates.projectRegistry.clone(),
-                noItemsFoundElem = me.editor.templates.noItemsFound.clone(),
                 pointAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel,
@@ -67,7 +66,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 pointItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].name);
+                panel.setTitle(data.points[i].id);
                 panel.setContent(pointItemRow);
                 panel.setVisible(true);
                 panel.close();
@@ -78,7 +77,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
             pointAccordion.insertTo(point);
 
             if (data.points.length == 0) {
-                point.append(noItemsFoundElem);
+                point.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
@@ -102,7 +101,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i] }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].name);
+                panel.setTitle(data.areas[i].id);
                 panel.setContent(areaRow);
                 panel.setVisible(true);
                 panel.close();
@@ -113,7 +112,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
             areaAccordion.insertTo(area);
 
             if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
+                area.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newAreaRow = me.templates.projectRegistrySubItemAdd.clone();
@@ -151,14 +150,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
         },
 
         preparePostData() {
-            var edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+            var me = this,
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+                
             $.each(me.editor.itemData.points, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
             });
@@ -173,7 +174,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
             //if (attributes != null && selectedFeature != null) {
             //add dropdowns
-            //    me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            //    me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             //}
 
             return template;
@@ -188,7 +189,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
             //if (attributes != null && selectedFeature != null) {
             //add dropdowns
-            //    me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            //    me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             //}
 
             return template;

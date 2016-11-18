@@ -47,7 +47,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
         render: function (data) {
             var me = this,
                 itemDetails = me.templates.maintenance.clone(),
-                noItemsFoundElem = me.editor.templates.noItemsFound.clone(),
                 subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel,
                 main = itemDetails.find("#main"),
@@ -84,7 +83,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
                 subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i] }));
 
                 //sub.append(subItemRow);
-
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 panel.setTitle(data.subAreas[i].id + ' / ' + data.subAreas[i].objectName);
                 panel.setContent(subItemRow);
@@ -118,16 +116,20 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
                     me.editor.editFeature.pointDescription = content.find("#description").val();
                     me.editor.editFeature.pointSurveyingAccuracy = content.find("#surveyingAccuracy").val();
                     me.editor.editFeature.pointSurveyingType = content.find("#surveyingType").val();
-                } else {
+                } else if (me.editor.editFeature._type === 'main') {
                     me.editor.editFeature.areaGeometry = JSON.parse(geometry);
+                } else if (me.editor.editFeature._type === 'sub'){
+                    me.editor.editFeature.geometry = JSON.parse(geometry);
                 }
             }
         },
 
         preparePostData() {
-            var edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subAreas': [] };
+            var me = this,
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subAreas': [] };
+                
             $.each(me.editor.itemData.subAreas, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.subAreas.push(item.id);
                 }
             });
@@ -164,7 +166,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;

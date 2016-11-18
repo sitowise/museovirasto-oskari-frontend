@@ -39,7 +39,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
         render: function (data) {
             var me = this,
                 itemDetails = me.templates.ancientMonument.clone(),
-                noItemsFoundElem = me.editor.templates.noItemsFound.clone(),
                 subAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 areaAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel,
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
                 subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i] }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.subItems[i].id + ' / ' + data.subItems[i].name);
+                panel.setTitle(data.subItems[i].id + ' / ' + data.subItems[i].objectName);
                 panel.setContent(subItemRow);
                 panel.setVisible(true);
                 panel.open();
@@ -88,7 +87,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             subAccordion.insertTo(sub);
 
             if (data.subItems.length == 0) {
-                sub.append(noItemsFoundElem);
+                sub.append(me.editor.templates.noItemsFound.clone());
             }
 
             for (var i = 0; i < data.areas.length; ++i) {
@@ -120,7 +119,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             areaAccordion.insertTo(area);
 
             if (data.areas.length == 0) {
-                area.append(noItemsFoundElem);
+                area.append(me.editor.templates.noItemsFound.clone());
             }
 
             var newAreaRow = me.templates.ancientMonumentAreaItemAdd.clone();
@@ -156,14 +155,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
         },
 
         preparePostData() {
-            var edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subItems': [], 'areas': [] };
+            var me = this,
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subItems': [], 'areas': [] };
+                
             $.each(me.editor.itemData.subItems, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.subItems.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
-                if (item._edited) {
+                if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
             });
@@ -200,7 +201,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;
@@ -237,7 +238,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
-                me.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
             }
 
             return template;
