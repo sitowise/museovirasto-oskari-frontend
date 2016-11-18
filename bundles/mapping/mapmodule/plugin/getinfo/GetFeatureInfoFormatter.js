@@ -348,7 +348,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             type = 'wfslayer',
             result,
             markup,
-            locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
+            locale = me._getRegistryLocale(data.registry.name, data.registry.itemType);
 
         if (data.features === 'empty') {
             return;
@@ -388,6 +388,34 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         });
 
         return result;
+    },
+    
+    _getRegistryLocale: function(registryName, itemType) {
+        var loc = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
+        switch(registryName) {
+        case "ancientMonument":
+            return loc.ancientMonument;
+            break;
+        case "rky2000":
+        case "rky1993":
+            return loc.rky2000;
+            break;
+        case "maintenance":
+            return loc.maintenance;
+            break;
+        case "buildingHeritage":
+            return loc.buildingHeritage;
+            break;
+        case "project":
+            return loc.projectRegistry;
+            break;
+        case "worldHeritage":
+            return loc.worldHeritage;
+            break;
+        default:
+            return loc.ancientMonument;
+        break;
+        }
     },
 
     /**

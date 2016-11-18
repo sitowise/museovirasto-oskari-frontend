@@ -368,7 +368,7 @@ Oskari.clazz.define(
                             itemtype: data.features[i].itemtype
                         };
 
-                        actions[loc.editItem + ' ' + itemData.id] = function () {
+                        actions[loc.editItem] = function () {
                             //open registry editor
                             Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
                             //close Search bundle after moving to registry editor
