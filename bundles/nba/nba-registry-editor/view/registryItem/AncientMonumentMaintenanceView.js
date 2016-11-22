@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
             subAccordion.insertTo(sub);
 
             if (data.subAreas.length == 0) {
-                sub.append(noItemsFoundElem);
+                sub.append(me.editor.templates.noItemsFound.clone());
             }
 
             return itemDetails;
