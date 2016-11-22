@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             me.editor.editFeature.surveyingType = content.find("#surveyingType").val();
         },
 
-        preparePostData() {
+        preparePostData: function () {
             var me = this,
                 edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subItems': [], 'areas': [] };
                 

@@ -463,7 +463,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             return container;
         },
 
-        _getGeometryTypeForCopy(conf, geoJsonFeature) {
+        _getGeometryTypeForCopy: function (conf, geoJsonFeature) {
             var geojsonFormat = new OpenLayers.Format.GeoJSON({}),
                 geod = JSON.parse(geoJsonFeature);
             
