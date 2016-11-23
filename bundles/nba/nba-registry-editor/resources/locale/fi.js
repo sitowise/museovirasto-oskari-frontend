@@ -11,7 +11,7 @@ Oskari.registerLocalization(
 				    "areaAuthor": "Tallentaja",
 				    "areaChangeReason": "Rajausmuutoksen perustelu",
 				    "areaCreateDate": "Luotu",
-				    "areaIntersects": "Kohteen päivittäminen epäonnistui, koska aluegeometria leikkaa toista kohdetta.",
+				    "areaIntersects": "Muokatun kohteen aluegeometria leikkaa toista kohdetta.",
 				    "areaModifyDate": "Muokattu",
 				    "areaSelectionSource": "Rajauslähde",
 				    "areaSelectionType": "Rajaustyyppi",
@@ -92,7 +92,6 @@ Oskari.registerLocalization(
 				        "17006": "Raportti puuttuu"
 				    },
 				    "sub": "Alakohteet",
-				    "subAreaIntersects": "Kohteen päivittäminen epäonnistui, koska osa-aluegeometria leikkaa toista kohdetta.",
 				    "subType": "Alatyyppi",
 				    "success": "Päivitys onnistui",
 				    "surveyingAccuracy": "Paikannustarkkuus",

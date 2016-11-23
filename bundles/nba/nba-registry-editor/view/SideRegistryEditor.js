@@ -638,7 +638,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     success: function (data, textStatus, jqXHR) {
                         if (data.updated) {
                             me._refreshData(me.data.id);
-                            me.showMessage(me.loc.success, me.loc.featureUpdated);
+                            var message = me.loc.featureUpdated;
+                            if(data.areaIntersects) {
+                                message = message + '<br/>' + me.loc.areaIntersects;
+                            }
+                            me.showMessage(me.loc.success, message);
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
