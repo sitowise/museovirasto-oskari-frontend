@@ -11,7 +11,7 @@ Oskari.registerLocalization(
 				    "areaAuthor": "Area author",
 				    "areaChangeReason": "Area change reason",
 				    "areaCreateDate": "Area create date",
-				    "areaIntersects": "Feature update failed, because area geometry intersects another feature.",
+				    "areaIntersects": "Feature area geometry intersects another feature.",
 				    "areaModifyDate": "Area modify date",
 				    "areaSelectionSource": "Area selection source",
 				    "areaSelectionType": "Area selection type",
@@ -92,7 +92,6 @@ Oskari.registerLocalization(
 				        "17006": "Raportti puuttuu"
 				    },
 				    "sub": "Sub items",
-				    "subAreaIntersects": "Feature update failed, because subarea geometry intersects another feature.",
 				    "subType": "Subtype",
 				    "success": "Success",
 				    "surveyingAccuracy": "Surveying Accuracy",
