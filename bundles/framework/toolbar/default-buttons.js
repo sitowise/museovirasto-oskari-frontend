@@ -202,7 +202,8 @@ Oskari.clazz.category(
             }
 
             // setup current url as base if none configured
-            return sandbox.createURL(url || window.location.pathname, true);
+            var pathname = window.location.pathname == '//' ? '/' : window.location.pathname;
+            return sandbox.createURL(url || pathname, true);
         }
 
     }
