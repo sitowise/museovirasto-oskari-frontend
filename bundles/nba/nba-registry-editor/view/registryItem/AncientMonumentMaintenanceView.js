@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
                 + '<div class="registryItemTools"/></div>'),
             'maintenanceSubItem': jQuery('<div class="item maintenanceSubItem"><div class="id"/><div class="createDate"/><div class="modifyDate"/><div class="registryItemTools"/></div>'),
             'maintenanceSurveyingDetails': jQuery('<div class="itemDetails">'
-                + '<div><label>' + me.loc.description + '</label><input type="text" id="description">'
+                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'
                 + '<div><label>' + me.loc.surveyingType + '</label><select id="surveyingType"/></div>'
                 + '<div><label>' + me.loc.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>')
         };
