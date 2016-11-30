@@ -21,10 +21,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
             'projectRegistryArea': jQuery('<div class="item projectRegistryAreaItem"><div class="id"/><div class="description"/><div class="type"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
             'projectRegistrySubItemAdd': jQuery('<div class="item newItem projectRegistrySubItem"><h4>' + me.loc.addNew + '</h4><div class="registryItemTools"/></div>'),
             'projectRegistryPointSurveyingDetails': jQuery('<div class="itemDetails">'
-                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'),
+                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div></div>'),
             'projectRegistryAreaSurveyingDetails': jQuery('<div class="itemDetails">'
-                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></label></div>'
-                + '<div><label>' + me.loc.type + '</label><input type="text" id="type"/></label></div>')
+                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'
+                + '<div><label>' + me.loc.type + '</label><select id="projectItemType"/></div></div>')
         };
     }, {
 
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
                 areaRow.find('.id').append(me.editor.formatData(me.loc.id, data.areas[i].objectId));
                 areaRow.find('.description').append(me.editor.formatData(me.loc.description, data.areas[i].description));
-                areaRow.find('.type').append(me.editor.formatData(me.loc.type, data.areas[i].type));
+                areaRow.find('.type').append(me.editor.formatData(me.loc.type, me.loc.projectItemTypeValues[data.areas[i].type]));
                 areaRow.find('.modifyDate').append(me.editor.formatData(me.loc.modifyDate, data.areas[i].modifyDate));
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
                 areaRow.find('.author').append(me.editor.formatData(me.loc.author, data.areas[i].author));
@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                     me.editor.itemData.areas.push(me.editor.editFeature);
                 }
 
-                me.editor.editFeature.type = content.find("#type").val();
+                me.editor.editFeature.type = content.find("#projectItemType").val();
             }
 
             me.editor.editFeature.geometry = JSON.parse(geometry);
@@ -172,25 +172,36 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
             template.find("#description").val(me.editor.editFeature.description);
 
-            //if (attributes != null && selectedFeature != null) {
-            //add dropdowns
-            //    me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            //}
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
 
             return template;
         },
 
         _renderProjectRegistryAreaDetails: function (attributes, selectedFeature, fields) {
             var me = this,
-                template = me.templates.projectRegistryAreaSurveyingDetails.clone();
+                template = me.templates.projectRegistryAreaSurveyingDetails.clone(),
+                typeSelect = template.find("#projectItemType");
 
             template.find("#description").val(me.editor.editFeature.description);
-            template.find("#type").val(me.editor.editFeature.type);
+            
+            $.each(me.loc.projectItemTypeValues, function (key, value) {
+                var option = jQuery('<option/>');
+                option.attr({ 'value': key }).text(value);
+                if (value === me.editor.editFeature.type) {
+                    option.prop('selected', true);
+                }
+                typeSelect.append(option);
+            });
 
-            //if (attributes != null && selectedFeature != null) {
-            //add dropdowns
-            //    me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
-            //}
+            typeSelect.val(me.editor.editFeature.type);
+
+            if (attributes != null && selectedFeature != null) {
+                //add dropdowns
+                me.editor.addDropdownsToTemplate(template, attributes, selectedFeature, fields);
+            }
 
             return template;
         }
