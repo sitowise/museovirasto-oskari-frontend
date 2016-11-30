@@ -25,8 +25,8 @@ Oskari.registerLocalization(
 				        "saveObject": "Save object",
 				        "title": "Enter the coordinates of point"
 				    },
-				    "coordinateX": "X",
-				    "coordinateY": "Y",
+				    "coordinateLat": "N / lat",
+				    "coordinateLon": "E / lon",
 				    "copyright": "Copyright",
 				    "createDate": "Create Date",
 				    "dating": "Dating",

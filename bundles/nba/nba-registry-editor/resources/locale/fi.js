@@ -25,8 +25,8 @@ Oskari.registerLocalization(
 				        "saveObject": "Tallenna kohde",
 				        "title": "Anna pisteen koordinaatit"
 				    },
-				    "coordinateX": "I",
-				    "coordinateY": "P",
+				    "coordinateLat": "P / leveysaste",
+				    "coordinateLon": "I / pituusaste",
 				    "copyright": "Copyright",
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
