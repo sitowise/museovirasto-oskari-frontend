@@ -25,8 +25,8 @@ Oskari.registerLocalization(
 				        "saveObject": "Tallenna kohde",
 				        "title": "Anna pisteen koordinaatit"
 				    },
-				    "coordinateX": "I",
-				    "coordinateY": "P",
+				    "coordinateLat": "P / leveysaste",
+				    "coordinateLon": "I / pituusaste",
 				    "copyright": "Copyright",
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
@@ -77,6 +77,11 @@ Oskari.registerLocalization(
 				        "12013": "Valokuvadokumentointi"
 				    },
 				    "projectCategorySpecification": "Tarkenne",
+				    "projectItemTypeValues": {
+						"301": "Hankealue",
+						"302": "Tutkimusalue",
+						"303": "Tutkittu alue"
+				    },
 				    "projectOrganization": "Toimija",
 				    "searchError": "Kohteen hakeminen epäonnistui",
 				    "selectError": "Valitse kartalta vain yksi kohde",

@@ -26,9 +26,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
                 + '<div><label>' + me.loc.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>'),
             'ancientMonumentAreaSurveyingDetails': jQuery('<div class="itemDetails">'
                 + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'
-                + '<div><label>' + me.loc.surveyingTypeArea + '</label><select id="surveyingType"/></label></div>'
+                + '<div><label>' + me.loc.surveyingTypeArea + '</label><select id="surveyingType"/></div>'
                 + '<div><label>' + me.loc.surveyingAccuracyArea + '</label><select id="surveyingAccuracy"/></div>'
-                + '<div><label>' + me.loc.areaChangeReason + '</label><input type="text" id="areaChangeReason"></div>')
+                + '<div><label>' + me.loc.areaChangeReason + '</label><input type="text" id="areaChangeReason"></div></div>')
         };
     }, {
 

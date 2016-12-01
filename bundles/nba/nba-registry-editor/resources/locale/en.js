@@ -25,8 +25,8 @@ Oskari.registerLocalization(
 				        "saveObject": "Save object",
 				        "title": "Enter the coordinates of point"
 				    },
-				    "coordinateX": "X",
-				    "coordinateY": "Y",
+				    "coordinateLat": "N / lat",
+				    "coordinateLon": "E / lon",
 				    "copyright": "Copyright",
 				    "createDate": "Create Date",
 				    "dating": "Dating",
@@ -77,6 +77,11 @@ Oskari.registerLocalization(
 				        "12013": "Valokuvadokumentointi"
 				    },
 				    "projectCategorySpecification": "Specifier",
+				    "projectItemTypeValues": {
+						"301": "Project area",
+						"302": "Research area",
+						"303": "Researched area"
+				    },
 				    "projectOrganization": "Operator",
 				    "searchError": "Could not find registry item",
 				    "selectError": "Select only one feature on the map",

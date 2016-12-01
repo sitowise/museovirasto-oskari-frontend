@@ -25,8 +25,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 //common templates
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
-                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="X"></input></div><div class="clear"></div></div>' +
-                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="Y"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="' + me.loc.coordinateLat + '"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="' + me.loc.coordinateLon + '"></input></div><div class="clear"></div></div>' +
                     '</div>'),
                 'noItemsFound': jQuery('<div class="noItemsFound">' + me.loc.noItemsFound + '</div>')
         };
@@ -733,13 +733,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         "name": "EPSG:3067",
                         "text": "ETRS89-TM35FIN (EPSG:3067)",
                         "definition": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-                        "default": false
+                        "default": true
                     },
                     {
                         "name": "EPSG:4326",
                         "text": "WGS84 (EPSG:4326)",
                         "definition": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-                        "default": true
+                        "default": false
                     },
                     {
                         "name": "EPSG:2393",

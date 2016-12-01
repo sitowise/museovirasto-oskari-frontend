@@ -186,7 +186,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'bounds': result.bounds,
                     'itemtype': result.itemtype,
                     'registry': me.loc.registryNames[result.itemtype],
-                    'municipality': result.municipality
+                    'municipality': result.municipality,
+                    'editable': result.editable
                 });
             });
 
@@ -196,7 +197,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idColumnDiv = jQuery('<div></div>');
 
-                if (me._hasUserPermissions(editorRoles)) {
+                if (me._hasUserPermissions(editorRoles) && data.editable === true) {
                     var editLink = jQuery('<a href="#" class="nba-edit-link" />');
                     editLink.bind('click', function () {
 

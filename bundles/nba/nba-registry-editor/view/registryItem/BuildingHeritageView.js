@@ -17,16 +17,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
         me.templates = {
             'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h3>' + me.loc.main + '</h4></div><div id="sub"><h4>' + me.loc.sub + '</h4></div><div id="area"><h4>' + me.loc.area + '</h4></div></div>'),
             'buildingHeritageMainItem': jQuery('<div class="item buildingHeritageMainItem"><div class="id"/><div class="name"/><div class="municipalityName"/></div>'),
-            'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
-            'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
+            'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
+            'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
             'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem"><h4>' + me.loc.addNew + '</h4><div class="registryItemTools"/></div>'),
             'buildingHeritageSurveyingDetails': jQuery('<div class="itemDetails">'
-                + '<div><label>' + me.loc.name + '</label><input type="text" id="name"></div>'
                 + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'
                 + '<div><label>' + me.loc.surveyingType + '</label><select id="surveyingType"/></div>'
-                + '<div><label>' + me.loc.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div>'
-                + '<div><label>' + me.loc.conservationGroup + '</label><input type="text" id="conservationGroup"></div>'
-                + '<div><label>' + me.loc.conservationStatus + '</label><input type="text" id="conservationStatus"></div></div>')
+                + '<div><label>' + me.loc.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>')
         };
     }, {
         
@@ -56,10 +53,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 var subItemRow = me.templates.buildingHeritagePoint.clone();
 
                 subItemRow.find('.id').append(me.editor.formatData(me.loc.id, data.points[i].objectId));
-                subItemRow.find('.name').append(me.editor.formatData(me.loc.name, data.points[i].objectName));
                 subItemRow.find('.description').append(me.editor.formatData(me.loc.description, data.points[i].description));
-                subItemRow.find('.conservationGroup').append(me.editor.formatData(me.loc.conservationGroup, data.points[i].conservationGroup));
-                subItemRow.find('.conservationStatus').append(me.editor.formatData(me.loc.conservationStatus, data.points[i].conservationStatus));
                 subItemRow.find('.surveyingAccuracy').append(me.editor.formatData(me.loc.surveyingAccuracy, me.loc.surveyingAccuracyValues[data.points[i].surveyingAccuracy]));
                 subItemRow.find('.surveyingType').append(me.editor.formatData(me.loc.surveyingType, me.loc.surveyingTypeValues[data.points[i].surveyingType]));
                 subItemRow.find('.modifyDate').append(me.editor.formatData(me.loc.modifyDate, data.points[i].modifyDate));
@@ -71,7 +65,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 //sub.append(subItemRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id + ' / ' + data.points[i].objectName);
+                panel.setTitle(data.points[i].id);
                 panel.setContent(subItemRow);
                 panel.setVisible(true);
                 panel.close();
@@ -89,10 +83,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 var areaRow = me.templates.buildingHeritageArea.clone();
 
                 areaRow.find('.id').append(me.editor.formatData(me.loc.id, data.areas[i].objectId));
-                areaRow.find('.name').append(me.editor.formatData(me.loc.name, data.areas[i].objectName));
                 areaRow.find('.description').append(me.editor.formatData(me.loc.description, data.areas[i].description));
-                areaRow.find('.conservationGroup').append(me.editor.formatData(me.loc.conservationGroup, data.areas[i].conservationGroup));
-                areaRow.find('.conservationStatus').append(me.editor.formatData(me.loc.conservationStatus, data.areas[i].conservationStatus));
                 areaRow.find('.surveyingAccuracy').append(me.editor.formatData(me.loc.surveyingAccuracy, me.loc.surveyingAccuracyValuesArea[data.areas[i].surveyingAccuracy]));
                 areaRow.find('.surveyingType').append(me.editor.formatData(me.loc.surveyingType, me.loc.surveyingTypeValuesArea[data.areas[i].surveyingType]));
                 areaRow.find('.modifyDate').append(me.editor.formatData(me.loc.modifyDate, data.areas[i].modifyDate));
@@ -104,7 +95,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 //area.append(areaRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].objectName);
+                panel.setTitle(data.areas[i].id);
                 panel.setContent(areaRow);
                 panel.setVisible(true);
                 panel.close();
@@ -146,9 +137,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             me.editor.editFeature.description = content.find("#description").val();
             me.editor.editFeature.surveyingAccuracy = content.find("#surveyingAccuracy").val();
             me.editor.editFeature.surveyingType = content.find("#surveyingType").val();
-            me.editor.editFeature.conservationStatus = content.find("#conservationStatus").val();
-            me.editor.editFeature.conservationGroup = content.find("#conservationGroup").val();
-            me.editor.editFeature.objectName = content.find("#name").val();
         },
 
         preparePostData() {
@@ -193,9 +181,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             });
 
             template.find("#description").val(me.editor.editFeature.description);
-            template.find("#name").val(me.editor.editFeature.objectName);
-            template.find("#conservationGroup").val(me.editor.editFeature.conservationGroup);
-            template.find("#conservationStatus").val(me.editor.editFeature.conservationStatus);
             accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
             typeSelect.val(me.editor.editFeature.surveyingType);
 
@@ -232,9 +217,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             });
 
             template.find("#description").val(me.editor.editFeature.description);
-            template.find("#name").val(me.editor.editFeature.objectName);
-            template.find("#conservationGroup").val(me.editor.editFeature.conservationGroup);
-            template.find("#conservationStatus").val(me.editor.editFeature.conservationStatus);
             accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
             typeSelect.val(me.editor.editFeature.surveyingType);
 
