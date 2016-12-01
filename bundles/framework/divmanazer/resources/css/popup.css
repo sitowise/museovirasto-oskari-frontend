@@ -97,3 +97,13 @@ div.divmanazerpopup {
     background-color: #FDF8D9;
     border-radius: 5px 5px 0 0;
     padding: 8px 10px; }
+  div.divmanazerpopup div.header {
+    background-color: #FDF8D9;
+    border-radius: 5px 5px 0 0;
+    padding: 8px 10px; }
+  div.divmanazerpopup div.header h3 {
+    padding: 8px 10px; }
+  div.divmanazerpopup div.header div.icon-close {
+    position: absolute;
+    top: 8px;
+    right: 5px; }

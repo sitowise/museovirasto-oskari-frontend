@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="content"></div><div class="actions"></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup"><div class="header"><h3 class="popupHeader"></h3></div><div class="content"></div><div class="actions"></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {String} message
          * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
          */
-        show: function (title, message, buttons) {
+        show: function (title, message, buttons, closeIcon) {
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
                 actionDiv = this.dialog.find('div.actions'),
@@ -52,6 +52,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     me.close(true);
                 });
             }
+
+            if(closeIcon) {
+                var closeIcon = jQuery('<div class="icon-close" title="' + Oskari.getLocalization('DivManazer').buttons.close + '"></div>');
+                closeIcon.bind('click', function () {
+                    me.close(true);
+                });
+                
+                this.dialog.find('div.header').append(closeIcon);
+            }
+
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
                 buttons[focusedButton].focus();
