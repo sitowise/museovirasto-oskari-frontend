@@ -303,7 +303,11 @@ Oskari.clazz.define(
 
             me.dataSourcesDialog = dialog;
 
-            dialog.show(popupTitle, content, [closeButton]);
+            dialog.onClose(function() {
+                me.dataSourcesDialog = null;
+            });
+
+            dialog.show(popupTitle, content, [closeButton], true);
 
             target = target || me.getElement().find('div.data-sources');
             dialog.moveTo(target, 'top');
