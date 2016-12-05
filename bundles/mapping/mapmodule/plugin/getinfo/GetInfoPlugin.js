@@ -366,7 +366,7 @@ Oskari.clazz.define(
                         if (data.features[i].editable === true) {
                             var itemData = {
                                 id: data.features[i].id,
-                                itemtype: data.features[i].itemtype
+                                registryIdentifier: data.features[i].registryIdentifier
                             };
 
                             actions[loc.editItem + ' ' + itemData.id] = function () {
