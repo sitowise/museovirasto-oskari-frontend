@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             me.editor.editFeature.surveyingType = content.find("#surveyingType").val();
         },
 
-        preparePostData() {
+        preparePostData: function() {
             var me = this,
                 edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
                 

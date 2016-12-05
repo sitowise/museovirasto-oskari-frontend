@@ -187,7 +187,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             me.editor.editFeature.objectName = content.find("#name").val();
         },
 
-        preparePostData() {
+        preparePostData: function() {
             var me = this,
                 edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
                 
