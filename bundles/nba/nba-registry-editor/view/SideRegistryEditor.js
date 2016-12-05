@@ -188,15 +188,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _setRegisterView: function () {
             var me = this;
             me.registerView = null;
-            if (me.data.itemtype === 'AncientMonument') {
+            if (me.data.registryIdentifier === 'ancientMonument') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentView', me, me.loc);
-            } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
+            } else if (me.data.registryIdentifier === 'ancientMaintenance') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentMaintenanceView', me, me.loc);
-            } else if (me.data.itemtype === 'BuildingHeritageItem') {
+            } else if (me.data.registryIdentifier === 'buildingHeritage') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritageView', me, me.loc);
-            } else if (me.data.itemtype === 'RKY2000') {
+            } else if (me.data.registryIdentifier === 'rky2000') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View', me, me.loc);
-            } else if (me.data.itemtype === 'ProjectItem') {
+            } else if (me.data.registryIdentifier === 'project') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.ProjectView', me, me.loc);
             }//TODO missing WorldHeritage, Resource
         },

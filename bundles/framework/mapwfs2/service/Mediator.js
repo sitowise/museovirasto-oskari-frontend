@@ -355,7 +355,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                 "features": [],
                                 "layerId": data.data.layerId,
                                 "lonlat": this.lonlat,
-                                "registry": registry,
                                 "via": "registry"};
             
             if(registry.itemType === 'area') {

@@ -9,6 +9,7 @@
             "tooltip": "NBA Registers"
         },
         "tab": {
+            "all": "All",
             "title": "Registers",
             "header": "Search a registry items of National Board of Antiquities",
             "selectRegister": "Select the register",
@@ -26,20 +27,6 @@
                 "municipality": "Municipality",
                 "actions": "Actions",
                 "editItems": "Edit items",
-            },
-            "registryNames": {
-                "AncientMonument": "Ancient Monument",
-                "AncientMonumentMaintenanceItem": "Ancient Monument Maintenance",
-                "BuildingHeritageItem": "Building Heritage",
-                "RKY1993": "RKY1993",
-                "RKY2000": "RKY2000",
-                "WorldHeritageItem": "World Heritage",
-                "ProjectItem": "Project",
-                "HistoricalMunicipality": "Resource",
-                "KYSItem": "Resource",
-                "ProvincialMuseum": "Resource",
-                "Municipality250": "Resource",
-                "Region": "Resource"
             }
         },
         "gfiPopup": {

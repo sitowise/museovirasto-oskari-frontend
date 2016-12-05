@@ -23,3 +23,7 @@ div.nba-searchContainer a.nba-edit-link {
     display: inline-block;
     margin-right: 10px;
 }
+
+div.nba-searchContainer div.resultsContainer div.grid table td {
+    word-wrap: break-word;
+}
