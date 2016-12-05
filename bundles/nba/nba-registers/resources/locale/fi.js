@@ -9,6 +9,7 @@
             "tooltip": "NBA Registers"
         },
         "tab": {
+            "all": "Kaikki",
             "title": "Rekisterihaku",
             "header": "Hae Museoviraston rekisterireiden kohteita",
             "selectRegister": "Valitse rekisteri",
@@ -26,20 +27,6 @@
                 "municipality": "Kunta",
                 "actions": "Toiminnot",
                 "editItems": "Muokkaa kohdetta",
-            },
-            "registryNames": {
-                "AncientMonument": "Muinaisjäännösrekisteri",
-                "AncientMonumentMaintenanceItem": "Muinaisjaann. hoitorekisteri",
-                "BuildingHeritageItem": "Rakennusperintorekisteri",
-                "RKY1993": "RKY1993",
-                "RKY2000": "RKY2000",
-                "WorldHeritageItem": "Maailmanperintökohteet",
-                "ProjectItem": "Project",
-                "HistoricalMunicipality": "Resurssi",
-                "KYSItem": "Resurssi",
-                "ProvincialMuseum": "Resurssi",
-                "Municipality250": "Resurssi",
-                "Region": "Resurssi"
             }
         },
         "gfiPopup": {
