@@ -349,13 +349,19 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             type = 'wfslayer',
             result,
             markup,
-            locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView;
+            locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView,
+            gfiAttributes = this._sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers[data.layerId].gfiAttributes;
 
         if (data.features === 'empty') {
             return;
         }
         result = _.map(data.features, function (feature) {
-            fields = Object.keys(feature);
+            if (gfiAttributes != null) {
+                fields = gfiAttributes;
+            } else {
+                fields = Object.keys(feature);
+            }
+            
             var feat = _.chain(fields)
                 .filter(function (key) {
                     return !_.contains(hiddenFields, key);
