@@ -22,7 +22,7 @@
             "searchResults": "Hakutulokset",
             "grid": {
                 "id": "Tunnus",
-                "desc": "Kuvaus",
+                "desc": "Selite",
                 "registry": "Tietolähde",
                 "municipality": "Kunta",
                 "actions": "Toiminnot",
