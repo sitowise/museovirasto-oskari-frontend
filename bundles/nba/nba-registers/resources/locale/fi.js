@@ -30,7 +30,7 @@
             }
         },
         "gfiPopup": {
-            "editItem": "Muokkaa kohde"
+            "editItem": "Muokkaa kohdetta"
         }
     }
 }
