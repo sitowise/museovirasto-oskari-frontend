@@ -166,7 +166,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
                 searchInput = jQuery(me.tabContent.find('#nba-registers-search-input')),
-                editorRoles = me.instance.conf.editorRoles;
+                editorRoles = me.instance.conf.editorRoles,
+                registryName,
+                registriesConf = me.instance.conf != null ? me.instance.conf.registries : null,
+                lang = Oskari.getLang();
 
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
@@ -176,6 +179,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             gridModel.setIdField('id');
 
             _.each(results, function (result) {
+                if (registriesConf != null && registriesConf[result.registryIdentifier] != null 
+                    && registriesConf[result.registryIdentifier][lang] != null) {
+                    registryName = registriesConf[result.registryIdentifier][lang].name;
+                } else {
+                    registryName = result.registryIdentifier;
+                }
+
                 gridModel.addData({
                     'id': result.id,
                     'desc': result.desc != null ? result.desc.trim() : '',
@@ -184,9 +194,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
-                    'itemtype': result.itemtype,
-                    'registry': me.loc.registryNames[result.itemtype],
-                    'municipality': result.municipality
+                    'itemClassName': result.itemClassName,
+                    'registryIdentifier': result.registryIdentifier,
+                    'registry': registryName,
+                    'municipality': result.municipality,
+                    'editable': result.editable
                 });
             });
 
@@ -196,7 +208,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setColumnValueRenderer('id', function (name, data) {
                 var idColumnDiv = jQuery('<div></div>');
 
-                if (me._hasUserPermissions(editorRoles)) {
+                if (me._hasUserPermissions(editorRoles) && data.editable === true) {
                     var editLink = jQuery('<a href="#" class="nba-edit-link" />');
                     editLink.bind('click', function () {
 
@@ -287,28 +299,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                 //show GFI popup
                 if (showGfi) {
-                    var registry = {};
-                    if (data.itemtype === 'AncientMonument') {
-                        registry.name = 'ancientMonument';
-                    } else if (data.itemtype === 'AncientMonumentMaintenanceItem') {
-                        registry.name = 'maintenance';
-                    } else if (data.itemtype === 'BuildingHeritageItem') {
-                        registry.name = 'buildingHeritage';
-                    } else if (data.itemtype === 'RKY2000') {
-                        registry.name = 'rky2000';
-                    } else if (data.itemtype === 'ProjectItem') {
-                        registry.name = 'project';
-                    } else if (data.itemtype === 'RKY1993') {
-                        registry.name = 'rky1993';
-                    } else if (data.itemtype === 'WorldHeritageItem') {
-                        registry.name = 'worldHeritage';
-                    }
-
                     var registryData = {
                         "via": "registry",
                         "features": [data],
-                        "lonlat": lonlat,
-                        "registry": registry
+                        "lonlat": lonlat
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
 
@@ -341,30 +335,41 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             return hasPermissions;
         },
 
+        /**
+         * @method _getRegisters
+         * Get register names from config of the bundle
+         */
         _getRegisters: function () {
-            var me = this;
-            this.instance.getSearchService().getRegisters(
-                function (results) {
-                    me._handleRegistersResults(results);
-                },
-                function () {
-                    //TODO handle error
-                });
-        },
+            var me = this,
+                conf = me.instance.conf,
+                registries = [],
+                lang = Oskari.getLang(),
+                selectElement = this.getContent().find('div.registerSelect select'),
+                registryName,
+                i;
 
-        _handleRegistersResults: function (results) {
-            if (jQuery.isEmptyObject(results)) {
-                return;
-            }
+            if (conf != null) {
+                registries = conf.registries;
 
-            var selectElement = this.getContent().find('div.registerSelect select');
-
-            $.each(results, function (i, item) {
+                //add 'all' element
                 selectElement.append($('<option>', {
-                    value: item.id,
-                    text: item.name
+                    value: "",
+                    text: me.loc.all
                 }));
-            });
+                
+                for (i in registries) {
+                    if (registries[i][lang] != null) {
+                        registryName = registries[i][lang].name;
+                    } else {
+                        registryName = i;
+                    }
+
+                    selectElement.append($('<option>', {
+                        value: i,
+                        text: registryName
+                    }));
+                } 
+            }
         },
 
         _getRegistryItems: function (params) {

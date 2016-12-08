@@ -25,8 +25,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 //common templates
                 'coordinatePopupContent': jQuery('<div class="nba-registry-editor-coordinates-popup-content"><div class="description"></div>' +
                     '<div class="margintop"><div class="floatleft"><select class="srs-select"></select></div><div class="clear"></div></div>' +
-                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="X"></input></div><div class="clear"></div></div>' +
-                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="Y"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lat-input" placeholder="' + me.loc.coordinateLat + '"></input></div><div class="clear"></div></div>' +
+                    '<div class="margintop"><div class="floatleft"><input type="text" class="lon-input" placeholder="' + me.loc.coordinateLon + '"></input></div><div class="clear"></div></div>' +
                     '</div>'),
                 'noItemsFound': jQuery('<div class="noItemsFound">' + me.loc.noItemsFound + '</div>')
         };
@@ -188,15 +188,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
         _setRegisterView: function () {
             var me = this;
             me.registerView = null;
-            if (me.data.itemtype === 'AncientMonument') {
+            if (me.data.registryIdentifier === 'ancientMonument') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentView', me, me.loc);
-            } else if (me.data.itemtype === 'AncientMonumentMaintenanceItem') {
+            } else if (me.data.registryIdentifier === 'ancientMaintenance') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentMaintenanceView', me, me.loc);
-            } else if (me.data.itemtype === 'BuildingHeritageItem') {
+            } else if (me.data.registryIdentifier === 'buildingHeritage') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritageView', me, me.loc);
-            } else if (me.data.itemtype === 'RKY2000') {
+            } else if (me.data.registryIdentifier === 'rky2000') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View', me, me.loc);
-            } else if (me.data.itemtype === 'ProjectItem') {
+            } else if (me.data.registryIdentifier === 'project') {
                 me.registerView = Oskari.clazz.create('Oskari.nba.bundle.nba-registry-editor.view.ProjectView', me, me.loc);
             }//TODO missing WorldHeritage, Resource
         },
@@ -638,7 +638,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     success: function (data, textStatus, jqXHR) {
                         if (data.updated) {
                             me._refreshData(me.data.id);
-                            me.showMessage(me.loc.success, me.loc.featureUpdated);
+                            var message = me.loc.featureUpdated;
+                            if(data.areaIntersects) {
+                                message = message + '<br/>' + me.loc.areaIntersects;
+                            }
+                            me.showMessage(me.loc.success, message);
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
@@ -729,13 +733,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         "name": "EPSG:3067",
                         "text": "ETRS89-TM35FIN (EPSG:3067)",
                         "definition": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-                        "default": false
+                        "default": true
                     },
                     {
                         "name": "EPSG:4326",
                         "text": "WGS84 (EPSG:4326)",
                         "definition": "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
-                        "default": true
+                        "default": false
                     },
                     {
                         "name": "EPSG:2393",

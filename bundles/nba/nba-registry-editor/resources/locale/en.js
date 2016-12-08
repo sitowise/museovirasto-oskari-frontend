@@ -11,7 +11,7 @@ Oskari.registerLocalization(
 				    "areaAuthor": "Area author",
 				    "areaChangeReason": "Area change reason",
 				    "areaCreateDate": "Area create date",
-				    "areaIntersects": "Feature update failed, because area geometry intersects another feature.",
+				    "areaIntersects": "Feature area geometry intersects another feature.",
 				    "areaModifyDate": "Area modify date",
 				    "areaSelectionSource": "Area selection source",
 				    "areaSelectionType": "Area selection type",
@@ -25,8 +25,8 @@ Oskari.registerLocalization(
 				        "saveObject": "Save object",
 				        "title": "Enter the coordinates of point"
 				    },
-				    "coordinateX": "X",
-				    "coordinateY": "Y",
+				    "coordinateLat": "N / lat",
+				    "coordinateLon": "E / lon",
 				    "copyright": "Copyright",
 				    "createDate": "Create Date",
 				    "dating": "Dating",
@@ -77,6 +77,11 @@ Oskari.registerLocalization(
 				        "12013": "Valokuvadokumentointi"
 				    },
 				    "projectCategorySpecification": "Specifier",
+				    "projectItemTypeValues": {
+						"301": "Project area",
+						"302": "Research area",
+						"303": "Researched area"
+				    },
 				    "projectOrganization": "Operator",
 				    "searchError": "Could not find registry item",
 				    "selectError": "Select only one feature on the map",
@@ -92,7 +97,6 @@ Oskari.registerLocalization(
 				        "17006": "Raportti puuttuu"
 				    },
 				    "sub": "Sub items",
-				    "subAreaIntersects": "Feature update failed, because subarea geometry intersects another feature.",
 				    "subType": "Subtype",
 				    "success": "Success",
 				    "surveyingAccuracy": "Surveying Accuracy",

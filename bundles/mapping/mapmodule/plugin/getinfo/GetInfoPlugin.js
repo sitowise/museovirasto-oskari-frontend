@@ -363,17 +363,19 @@ Oskari.clazz.define(
                 //if user has permissions add edit action for all registry items
                 if (this._hasUserPermissions(editorRoles) && data.features != null && fragments.length) {
                     for (var i = 0; i < data.features.length; i++) {
-                        var itemData = {
-                            id: data.features[i].id,
-                            itemtype: data.features[i].itemtype
-                        };
+                        if (data.features[i].editable === true) {
+                            var itemData = {
+                                id: data.features[i].id,
+                                registryIdentifier: data.features[i].registryIdentifier
+                            };
 
-                        actions[loc.editItem + ' ' + itemData.id] = function () {
-                            //open registry editor
-                            Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
-                            //close Search bundle after moving to registry editor
-                            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
-                        };
+                            actions[loc.editItem + ' ' + itemData.id] = function () {
+                                //open registry editor
+                                Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
+                                //close Search bundle after moving to registry editor
+                                Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+                            };
+                        }
                     }
                 }
 
