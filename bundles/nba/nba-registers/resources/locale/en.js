@@ -27,7 +27,15 @@
                 "municipality": "Municipality",
                 "actions": "Actions",
                 "editItems": "Edit items",
-            }
+            },
+            "errorTitle": "Error",
+            "warningTitle": "Warning",
+            "warningTooManyAreas": "The search may take a long time because there are selected many areas on the map.",
+            "searchErrorGeneral": "Search failed",
+            "searchErrorTimeout": "Search failed. Select fewer areas and try again",
+            "ok": "OK",
+            "cancel": "Cancel",
+            "continue": "Continue"
         },
         "gfiPopup": {
             "editItem": "Edit item"

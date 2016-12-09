@@ -27,7 +27,15 @@
                 "municipality": "Kunta",
                 "actions": "Toiminnot",
                 "editItems": "Muokkaa kohdetta",
-            }
+            },
+            "errorTitle": "Virhe",
+            "warningTitle": "Varoitus",
+            "warningTooManyAreas": "Haku voi kestää pitkään, koska kartalta on valittuna useita alueita.",
+            "searchErrorGeneral": "Haku epäonnistui",
+            "searchErrorTimeout": "Haku epäonnistui. Valitse kartalta vähemmän alueita ja yritä uudelleen.",
+            "ok": "OK",
+            "cancel": "Peruuta",
+            "continue": "Jatka"
         },
         "gfiPopup": {
             "editItem": "Muokkaa kohdetta"
