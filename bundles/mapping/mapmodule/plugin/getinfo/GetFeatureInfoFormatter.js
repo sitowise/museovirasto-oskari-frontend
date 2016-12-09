@@ -350,14 +350,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             result,
             markup,
             locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView,
-            gfiAttributes = this._sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers[data.layerId].gfiAttributes;
+            registryLayerConf = this._sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers[data.layerId];
 
         if (data.features === 'empty') {
             return;
         }
         result = _.map(data.features, function (feature) {
-            if (gfiAttributes != null) {
-                fields = gfiAttributes;
+            if (registryLayerConf != null && registryLayerConf.gfiAttributes != null) {
+                fields = registryLayerConf.gfiAttributes;
             } else {
                 fields = Object.keys(feature);
             }
