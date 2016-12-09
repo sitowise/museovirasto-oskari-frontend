@@ -23,7 +23,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.tabContent = this._initContent();
         //this.resultsContainer = this._initResultGrid();
-        this._getRegisters();
+        this._getRegisters(),
+        this._dialog = null;
     }, {
         _templates: {
             tabContent: '<div class="nba-searchContainer">'
@@ -57,6 +58,33 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             if (requestBuilder) {
                 request = requestBuilder(this.getTitle(), this.getContent());
                 this.sandbox.request(this.instance, request);
+            }
+        },
+
+        _showMessage: function(title, content, buttons, isModal) {
+            var me = this;
+            this.closeDialog();
+            this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            if(typeof buttons === 'undefined') {
+                var okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
+
+                okBtn.setHandler(function () {
+                    me._dialog.close(true);
+                    me._dialog = null;
+                });
+
+                buttons = [okBtn];
+            }
+            this._dialog.show(title, content, buttons);
+            if (isModal) {
+                this._dialog.makeModal();
+            }
+        },
+
+        closeDialog : function() {
+            if(this._dialog) {
+                this._dialog.close(true);
+                this._dialog = null;
             }
         },
 
@@ -124,14 +152,35 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                                 }
                             }
                         }
-
                         //add geometry filter
                         params.geometry = geometryFilters.join('|');
-                        //FIXME it's for local testing
-                        //params.geometry = "MULTIPOLYGON (((380192 7549184, 507168 7356672, 572704 7487744, 535840 7610624, 380192 7549184)))|MULTIPOLYGON (((513312 7137536, 599328 7278848, 415008 7291136, 513312 7137536)))|MULTIPOLYGON (((374048 7121152, 355616 7057664, 511264 7037184, 476448 7133440, 460064 7139584, 374048 7121152)))";
-                    }
+                        
+                        //check amount of selected geometries and show warning if needed
+                        if (geometryFilters.length > 10) {
+                            var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                                cancelButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                                buttons = [cancelButton, continueButton];
 
-                    me._getRegistryItems(params);
+                            cancelButton.setHandler(function() {
+                                me._dialog.close(true);
+                                me._dialog = null;
+                            });
+
+                            continueButton.setTitle(me.loc.continue);
+                            continueButton.addClass('primary');
+                            continueButton.setHandler(function() {
+                                me._dialog.close(true);
+                                me._dialog = null;
+                                me._getRegistryItems(params);
+                            });
+
+                            me._showMessage(me.loc.warningTitle, me.loc.warningTooManyAreas, buttons);
+                        } else {
+                            me._getRegistryItems(params);
+                        }
+                    } else {
+                        me._getRegistryItems(params);
+                    }
                 }
             }
             
@@ -380,9 +429,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 function (results) {
                     me._handleRegistryItemsResults(results);
                 },
-                function () {
+                function (jqXHR, textStatus, errorThrown) {
                     me.progressSpinner.stop();
-                    //TODO handle error
+                    
+                    if (textStatus == 'Gateway Time-out') {
+                        me._showMessage(me.loc.errorTitle, me.loc.searchErrorTimeout);
+                    } else {
+                        me._showMessage(me.loc.errorTitle, me.loc.searchErrorGeneral);
+                    }
                 });
         },
 
