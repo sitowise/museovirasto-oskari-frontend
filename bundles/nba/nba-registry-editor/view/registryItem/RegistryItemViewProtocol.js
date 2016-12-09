@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RegistryItemView
             throw "Not implemented function!";
         },
 
-        preparePostData: function() {
+        preparePostData: function () {
             throw "Not implemented function!";
         }
 
