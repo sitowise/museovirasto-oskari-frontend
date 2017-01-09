@@ -643,6 +643,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 message = message + '<br/>' + me.loc.areaIntersects;
                             }
                             me.showMessage(me.loc.success, message);
+                            
+                            me._clearTiles();
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
@@ -658,6 +660,21 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             } else {
                 me.showMessage(me.loc.error, me.loc.updateError);
             }
+        },
+        
+        _clearTiles: function() {
+            var me = this,
+                wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin'),
+                layerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+            
+            $.each(me.itemData.mapLayers, function(i, obj) {
+                var layer = layerService.findMapLayer(obj.mapLayerID);
+                wfsLayerPlugin.deleteTileCache(obj.mapLayerID, layer.getCurrentStyle().getName());
+            });
+            
+            //force refresh of layers
+            mapModule.adjustZoomLevel(0);
         },
 
         addDropdownsToTemplate: function (template, attributes, selectedFeature, fields) {
