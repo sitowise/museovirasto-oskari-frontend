@@ -100,10 +100,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             var me = this,
                 conf = jQuery.extend(true, {}, config);
 
-            me.instance.plugins.drawPlugin.startDrawing(config);
-            //Drawing needs to be stopped and restarted once to make editing geometry selectable
+            //to make sure that geometry can be edited
+            //start in drawing mode first to activate tool, then stop and start with proper config
+            me.instance.plugins.drawPlugin.startDrawing({drawMode: conf.drawMode});
             me.sendStopDrawRequest(true);
-            me.instance.plugins.drawPlugin.startDrawing(config);
+            me.instance.plugins.drawPlugin.startDrawing(conf);
             me.instance.enableGfi(false);
             me._showDrawHelper(conf.drawMode, id, typeof conf.geometry !== 'undefined');
 
