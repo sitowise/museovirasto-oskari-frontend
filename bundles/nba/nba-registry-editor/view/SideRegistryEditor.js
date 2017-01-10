@@ -666,11 +666,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             var me = this,
                 wfsLayerPlugin = me.sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin'),
                 layerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-                mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             
             $.each(me.itemData.mapLayers, function(i, obj) {
                 var layer = layerService.findMapLayer(obj.mapLayerID);
                 wfsLayerPlugin.deleteTileCache(obj.mapLayerID, layer.getCurrentStyle().getName());
+                
+                var evt = me.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                me.sandbox.notifyAll(evt);
             });
             
             //force refresh of layers
