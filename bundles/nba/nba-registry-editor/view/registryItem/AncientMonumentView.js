@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             mainItemRow.find('.subType').append(me.editor.formatData(me.loc.subType, data.subType.join(", ")));
             mainItemRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.createDate));
 
-            mainItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.id, 'type': 'main', feature: data }));
+            mainItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.id, 'type': 'main', feature: data, 'deleteOption': true }));
 
             main.append(mainItemRow);
 
@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
                 subItemRow.find('.surveyingAccuracy').append(me.editor.formatData(me.loc.surveyingAccuracy, me.loc.surveyingAccuracyValues[data.subItems[i].surveyingAccuracy]));
                 subItemRow.find('.surveyingType').append(me.editor.formatData(me.loc.surveyingType, me.loc.surveyingTypeValues[data.subItems[i].surveyingType]));
 
-                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i] }));
+                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.subItems[i].objectId, 'type': 'sub', feature: data.subItems[i], 'deleteOption': true }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 panel.setTitle(data.subItems[i].id + ' / ' + data.subItems[i].objectName);
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
                 areaRow.find('.description').append(me.editor.formatData(me.loc.description, data.areas[i].description));
                 areaRow.find('.areaChangeReason').append(me.editor.formatData(me.loc.areaChangeReason, data.areas[i].areaChangeReason));
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
-                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i] }));
+                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i], 'deleteOption': true }));
 
                 //area.append(areaRow);
 
@@ -156,19 +156,26 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
 
         preparePostData: function () {
             var me = this,
-                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subItems': [], 'areas': [] };
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subItems': [], 'areas': [] },
+                deleted = { 'id': me.editor.itemData.id, 'pointDeleted': me.editor.itemData._pointDeleted, 'subItems': [], 'areas': [] };
                 
             $.each(me.editor.itemData.subItems, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.subItems.push(item.id);
+                }
+                if (item._deleted && item.id != null) {
+                    deleted.subItems.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.areas.push(item.id);
+                }
             });
-            return { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited) };
+            return { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
         _renderAncientMonumentDetails: function (attributes, selectedFeature, fields) {

@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
             mainItemRow.find('.areaCreateDate').append(me.editor.formatData(me.loc.areaCreateDate, data.areaCreateDate));
             mainItemRow.find('.areaModifyDate').append(me.editor.formatData(me.loc.areaModifyDate, data.areaModifyDate));
 
-            mainItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'area': true, 'id': data.id, 'type': 'main', feature: data })); 
+            mainItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'area': true, 'id': data.id, 'type': 'main', feature: data, 'deleteOption': true })); 
 
             main.append(mainItemRow);
 
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
                 subItemRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.subAreas[i].createDate));
                 subItemRow.find('.modifyDate').append(me.editor.formatData(me.loc.modifyDate, data.subAreas[i].modifyDate));
 
-                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i] }));
+                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.subAreas[i].objectId, 'type': 'sub', feature: data.subAreas[i], 'deleteOption': true }));
 
                 //sub.append(subItemRow);
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -126,14 +126,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentM
 
         preparePostData: function () {
             var me = this,
-                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subAreas': [] };
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'subAreas': [] },
+                deleted = { 'id': me.editor.itemData.id, 'pointDeleted': me.editor.itemData._pointDeleted, 'areaDeleted': me.editor.itemData._areaDeleted, 'subAreas': [] };
                 
             $.each(me.editor.itemData.subAreas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.subAreas.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.subAreas.push(item.id);
+                }
             });
-            return { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited) };
+            return { 'registerName': 'ancientMaintenance', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
         _renderMaintenanceDetails: function (attributes, selectedFeature, fields) {

@@ -223,6 +223,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          *      - line (true/false)
          *      - feature (Object)
          *      - type ('main'/'sub')
+         *      - deleteOption (true/false)
          *      - id
          */
         getEditTools: function(conf) {
@@ -239,9 +240,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointXYButton = $('<button type="button">' + locBtns.createWithXY + '</button>').addClass('registryItemActionButton'),
                 lineButton = $('<button type="button">' + locBtns.addNewLine + '</button>').addClass('registryItemActionButton'),
                 areaButton = $('<button type="button">' + locBtns.addNewArea + '</button>').addClass('registryItemActionButton'),
-                copyButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton');
-
-                
+                copyButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton'),
+                deletePointButton = $('<button type="button">' + locBtns.deletePoint + '</button>').addClass('registryItemActionButton'),
+                deleteAreaButton = $('<button type="button">' + locBtns.deleteArea + '</button>').addClass('registryItemActionButton'),
+                deleteLineButton = $('<button type="button">' + locBtns.deleteLine + '</button>').addClass('registryItemActionButton');
 
             if (typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
@@ -310,6 +312,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 });
                 pointXYButton.attr('id', 'pointxy-' + conf.type + "-" + conf.id);
                 container.append(pointXYButton);
+
+                if (conf.deleteOption) {
+                    deletePointButton.on('click', function() {
+                        if (conf.type == 'main') {
+                            me._deleteGeometry(conf.feature, 'point');
+                        } else {
+                            me._deleteGeometry(conf.feature);
+                        }
+                    });
+                    deletePointButton.attr('id', 'deletePoint-' + conf.type + "-" + conf.id);
+                    container.append(deletePointButton);
+                }
             }
 
             if (typeof conf.line !== 'undefined' && conf.line) {
@@ -334,6 +348,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     lineButton.html(locBtns.editLine);
                 }
                 container.append(lineButton);
+
+                if (conf.deleteOption) {
+                    deleteLineButton.on('click', function() {
+                        me._deleteGeometry(conf.feature);
+                    });
+                    deleteLineButton.attr('id', 'deleteLine-' + conf.type + "-" + conf.id);
+                    container.append(deleteLineButton);
+                }
             }
 
             if (typeof conf.area !== 'undefined' && conf.area) {
@@ -361,6 +383,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     areaButton.html(locBtns.editArea);
                 }
                 container.append(areaButton);
+
+                if (conf.deleteOption) {
+                    deleteAreaButton.on('click', function() {
+                        if (conf.type == 'main') {
+                            me._deleteGeometry(conf.feature, 'area');
+                        } else {
+                            me._deleteGeometry(conf.feature);
+                        }
+                    });
+                    deleteAreaButton.attr('id', 'deleteArea-' + conf.type + "-" + conf.id);
+                    container.append(deleteAreaButton);
+                }
             }
 
             copyButton.on('click', function () {
@@ -461,6 +495,38 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             }*/
 
             return container;
+        },
+
+        _deleteGeometry: function (feature, geometryType) {
+            var me = this,
+                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                title = me.loc.deleteGeometryTitle,
+                content = me.loc.confirmDelete;
+
+            okBtn.setTitle(me.instance.getLocalization('buttons').ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                me._dialog.close(true);
+                me._dialog = null;
+                
+                if (geometryType == 'point') {
+                    feature._pointDeleted = true;
+                } else if (geometryType == 'area') {
+                    feature._areaDeleted = true;
+                } else {
+                    feature._deleted = true;
+                }
+                
+                me._saveRegistryItem();
+            });
+
+            cancelBtn.setHandler(function () {
+                me._dialog.close(true);
+                me._dialog = null;
+            });
+
+            me.showMessage(title, content, [cancelBtn, okBtn], true);
         },
 
         _getGeometryTypeForCopy: function (conf, geoJsonFeature) {
@@ -645,6 +711,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me.showMessage(me.loc.success, message);
                             
                             me._clearTiles();
+                        } else if (data.deleted) {
+                            me._refreshData(me.data.id);
+                            var message = me.loc.featureDeleted;
+                            me.showMessage(me.loc.success, message);
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
