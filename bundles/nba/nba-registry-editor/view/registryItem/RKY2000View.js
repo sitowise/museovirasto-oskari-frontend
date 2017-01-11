@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 pointRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.points[i].createDate));
                 pointRow.find('.author').append(me.editor.formatData(me.loc.author, data.points[i].author));
 
-                pointRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
+                pointRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i], 'deleteOption': true }));
 
                 //point.append(pointRow);
 
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
                 areaRow.find('.author').append(me.editor.formatData(me.loc.author, data.areas[i].author));
 
-                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i] }));
+                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i], 'deleteOption': true }));
 
                 //area.append(areaRow);
 
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
                 lineRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.lines[i].createDate));
                 lineRow.find('.author').append(me.editor.formatData(me.loc.author, data.lines[i].author));
 
-                lineRow.find('.registryItemTools').append(me.editor.getEditTools({ 'line': true, 'id': data.lines[i].id, 'type': 'sub', feature: data.lines[i] }));
+                lineRow.find('.registryItemTools').append(me.editor.getEditTools({ 'line': true, 'id': data.lines[i].id, 'type': 'sub', feature: data.lines[i], 'deleteOption': true }));
 
                 //line.append(lineRow);
 
@@ -189,24 +189,34 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
 
         preparePostData: function () {
             var me = this,
-                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [], 'lines': [] };
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [], 'lines': [] },
+                deleted = { 'id': me.editor.itemData.id, 'points': [], 'areas': [], 'lines': [] };
                 
             $.each(me.editor.itemData.points, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.points.push(item.id);
+                }
+                if (item._deleted && item.id != null) {
+                    deleted.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.areas.push(item.id);
+                }
             });
             $.each(me.editor.itemData.lines, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.lines.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.lines.push(item.id);
+                }
             });
-            return { 'registerName': 'rky2000', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited) };
+            return { 'registerName': 'rky2000', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
         _renderRKY2000SurveyingDetails: function (attributes, selectedFeature, fields) {

@@ -17,6 +17,7 @@ Oskari.registerLocalization(
 				    "areaSelectionType": "Rajaustyyppi",
 				    "author": "Tallentaja",
 				    "classification": "Lajityyppi",
+				    "confirmDelete": "Haluatko varmasti poistaa geometrian?",
 				    "conservationGroup": "Suojeluväline",
 				    "conservationStatus": "Suojelun tila",
 				    "coordinatePopup": {
@@ -30,12 +31,14 @@ Oskari.registerLocalization(
 				    "copyright": "Copyright",
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
+				    "deleteGeometryTitle": "Poista geometria",
 				    "description": "Selite",
 				    "digiMk": "digiMk",
 				    "digiMkYear": "DigiMkVuosi",
 				    "digitizationAuthor": "Digitoija",
 				    "digitizationDate": "Digipvm",
 				    "error": "Virhe",
+				    "featureDeleted": "Kohteen poistaminen onnistui",
 				    "featureHasGeometry": "Kohteella on jo tallennettu geometria. Haluatko muokata geometriaa?",
 				    "featureUpdated": "Kohteen päivitys onnistui",
 				    "geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
@@ -174,6 +177,9 @@ Oskari.registerLocalization(
 					"editLine": "Muokkaa viivaa",
 					"editGeometry": "Muokkaa geometriaa",
 					"copyGeometry": "Kopioi geometria kartalta",
+					"deletePoint": "Poista pistettä",
+					"deleteArea": "Poista aluetta",
+					"deleteLine": "Poista viivaa",
 					"createWithXY": "Luo piste koordinaateista",
 					"continue": "Jatka"
 				}
