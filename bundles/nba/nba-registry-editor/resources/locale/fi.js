@@ -32,6 +32,7 @@ Oskari.registerLocalization(
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
 				    "deleteGeometryTitle": "Poista geometria",
+				    "desc": "Selite",
 				    "description": "Selite",
 				    "digiMk": "digiMk",
 				    "digiMkYear": "DigiMkVuosi",
@@ -49,6 +50,7 @@ Oskari.registerLocalization(
 				    "main": "Pääkohde",
 				    "maintainingEntity": "Hoitotaho",
 				    "modifyDate": "Muokattu",
+				    "municipality": "Kunta",
 				    "municipalityName": "Kunta",
 				    "name": "Nimi",
 				    "nbaUrl": "Kohteen tiedot",
@@ -134,7 +136,8 @@ Oskari.registerLocalization(
 				    "url": "Url",
 				    "warning": "Varoitus",
 				    "wrongGeometryError": "Valittu kohde on väärän tyyppinen",
-				    "year": "Tutkimusvuosi"
+				    "year": "Tutkimusvuosi",
+				    "registry": "Tietolähde"
 				},
 				"tools": {
 					"point": {
