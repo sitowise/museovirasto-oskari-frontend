@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 subItemRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.points[i].createDate));
                 subItemRow.find('.author').append(me.editor.formatData(me.loc.author, data.points[i].author));
 
-                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
+                subItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i], 'deleteOption': true }));
 
                 //sub.append(subItemRow);
 
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
                 areaRow.find('.author').append(me.editor.formatData(me.loc.author, data.areas[i].author));
 
-                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i] }));
+                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i], 'deleteOption': true }));
 
                 //area.append(areaRow);
 
@@ -153,19 +153,26 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
 
         preparePostData: function () {
             var me = this,
-                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] },
+                deleted = { 'id': me.editor.itemData.id, 'points': [], 'areas': [] };
                 
             $.each(me.editor.itemData.points, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.points.push(item.id);
+                }
+                if (item._deleted && item.id != null) {
+                    deleted.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.areas.push(item.id);
+                }
             });
-            return { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited) };
+            return { 'registerName': 'buildingHeritage', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
         _renderBuildingHeritageDetails: function (attributes, selectedFeature, fields) {

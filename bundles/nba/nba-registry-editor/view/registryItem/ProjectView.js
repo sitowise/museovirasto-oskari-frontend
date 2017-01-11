@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 pointItemRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.points[i].createDate));
                 pointItemRow.find('.author').append(me.editor.formatData(me.loc.author, data.points[i].author));
 
-                pointItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i] }));
+                pointItemRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': data.points[i].objectId, 'type': 'sub', feature: data.points[i], 'deleteOption': true }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 panel.setTitle(data.points[i].id);
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
                 areaRow.find('.author').append(me.editor.formatData(me.loc.author, data.areas[i].author));
 
-                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i] }));
+                areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i], 'deleteOption': true }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                 panel.setTitle(data.areas[i].id);
@@ -151,19 +151,26 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
         preparePostData: function () {
             var me = this,
-                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] };
+                edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] },
+                deleted = { 'id': me.editor.itemData.id, 'points': [], 'areas': [] };
                 
             $.each(me.editor.itemData.points, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.points.push(item.id);
+                }
+                if (item._deleted && item.id != null) {
+                    deleted.points.push(item.id);
                 }
             });
             $.each(me.editor.itemData.areas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
                 }
+                if (item._deleted && item.id != null) {
+                    deleted.areas.push(item.id);
+                }
             });
-            return { 'registerName': 'project', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited) };
+            return { 'registerName': 'project', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
         _renderProjectRegistryDetails: function (attributes, selectedFeature, fields) {

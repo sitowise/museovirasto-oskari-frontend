@@ -17,6 +17,7 @@ Oskari.registerLocalization(
 				    "areaSelectionType": "Area selection type",
 				    "author": "author",
 				    "classification": "Classification",
+					"confirmDelete": "Are you sure you want to delete the geometry?",
 				    "conservationGroup": "Conservation group",
 				    "conservationStatus": "Conservation status",
 				    "coordinatePopup": {
@@ -30,12 +31,14 @@ Oskari.registerLocalization(
 				    "copyright": "Copyright",
 				    "createDate": "Create Date",
 				    "dating": "Dating",
+				    "deleteGeometryTitle": "Delete geometry",
 				    "description": "Description",
 				    "digiMk": "DigiMk",
 				    "digiMkYear": "digiMk Year",
 				    "digitizationAuthor": "Digitization author",
 				    "digitizationDate": "Digitization date",
 				    "error": "Error",
+				    "featureDeleted": "Feature was succesfully deleted",
 				    "featureHasGeometry": "Feature already has a geometry. Do you want to continue editing?",
 				    "featureUpdated": "Feature was succesfully updated",
 				    "geometryDetailsInfo": "Update registry information for geometry",
@@ -174,6 +177,9 @@ Oskari.registerLocalization(
 					"editLine": "Edit line",
 					"editGeometry": "Edit geometry",
 					"copyGeometry": "Copy geometry",
+					"deletePoint": "Delete point",
+					"deleteArea": "Delete area",
+					"deleteLine": "Delete line",
 					"createWithXY": "Create with XY",
 					"continue": "Continue"
 				}
