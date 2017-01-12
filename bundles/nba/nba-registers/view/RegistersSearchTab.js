@@ -255,9 +255,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setVisibleFields(['id', 'desc', 'registry', 'municipality']);
 
             grid.setColumnValueRenderer('id', function (name, data) {
-                var idColumnDiv = jQuery('<div></div>');
-
-                if (me._hasUserPermissions(editorRoles) && data.editable === true) {
+                var idColumnDiv = jQuery('<div></div>'),
+                    registryEditRoles = editorRoles[data.registryIdentifier] != null ? editorRoles[data.registryIdentifier] : editorRoles['general'];
+                    
+                if (me._hasUserPermissions(registryEditRoles) && data.editable === true) {
                     var editLink = jQuery('<a href="#" class="nba-edit-link" />');
                     editLink.bind('click', function () {
 

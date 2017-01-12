@@ -360,10 +360,11 @@ Oskari.clazz.define(
             } else if(data.via === 'registry') {
                 fragments = this._formatRegistryFeaturesForInfoBox(data);
 
-                //if user has permissions add edit action for all registry items
-                if (this._hasUserPermissions(editorRoles) && data.features != null && fragments.length) {
+                if (data.features != null && fragments.length) {
                     for (var i = 0; i < data.features.length; i++) {
-                        if (data.features[i].editable === true) {
+                        //if user has permissions add edit action for the registry item
+                        var registryEditRoles = editorRoles[data.features[i].registryIdentifier] != null ? editorRoles[data.features[i].registryIdentifier] : editorRoles['general'];
+                        if (this._hasUserPermissions(registryEditRoles) && data.features[i].editable === true) {
                             var itemData = {
                                 id: data.features[i].id,
                                 registryIdentifier: data.features[i].registryIdentifier
