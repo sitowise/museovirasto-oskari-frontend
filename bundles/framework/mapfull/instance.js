@@ -678,7 +678,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     }
                     layers += layer.id + '+' + layer.opacity;
                     if (layer.style) {
-                        layers += '+' + layer.style;
+                        layers += '+' + encodeURIComponent(layer.style);
                     } else {
                         layers += '+';
                     }
