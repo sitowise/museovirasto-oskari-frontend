@@ -89,7 +89,7 @@ Oskari.registerLocalization(
 				    },
 				    "projectOrganization": "Toimija",
 				    "searchError": "Kohteen hakeminen epäonnistui",
-				    "selectError": "Valitse kartalta vain yksi kohde",
+				    "selectWarning": "Valitsit useita kohteita. Vain yksi kohde voidaan kopioida. Käytetäänkö korostettua kohdetta?",
 				    "sourceDating": "Ajoitus",
 				    "stageCode": "Työvaihe",
 				    "stageCodeValues": {

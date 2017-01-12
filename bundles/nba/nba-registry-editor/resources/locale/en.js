@@ -87,7 +87,7 @@ Oskari.registerLocalization(
 				    },
 				    "projectOrganization": "Operator",
 				    "searchError": "Could not find registry item",
-				    "selectError": "Select only one feature on the map",
+				    "selectWarning": "Multiple geometries were selected. Highlighted geometry will be used",
 				    "sourceDating": "Source dating",
 				    "stageCode": "Work stage",
 				    "stageCodeValues": {

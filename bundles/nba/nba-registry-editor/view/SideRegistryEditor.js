@@ -402,47 +402,80 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 var currentCopyButton = this;
 
                 var onFinishSelectionCallback = function () {
-                    var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                            geometryFilters = [];
+                    var builder = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent'),
+                        wfsFeaturesSelectedEvent,
+                        selectedLayers = me.sandbox.findAllSelectedMapLayers(),
+                        selectedGeometriesCount = 0,
+                        selectedFeature = null,
+                        selectedFeatureGeoJson,
+                        selectedFeatureAttributes,
+                        selectedFeatureFields,
+                        selectedLayer;
                     
                     for (var i = 0; i < selectedLayers.length; i++) {
                         var layer = selectedLayers[i];
 
                         if (layer.getClickedGeometries !== null && layer.getClickedGeometries !== undefined && layer.getClickedGeometries().length > 0) {
-
-                            if (layer.getClickedGeometries().length > 1) {
-                                me.showMessage(me.loc.error, me.loc.selectError);
-                            } else {
+                            for (var j = 0; j < layer.getClickedGeometries().length; j++) {
                                 //check if geometry suits to proper type
-                                var geometry = layer.getClickedGeometries()[0][1],//WKT string
+                                var geometry = layer.getClickedGeometries()[j][1],//WKT string
                                     wktFormat = new OpenLayers.Format.WKT({}),
                                     feature = wktFormat.read(geometry),//vector feature
                                     geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                                    geoJsonFeature = geojsonFormat.write(feature.geometry);//GeoJSON string
+                                    featureGeoJson = geojsonFormat.write(feature.geometry);//GeoJSON string
 
-                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, geoJsonFeature);
+                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, featureGeoJson);
 
                                 if (me.editFeature._geometryType != null) {
-
-                                    var attributes = me._getLayerAttributes(layer);
-                                    var selectedFeature = null;
-                                    var fields = layer.getFields();
-                                    var activeFeatures = layer.getActiveFeatures();
-
+                                    selectedFeatureGeoJson = featureGeoJson;
+                                    selectedFeatureAttributes = me._getLayerAttributes(layer);
+                                    selectedFeatureFields = layer.getFields();
+                                    selectedLayer = layer;
+                                    
                                     //maybe here is better way to get selected feature
+                                    var activeFeatures = layer.getActiveFeatures();
                                     for (var k = 0; k < activeFeatures.length; k++) {
-                                        if (activeFeatures[k][0] == layer.getClickedGeometries()[0][0]) {
+                                        if (activeFeatures[k] != null && activeFeatures[k][0] == layer.getClickedGeometries()[j][0]) {
                                             selectedFeature = activeFeatures[k];
                                         }
                                     }
-
-                                    me._showParameterUpdateDialog(currentCopyButton.id, geoJsonFeature, attributes, selectedFeature, fields);
-                                } else {
-                                    me.showMessage(me.loc.error, me.loc.wrongGeometryError);
                                 }
+                                selectedGeometriesCount++;
                             }
                         }
+                        //clean selections from the layer
+                        wfsFeaturesSelectedEvent = builder([], layer, false);
+                        me.sandbox.notifyAll(wfsFeaturesSelectedEvent);
+                    }
+                    
+                    if (selectedGeometriesCount > 0) {
+                        if (selectedFeature == null) {
+                            //none of selected geometries is valid - show error
+                            me.showMessage(me.loc.error, me.loc.wrongGeometryError);
+                        } else if (selectedGeometriesCount == 1) {
+                            //one selected geometry (valid) - go to next step
+                            me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                        } else {
+                            //more geometries are selected (at least one is valid) - highlight valid geometry, show warning and go to next step
+                            wfsFeaturesSelectedEvent = builder([selectedFeature[0]], selectedLayer, false);
+                            me.sandbox.notifyAll(wfsFeaturesSelectedEvent);
 
+                            var copyOkBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                            copyOkBtn.setTitle(me.instance.getLocalization('buttons').ok);
+                            copyOkBtn.addClass('primary');
+                            copyOkBtn.setHandler(function () {
+                                me._dialog.close(true);
+                                me._dialog = null;
+                                me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                            });
+
+                            var copyCancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
+                            copyCancelBtn.setHandler(function () {
+                                me._dialog.close(true);
+                                me._dialog = null;
+                            });
+                            me.showMessage(me.loc.warning, me.loc.selectWarning, [copyOkBtn, copyCancelBtn]);
+                        }
                     }
                 };
 
