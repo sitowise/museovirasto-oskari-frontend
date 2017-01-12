@@ -283,7 +283,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 }
                 // Save the tile data per layer for later use.
                 if (tileData && layerId) {
-                    this.tileData[layerId] = tileData;
+                    this.tileData[layerId] = {};
+                    this.tileData[layerId][layerId] = tileData[layerId];
                 }
             },
             /**
