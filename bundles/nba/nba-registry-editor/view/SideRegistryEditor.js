@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 pointXYButton.attr('id', 'pointxy-' + conf.type + "-" + conf.id);
                 container.append(pointXYButton);
 
-                if (conf.deleteOption) {
+                if (conf.deleteOption && (conf.feature.geometry != null || conf.feature.pointGeometry)) {
                     deletePointButton.on('click', function() {
                         if (conf.type == 'main') {
                             me._deleteGeometry(conf.feature, 'point');
@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 }
                 container.append(lineButton);
 
-                if (conf.deleteOption) {
+                if (conf.deleteOption && conf.feature.geometry != null) {
                     deleteLineButton.on('click', function() {
                         me._deleteGeometry(conf.feature);
                     });
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 }
                 container.append(areaButton);
 
-                if (conf.deleteOption) {
+                if (conf.deleteOption && (conf.feature.geometry != null || conf.feature.areaGeometry)) {
                     deleteAreaButton.on('click', function() {
                         if (conf.type == 'main') {
                             me._deleteGeometry(conf.feature, 'area');
