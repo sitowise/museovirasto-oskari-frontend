@@ -180,8 +180,8 @@ Oskari.registerLocalization(
 					"editLine": "Muokkaa viivaa",
 					"editGeometry": "Muokkaa geometriaa",
 					"copyGeometry": "Kopioi geometria kartalta",
-					"deletePoint": "Poista pistettä",
-					"deleteArea": "Poista aluetta",
+					"deletePoint": "Poista piste",
+					"deleteArea": "Poista alue",
 					"deleteLine": "Poista viivaa",
 					"createWithXY": "Luo piste koordinaateista",
 					"continue": "Jatka"
