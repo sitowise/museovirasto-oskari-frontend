@@ -16,6 +16,7 @@ Oskari.registerLocalization(
 				    "areaSelectionSource": "Rajauslähde",
 				    "areaSelectionType": "Rajaustyyppi",
 				    "author": "Tallentaja",
+				    "buildings": "Rakennukset",
 				    "classification": "Lajityyppi",
 				    "confirmDelete": "Haluatko varmasti poistaa geometrian?",
 				    "conservationGroup": "Suojeluväline",

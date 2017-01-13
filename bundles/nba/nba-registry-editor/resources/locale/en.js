@@ -16,6 +16,7 @@ Oskari.registerLocalization(
 				    "areaSelectionSource": "Area selection source",
 				    "areaSelectionType": "Area selection type",
 				    "author": "author",
+				    "buildings": "Buildings",
 				    "classification": "Classification",
 					"confirmDelete": "Are you sure you want to delete the geometry?",
 				    "conservationGroup": "Conservation group",

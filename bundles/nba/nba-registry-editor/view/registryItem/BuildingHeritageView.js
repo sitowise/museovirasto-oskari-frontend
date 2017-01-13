@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
         me.editor = editor;
         me.loc = loc;
         me.templates = {
-            'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h3>' + me.loc.main + '</h4></div><div id="sub"><h4>' + me.loc.sub + '</h4></div><div id="area"><h4>' + me.loc.area + '</h4></div></div>'),
+            'buildingHeritage': jQuery('<div id="buildingHeritage"><div id="main"><h3>' + me.loc.main + '</h4></div><div id="sub"><h4>' + me.loc.buildings + '</h4></div><div id="area"><h4>' + me.loc.area + '</h4></div></div>'),
             'buildingHeritageMainItem': jQuery('<div class="item buildingHeritageMainItem"><div class="id"/><div class="name"/><div class="municipalityName"/></div>'),
             'buildingHeritagePoint': jQuery('<div class="item buildingHeritagePoint"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
             'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="name"/><div class="description"/><div class="conservationGroup"/><div class="conservationStatus"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
