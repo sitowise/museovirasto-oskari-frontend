@@ -567,17 +567,46 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             saveBtn.setTitle(me.loc.buttons.save);
 
             saveBtn.setHandler(function () {
-                var map = me.instance.sandbox.getMap(),
-                    features = (map.geojs === undefined || map.geojs === null) ? null : map.geojs,
-                    selections = me._gatherSelections();
+                if(Object.keys(me.instance.__loadingStatus).length === 0) {
+                    me.__saveBtnHandler(me)
+                } else {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                    buttons = [],
+                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
-                if (selections) {
-                    me._printMap(selections, features);
+                    cancelBtn.setHandler(function () {
+                        dialog.close(true);
+                    });
+                    buttons.push(cancelBtn);
+
+                    var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+                    finishBtn.setTitle(me.loc.buttons.save);
+                    finishBtn.addClass('primary');
+                    finishBtn.setHandler(function() {
+                        dialog.close(true);
+                        me.__saveBtnHandler(me);
+                    });
+                    buttons.push(finishBtn);
+
+                    var content = jQuery('<div>' + me.loc.error.stillLoading + '</div>');
+
+                    dialog.show(me.loc.error.title, content, buttons);
                 }
             });
             saveBtn.insertTo(buttonCont);
 
             return buttonCont;
+        },
+
+        __saveBtnHandler: function (me) {
+            var map = me.instance.sandbox.getMap(),
+            features = (map.geojs === undefined || map.geojs === null) ? null : map.geojs,
+            selections = me._gatherSelections();
+
+            if (selections) {
+                me._printMap(selections, features);
+            }
         },
 
         /**
