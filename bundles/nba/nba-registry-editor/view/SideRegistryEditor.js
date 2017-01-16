@@ -422,11 +422,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                     wktFormat = new OpenLayers.Format.WKT({}),
                                     feature = wktFormat.read(geometry),//vector feature
                                     geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                                    featureGeoJson = geojsonFormat.write(feature.geometry);//GeoJSON string
+                                    featureGeoJson = geojsonFormat.write(feature.geometry),//GeoJSON string
+                                    geometryType = me._getGeometryTypeForCopy(conf, featureGeoJson);
 
-                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, featureGeoJson);
-
-                                if (me.editFeature._geometryType != null) {
+                                if (geometryType != null) {
+                                    me.editFeature._geometryType = geometryType;
                                     selectedFeatureGeoJson = featureGeoJson;
                                     selectedFeatureAttributes = me._getLayerAttributes(layer);
                                     selectedFeatureFields = layer.getFields();
