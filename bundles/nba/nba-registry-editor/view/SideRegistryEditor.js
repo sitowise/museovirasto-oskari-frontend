@@ -749,6 +749,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me._refreshData(me.data.id);
                             var message = me.loc.featureDeleted;
                             me.showMessage(me.loc.success, message);
+
+                            me._clearTiles();
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {
