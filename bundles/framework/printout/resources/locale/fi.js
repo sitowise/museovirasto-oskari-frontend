@@ -168,7 +168,7 @@ Oskari.registerLocalization(
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Tulostus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat suomen kielen aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-).",
-                "stillLoading": "Kaikki aineistot eivät ole vielä latautuneet eikä niitä voi tulostaa. Voit tulostaa latautuneet aineistot tai yrittää uudelleen kun aineistot ovat latautuneet."
+                "stillLoading": "Kaikki aineistot eivät ole vielä latautuneet eikä niitä voida tulostaa. Voit tulostaa nyt kartalla näkyvät aineistot tai yrittää uudelleen, kun kaikki aineistot ovat latautuneet."
             }
         },
         "StartView": {
