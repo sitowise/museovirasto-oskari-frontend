@@ -167,7 +167,8 @@ Oskari.registerLocalization(
                 "name": "Name is required information",
                 "nohelp": "There is no help available.",
                 "saveFailed": "Printing the map view not succeeded. Please try again later.",
-                "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
+                "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+                "stillLoading": "All map layers have not been fully loaded yet. You can print layers that are currently visible or try again later after everything has been loaded"
             }
         },
         "StartView": {
