@@ -410,7 +410,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         selectedFeatureGeoJson,
                         selectedFeatureAttributes,
                         selectedFeatureFields,
-                        selectedLayer;
+                        selectedLayer,
+                        wktFormat = new OpenLayers.Format.WKT({});
                     
                     for (var i = 0; i < selectedLayers.length; i++) {
                         var layer = selectedLayers[i];
@@ -419,15 +420,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             for (var j = 0; j < layer.getClickedGeometries().length; j++) {
                                 //check if geometry suits to proper type
                                 var geometry = layer.getClickedGeometries()[j][1],//WKT string
-                                    wktFormat = new OpenLayers.Format.WKT({}),
                                     feature = wktFormat.read(geometry),//vector feature
-                                    geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                                    featureGeoJson = geojsonFormat.write(feature.geometry),//GeoJSON string
-                                    geometryType = me._getGeometryTypeForCopy(conf, featureGeoJson);
+                                    geometryInfo = me._getGeometryInfoForCopy(conf, feature);
 
-                                if (geometryType != null) {
-                                    me.editFeature._geometryType = geometryType;
-                                    selectedFeatureGeoJson = featureGeoJson;
+                                if (geometryInfo != null) {
+                                    me.editFeature._geometryType = geometryInfo.geometryType;
+                                    selectedFeatureGeoJson = geometryInfo.featureGeoJson;
                                     selectedFeatureAttributes = me._getLayerAttributes(layer);
                                     selectedFeatureFields = layer.getFields();
                                     selectedLayer = layer;
@@ -563,19 +561,42 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             me.showMessage(title, content, [cancelBtn, okBtn], true);
         },
 
-        _getGeometryTypeForCopy: function (conf, geoJsonFeature) {
+        /**
+         * @method _getGeometryInfoForCopy
+         * Checks if the feature has valid geometry type according to configuration object. 
+         * Returns object containing information about geometry type and GeoJSON string of the feature.
+         */
+        _getGeometryInfoForCopy: function (conf, feature) {
             var geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                geod = JSON.parse(geoJsonFeature);
+                geoJsonString = geojsonFormat.write(feature.geometry),
+                geoJsonObject = JSON.parse(geoJsonString),
+                geometryType = null,
+                featureGeoJson = null;
             
-            if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geod, 'Polygon') || geojsonFormat.isValidType(geod, 'MultiPolygon'))) {
-                return 'area';
+            //MultiPolygon is acceptable in API
+            if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geoJsonObject, 'Polygon') || geojsonFormat.isValidType(geoJsonObject, 'MultiPolygon'))) {
+                geometryType = 'area';
+                featureGeoJson = geoJsonString;
+            } else if (typeof conf.point !== 'undefined' && conf.point) {
+                geometryType = 'point';
+                if (geojsonFormat.isValidType(geoJsonObject, 'Point')) {
+                    featureGeoJson = geoJsonString;
+                } else if (geojsonFormat.isValidType(geoJsonObject, 'MultiPoint') && feature.geometry.components.length == 1) {
+                    //MultiPoint is not acceptable in API, so change it to Point
+                    featureGeoJson = geojsonFormat.write(feature.geometry.components[0]);
+                }
+            } else if (typeof conf.line !== 'undefined' && conf.line) {
+                geometryType = 'line';
+                if (geojsonFormat.isValidType(geoJsonObject, 'LineString')) {
+                    featureGeoJson = geoJsonString;
+                } else if (geojsonFormat.isValidType(geoJsonObject, 'MultiLineString') && feature.geometry.components.length == 1) {
+                    //MultiLineString is not acceptable in API, so change it to LineString
+                    featureGeoJson = geojsonFormat.write(feature.geometry.components[0]);
+                }
+            }
 
-            } else if (typeof conf.point !== 'undefined' && conf.point && (geojsonFormat.isValidType(geod, 'Point') || geojsonFormat.isValidType(geod, 'MultiPoint'))) {
-                return 'point';
-
-            } else if (typeof conf.line !== 'undefined' && conf.line && (geojsonFormat.isValidType(geod, 'LineString') || geojsonFormat.isValidType(geod, 'MultiLineString'))) {
-                return 'line';
-
+            if (featureGeoJson != null) {
+                return { 'geometryType': geometryType, 'featureGeoJson': featureGeoJson};
             } else {
                 return null;
             }
