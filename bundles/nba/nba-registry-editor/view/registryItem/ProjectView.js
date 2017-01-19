@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
             return itemDetails;
         },
 
-        renderUpdateDialogContent: function (attributes, selectedFeature, fields) {
+        renderUpdateDialogContent: function (attributes, selectedFeature, fields, defaults) {
             var me = this;
             if (me.editor.editFeature._geometryType === 'area') {
                 return me._renderProjectRegistryAreaDetails(attributes, selectedFeature, fields);

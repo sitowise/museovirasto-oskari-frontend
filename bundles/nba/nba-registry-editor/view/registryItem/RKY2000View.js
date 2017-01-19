@@ -157,9 +157,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             return itemDetails;
         },
 
-        renderUpdateDialogContent: function (attributes, selectedFeature, fields) {
+        renderUpdateDialogContent: function (attributes, selectedFeature, fields, defaults) {
             var me = this;
-            return me._renderRKY2000SurveyingDetails(attributes, selectedFeature, fields);
+            return me._renderRKY2000SurveyingDetails(attributes, selectedFeature, fields, defaults);
         },
 
         collectDataForUpdate: function (content, geometry) {
@@ -219,7 +219,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             return { 'registerName': 'rky2000', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
-        _renderRKY2000SurveyingDetails: function (attributes, selectedFeature, fields) {
+        _renderRKY2000SurveyingDetails: function (attributes, selectedFeature, fields, defaults) {
             var me = this,
                 template = me.templates.rky2000SurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
@@ -228,7 +228,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             $.each(me.loc.surveyingAccuracyValues, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingAccuracy) {
+                if (defaults != null && defaults.surveyingAccuracy != null && value === defaults.surveyingAccuracy) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingAccuracy) {
                     option.prop('selected', true);
                 }
                 accuracySelect.append(option);
@@ -237,16 +239,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RKY2000View',
             $.each(me.loc.surveyingTypeValues, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingType) {
+                if (defaults != null && defaults.surveyingType != null && value === defaults.surveyingType) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingType) {
                     option.prop('selected', true);
                 }
                 typeSelect.append(option);
             });
-
-            template.find("#description").val(me.editor.editFeature.description);
-            template.find("#name").val(me.editor.editFeature.objectName);
-            accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editor.editFeature.surveyingType);
+            if (defaults == null) {
+                template.find("#description").val(me.editor.editFeature.description);
+                template.find("#name").val(me.editor.editFeature.objectName);
+                accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
+                typeSelect.val(me.editor.editFeature.surveyingType);
+            }
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns

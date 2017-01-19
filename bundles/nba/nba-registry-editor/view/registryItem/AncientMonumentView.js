@@ -129,12 +129,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             return itemDetails;
         },
 
-        renderUpdateDialogContent: function (attributes, selectedFeature, fields) {
+        renderUpdateDialogContent: function (attributes, selectedFeature, fields, defaults) {
             var me = this;
             if (me.editor.editFeature._geometryType === 'area') {
-                return me._renderAncientMonumentAreaDetails(attributes, selectedFeature, fields);
+                return me._renderAncientMonumentAreaDetails(attributes, selectedFeature, fields, defaults);
             } else {
-                return me._renderAncientMonumentDetails(attributes, selectedFeature, fields);
+                return me._renderAncientMonumentDetails(attributes, selectedFeature, fields, defaults);
             }
         },
 
@@ -178,7 +178,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             return { 'registerName': 'ancientMonument', 'item': JSON.stringify(me.editor.itemData), 'edited': JSON.stringify(edited), 'deleted': JSON.stringify(deleted) };
         },
 
-        _renderAncientMonumentDetails: function (attributes, selectedFeature, fields) {
+        _renderAncientMonumentDetails: function (attributes, selectedFeature, fields, defaults) {
             var me = this,
                 template = me.templates.ancientMonumentSurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
@@ -187,7 +187,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             $.each(me.loc.surveyingAccuracyValues, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingAccuracy) {
+                if (defaults != null && defaults.surveyingAccuracy != null && value === defaults.surveyingAccuracy) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingAccuracy) {
                     option.prop('selected', true);
                 }
                 accuracySelect.append(option);
@@ -196,15 +198,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             $.each(me.loc.surveyingTypeValues, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingType) {
+                if (defaults != null && defaults.surveyingType != null && value === defaults.surveyingType) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingType) {
                     option.prop('selected', true);
                 }
                 typeSelect.append(option);
             });
-
-            template.find("#description").val(me.editor.editFeature.description);
-            accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editor.editFeature.surveyingType);
+            if (defaults == null) {
+                template.find("#description").val(me.editor.editFeature.description);
+                accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
+                typeSelect.val(me.editor.editFeature.surveyingType);
+            }
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns
@@ -214,7 +219,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             return template;
         },
 
-        _renderAncientMonumentAreaDetails: function (attributes, selectedFeature, fields) {
+        _renderAncientMonumentAreaDetails: function (attributes, selectedFeature, fields, defaults) {
             var me = this,
                 template = me.templates.ancientMonumentAreaSurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
@@ -223,7 +228,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             $.each(me.loc.surveyingAccuracyValuesArea, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingAccuracy) {
+                if (defaults != null && defaults.surveyingAccuracy != null && value === defaults.surveyingAccuracy) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingAccuracy) {
                     option.prop('selected', true);
                 }
                 accuracySelect.append(option);
@@ -232,16 +239,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.AncientMonumentV
             $.each(me.loc.surveyingTypeValuesArea, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
-                if (value === me.editor.editFeature.surveyingType) {
+                if (defaults != null && defaults.surveyingType != null && value === defaults.surveyingType) {
+                    option.prop('selected', true);
+                } else if (value === me.editor.editFeature.surveyingType) {
                     option.prop('selected', true);
                 }
                 typeSelect.append(option);
             });
-
-            template.find("#description").val(me.editor.editFeature.description);
-            template.find("#areaChangeReason").val(me.editor.editFeature.areaChangeReason);
-            accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
-            typeSelect.val(me.editor.editFeature.surveyingType);
+            if (defaults == null) {
+                template.find("#description").val(me.editor.editFeature.description);
+                template.find("#areaChangeReason").val(me.editor.editFeature.areaChangeReason);
+                accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
+                typeSelect.val(me.editor.editFeature.surveyingType);
+            }
 
             if (attributes != null && selectedFeature != null) {
                 //add dropdowns

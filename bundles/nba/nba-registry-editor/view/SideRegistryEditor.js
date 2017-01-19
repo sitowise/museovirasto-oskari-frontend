@@ -411,6 +411,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         selectedFeatureAttributes,
                         selectedFeatureFields,
                         selectedLayer,
+                        defaults,
                         wktFormat = new OpenLayers.Format.WKT({});
                     
                     for (var i = 0; i < selectedLayers.length; i++) {
@@ -437,6 +438,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                             selectedFeature = activeFeatures[k];
                                         }
                                     }
+
+                                    if (layer.getLayerType() == 'myplaces') {
+                                        $.each(selectedFeatureFields, function(index, element) {
+                                            if (element == 'attributes' && selectedFeature[index] != null) {
+                                                defaults = {
+                                                    surveyingAccuracy: selectedFeature[index].paikannusTarkkuus,
+                                                    surveyingType: selectedFeature[index].paikannusTapa
+                                                };
+                                                return false;
+                                            }
+                                        });
+                                    }
                                 }
                                 selectedGeometriesCount++;
                             }
@@ -452,7 +465,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me.showMessage(me.loc.error, me.loc.wrongGeometryError);
                         } else if (selectedGeometriesCount == 1) {
                             //one selected geometry (valid) - go to next step
-                            me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                            me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields, defaults);
                         } else {
                             //more geometries are selected (at least one is valid) - highlight valid geometry, show warning and go to next step
                             wfsFeaturesSelectedEvent = builder([selectedFeature[0]], selectedLayer, false);
@@ -464,7 +477,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             copyOkBtn.setHandler(function () {
                                 me._dialog.close(true);
                                 me._dialog = null;
-                                me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                                me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields, defaults);
                             });
 
                             var copyCancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -691,7 +704,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          * @param id DOM element id of the tool button
          * @param geometry new geometry in GeoJson format
          */
-        _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields) {
+        _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields, defaults) {
             var me = this,
                 locBtns = me.instance.getLocalization('buttons'),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -699,7 +712,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 title = me.loc.geometryDetailsInfoTitle,
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields);
+                editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields, defaults);
                 
             //If edit form provided then show it and collect data for update. Otherwise save only geometry.
             if (editForm != null) {
