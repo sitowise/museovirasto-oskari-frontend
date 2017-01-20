@@ -326,7 +326,7 @@ module.exports = function (grunt) {
             copyFiles = {
                 expand: true,
                 cwd: cwd + '/',
-                src: ['css/**', 'images/**', '*.js'],
+                src: ['css/**', 'icons/**', 'images/**', '*.js'],
                 dest: dest
             };
 
@@ -421,7 +421,7 @@ module.exports = function (grunt) {
 
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
-        grunt.task.run('sprite');
+        //grunt.task.run('sprite');
         if (!skipDocumentation) {
 //            grunt.task.run('oskaridoc');
         }
