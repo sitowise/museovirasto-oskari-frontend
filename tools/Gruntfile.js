@@ -598,7 +598,7 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            var TO_MATCH = 'oskari' + path.sep + 'bundles',
+            var TO_MATCH = path.sep + 'bundles' + path.sep,
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
