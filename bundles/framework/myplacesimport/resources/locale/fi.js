@@ -55,16 +55,17 @@ Oskari.registerLocalization(
                 "source": "Tietolähde",
                 "remove": "Poista",
                 "removeButton": "Poista",
-                "edit": "Muokka"
+                "edit": "Muokkaa",
+                "zoomToData": "Kohdista"
             },
             "confirmDeleteMsg": "Haluatko poistaa aineiston:",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",
                 "delete": "Poista",
-                "edit": "Muokka",
+                "edit": "Muokkaa",
                 "save": "Tallenna",
-                "zoomToData": "Zoom to data"
+                "zoomToData": "Kohdista"
             },
             "notification": {
                 "deletedTitle": "Poista aineisto",

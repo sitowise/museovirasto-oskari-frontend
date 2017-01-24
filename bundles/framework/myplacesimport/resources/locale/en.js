@@ -55,7 +55,8 @@ Oskari.registerLocalization(
                 "source": "Data source",
                 "remove": "Delete",
                 "removeButton": "Delete",
-                "edit": "Edit"
+                "edit": "Edit",
+                "zoomToData": "Zoom to data"
             },
             "confirmDeleteMsg": "Do you want to delete the dataset:",
             "buttons": {
