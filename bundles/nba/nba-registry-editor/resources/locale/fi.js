@@ -137,7 +137,8 @@ Oskari.registerLocalization(
 				    "warning": "Varoitus",
 				    "wrongGeometryError": "Valittu kohde on väärän tyyppinen",
 				    "year": "Tutkimusvuosi",
-				    "registry": "Tietolähde"
+				    "registry": "Tietolähde",
+				    "conservationId": "Suojelu id"
 				},
 				"tools": {
 					"point": {
