@@ -17,7 +17,7 @@ Oskari.registerLocalization(
 				    "areaSelectionType": "Rajaustyyppi",
 				    "author": "Tallentaja",
 				    "buildings": "Rakennukset",
-				    "classification": "Lajityyppi",
+				    "classification": "Laji",
 				    "confirmDelete": "Haluatko varmasti poistaa geometrian?",
 				    "conservationGroup": "Suojeluväline",
 				    "conservationStatus": "Suojelun tila",
@@ -33,7 +33,7 @@ Oskari.registerLocalization(
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
 				    "deleteGeometryTitle": "Poista geometria",
-				    "desc": "Selite",
+				    "desc": "Nimi",
 				    "description": "Selite",
 				    "digiMk": "digiMk",
 				    "digiMkYear": "DigiMkVuosi",
@@ -57,6 +57,7 @@ Oskari.registerLocalization(
 				    "nbaUrl": "Kohteen tiedot",
 				    "noEditsDone": "Kohteita ei ole muokattu. Muokkaa kohteita ennen tallentamista.",
 				    "noItemsFound": "Kohteita ei löytynyt",
+				    "objectId": "Tunnus",
 				    "objectName": "Nimi",
 				    "objectType": "Kohdetyyppi",
 				    "point": "Pisteet",
@@ -89,6 +90,7 @@ Oskari.registerLocalization(
 						"303": "Tutkittu alue"
 				    },
 				    "projectOrganization": "Toimija",
+				    "registry": "Tietolähde",
 				    "searchError": "Kohteen hakeminen epäonnistui",
 				    "selectWarning": "Valitsit useita kohteita. Vain yksi kohde voidaan kopioida. Käytetäänkö korostettua kohdetta?",
 				    "sourceDating": "Ajoitus",
@@ -137,8 +139,7 @@ Oskari.registerLocalization(
 				    "url": "Url",
 				    "warning": "Varoitus",
 				    "wrongGeometryError": "Valittu kohde on väärän tyyppinen",
-				    "year": "Tutkimusvuosi",
-				    "registry": "Tietolähde"
+				    "year": "Tutkimusvuosi"
 				},
 				"tools": {
 					"point": {
