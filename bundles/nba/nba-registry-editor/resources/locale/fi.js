@@ -20,7 +20,7 @@ Oskari.registerLocalization(
 				    "classification": "Laji",
 				    "confirmDelete": "Haluatko varmasti poistaa geometrian?",
 				    "conservationGroup": "Suojeluväline",
-				    "conservationId": "Suojelu id"
+				    "conservationId": "Suojelu id",
 				    "conservationStatus": "Suojelun tila",
 				    "coordinatePopup": {
 				        "description": "Valitse projektio ja koordinaatit",
