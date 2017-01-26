@@ -882,7 +882,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (!jQuery.isEmptyObject(tileData)) {
                 var dataArr = [],
                     returnArr,
-                    key;
+                    key,
+                    me = this;
 
                 for (key in tileData) {
                     if (tileData.hasOwnProperty(key)) {
@@ -892,6 +893,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 // dataArr is now an array like this:
                 // [ [{}, ...], [{}, ...], ... ]
                 returnArr = [].concat.apply([], dataArr);
+
+                //keep only tiles having currently selected style
+                for (key in returnArr) {
+                    if (returnArr.hasOwnProperty(key)) {
+                        for(layerId in returnArr[key]) {
+                            returnArr[key][layerId] = jQuery.grep(returnArr[key][layerId], function(obj,index) {
+                                var layer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
+                                return obj.style === layer.getCurrentStyle().getName();
+                            });
+                        }
+                    }
+                }
                 return JSON.stringify(returnArr);
             }
             return null;
