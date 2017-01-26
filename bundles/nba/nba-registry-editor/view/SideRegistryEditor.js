@@ -439,6 +439,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                         }
                                     }
 
+                                    defaults = null;
                                     if (layer.getLayerType() == 'myplaces') {
                                         $.each(selectedFeatureFields, function(index, element) {
                                             if (element == 'attributes' && selectedFeature[index] != null) {
