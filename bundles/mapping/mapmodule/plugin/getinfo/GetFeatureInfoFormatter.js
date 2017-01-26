@@ -356,8 +356,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return;
         }
         result = _.map(data.features, function (feature) {
+            var showNulls = false;
             if (registryLayerConf != null && registryLayerConf.gfiAttributes != null) {
                 fields = registryLayerConf.gfiAttributes;
+                showNulls = true;
             } else {
                 fields = Object.keys(feature);
             }
@@ -383,7 +385,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 }, {})
                 .value();
 
-            markup = me._json2html(feat);
+            markup = me._json2html(feat, showNulls);
             
             return {
                 markup: markup,
@@ -455,9 +457,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @private
      * Parses and formats a WFS layers JSON GFI response
      * @param {Object} node response data to format
+     * @param {Boolean} showNulls specify if attributes with null or undefined values should be shown
      * @return {String} formatted HMTL
      */
-    _json2html: function (node) {
+    _json2html: function (node, showNulls) {
         // FIXME this function is too complicated, chop it to pieces
         if (node === null || node === undefined) {
             return '';
@@ -479,10 +482,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             if (node.hasOwnProperty(key)) {
                 value = node[key];
 
-                if (value === null || value === undefined ||
-                        key === null || key === undefined) {
+                if (key === null || key === undefined) {
                     continue;
                 }
+
+                if ((value === null || value === undefined) && !showNulls) {
+                    continue;
+                }
+
                 vType = (typeof value).toLowerCase();
                 valpres = '';
                 switch (vType) {
