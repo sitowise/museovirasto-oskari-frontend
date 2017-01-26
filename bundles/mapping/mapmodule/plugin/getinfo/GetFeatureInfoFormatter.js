@@ -19,9 +19,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
      * @method _renderFragments
      * @private
      * @param  {Object[]} fragments
+     * @param  {Boolean} wideHeader
      * @return {jQuery}
      */
-    _renderFragments: function (fragments) {
+    _renderFragments: function (fragments, wideHeader) {
         var me = this;
 
         return _.foldl(fragments, function (wrapper, fragment) {
@@ -39,6 +40,14 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
                 titleWrapper.append(fragmentTitle);
                 titleWrapper.attr('title', fragmentTitle);
+
+                //FIXME Find better way to automatically fit width of popup to the title width 
+                if (wideHeader) {
+                    titleWrapper.css({
+                        'width': '530px'
+                    });
+                }
+
                 headerWrapper.append(titleWrapper);
                 contentWrapper.append(headerWrapper);
 
