@@ -410,7 +410,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         selectedFeatureGeoJson,
                         selectedFeatureAttributes,
                         selectedFeatureFields,
-                        selectedLayer;
+                        selectedLayer,
+                        defaults,
+                        wktFormat = new OpenLayers.Format.WKT({});
                     
                     for (var i = 0; i < selectedLayers.length; i++) {
                         var layer = selectedLayers[i];
@@ -419,15 +421,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             for (var j = 0; j < layer.getClickedGeometries().length; j++) {
                                 //check if geometry suits to proper type
                                 var geometry = layer.getClickedGeometries()[j][1],//WKT string
-                                    wktFormat = new OpenLayers.Format.WKT({}),
                                     feature = wktFormat.read(geometry),//vector feature
-                                    geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                                    featureGeoJson = geojsonFormat.write(feature.geometry);//GeoJSON string
+                                    geometryInfo = me._getGeometryInfoForCopy(conf, feature);
 
-                                me.editFeature._geometryType = me._getGeometryTypeForCopy(conf, featureGeoJson);
-
-                                if (me.editFeature._geometryType != null) {
-                                    selectedFeatureGeoJson = featureGeoJson;
+                                if (geometryInfo != null) {
+                                    me.editFeature._geometryType = geometryInfo.geometryType;
+                                    selectedFeatureGeoJson = geometryInfo.featureGeoJson;
                                     selectedFeatureAttributes = me._getLayerAttributes(layer);
                                     selectedFeatureFields = layer.getFields();
                                     selectedLayer = layer;
@@ -438,6 +437,18 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                         if (activeFeatures[k] != null && activeFeatures[k][0] == layer.getClickedGeometries()[j][0]) {
                                             selectedFeature = activeFeatures[k];
                                         }
+                                    }
+
+                                    if (layer.getLayerType() == 'myplaces') {
+                                        $.each(selectedFeatureFields, function(index, element) {
+                                            if (element == 'attributes' && selectedFeature[index] != null) {
+                                                defaults = {
+                                                    surveyingAccuracy: selectedFeature[index].paikannusTarkkuus,
+                                                    surveyingType: selectedFeature[index].paikannusTapa
+                                                };
+                                                return false;
+                                            }
+                                        });
                                     }
                                 }
                                 selectedGeometriesCount++;
@@ -454,7 +465,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me.showMessage(me.loc.error, me.loc.wrongGeometryError);
                         } else if (selectedGeometriesCount == 1) {
                             //one selected geometry (valid) - go to next step
-                            me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                            me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields, defaults);
                         } else {
                             //more geometries are selected (at least one is valid) - highlight valid geometry, show warning and go to next step
                             wfsFeaturesSelectedEvent = builder([selectedFeature[0]], selectedLayer, false);
@@ -466,7 +477,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             copyOkBtn.setHandler(function () {
                                 me._dialog.close(true);
                                 me._dialog = null;
-                                me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields);
+                                me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields, defaults);
                             });
 
                             var copyCancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -563,19 +574,42 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             me.showMessage(title, content, [cancelBtn, okBtn], true);
         },
 
-        _getGeometryTypeForCopy: function (conf, geoJsonFeature) {
+        /**
+         * @method _getGeometryInfoForCopy
+         * Checks if the feature has valid geometry type according to configuration object. 
+         * Returns object containing information about geometry type and GeoJSON string of the feature.
+         */
+        _getGeometryInfoForCopy: function (conf, feature) {
             var geojsonFormat = new OpenLayers.Format.GeoJSON({}),
-                geod = JSON.parse(geoJsonFeature);
+                geoJsonString = geojsonFormat.write(feature.geometry),
+                geoJsonObject = JSON.parse(geoJsonString),
+                geometryType = null,
+                featureGeoJson = null;
             
-            if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geod, 'Polygon') || geojsonFormat.isValidType(geod, 'MultiPolygon'))) {
-                return 'area';
+            //MultiPolygon is acceptable in API
+            if (typeof conf.area !== 'undefined' && conf.area && (geojsonFormat.isValidType(geoJsonObject, 'Polygon') || geojsonFormat.isValidType(geoJsonObject, 'MultiPolygon'))) {
+                geometryType = 'area';
+                featureGeoJson = geoJsonString;
+            } else if (typeof conf.point !== 'undefined' && conf.point) {
+                geometryType = 'point';
+                if (geojsonFormat.isValidType(geoJsonObject, 'Point')) {
+                    featureGeoJson = geoJsonString;
+                } else if (geojsonFormat.isValidType(geoJsonObject, 'MultiPoint') && feature.geometry.components.length == 1) {
+                    //MultiPoint is not acceptable in API, so change it to Point
+                    featureGeoJson = geojsonFormat.write(feature.geometry.components[0]);
+                }
+            } else if (typeof conf.line !== 'undefined' && conf.line) {
+                geometryType = 'line';
+                if (geojsonFormat.isValidType(geoJsonObject, 'LineString')) {
+                    featureGeoJson = geoJsonString;
+                } else if (geojsonFormat.isValidType(geoJsonObject, 'MultiLineString') && feature.geometry.components.length == 1) {
+                    //MultiLineString is not acceptable in API, so change it to LineString
+                    featureGeoJson = geojsonFormat.write(feature.geometry.components[0]);
+                }
+            }
 
-            } else if (typeof conf.point !== 'undefined' && conf.point && (geojsonFormat.isValidType(geod, 'Point') || geojsonFormat.isValidType(geod, 'MultiPoint'))) {
-                return 'point';
-
-            } else if (typeof conf.line !== 'undefined' && conf.line && (geojsonFormat.isValidType(geod, 'LineString') || geojsonFormat.isValidType(geod, 'MultiLineString'))) {
-                return 'line';
-
+            if (featureGeoJson != null) {
+                return { 'geometryType': geometryType, 'featureGeoJson': featureGeoJson};
             } else {
                 return null;
             }
@@ -670,7 +704,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          * @param id DOM element id of the tool button
          * @param geometry new geometry in GeoJson format
          */
-        _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields) {
+        _showParameterUpdateDialog: function (id, geometry, attributes, selectedFeature, fields, defaults) {
             var me = this,
                 locBtns = me.instance.getLocalization('buttons'),
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -678,7 +712,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 title = me.loc.geometryDetailsInfoTitle,
                 cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
                 finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields);
+                editForm = me.registerView.renderUpdateDialogContent(attributes, selectedFeature, fields, defaults);
                 
             //If edit form provided then show it and collect data for update. Otherwise save only geometry.
             if (editForm != null) {
@@ -749,6 +783,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             me._refreshData(me.data.id);
                             var message = me.loc.featureDeleted;
                             me.showMessage(me.loc.success, message);
+
+                            me._clearTiles();
                         } else {
                             var errorMessage = me.loc.updateError;
                             if(typeof data.error !== 'undefined' && typeof me.loc[data.error] !== 'undefined') {

@@ -20,6 +20,7 @@ Oskari.registerLocalization(
 				    "classification": "Laji",
 				    "confirmDelete": "Haluatko varmasti poistaa geometrian?",
 				    "conservationGroup": "Suojeluväline",
+				    "conservationId": "Suojelu id"
 				    "conservationStatus": "Suojelun tila",
 				    "coordinatePopup": {
 				        "description": "Valitse projektio ja koordinaatit",
@@ -182,8 +183,8 @@ Oskari.registerLocalization(
 					"editLine": "Muokkaa viivaa",
 					"editGeometry": "Muokkaa geometriaa",
 					"copyGeometry": "Kopioi geometria kartalta",
-					"deletePoint": "Poista pistettä",
-					"deleteArea": "Poista aluetta",
+					"deletePoint": "Poista piste",
+					"deleteArea": "Poista alue",
 					"deleteLine": "Poista viivaa",
 					"createWithXY": "Luo piste koordinaateista",
 					"continue": "Jatka"

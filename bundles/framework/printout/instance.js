@@ -39,6 +39,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 "image/png": ""
             }
         };
+        this.__loadingStatus = {};
 
     }, {
         /**
@@ -332,6 +333,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 // configure UI
                 me.printout.modifyUIConfig4Parcel(printParams);
                 me.printout.setLayoutParams(printParams);
+            },
+            'WFSStatusChangedEvent': function (event) {
+                if(event.getLayerId() === undefined) {
+                    return;
+                }
+                if(!this.__loadingStatus) {
+                    this.__loadingStatus = {};
+                }
+                if(event.getStatus() === event.status.loading)  {
+                    this.__loadingStatus['' + event.getLayerId()] = 'loading';
+                }
+
+                if(event.getStatus() === event.status.complete)  {
+                    delete this.__loadingStatus['' + event.getLayerId()];
+                }
+                if(event.getStatus() === event.status.error)  {
+                    this.__loadingStatus['' + event.getLayerId()] = 'error';
+                }
             }
         },
 

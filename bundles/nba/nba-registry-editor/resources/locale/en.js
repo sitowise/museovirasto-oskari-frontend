@@ -139,7 +139,8 @@ Oskari.registerLocalization(
 				    "url": "Url",
 				    "warning": "Warning",
 				    "wrongGeometryError": "You selected wrong type of geometry",
-				    "year": "Research Year"
+				    "year": "Research Year",
+				    "conservationId": "Conservation id"
 				},
 				"tools": {
 					"point": {

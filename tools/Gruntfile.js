@@ -326,7 +326,7 @@ module.exports = function (grunt) {
             copyFiles = {
                 expand: true,
                 cwd: cwd + '/',
-                src: ['css/**', 'images/**', '*.js'],
+                src: ['css/**', 'icons/**', 'images/**', '*.js'],
                 dest: dest
             };
 
@@ -421,7 +421,7 @@ module.exports = function (grunt) {
 
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
-        grunt.task.run('sprite');
+        //grunt.task.run('sprite');
         if (!skipDocumentation) {
 //            grunt.task.run('oskaridoc');
         }
@@ -598,7 +598,7 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            var TO_MATCH = 'oskari' + path.sep + 'bundles',
+            var TO_MATCH = path.sep + 'bundles' + path.sep,
                 matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {

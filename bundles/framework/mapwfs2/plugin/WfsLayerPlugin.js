@@ -1475,7 +1475,8 @@ Oskari.clazz.define(
             }
             this._printTiles[layer.getId()].push({
                 'bbox': bbox,
-                'url': imageUrl
+                'url': imageUrl,
+                'style': layer.getCurrentStyle().getName()
             });
         },
 

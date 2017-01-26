@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.RegistryItemView
             throw "Not implemented function!";
         },
 
-        renderUpdateDialogContent: function (attributes, selectedFeature, fields) {
+        renderUpdateDialogContent: function (attributes, selectedFeature, fields, defaults) {
             throw "Not implemented function!";
         },
 
