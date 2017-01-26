@@ -21,7 +21,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             'buildingHeritageArea': jQuery('<div class="item buildingHeritageAreaItem"><div class="id"/><div class="description"/><div class="surveyingType"/><div class="surveyingAccuracy"/><div class="createDate"/><div class="modifyDate"/><div class="author"/><div class="registryItemTools"/></div>'),
             'buildingHeritageAreaAdd': jQuery('<div class="item newItem buildingHeritageAreaItem"><h4>' + me.loc.addNew + '</h4><div class="registryItemTools"/></div>'),
             'buildingHeritageSurveyingDetails': jQuery('<div class="itemDetails">'
-                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"></div>'
+                + '<div><label>' + me.loc.description + '</label><input type="text" id="description"/></div>'
+                + '<div><label>' + me.loc.conservationId + '</label><input type="text" id="conservationId"/></div>'
                 + '<div><label>' + me.loc.surveyingType + '</label><select id="surveyingType"/></div>'
                 + '<div><label>' + me.loc.surveyingAccuracy + '</label><select id="surveyingAccuracy"/></div></div>')
         };
@@ -131,6 +132,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 if (typeof me.editor.editFeature.id === 'undefined') {
                     me.editor.itemData.areas.push(me.editor.editFeature);
                 }
+                me.editor.editFeature.conservationId = content.find("#conservationId").val();
             }
 
             me.editor.editFeature.geometry = JSON.parse(geometry);
@@ -168,6 +170,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 template = me.templates.buildingHeritageSurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
                 typeSelect = template.find("#surveyingType");
+
+            template.find("#conservationId").parent().remove();
 
             $.each(me.loc.surveyingAccuracyValues, function (key, value) {
                 var option = jQuery('<option/>');
@@ -208,7 +212,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
             var me = this,
                 template = me.templates.buildingHeritageSurveyingDetails.clone(),
                 accuracySelect = template.find("#surveyingAccuracy"),
-                typeSelect = template.find("#surveyingType");
+                typeSelect = template.find("#surveyingType"),
+                conservationIdInput = template.find("#conservationId");
 
             $.each(me.loc.surveyingAccuracyValuesArea, function (key, value) {
                 var option = jQuery('<option/>');
@@ -235,6 +240,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 template.find("#description").val(me.editor.editFeature.description);
                 accuracySelect.val(me.editor.editFeature.surveyingAccuracy);
                 typeSelect.val(me.editor.editFeature.surveyingType);
+                conservationIdInput.val(me.editor.editFeature.conservationId);
             }
 
             if (attributes != null && selectedFeature != null) {
