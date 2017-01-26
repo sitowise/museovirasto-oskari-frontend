@@ -353,13 +353,14 @@ Oskari.clazz.define(
                 font,
                 actions = {},
                 editorRoles = this.getSandbox().findRegisteredModuleInstance('nba-registers').conf.editorRoles,
-                loc = Oskari.getLocalization("nba-registers").gfiPopup;
-
+                loc = Oskari.getLocalization("nba-registers").gfiPopup,
+                wideHeader = false;
+                
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else if(data.via === 'registry') {
                 fragments = this._formatRegistryFeaturesForInfoBox(data);
-
+                wideHeader = true;
                 if (data.features != null && fragments.length) {
                     for (var i = 0; i < data.features.length; i++) {
                         //if user has permissions add edit action for the registry item
@@ -386,7 +387,7 @@ Oskari.clazz.define(
 
             if (fragments.length) {
                 contentData.actions = actions;
-                contentData.html = this._renderFragments(fragments);
+                contentData.html = this._renderFragments(fragments, wideHeader);
                 contentData.layerId = fragments[0].layerId;
                 content.push(contentData);
             }
