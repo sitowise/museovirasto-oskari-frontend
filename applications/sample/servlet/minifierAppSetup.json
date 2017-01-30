@@ -587,5 +587,22 @@
                }
             }
          }
+      },
+      {
+         "instanceProps": {},
+         "title": "PublishedStatehandler",
+         "bundleinstancename": "publishedstatehandler",
+         "fi": "publishedstatehandler",
+         "sv": "publishedstatehandler",
+         "en": "publishedstatehandler",
+         "bundlename": "publishedstatehandler",
+         "metadata": {
+            "Import-Bundle": {
+               "publishedstatehandler": {
+                  "bundlePath":"../../../packages/framework/bundle/"
+               }
+            },
+            "Require-Bundle-Instance":[]
+         }
       }
    ]}
