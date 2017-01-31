@@ -344,29 +344,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
         } else if(data.data.features !== "empty" && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
-            var registry = registryLayers[data.data.layerId], //{name: "", idAttribute: "", itemType: ""}
+            var registry = registryLayers[data.data.layerId], //{name: "", mainIdAttribute: "", subIdAttribute: "", itemType: ""}
                 fields = layer.getFields(),
                 idFieldNum = -1,
                 subIdFieldNum = -1,
                 ids = [],
                 subIds = [],
-                subIdAttribute = 'Alakohdetunnus',
                 registryData = {"reqId": data.data.reqId,
                                 "features": [],
                                 "layerId": data.data.layerId,
                                 "lonlat": this.lonlat,
                                 "via": "registry"};
-            
-            if(registry.itemType === 'area') {
-                subIdAttribute = 'OBJECTID';
-            }
-            
+                                
             _.forEach(fields, function(value, key) {
-                if(value === registry.idAttribute) {
+                if(value === registry.mainIdAttribute) {
                     idFieldNum = key;
                 }
                 
-                if(value === subIdAttribute) {
+                if(value === registry.subIdAttribute) {
                     subIdFieldNum = key;
                 }
             });
@@ -388,51 +383,20 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                             return;
                         }
                         
-                        var features = [];
+                        var features = [],
+                            itemType = registry.itemType;
 
                         if(!_.isArray(data)) {
                             data = [data];
                         }
 
-                        if(registry.itemType === 'sub') {
+                        if(itemType != null && itemType != '' && itemType != 'main') {
                             $.each(data, function (index, value){
-                                var newFeatures = $.grep(value.subItems, function(obj, key) {
+                                var newFeatures = $.grep(value[itemType], function(obj, key) {
                                     return $.inArray(""+obj.id, subIds) > -1;
                                 });
                                 $.each(newFeatures, function (i, feature) {
                                     //populate subItem with data from main object
-                                    for(var attr in value) {
-                                        if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
-                                            feature[attr] = value[attr];
-                                        }
-                                    }
-                                    feature.id = value.id; //show main feature id in infobox
-                                });
-                                features = features.concat(newFeatures);
-                            });
-                        } else if(registry.itemType === 'point') {
-                            $.each(data, function (index, value){
-                                var newFeatures = $.grep(value.points, function(obj, key) {
-                                    return $.inArray(""+obj.id, subIds) > -1;
-                                });
-                                $.each(newFeatures, function (i, feature) {
-                                    //populate point with data from main object
-                                    for(var attr in value) {
-                                        if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
-                                            feature[attr] = value[attr];
-                                        }
-                                    }
-                                    feature.id = value.id; //show main feature id in infobox
-                                });
-                                features = features.concat(newFeatures);
-                            });
-                        } else if(registry.itemType === 'area') {
-                            $.each(data, function (index, value){
-                                var newFeatures = $.grep(value.areas, function(obj, key) {
-                                    return $.inArray(""+obj.id, subIds) > -1;
-                                });
-                                $.each(newFeatures, function (i, feature) {
-                                    //populate area with data from main object
                                     for(var attr in value) {
                                         if(value.hasOwnProperty(attr) && typeof feature[attr] === 'undefined') {
                                             feature[attr] = value[attr];

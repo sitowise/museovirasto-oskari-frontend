@@ -18,6 +18,17 @@ Oskari.registerLocalization(
 				    "author": "author",
 				    "buildings": "Buildings",
 				    "classification": "Classification",
+				    "classificationValues": {
+				    	"10000": "ei määritelty",
+						"10001": "mahdollinen muinaisjäännös",
+						"10002": "kiinteä muinaisjäännös",
+						"10003": "löytöpaikka",
+						"10004": "luonnonmuodostuma",
+						"10005": "poistettava",
+						"10006": "muu kohde",
+						"10007": "muu kulttuuriperintökohde",
+						"10008": "poistettu kiinteä muinaisjäännös (ei rauhoitettu)"
+				    },
 					"confirmDelete": "Are you sure you want to delete the geometry?",
 				    "conservationGroup": "Conservation group",
 				    "conservationStatus": "Conservation status",
