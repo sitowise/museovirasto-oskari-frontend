@@ -375,7 +375,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
                 extent,
                 center;
-            debugger;
+
             if (data.bounds != null) {
                 
                 feature = geojsonFormat.read(data.bounds);
