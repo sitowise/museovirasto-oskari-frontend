@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
     }, {
         _isTooManyLayers: function () {
             var layerCount = this.instance.getSandbox().findAllSelectedMapLayers().length;
-            var isMaxLayersExceeded = layerCount > 7;
+            var isMaxLayersExceeded = layerCount > 8;
             return isMaxLayersExceeded;
         },
         _isManyLayers: function () {
