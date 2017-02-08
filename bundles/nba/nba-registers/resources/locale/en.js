@@ -35,7 +35,9 @@
             "searchErrorTimeout": "Search failed. Select fewer areas and try again",
             "ok": "OK",
             "cancel": "Cancel",
-            "continue": "Continue"
+            "continue": "Continue",
+            "noticeTitle": "Notice",
+            "searchResultNoGeometry": "Registry item has not geometry. Map can't be zoomed to item."
         },
         "gfiPopup": {
             "editItem": "Edit item"
