@@ -37,7 +37,7 @@
             "cancel": "Peruuta",
             "continue": "Jatka",
             "noticeTitle": "Huomio",
-            "searchResultNoGeometry": "Rekisterikohteella ei ole geometriaa, joten kartta ei voida kohdistaa kohteeseen."
+            "searchResultNoGeometry": "Rekisterikohteella ei ole geometriaa, joten karttaa ei voida kohdistaa kohteeseen."
         },
         "gfiPopup": {
             "editItem": "Muokkaa kohdetta"
