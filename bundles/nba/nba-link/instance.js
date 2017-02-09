@@ -128,7 +128,6 @@ function () {
             }
 
             if (data[x].bounds != null) {
-                debugger;
                 //Create feature and add to fake layer
                 bounds = new OpenLayers.Bounds(data[x].bounds);
                 geometry = bounds.toGeometry();
