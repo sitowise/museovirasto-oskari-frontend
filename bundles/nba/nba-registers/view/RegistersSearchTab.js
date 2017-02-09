@@ -304,9 +304,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
         },
 
         _zoomToObject: function (data, showGfi) {
+            var me = this
+
+            //remove all markers
+            var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+            if (removeMarkersReqBuilder) {
+                me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+            }
+
             if (data != null && data.bounds != null) {
-                var me = this,
-                    extent = new OpenLayers.Bounds(data.bounds),
+                var extent = new OpenLayers.Bounds(data.bounds),
                     center = extent.getCenterLonLat(),
                     x = center.lon,
                     y = center.lat,
@@ -325,12 +332,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                 //move and zoom the map
                 me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
-
-                //remove all markers
-                var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
-                if (removeMarkersReqBuilder) {
-                    me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
-                }
 
                 //show new marker
                 var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
@@ -358,6 +359,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                     me.sandbox.notifyAll(infoEvent);
                 }
+            } else {
+                me._showMessage(me.loc.noticeTitle, me.loc.searchResultNoGeometry);
+
+                if (data != null && showGfi) {
+                    var registryData = {
+                        "via": "registry",
+                        "features": [data],
+                        "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule')._getMapCenter()
+                    };
+                    var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
+                }
+
+                me.sandbox.notifyAll(infoEvent);
             }
         },
 

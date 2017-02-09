@@ -35,7 +35,9 @@
             "searchErrorTimeout": "Haku epäonnistui. Valitse kartalta vähemmän alueita ja yritä uudelleen.",
             "ok": "OK",
             "cancel": "Peruuta",
-            "continue": "Jatka"
+            "continue": "Jatka",
+            "noticeTitle": "Huomio",
+            "searchResultNoGeometry": "Rekisterikohteella ei ole geometriaa, joten karttaa ei voida kohdistaa kohteeseen."
         },
         "gfiPopup": {
             "editItem": "Muokkaa kohdetta"
