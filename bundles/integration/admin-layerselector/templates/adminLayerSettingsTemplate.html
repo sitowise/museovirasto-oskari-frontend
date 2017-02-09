@@ -26,7 +26,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-username" class="add-layer-input long"
+                <input type="text" id="add-layer-username" class="add-layer-input long" autocomplete="off"
                        placeholder="<%= instance.getLocalization('admin').username %>"
                        value="<%= model.getUsername() %>" />
                 <div class="icon-close"></div>
@@ -40,7 +40,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="password" id="add-layer-password" class="add-layer-input long"
+                <input type="password" id="add-layer-password" class="add-layer-input long" autocomplete="off"
                        placeholder="<%= instance.getLocalization('admin').password %>"
                        value="<%= model.getPassword() %>" />
                 <div class="icon-close"></div>
