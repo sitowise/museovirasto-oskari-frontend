@@ -95,7 +95,7 @@ Oskari.registerLocalization(
 				        "12013": "Valokuvadokumentointi"
 				    },
 				    "projectCategorySpecification": "Specifier",
-				    "projectItemTypeValues": {
+				    "typeValues": {
 						"301": "Project area",
 						"302": "Research area",
 						"303": "Researched area"

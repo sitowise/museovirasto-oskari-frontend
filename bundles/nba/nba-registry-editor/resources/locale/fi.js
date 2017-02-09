@@ -96,7 +96,7 @@ Oskari.registerLocalization(
 				        "12013": "Valokuvadokumentointi"
 				    },
 				    "projectCategorySpecification": "Tarkenne",
-				    "projectItemTypeValues": {
+				    "typeValues": {
 						"301": "Hankealue",
 						"302": "Tutkimusalue",
 						"303": "Tutkittu alue"
