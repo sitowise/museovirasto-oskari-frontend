@@ -77,21 +77,16 @@ function () {
     },
 
     _showRegistryItemOnMap: function (data) {
-        //TODO probably need to be converted to current coordinate system
         var me = this,
-            //zoomLevel = 7,
-            //extent = new OpenLayers.Bounds(data.bounds),
-            //center = extent.getCenterLonLat(),
-            //x = center.lon,
-            //y = center.lat,
             layers = [],
             features = [],
             extent,
             center,
             registerSearchLayer = new OpenLayers.Layer.Vector('registerSearchLayer'),
-            format = new OpenLayers.Format.WKT({}),
             feature,
-            featureJson;
+            bounds,
+            geometry,
+            itemType;
 
         if (!$.isArray(data)) {
             data = [data];
@@ -104,28 +99,39 @@ function () {
                 if (layers.indexOf(mapLayerId) == -1) {
                     layers.push(mapLayerId);
                 }
-
                 if (data[x].mapLayers[j].toHighlight) {
-                    featureJson = {
-                        attribute: data[x].mapLayers[j].attribute,
-                        itemId: data[x].id,
-                        layerId: mapLayerId,
-                        bounds: data[x].bounds
-                    };
 
-                    features.push(featureJson);
+                    itemType = data[x].mapLayers[j].itemType;
+                    if (itemType == 'main' || itemType == null) {
+                        if (data[x].geometry != null) {
+                            var centroid = me._getCentroidFromGeoJson(data[x].geometry);
+                            features.push(centroid);
+                        } else {
+                            if (data[x].pointGeometry != null) {
+                                var centroid = me._getCentroidFromGeoJson(data[x].pointGeometry);
+                                features.push(centroid);
+                            }
+                            if (data[x].areaGeometry != null) {
+                                var centroid = me._getCentroidFromGeoJson(data[x].areaGeometry);
+                                features.push(centroid);
+                            }
+                        }
+                    } else {
+                        $.each(data[x][itemType], function(index, value) {
+                            if (value.geometry != null) {
+                                var centroid = me._getCentroidFromGeoJson(value.geometry);
+                                features.push(centroid);
+                            }
+                        });
+                    }
                 }
             }
 
             if (data[x].bounds != null) {
-                var bounds = new OpenLayers.Bounds(data[x].bounds);
-                var geometry = bounds.toGeometry();
-                var wktFormat = new OpenLayers.Format.WKT({});
-                var wkt = wktFormat.extractGeometry(geometry);
-
                 //Create feature and add to fake layer
-                //feature = format.read('POINT (' + data.x + ' ' + data.y + ')');
-                feature = format.read(wkt);
+                bounds = new OpenLayers.Bounds(data[x].bounds);
+                geometry = bounds.toGeometry();
+                feature = new OpenLayers.Feature.Vector(geometry);
                 registerSearchLayer.addFeatures([feature]);
             }
         }
@@ -155,64 +161,29 @@ function () {
 
         //find features in the layers by the identyfying attribute and highlight it
         for (var i = 0; i < features.length; i++) {
-            var filters = {
-                filters: [{
-                    attribute: features[i].attribute,
-                    //attribute: 'OBJECTID',
-                    caseSensitive: false,
-                    operator: "=",
-                    value: features[i].itemId
-                }]
-            };
-
-            var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
-            me.sandbox.notifyAll(evt);
-
             //show marker
-            var bounds = new OpenLayers.Bounds(features[i].bounds);
-            var boundsCenter = bounds.getCenterLonLat();
-
             var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
             if (reqBuilder) {
                 var marker = {
-                    x: boundsCenter.lon,
-                    y: boundsCenter.lat,
+                    x: features[i].x,
+                    y: features[i].y,
                     color: "000000",
                     msg: '',
                     shape: 4,
-                    size: 5
+                    size: 3
                 };
                 var request = reqBuilder(marker, 'registry-search-result-' + i);
                 me.sandbox.request('MainMapModule', request);
             }
         }
-
-        /*
-        //create infobox
-        //TODO probably need to be converted to current coordinate system
-        var lonlat = new OpenLayers.LonLat(x, y),
-        //var lonlat = new OpenLayers.LonLat(24.6603626, 60.2241869),
-            infoBoxContent = {
-                html: me._getInfoBoxHtml(data),
-                actions: {}
-            },
-            popupId = "nba-register-search-result";
-
-        //TODO make localization 'Kohdetiedot'
-        me.getSandbox().postRequestByName('InfoBox.ShowInfoBoxRequest', [popupId, "Rekisterikohde", [infoBoxContent], lonlat, true]);
-        */
     },
 
-    _getInfoBoxHtml: function (result) {
-        //TODO make localization
-        //TODO fix styling and layout
-        var template = '<h3>Tunnus: ' + result.id + '</h3>' +
-                        //'<h3>Shape: ' + result.id + '</h3>' +
-                        '<h3>Kohdetunnus: ' + result.id + '</h3>' +
-                        '<h3>Kohdenimi: ' + result.desc + '</h3>' +
-                        '<h3>Rekisteritiedot: <a href="' + result.nbaUrl + '" target="_blank">Linkki rekisteritietoihin</a></h3>';
-        return template;
-    },
+    _getCentroidFromGeoJson: function(geoJson) {
+        var geoJsonFormat = new OpenLayers.Format.GeoJSON(),
+            geometry = geoJsonFormat.parseGeometry(geoJson);
+        
+        return geometry.getCentroid();
+    }
 
 }, {
     "extend": ["Oskari.userinterface.extension.DefaultExtension"]

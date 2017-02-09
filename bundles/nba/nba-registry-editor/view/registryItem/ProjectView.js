@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
                 areaRow.find('.id').append(me.editor.formatData(me.loc.id, data.areas[i].objectId));
                 areaRow.find('.description').append(me.editor.formatData(me.loc.description, data.areas[i].description));
-                areaRow.find('.type').append(me.editor.formatData(me.loc.type, me.loc.projectItemTypeValues[data.areas[i].type]));
+                areaRow.find('.type').append(me.editor.formatData(me.loc.type, me.loc.typeValues[data.areas[i].type]));
                 areaRow.find('.modifyDate').append(me.editor.formatData(me.loc.modifyDate, data.areas[i].modifyDate));
                 areaRow.find('.createDate').append(me.editor.formatData(me.loc.createDate, data.areas[i].createDate));
                 areaRow.find('.author').append(me.editor.formatData(me.loc.author, data.areas[i].author));
@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
             template.find("#description").val(me.editor.editFeature.description);
             
-            $.each(me.loc.projectItemTypeValues, function (key, value) {
+            $.each(me.loc.typeValues, function (key, value) {
                 var option = jQuery('<option/>');
                 option.attr({ 'value': key }).text(value);
                 if (value === me.editor.editFeature.type) {
