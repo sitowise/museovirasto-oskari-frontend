@@ -78,11 +78,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
 
             if (data.points.length == 0) {
                 point.append(me.editor.templates.noItemsFound.clone());
-            }
 
-            var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
-            newPointRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': -1, 'type': 'sub', feature: {} }));
-            point.append(newPointRow)
+                var newPointRow = me.templates.projectRegistrySubItemAdd.clone();
+                newPointRow.find('.registryItemTools').append(me.editor.getEditTools({ 'point': true, 'id': -1, 'type': 'sub', feature: {} }));
+                point.append(newPointRow)
+            }
 
             if (data.areas == null) {
                 data.areas = [];
@@ -154,14 +154,17 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 edited = { 'id': me.editor.itemData.id, 'edited': me.editor.itemData._edited, 'points': [], 'areas': [] },
                 deleted = { 'id': me.editor.itemData.id, 'points': [], 'areas': [] };
                 
-            $.each(me.editor.itemData.points, function (index, item) {
+            if (me.editor.itemData.points.length > 0) {
+                var item = me.editor.itemData.points[0];
+                me.editor.itemData.point = item;
                 if (item._edited && item.id != null) {
                     edited.points.push(item.id);
                 }
                 if (item._deleted && item.id != null) {
                     deleted.points.push(item.id);
                 }
-            });
+            };
+
             $.each(me.editor.itemData.areas, function (index, item) {
                 if (item._edited && item.id != null) {
                     edited.areas.push(item.id);
