@@ -369,9 +369,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule')._getMapCenter()
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
-                }
 
-                me.sandbox.notifyAll(infoEvent);
+                    me.sandbox.notifyAll(infoEvent);
+                }
             }
         },
 
