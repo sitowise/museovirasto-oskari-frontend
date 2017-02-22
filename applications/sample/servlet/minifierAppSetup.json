@@ -371,26 +371,6 @@
       },
       {
          "instanceProps": {},
-         "title": "Analysis UI",
-         "fi": "analyysi",
-         "bundleinstancename": "analyse",
-         "sv": "analys",
-         "en": "analyse",
-         "bundlename": "analyse",
-         "metadata": {
-            "Import-Bundle": {
-               "geometryeditor": {
-                  "bundlePath": "../../../packages/framework/bundle/"
-               },
-               "analyse": {
-                  "bundlePath": "../../../packages/analysis/bundle/"
-               }
-            },
-            "Require-Bundle-Instance": []
-         }
-      },
-      {
-         "instanceProps": {},
          "title": "myplacesimport",
          "bundleinstancename": "myplacesimport",
          "fi": "myplacesimport",
