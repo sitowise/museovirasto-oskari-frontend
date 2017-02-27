@@ -231,16 +231,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         },
 
         /**
-         * Overriding getLegendImage for WFS
-         *
-         * @method getLegendImage
-         * @return {String} URL to a legend image
-         */
-        getLegendImage: function () {
-            return null;
-        },
-
-        /**
          * @method setCustomStyle
          * @param {json} customStyle
          */
