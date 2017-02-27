@@ -117,6 +117,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
 
             // request toolbar to add buttons
             var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+            var removeReqBuilder = sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest');
             for (tool in this.buttons) {
                 if (this.buttons.hasOwnProperty(tool)) {
                     sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
@@ -134,6 +135,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                             measureTool.iconCls = 'tool-measure-line';
                             measureTool.tooltip = loc.tools.measureline.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                            //remove default measure tool
+                            sandbox.request(this, removeReqBuilder('measureline', this.measureButtonGroup, null));
                         }
                         if (tool === 'area') {
                             measureTool = jQuery.extend(true, {}, this.buttons[tool]);
@@ -145,6 +148,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
                             measureTool.iconCls = 'tool-measure-area';
                             measureTool.tooltip = loc.tools.measurearea.tooltip;
                             sandbox.request(this, reqBuilder(tool, this.measureButtonGroup, measureTool));
+                            //remove default measure tool
+                            sandbox.request(this, removeReqBuilder('measurearea', this.measureButtonGroup, null));
                         }
                     }
                 }
