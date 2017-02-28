@@ -129,6 +129,20 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 // pressed finished drawing, act like dblclick
                 me.instance.plugins.drawPlugin.forceFinishDraw();
             }
+            me.enableGfi(true);
+        },
+        /**
+         * @method enableGfi
+         * Enables/disables the gfi functionality
+         * @param {Boolean} blnEnable true to enable, false to disable
+         */
+        enableGfi: function (blnEnable) {
+            var gfiReqBuilder = this.sandbox.getRequestBuilder(
+                'MapModulePlugin.GetFeatureInfoActivationRequest'
+            );
+            if (gfiReqBuilder) {
+                this.sandbox.request(this, gfiReqBuilder(blnEnable));
+            }
         },
 
         /**
@@ -828,7 +842,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 var input = $(this);
                 var attrSelect = jQuery('<select></select>');
-                me._appendOptionValues(attrSelect, 'Select attribute value', attributes);
+                me._appendOptionValues(attrSelect, me.loc.selectAttribute, attributes);
                 attrSelect.on('change', function () {
 
                     var attrIndex = fields.indexOf($(this).val());
