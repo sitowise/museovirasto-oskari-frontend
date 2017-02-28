@@ -129,6 +129,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 // pressed finished drawing, act like dblclick
                 me.instance.plugins.drawPlugin.forceFinishDraw();
             }
+            me.instance.enableGfi(true);
         },
 
         /**
@@ -828,7 +829,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
 
                 var input = $(this);
                 var attrSelect = jQuery('<select></select>');
-                me._appendOptionValues(attrSelect, 'Select attribute value', attributes);
+                me._appendOptionValues(attrSelect, me.loc.selectAttribute, attributes);
                 attrSelect.on('change', function () {
 
                     var attrIndex = fields.indexOf($(this).val());

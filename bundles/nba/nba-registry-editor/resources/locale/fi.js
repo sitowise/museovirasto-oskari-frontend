@@ -116,6 +116,7 @@ Oskari.registerLocalization(
 				        "17005": "Raportti jätetty",
 				        "17006": "Raportti puuttuu"
 				    },
+				    "selectAttribute": "Valitse ominaisuustieto",
 				    "sub": "Alakohteet",
 				    "subType": "Alatyyppi",
 				    "success": "Päivitys onnistui",

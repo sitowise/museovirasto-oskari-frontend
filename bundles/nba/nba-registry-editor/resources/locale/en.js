@@ -115,6 +115,7 @@ Oskari.registerLocalization(
 				        "17005": "Raportti jätetty",
 				        "17006": "Raportti puuttuu"
 				    },
+				    "selectAttribute": "Select attribute value",
 				    "sub": "Sub items",
 				    "subType": "Subtype",
 				    "success": "Success",
