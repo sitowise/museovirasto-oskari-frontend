@@ -697,7 +697,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             content.find('div.infoText').html(message);
 
             dialog.show(title, content, buttons);
-            dialog.moveTo('button#' + id, 'top');
+            dialog.addClass('registryEditor');
+            dialog.makeDraggable();
+            dialog.moveTo('button#' + id, 'bottom');
         },
         
         /**
