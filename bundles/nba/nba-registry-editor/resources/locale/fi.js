@@ -168,7 +168,7 @@ Oskari.registerLocalization(
 						"tooltip": "Piirrä viiva ja lisää se kohteeseen.",
 						"add": "Piirrä viiva kartalle. Klikkaa viivan taitepisteitä. Lopuksi kaksoisklikkaa päätepistettä tai paina \"Tallenna kohde\".",
 						"next": "Voit piirtää samaan kohteeseen useita viivoja.",
-						"edit": "Kohteella on jo tallennettuna viiva. Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
+						"edit": "Kohteella on jo tallennettuna viiva. Voit siirtää taitepisteitä raahaamalla niitä hiirellä. Voit poistaa taitepisteitä viemällä hiiren kursorin taitepisteen päälle ja painamalla Delete-näppäintä.",
 						"save": "Tallenna"
 					},
 					"area": {
@@ -176,7 +176,7 @@ Oskari.registerLocalization(
 						"tooltip": "Piirrä alue ja lisää se kohteeseen.",
 						"add": "Piirrä alue kartalle. Klikkaa alueen reunapisteitä. Lopuksi kaksoisklikkaa viimeistä pistettä tai paina \"Tallenna kohde\". Voit piirtää alueeseen reiän pitämällä ALT-näppäintä pohjassa reiän piirtämisen ajan.",
 						"next": "Voit piirtää samaan kohteeseen useita alueita.",
-						"edit": "Kohteella on jo tallennettuna alue. Voit siirtää taitepisteitä raahaamalla niitä hiirellä.",
+						"edit": "Kohteella on jo tallennettuna alue. Voit siirtää taitepisteitä raahaamalla niitä hiirellä. Voit poistaa taitepisteitä viemällä hiiren kursorin taitepisteen päälle ja painamalla Delete-näppäintä.",
 						"save": "Tallenna"
 					}
 				},
