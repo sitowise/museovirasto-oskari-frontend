@@ -193,8 +193,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
 
-                if (onCloseCallback != null) { 			
-                    onCloseCallback(); 			
+                if (onCloseCallback != null) {
+                    onCloseCallback();
                 } 
 
                 //destroy the active sketch, disable the selected control
@@ -213,7 +213,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.PopupHandler",
 
             //tick the select from all layers - checkbox, if it was on previously
             if (me.WFSLayerService.isSelectFromAllLayers()) {
-                jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
+                selectFromAll.find('input[type=radio]').prop('checked', true);
             }
 
         },
