@@ -494,7 +494,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         } else {
             if (data.data.features === 'empty') {
-                me.WFSLayerService.emptyAllWFSFeatureSelections();
+                me.WFSLayerService.emptyWFSFeatureSelections(layer);
             }
         }
 

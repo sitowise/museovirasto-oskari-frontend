@@ -413,17 +413,22 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                         selectedFeatureFields,
                         selectedLayer,
                         defaults,
-                        wktFormat = new OpenLayers.Format.WKT({});
-                    
-                    for (var i = 0; i < selectedLayers.length; i++) {
-                        var layer = selectedLayers[i];
+                        wktFormat = new OpenLayers.Format.WKT({}),
+                        wfsService = me.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 
+                    for (var i = 0; i < selectedLayers.length; i++) {
+                        var layer = selectedLayers[i],
+                            selectedFeaturesForLayer = wfsService.getSelectedFeatureIds(layer._id);
                         if (layer.getClickedGeometries !== null && layer.getClickedGeometries !== undefined && layer.getClickedGeometries().length > 0) {
                             for (var j = 0; j < layer.getClickedGeometries().length; j++) {
                                 //check if geometry suits to proper type
                                 var geometry = layer.getClickedGeometries()[j][1],//WKT string
                                     feature = wktFormat.read(geometry),//vector feature
                                     geometryInfo = me._getGeometryInfoForCopy(conf, feature);
+
+                                if($.inArray(layer.getClickedGeometries()[j][0], selectedFeaturesForLayer) < 0) {
+                                    continue;
+                                }
 
                                 if (geometryInfo != null) {
                                     me.editFeature._geometryType = geometryInfo.geometryType;
@@ -457,8 +462,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                             }
                         }
                         //clean selections from the layer
-                        wfsFeaturesSelectedEvent = builder([], layer, false);
-                        me.sandbox.notifyAll(wfsFeaturesSelectedEvent);
+                        wfsService.emptyWFSFeatureSelections(layer);
                     }
                     
                     if (selectedGeometriesCount > 0) {
@@ -480,12 +484,14 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                                 me._dialog.close(true);
                                 me._dialog = null;
                                 me._showParameterUpdateDialog(currentCopyButton.id, selectedFeatureGeoJson, selectedFeatureAttributes, selectedFeature, selectedFeatureFields, defaults);
+                                wfsService.emptyAllWFSFeatureSelections();
                             });
 
                             var copyCancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
                             copyCancelBtn.setHandler(function () {
                                 me._dialog.close(true);
                                 me._dialog = null;
+                                wfsService.emptyAllWFSFeatureSelections();
                             });
                             me.showMessage(me.loc.warning, me.loc.selectWarning, [copyOkBtn, copyCancelBtn]);
                         }
