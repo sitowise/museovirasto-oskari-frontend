@@ -195,9 +195,9 @@ Oskari.clazz.define(
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
-            panel.setTitleIcon('icon-funnel', function (event) {
-                me.addFilterFunctionality(event, layer);
-            });
+            //panel.setTitleIcon('icon-funnel', function (event) {
+            //    me.addFilterFunctionality(event, layer);
+            //});
         },
 
         turnOnClickOff: function () {

@@ -189,23 +189,6 @@
       },
       {
          "instanceProps": {},
-         "title": "Metadata Catalogue",
-         "bundleinstancename": "metadatacatalogue",
-         "fi": "metadatacatalogue",
-         "sv": "metadatacatalogue",
-         "en": "metadatacatalogue",
-         "bundlename": "metadatacatalogue",
-         "metadata": {
-            "Import-Bundle": {
-               "metadatacatalogue": {
-                  "bundlePath": "../../../packages/catalogue/bundle/"
-               }
-            },
-            "Require-Bundle-Instance": []
-         }
-      },
-      {
-         "instanceProps": {},
          "title": "Maplayer selection",
          "bundleinstancename": "layerselector2",
          "fi": "layerselector2",
@@ -364,26 +347,6 @@
             "Import-Bundle": {
                "printout": {
                   "bundlePath": "../../../packages/framework/bundle/"
-               }
-            },
-            "Require-Bundle-Instance": []
-         }
-      },
-      {
-         "instanceProps": {},
-         "title": "Analysis UI",
-         "fi": "analyysi",
-         "bundleinstancename": "analyse",
-         "sv": "analys",
-         "en": "analyse",
-         "bundlename": "analyse",
-         "metadata": {
-            "Import-Bundle": {
-               "geometryeditor": {
-                  "bundlePath": "../../../packages/framework/bundle/"
-               },
-               "analyse": {
-                  "bundlePath": "../../../packages/analysis/bundle/"
                }
             },
             "Require-Bundle-Instance": []
