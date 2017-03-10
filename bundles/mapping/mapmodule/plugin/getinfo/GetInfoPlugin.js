@@ -368,10 +368,21 @@ Oskari.clazz.define(
                         if (this._hasUserPermissions(registryEditRoles) && data.features[i].editable === true) {
                             var itemData = {
                                 id: data.features[i].id,
-                                registryIdentifier: data.features[i].registryIdentifier
+                                registryIdentifier: data.features[i].registryIdentifier,
+                                mapLayers: data.features[i].mapLayers
                             };
-
+                            
                             actions[loc.editItem + ' ' + itemData.id] = function () {
+                                //showing all layers for the register
+                                if (itemData != null && itemData.mapLayers != null) {
+                                    for (var j = 0; j < itemData.mapLayers.length; j++) {
+                                        var mapLayerId = itemData.mapLayers[j].mapLayerID,
+                                            layer = Oskari.getSandbox().findMapLayerFromAllAvailable(mapLayerId);
+                                        if (layer != null) {
+                                            Oskari.getSandbox().postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                                        }
+                                    }
+                                }
                                 //open registry editor
                                 Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
                                 //close Search bundle after moving to registry editor
