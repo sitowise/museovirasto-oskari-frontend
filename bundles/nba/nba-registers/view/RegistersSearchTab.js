@@ -311,6 +311,17 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             if (removeMarkersReqBuilder) {
                 me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
             }
+            
+            //showing all layers for the register
+            if (data != null && data.mapLayers != null) {
+                for (var i = 0; i < data.mapLayers.length; i++) {
+                    var mapLayerId = data.mapLayers[i].mapLayerID,
+                        layer = me.sandbox.findMapLayerFromAllAvailable(mapLayerId);
+                    if (layer != null) {
+                        me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                    }
+                }
+            }
 
             if (data != null && data.bounds != null) {
                 var extent = new OpenLayers.Bounds(data.bounds),
@@ -318,17 +329,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     x = center.lon,
                     y = center.lat,
                     lonlat = new OpenLayers.LonLat(x, y);
-
-                //showing layer for the register
-                for (var i = 0; i < data.mapLayers.length; i++) {
-                    var mapLayerId = data.mapLayers[i].mapLayerID,
-                        layer = me.sandbox.findMapLayerFromAllAvailable(mapLayerId);
-                    if (layer != null) {
-                        me.sandbox.postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
-                    } else {
-                        //TODO show error
-                    }
-                }
 
                 //move and zoom the map
                 me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
