@@ -18,8 +18,12 @@ Oskari.registerLocalization(
         },
         "tabs": [
             {
-                "title": "Karttaikkuna",
-                "tags": "ohje_karttaikkuna"
+                "title": "Karttatasot",
+                "tags": "ohje_karttatasot"
+            },
+            {
+                "title": "Kohdetiedot",
+                "tags": "ohje_kohdetiedot"
             },
             {
                 "title": "Työkalut",
@@ -30,20 +34,12 @@ Oskari.registerLocalization(
                 "tags": "ohje_haku"
             },
             {
-                "title": "Karttatasot",
-                "tags": "ohje_karttatasot"
-            },
-            {
                 "title": "Karttajulkaisu",
                 "tags": "ohje_karttajulkaisu"
             },
             {
-                "title": "Teemakartat",
-                "tags": "ohje_teemakartat"
-            },
-            {
-                "title": "Analyysi",
-                "tags": "ohje_analyysi"
+                "title": "Omat tiedot",
+                "tags": "ohje_omattiedot"
             }
         ],
         "help": {
