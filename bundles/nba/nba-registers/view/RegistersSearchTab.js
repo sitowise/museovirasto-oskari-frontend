@@ -216,9 +216,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 grid = Oskari.clazz.create('Oskari.userinterface.component.Grid'),
                 searchInput = jQuery(me.tabContent.find('#nba-registers-search-input')),
                 editorRoles = me.instance.conf.editorRoles,
-                registryName,
-                registriesConf = me.instance.conf != null ? me.instance.conf.registries : null,
-                lang = Oskari.getLang();
+                dataSourceName,
+                registriesConf = me.instance.conf != null ? me.instance.conf.registries : {},
+                lang = Oskari.getLang(),
+                currentLocale;
 
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
@@ -228,11 +229,16 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             gridModel.setIdField('id');
 
             _.each(results, function (result) {
-                if (registriesConf != null && registriesConf[result.registryIdentifier] != null 
-                    && registriesConf[result.registryIdentifier][lang] != null) {
-                    registryName = registriesConf[result.registryIdentifier][lang].name;
+                if (registriesConf[result.registryIdentifier] != null && registriesConf[result.registryIdentifier][lang] != null) {
+                    //Try set item class name as data source. If translation is not available then get general name of registry.
+                    currentLocale = registriesConf[result.registryIdentifier][lang];
+                    dataSourceName = currentLocale[result.itemClassName]
+                    
+                    if (dataSourceName == null || dataSourceName == '') {
+                        dataSourceName = currentLocale.name;
+                    }
                 } else {
-                    registryName = result.registryIdentifier;
+                    dataSourceName = result.registryIdentifier;
                 }
 
                 gridModel.addData({
@@ -245,7 +251,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'bounds': result.bounds,
                     'itemClassName': result.itemClassName,
                     'registryIdentifier': result.registryIdentifier,
-                    'registry': registryName,
+                    'registry': dataSourceName,
                     'municipality': result.municipality,
                     'editable': result.editable
                 });
@@ -311,7 +317,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             if (removeMarkersReqBuilder) {
                 me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
             }
-            
+
             //showing all layers for the register
             if (data != null && data.mapLayers != null) {
                 for (var i = 0; i < data.mapLayers.length; i++) {
