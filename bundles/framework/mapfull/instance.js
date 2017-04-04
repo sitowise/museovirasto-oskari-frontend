@@ -509,6 +509,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         setState: function (state, ignoreLocation) {
             var me = this,
+                map = me.getSandbox().getMap(),
                 mapmodule = me.getMapModule(),
                 mapModuleName = mapmodule.getName(),
                 rbAdd,
@@ -518,14 +519,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             me._teardownState(mapmodule);
 
-            // map location needs to be set before layers are added
-            // otherwise f.ex. wfs layers break on add
-            if (state.east && ignoreLocation !== true) {
-                me.getSandbox().getMap().moveTo(
-                    state.east,
-                    state.north,
-                    state.zoom
-                );
+            var initialZoomToExtent = map.getZoomToExtent();
+            if (initialZoomToExtent != null) {
+                map.getZoomToExtent(null);
+                mapmodule.zoomToExtent(initialZoomToExtent);
+            } else {
+                // map location needs to be set before layers are added
+                // otherwise f.ex. wfs layers break on add
+                if (state.east && ignoreLocation !== true) {
+                    map.moveTo(
+                        state.east,
+                        state.north,
+                        state.zoom
+                    );
+                }
             }
 
             // mapmodule needed to set also param, because without it max zoomlevel check not working

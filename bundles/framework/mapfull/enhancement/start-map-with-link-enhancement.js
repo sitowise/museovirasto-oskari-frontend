@@ -23,7 +23,8 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
                 mapLayers = core.getRequestParameter('mapLayers'),
                 markerVisible = core.getRequestParameter('showMarker'),
                 markerVisibleOption2 = core.getRequestParameter('isCenterMarker'),
-                keepLayersOrder = core.getRequestParameter('keepLayersOrder');
+                keepLayersOrder = core.getRequestParameter('keepLayersOrder'),
+                bounds = core.getRequestParameter('bounds');
 
             if (keepLayersOrder === null) {
                 keepLayersOrder = true;
@@ -33,6 +34,32 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
                 return bln === true || bln === 'true';
             }
             core.getMap().setMarkerVisible(checkBoolean(markerVisible) || checkBoolean(markerVisibleOption2));
+
+            if (bounds) {
+                var splittedBounds;
+                // Bounds can be split with "_" or "%20"
+                if (bounds.indexOf('_') >= 0) {
+                    splittedBounds = bounds.split('_');
+                } else {
+                    splittedBounds = bounds.split('%20');
+                }
+                var boundsValid = true;
+                var parsedBounds = [];
+                if ((splittedBounds == null)||(splittedBounds.length < 4)) {
+                    boundsValid = false;
+                } else {
+                    for (var i=0; i<4; i++) {
+                        parsedBounds[i] = parseFloat(splittedBounds[i]);
+                        if ((parsedBounds[i] == null)||(!isFinite(parsedBounds[i]))) {
+                            boundsValid = false;
+                            break;
+                        }
+                    }
+                }
+                if (boundsValid) {
+                    core.getMap().setZoomToExtent(parsedBounds);
+                }
+            }
 
             if (coord === null || zoomLevel === null) {
                 // not a link
