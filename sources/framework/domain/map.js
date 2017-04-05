@@ -55,6 +55,9 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = "EPSG:3067";
+
+        // @property {OpenLayers.Bounds} _zoomToExtent default max extent
+        this._zoomToExtent = null;
     }, {
         /**
          * @method moveTo
@@ -267,7 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
          */
         setExtent: function (e) {
             this.extent = e;
-            /* e is this kind of oject  { left: l, top: t, right: r, bottom: b }*/
+            /* e is this kind of object  { left: l, top: t, right: r, bottom: b }*/
         },
         /**
          * @method getExtent
@@ -278,6 +281,26 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
          */
         getExtent: function () {
             return this.extent;
+        },
+        /**
+         * @method setExtent
+         * Default extent in map implementation (openlayers)
+         *
+         * @param {OpenLayers.Bounds} e
+         *            extent
+         */
+        setZoomToExtent: function (e) {
+            this._zoomToExtent = e;
+        },
+        /**
+         * @method getExtent
+         * Default extent in map implementation (openlayers)
+         *
+         * @return {OpenLayers.Bounds}
+         *            extent
+         */
+        getZoomToExtent: function () {
+            return this._zoomToExtent;
         },
         /**
          * @method setMaxExtent
