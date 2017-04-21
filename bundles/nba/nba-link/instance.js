@@ -156,7 +156,7 @@ function () {
         //remove all markers
         var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
         if (removeMarkersReqBuilder) {
-            me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+            me.sandbox.request(me, removeMarkersReqBuilder());
         }
 
         //find features in the layers by the identyfying attribute and highlight it
@@ -173,7 +173,7 @@ function () {
                     size: 3
                 };
                 var request = reqBuilder(marker, 'registry-search-result-' + i);
-                me.sandbox.request('MainMapModule', request);
+                me.sandbox.request(me, request);
             }
         }
     },

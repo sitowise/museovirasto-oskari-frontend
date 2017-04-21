@@ -315,7 +315,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //remove all markers
             var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
             if (removeMarkersReqBuilder) {
-                me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+                me.sandbox.request(me.instance, removeMarkersReqBuilder());
             }
 
             //showing all layers for the register
@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         size: 5
                     };
                     var request = reqBuilder(marker, 'registry-search-result');
-                    me.sandbox.request('MainMapModule', request);
+                    me.sandbox.request(me.instance, request);
                 }
 
                 //show GFI popup
@@ -543,7 +543,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 //remove all markers
                 var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
                 if (removeMarkersReqBuilder) {
-                    me.sandbox.request('MainMapModule', removeMarkersReqBuilder());
+                    me.sandbox.request(me.instance, removeMarkersReqBuilder());
                 }
 
                 //8. find features in the layers by the identyfying attribute and highlight it
@@ -575,7 +575,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                             size: 5
                         };
                         var request = reqBuilder(marker, 'registry-search-result-' + i);
-                        me.sandbox.request('MainMapModule', request);
+                        me.sandbox.request(me.instance, request);
                     }
                 }
             }
