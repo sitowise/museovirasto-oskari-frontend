@@ -159,6 +159,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var moveReqBuilder = me._sandbox.getRequestBuilder('MapMoveRequest');
                 var moveReq = moveReqBuilder(lonVal, latVal);
                 me._sandbox.request(this, moveReq);
+
+                //remove previous marker
+                var removeMarkerReqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                if (removeMarkerReqBuilder) {
+                    me._sandbox.request(this, removeMarkerReqBuilder('coordinatetool-center-position'));
+                }
+
+                //show new marker
+                var reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                if (reqBuilder) {
+                    var marker = {
+                        x: lonVal,
+                        y: latVal,
+                        color: "000000",
+                        msg: '',
+                        shape: 6,
+                        size: 10
+                    };
+                    var request = reqBuilder(marker, 'coordinatetool-center-position');
+                    me._sandbox.request(this, request);
+                }
+
             } else {
                 if(!me._dialog) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
