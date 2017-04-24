@@ -100,7 +100,8 @@ Oskari.registerLocalization(
                 },
                 "dialog": {
                     "title": "Karttamerkintä",
-                    "message": "Valitse karttamerkinnälle uusi sijainti klikkaamalla pistettä kartalla."
+                    "message": "Valitse karttamerkinnälle uusi sijainti klikkaamalla pistettä kartalla.",
+                    "clearConfirmation": "Haluatko varmasti poistaa kaikki merkinnät?"
                 }
             },
             "MyLocationPlugin": {

@@ -141,6 +141,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     callback: function() {
                         me.__toolButtonClicked();
                     }
+                },
+                'remove-all': {
+                    iconCls: 'markers-remove',
+                    tooltip: loc.buttons.clear,
+                    sticky: true,
+                    callback: function() {
+                        me.__removeAllToolButtonClicked();
+                    }
                 }
             };
 
@@ -195,6 +203,56 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             );
             me.getMapModule().getMapEl().addClass(
                 'cursor-crosshair'
+            );
+            me.dialog.moveTo(
+                '#toolbar div.toolrow[tbgroup=default-selectiontools]',
+                'bottom'
+            );
+        },
+
+        /**
+         * Handle toolbar remove all tool click.
+         */
+        __removeAllToolButtonClicked : function() {
+            var me = this,
+                sandbox = me.getSandbox(),
+                loc = me.getLocalization(),
+                diaLoc = loc.dialog,
+                controlButtons = [],
+                okBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.OkButton'
+                ),
+                cancelBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CancelButton'
+                ),
+                toolbarRequest = sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest');
+
+            okBtn.setHandler(function() {
+                me.removeMarkers();
+                me.dialog.close(true);
+                // ask toolbar to select default tool if available
+                if(toolbarRequest) {
+                    sandbox.request(me, toolbarRequest());
+                }
+            });
+
+            controlButtons.push(okBtn);
+            
+            cancelBtn.setHandler(function() {
+                me.dialog.close(true);
+                // ask toolbar to select default tool if available
+                if(toolbarRequest) {
+                    sandbox.request(me, toolbarRequest());
+                }
+            });
+            cancelBtn.setPrimary(true);
+            
+            controlButtons.push(cancelBtn);
+
+            me.dialog.show(
+                diaLoc.title,
+                diaLoc.clearConfirmation,
+                controlButtons
             );
             me.dialog.moveTo(
                 '#toolbar div.toolrow[tbgroup=default-selectiontools]',

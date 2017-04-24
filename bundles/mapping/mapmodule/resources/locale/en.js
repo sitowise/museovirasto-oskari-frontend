@@ -100,7 +100,8 @@ Oskari.registerLocalization(
                 },
                 "dialog": {
                     "title": "Map Marker",
-                    "message": "Select a new location for your map marker by clicking the map."
+                    "message": "Select a new location for your map marker by clicking the map.",
+                    "clearConfirmation": "Are you sure you want to remove all markers?"
                 }
             },
             "MyLocationPlugin": {
