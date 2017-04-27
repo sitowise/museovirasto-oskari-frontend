@@ -650,9 +650,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 this._dialog = null;
             }
             var me = this,
-                locTool = this.instance.getLocalization('tools')[drawMode];
-
-            var locBtns = this.instance.getLocalization('buttons'),
+                locToolGeneral = this.instance.getLocalization('tools'),
+                locTool = locToolGeneral[drawMode],
+                locBtns = this.instance.getLocalization('buttons'),
                 title = locTool.title,
                 message = locTool.add,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -699,8 +699,40 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
             buttons.push(finishBtn);
 
+            //setContent
             var content = me.templates.drawHelper.clone();
             content.find('div.infoText').html(message);
+            if (isEdit && (drawMode == 'area' || drawMode == 'line')) {
+                var editMethodRadioGroup = Oskari.clazz.create('Oskari.userinterface.component.RadioButtonGroup');
+                editMethodRadioGroup.setName('editMethod');
+
+                var radioOptions = [
+                {
+                    'title': locToolGeneral.reshapeMode,
+                    'value': "reshape"
+                },
+                {
+                    'title': locToolGeneral.dragMode,
+                    'value': "drag"
+                }];
+                editMethodRadioGroup.setOptions(radioOptions);
+                editMethodRadioGroup.setTitle(locToolGeneral.chooseEditMode);
+                var handler = function(value) {
+
+                    if (value == "drag") {
+                        me.instance.plugins.drawPlugin.modifyControls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
+                    } else {
+                        me.instance.plugins.drawPlugin.modifyControls.modify.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
+                    }
+                    me.instance.plugins.drawPlugin.modifyControls.modify.resetVertices();
+                };
+                editMethodRadioGroup.setValue("reshape");
+                editMethodRadioGroup.setHandler(handler);
+                editMethodRadioGroup.insertTo(content);
+
+                me.instance.plugins.drawPlugin.modifyControls.modify.mode = OpenLayers.Control.ModifyFeature.RESHAPE;
+                me.instance.plugins.drawPlugin.modifyControls.modify.resetVertices();
+            }
 
             dialog.show(title, content, buttons);
             dialog.addClass('registryEditor');
