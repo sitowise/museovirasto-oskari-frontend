@@ -415,6 +415,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                         me.WFSLayerService.emptyWFSFeatureSelections(layer);
                         var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
                         sandbox.notifyAll(infoEvent);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        var loc = Oskari.getLocalization("nba-registers").gfiPopup,
+                            title = loc.errorTitle,
+                            message = loc.errorMessage,
+                            ok = loc.ok;
+                        me.plugin.showMessage(title, message, ok, false);
+
+                        // when search for registry item data failed, then show normal GFI popup
+                        data.data.lonlat = me.lonlat;
+                        me.WFSLayerService.emptyWFSFeatureSelections(layer);
+                        var infoEvent = sandbox.getEventBuilder('GetInfoResultEvent')(data.data);
+                        sandbox.notifyAll(infoEvent);
                     }
                 });
             } else {

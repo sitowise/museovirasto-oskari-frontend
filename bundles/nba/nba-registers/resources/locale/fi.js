@@ -40,7 +40,10 @@
             "searchResultNoGeometry": "Rekisterikohteella ei ole geometriaa, joten karttaa ei voida kohdistaa kohteeseen."
         },
         "gfiPopup": {
-            "editItem": "Muokkaa kohdetta"
+            "editItem": "Muokkaa kohdetta",
+            "errorTitle": "Virhe",
+            "ok": "OK",
+            "errorMessage": "Kohdetietojen haku epäonnistui"
         }
     }
 }

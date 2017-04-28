@@ -40,7 +40,10 @@
             "searchResultNoGeometry": "Registry item has not geometry. Map can't be zoomed to item."
         },
         "gfiPopup": {
-            "editItem": "Edit item"
+            "editItem": "Edit item",
+            "errorTitle": "Error",
+            "ok": "OK",
+            "errorMessage": "Search for registry item data failed"
         }
     }
 }
