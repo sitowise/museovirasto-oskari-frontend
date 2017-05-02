@@ -178,7 +178,10 @@ Oskari.registerLocalization(
 						"next": "Voit piirtää samaan kohteeseen useita alueita.",
 						"edit": "Kohteella on jo tallennettuna alue. Voit siirtää taitepisteitä raahaamalla niitä hiirellä. Voit poistaa taitepisteitä viemällä hiiren kursorin taitepisteen päälle ja painamalla Delete-näppäintä.",
 						"save": "Tallenna"
-					}
+					},
+					"chooseEditMode": "Valitse muokkaustapa:",
+					"reshapeMode": "Kulmapisteiden muokkaaminen",
+					"dragMode": "Geometrian siirto"
 				},
 				"buttons": {
 					"ok": "OK",

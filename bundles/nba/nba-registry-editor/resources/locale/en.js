@@ -178,7 +178,10 @@ Oskari.registerLocalization(
 						"next": "You can draw several areas in one feature.",
 						"edit": "Feature already has an area geometry. You can move breaking points to another location by clicking them with a mouse.",
 						"save": "Save"
-					}
+					},
+					"chooseEditMode": "Choose edit mode:",
+					"reshapeMode": "Reshape geometry",
+					"dragMode": "Drag geometry"
 				},
 				"buttons": {
 					"ok": "OK",
