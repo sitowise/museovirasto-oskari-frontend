@@ -11,7 +11,7 @@
         "tab": {
             "all": "Kaikki",
             "title": "Rekisterihaku",
-            "header": "Hae Museoviraston rekisterireiden kohteita",
+            "header": "Hae Museoviraston rekistereiden kohteita",
             "selectRegister": "Valitse rekisteri",
             "allRegisters": "Kaikki rekisterit",
             "limitToArea": "Rajaa haku kartalta valittuun alueeseen",
