@@ -141,14 +141,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     callback: function() {
                         me.__toolButtonClicked();
                     }
-                },
-                'remove-all': {
-                    iconCls: 'markers-remove',
-                    tooltip: loc.buttons.clear,
-                    sticky: true,
-                    callback: function() {
-                        me.__removeAllToolButtonClicked();
-                    }
+//                },
+//                'remove-all': {
+//                    iconCls: 'markers-remove',
+//                    tooltip: loc.buttons.clear,
+//                    sticky: true,
+//                    callback: function() {
+//                        me.__removeAllToolButtonClicked();
+//                    }
                 }
             };
 
