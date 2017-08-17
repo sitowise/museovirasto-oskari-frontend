@@ -899,8 +899,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     if (returnArr.hasOwnProperty(key)) {
                         for(layerId in returnArr[key]) {
                             returnArr[key][layerId] = jQuery.grep(returnArr[key][layerId], function(obj,index) {
-                                var layer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-                                return obj.style === layer.getCurrentStyle().getName();
+                                var layer = me.instance.getSandbox().findMapLayerFromAllAvailable(layerId);
+                                return !!layer && layer.isVisible() && obj.style === layer.getCurrentStyle().getName();
                             });
                         }
                     }
