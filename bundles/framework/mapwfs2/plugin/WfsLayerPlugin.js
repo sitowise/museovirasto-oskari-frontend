@@ -680,7 +680,7 @@ Oskari.clazz.define(
                 return;
             }
             var lonlat = event.getLonLat(),
-                keepPrevious = this.getSandbox().isCtrlKeyDown();
+                keepPrevious = event.getParams().ctrlKeyDown;
 
             var geojson_format = new OpenLayers.Format.GeoJSON();
             var point = new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat);
