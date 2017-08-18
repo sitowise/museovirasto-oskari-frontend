@@ -1077,6 +1077,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
          *
          */
         destroy: function () {
+            //reset tools
+            this.sendStopDrawRequest(true);
             this.mainPanel.remove();
         }
     }, {
