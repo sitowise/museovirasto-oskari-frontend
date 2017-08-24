@@ -343,7 +343,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             me.WFSLayerService.setWFSFeaturesSelections(layer._id, featureIds);
             var event = sandbox.getEventBuilder('WFSFeaturesSelectedEvent')(me.WFSLayerService.getSelectedFeatureIds(layer._id), layer, selectFeatures);
             sandbox.notifyAll(event);
-        } else if(data.data.features !== "empty" && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
+        } else if(data.data.features !== "empty" && !!registryLayers && $.inArray(data.data.layerId, Object.keys(registryLayers)) > -1) {
             var registry = registryLayers[data.data.layerId], //{name: "", mainIdAttribute: "", subIdAttribute: "", itemType: ""}
                 fields = layer.getFields(),
                 idFieldNum = -1,
