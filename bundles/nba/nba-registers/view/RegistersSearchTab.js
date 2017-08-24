@@ -463,9 +463,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
         _handleRegistryItemsResults: function (results) {
             this.progressSpinner.stop();
-            if (jQuery.isEmptyObject(results)) {
-                return;
-            }
 
             this.resultsContainer = this._renderResultGrid(results);
         },
