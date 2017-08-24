@@ -56,6 +56,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         this.resizableColumns = false;
         this.uiNames = {};
         this.valueRenderer = {};
+        this.maxVisibleSubColumns = 100;
 
         /* last sort parameters are saved so we can change sort direction if the
          * same column is sorted again
@@ -455,7 +456,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     );
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
-                            if (dataArray.length > 2) {
+                            if (dataArray.length > me.maxVisibleSubColumns) {
                                 fullFieldNames.push(
                                     {
                                         key: key + '.' + field,
@@ -514,7 +515,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
                 } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > 2) {
+                    if (dataArray.length > me.maxVisibleSubColumns) {
                         header.addClass('closedSubTable');
                         header.addClass('base');
                     } else {
