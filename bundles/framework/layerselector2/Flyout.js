@@ -417,17 +417,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
-                if(a.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
-                    nameA = ""+a.getLayerOrderNumber();
+                if(groupingMethod === 'getInspireName' && a.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
+                    nameA = a.getLayerOrderNumber();
                 } else {
                     nameA = a.getName().toLowerCase();
                 }
 
-                if(b.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
-                    nameB = ""+b.getLayerOrderNumber();
+                if(groupingMethod === 'getInspireName' && b.getLayerOrderNumber() && (a.getLayerOrderNumber() !== b.getLayerOrderNumber())) {
+                    nameB = b.getLayerOrderNumber();
                 } else {
                     nameB = b.getName().toLowerCase();
                 }
+            }
+            if($.isNumeric(nameA) && $.isNumeric(nameB)) {
+                return nameA - nameB;
+            }            
+            if($.isNumeric(nameA)) {
+                return -1;
+            }            
+            if($.isNumeric(nameB)) {
+                return 1;
             }
             if (nameA < nameB) {
                 return -1;
