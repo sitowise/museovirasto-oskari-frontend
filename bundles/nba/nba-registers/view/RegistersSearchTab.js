@@ -114,6 +114,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 if (me.resultsContainer != null) {
                     me.resultsContainer.empty();
                 }
+                tabContent.find('div.showAllResultsLink').hide();
 
                 //If user has selected a filter with geometry the name/ID should not be mandatory parameter in the search
                 if (checkboxElement.prop('checked')) {
@@ -202,7 +203,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 return false;
             });
             tabContent.find('div.showAllResultsLink').append(showAllResultsLink);
-
+            tabContent.find('div.showAllResultsLink').hide();
             this.progressSpinner.insertTo(tabContent.find('div.nba-progressSpinner'));
 
             return tabContent;
@@ -224,7 +225,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
             //resultGrid.find('div.resultsTitle').append("Search results: " + results.length + " search results for the search " + searchInput.val());
-            resultGrid.find('div.resultsTitle').append("Hakutulokset: " + results.length + " hakutulosta haulle " + searchInput.val());
+            resultGrid.find('div.resultsTitle').append("Hakutulokset: " + results.length + " hakutulosta haulle '" + searchInput.val() + "'");
 
             gridModel.setIdField('id');
 
@@ -463,6 +464,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
         _handleRegistryItemsResults: function (results) {
             this.progressSpinner.stop();
+            if (jQuery.isEmptyObject(results)) {
+                this.tabContent.find('div.showAllResultsLink').hide();
+            } else {
+                this.tabContent.find('div.showAllResultsLink').show();
+            }
 
             this.resultsContainer = this._renderResultGrid(results);
         },
