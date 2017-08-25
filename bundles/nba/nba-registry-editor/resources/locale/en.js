@@ -207,7 +207,7 @@ Oskari.registerLocalization(
 					"deleteLine": "Delete line",
 					"createWithXY": "Create with XY",
 					"continue": "Continue",
-					"deleteMulti": "Poista geometrian osa"
+					"deleteMulti": "Remove part of multi geometry"
 				}
 			}
 		}
