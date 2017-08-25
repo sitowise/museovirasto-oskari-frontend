@@ -43,6 +43,10 @@ Oskari.registerLocalization(
 				    "copyright": "Copyright",
 				    "createDate": "Create Date",
 				    "dating": "Dating",
+				    "deleteFromMulti": "Click on the part of multi geometry to remove",
+				    "deleteFromMultiTitle": "Remove part of multi geometry",
+				    "deleteFromMultiConfirmation": "Are you sure you want to delete selected part of multi geometry?",
+				    "deleteFromMultiConfirmationTitle": "Remove part of multi geometry",
 				    "deleteGeometryTitle": "Delete geometry",
 				    "desc": "Name",
 				    "description": "Description",
@@ -202,7 +206,8 @@ Oskari.registerLocalization(
 					"deleteArea": "Delete area",
 					"deleteLine": "Delete line",
 					"createWithXY": "Create with XY",
-					"continue": "Continue"
+					"continue": "Continue",
+					"deleteMulti": "Remove part of multi geometry"
 				}
 			}
 		}

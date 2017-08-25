@@ -81,6 +81,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             if (isModal) {
                 this._dialog.makeModal();
             }
+            return this._dialog;
         },
         /**
          * Closes the message dialog if one is open
@@ -245,7 +246,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                 copyButton = $('<button type="button">' + locBtns.copyGeometry + '</button>').addClass('registryItemActionButton'),
                 deletePointButton = $('<button type="button">' + locBtns.deletePoint + '</button>').addClass('registryItemActionButton'),
                 deleteAreaButton = $('<button type="button">' + locBtns.deleteArea + '</button>').addClass('registryItemActionButton'),
-                deleteLineButton = $('<button type="button">' + locBtns.deleteLine + '</button>').addClass('registryItemActionButton');
+                deleteLineButton = $('<button type="button">' + locBtns.deleteLine + '</button>').addClass('registryItemActionButton'),
+                deleteFromMultiButton = $('<button type="button">' + locBtns.deleteMulti + '</button>').addClass('registryItemActionButton');
 
             if (typeof conf.point !== 'undefined' && conf.point) {
                 pointButton.on('click', function() {
@@ -396,6 +398,19 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
                     });
                     deleteAreaButton.attr('id', 'deleteArea-' + conf.type + "-" + conf.id);
                     container.append(deleteAreaButton);
+                }
+
+                if (conf.feature.geometry != null && conf.feature.geometry.type === "MultiPolygon" && conf.feature.geometry.coordinates.length > 1) {
+                    deleteFromMultiButton.on('click', function() {
+                        me.editFeature = conf.feature;
+                        if(typeof me.editFeature._type === 'undefined') {
+                            me.editFeature._type = conf.type;
+                        }
+                        me.editFeature._geometryType = geometryType;
+                        me._deleteFromMulti(conf.feature, 'area');
+                    });
+                    deleteFromMultiButton.attr('id', 'deleteFromMulti-' + conf.type + "-" + conf.id);
+                    container.append(deleteFromMultiButton);
                 }
             }
 
@@ -580,6 +595,75 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             });
 
             me.showMessage(title, content, [cancelBtn, okBtn], true);
+        },
+        
+        _deleteFromMulti: function (feature, geometryType) {
+            var me = this,
+                cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+                title = me.loc.deleteFromMultiTitle,
+                content = me.loc.deleteFromMulti;
+
+            cancelBtn.setHandler(function () {
+                me.instance.listenMapClickEvents(false);
+                me._dialog.close(true);
+                me._dialog = null;
+            });
+
+            var geom = (new OpenLayers.Format.GeoJSON()).parseGeometry(feature.geometry).clone();
+            if (geom != null && geom.getBounds()) {
+                var center = geom.getBounds().getCenterLonLat();
+                me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, geom.getBounds(), false]);
+            }
+
+            me.instance.enableGfi(false);
+            me.instance.listenMapClickEvents(true, me._deleteMultiFromPoint);
+            
+            me.showMessage(title, content, [cancelBtn], false).moveTo('button#' + 'deleteFromMulti-' + feature._type + "-" + feature.id, 'bottom');
+        },
+        
+        _deleteMultiFromPoint: function (event) {
+            var me = this,
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
+            title = me.loc.deleteFromMultiConfirmationTitle,
+            content = me.loc.deleteFromMultiConfirmation,
+            format = new OpenLayers.Format.GeoJSON(),
+            coords = new OpenLayers.Geometry.Point(event.getLonLat().lon, event.getLonLat().lat),
+            geom = format.parseGeometry(me.editFeature.geometry).clone();
+            
+            if(geom.intersects(coords)) {
+                okBtn.setTitle(me.instance.getLocalization('buttons').ok);
+                okBtn.addClass('primary');
+                okBtn.setHandler(function () {
+                    me._dialog.close(true);
+                    me._dialog = null;
+                   
+                    for (var i = 0; i < geom.components.length; i++) {
+                        if (geom.components[i].intersects(coords)) {
+                            geom.components.splice(i, 1);
+                            me.editFeature.geometry = JSON.parse(format.write(geom));
+                            break;
+                        }
+                    }
+                    
+                    me.editFeature._edited = true;
+                    
+                    me._saveRegistryItem();
+        
+                    me.instance.enableGfi(true);
+                    me.instance.listenMapClickEvents(false);
+                });
+        
+                cancelBtn.setHandler(function () {
+                    me._dialog.close(true);
+                    me._dialog = null;
+        
+                    me.instance.enableGfi(true);
+                    me.instance.listenMapClickEvents(false);
+                });
+                
+                me.showMessage(title, content, [cancelBtn, okBtn], false);
+            }
         },
 
         /**

@@ -346,7 +346,8 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var content = [],
+            var me = this,
+                content = [],
                 contentData = {},
                 fragments = [],
                 colourScheme,
@@ -387,6 +388,7 @@ Oskari.clazz.define(
                                 Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
                                 //close Search bundle after moving to registry editor
                                 Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+                                me._closeGfiInfo();
                             };
                         }
                     }

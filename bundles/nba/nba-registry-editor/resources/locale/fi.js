@@ -44,6 +44,10 @@ Oskari.registerLocalization(
 				    "copyright": "Copyright",
 				    "createDate": "Luotu",
 				    "dating": "Ajoitus",
+				    "deleteFromMulti": "Valitse poistettava multigeometrian osa",
+				    "deleteFromMultiTitle": "Poista multigeometrian osa",
+				    "deleteFromMultiConfirmation": "Haluatko varmasti poistaa valitun osan multigeometriasta?",
+				    "deleteFromMultiConfirmationTitle": "Poista multigeometrian osa",
 				    "deleteGeometryTitle": "Poista geometria",
 				    "desc": "Nimi",
 				    "description": "Selite",
@@ -202,7 +206,8 @@ Oskari.registerLocalization(
 					"deleteArea": "Poista alue",
 					"deleteLine": "Poista viivaa",
 					"createWithXY": "Luo piste koordinaateista",
-					"continue": "Jatka"
+					"continue": "Jatka",
+					"deleteMulti": "Poista geometrian osa"
 				}
 			}
 		}
