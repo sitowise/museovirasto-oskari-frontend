@@ -13,6 +13,7 @@ Oskari.registerLocalization(
         "errordata": "Feature data are invalid. Please update data by panning the map view slightly.",
         "columnSelectorTooltip": "Select visible columns",
         "featureDataPopup": "Statistical values",
+        "zoomTo": "Zoom",
         "selectionTools": {
             "title": "Select Features",
             "instructions": " ",

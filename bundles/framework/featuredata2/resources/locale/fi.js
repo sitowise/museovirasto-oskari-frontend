@@ -13,6 +13,7 @@ Oskari.registerLocalization(
         "errordata": "Palvelimelta saaduissa kohdetiedoissa oli virheitä. Siirrä hieman karttaa, jolloin tiedot päivittyvät.",
         "columnSelectorTooltip": "Valitse näytettävät sarakkeet",
         "featureDataPopup": "Tunnusluvut",
+        "zoomTo": "Kohdista",
         "selectionTools": {
             "title": "Valitse kohteita",
             "instructions": " ",

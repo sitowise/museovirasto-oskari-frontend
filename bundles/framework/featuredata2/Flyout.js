@@ -482,6 +482,9 @@ Oskari.clazz.define(
                 me._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
 
                 fields = model.getFields();
+                if(!!fields && fields.length > 0) {
+                    fields.unshift(me.instance.localization.zoomTo);
+                }
                 hiddenFields.push('__fid');
                 hiddenFields.push('__centerX');
                 hiddenFields.push('__centerY');
@@ -572,6 +575,18 @@ Oskari.clazz.define(
                 panel.grid.setDataModel(model);
                 _.forEach(visibleFields, function (field) {
                     grid.setNumericField(field, me._fixedDecimalCount);
+                });
+                panel.grid.setColumnValueRenderer(me.instance.localization.zoomTo, function(value, rowData) {
+                    var zoomToLink = me.templateLink.clone();
+                    zoomToLink.append(me.instance.localization.zoomTo);
+                    zoomToLink.click(function(event) {
+                        var moveReqBuilder = me.instance.sandbox.getRequestBuilder('MapMoveRequest');
+                        var moveReq = moveReqBuilder(rowData.__centerX, rowData.__centerY, { scale : 1000 });
+                        me.instance.sandbox.request(me.instance, moveReq);
+                    });
+                    if(!!rowData.__centerX && !!rowData.__centerY) {
+                        return zoomToLink;
+                    }
                 });
                 panel.grid.renderTo(panel.getContainer());
                 // define flyout size to adjust correctly to arbitrary tables
