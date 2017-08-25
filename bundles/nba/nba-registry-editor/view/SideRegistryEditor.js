@@ -621,7 +621,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             me.showMessage(title, content, [cancelBtn], false).moveTo('button#' + 'deleteFromMulti-' + feature._type + "-" + feature.id, 'bottom');
         },
         
-        _deleteMultiFromPoint(event) {
+        _deleteMultiFromPoint: function (event) {
             var me = this,
             okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton'),
@@ -632,37 +632,37 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.SideRegistryEdit
             geom = format.parseGeometry(me.editFeature.geometry).clone();
             
             if(geom.intersects(coords)) {
-    	        okBtn.setTitle(me.instance.getLocalization('buttons').ok);
-    	        okBtn.addClass('primary');
-    	        okBtn.setHandler(function () {
-    	            me._dialog.close(true);
-    	            me._dialog = null;
-   	            
-    	            for (var i = 0; i < geom.components.length; i++) {
-    	                if (geom.components[i].intersects(coords)) {
-        	            	geom.components.splice(i, 1);
-        	            	me.editFeature.geometry = JSON.parse(format.write(geom));
-    	                    break;
-    	                }
-    	            }
-    	            
-    	            me.editFeature._edited = true;
-    	            
-    	            me._saveRegistryItem();
-    	
-    	            me.instance.enableGfi(true);
-                	me.instance.listenMapClickEvents(false);
-    	        });
-    	
-    	        cancelBtn.setHandler(function () {
-    	            me._dialog.close(true);
-    	            me._dialog = null;
-    	
-    	            me.instance.enableGfi(true);
-                	me.instance.listenMapClickEvents(false);
-    	        });
-    	        
-    	        me.showMessage(title, content, [cancelBtn, okBtn], false);
+                okBtn.setTitle(me.instance.getLocalization('buttons').ok);
+                okBtn.addClass('primary');
+                okBtn.setHandler(function () {
+                    me._dialog.close(true);
+                    me._dialog = null;
+                   
+                    for (var i = 0; i < geom.components.length; i++) {
+                        if (geom.components[i].intersects(coords)) {
+                            geom.components.splice(i, 1);
+                            me.editFeature.geometry = JSON.parse(format.write(geom));
+                            break;
+                        }
+                    }
+                    
+                    me.editFeature._edited = true;
+                    
+                    me._saveRegistryItem();
+        
+                    me.instance.enableGfi(true);
+                    me.instance.listenMapClickEvents(false);
+                });
+        
+                cancelBtn.setHandler(function () {
+                    me._dialog.close(true);
+                    me._dialog = null;
+        
+                    me.instance.enableGfi(true);
+                    me.instance.listenMapClickEvents(false);
+                });
+                
+                me.showMessage(title, content, [cancelBtn, okBtn], false);
             }
         },
 
