@@ -18,6 +18,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
         this.localization = null;
         this.sideRegistryEditor = null;
         this.disabledLayers = null;
+        this.mapClickedListener = null;
     }, {
         /**
          * @static
@@ -157,6 +158,11 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
          * @static
          */
         eventHandlers: {
+            'MapClickedEvent': function (event) {
+                if(typeof this.mapClickedListener === 'function') {
+                    this.mapClickedListener.apply(this.sideRegistryEditor, [event]);
+                }
+            }
             
         },
         enableGfi: function (blnEnable) {
@@ -165,6 +171,15 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
             );
             if (gfiReqBuilder) {
                 this.sandbox.request(this, gfiReqBuilder(blnEnable));
+            }
+        },
+        listenMapClickEvents: function (blnEnable, callback) {
+            if(blnEnable) {
+                if(typeof callback === 'function') {
+                    this.mapClickedListener = callback;
+                }
+            } else {
+                this.mapClickedListener = null;
             }
         },
         /**
