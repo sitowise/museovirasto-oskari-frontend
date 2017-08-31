@@ -80,6 +80,10 @@ function () {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/nba/nba-registry-editor/resources/locale/en.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registry-editor/resources/locale/sv.js"
         }]
     },
     "bundle": {

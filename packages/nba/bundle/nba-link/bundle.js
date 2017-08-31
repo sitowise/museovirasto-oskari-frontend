@@ -56,6 +56,10 @@ function () {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/nba/nba-link/resources/locale/en.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-link/resources/locale/sv.js"
         }]
     },
     "bundle": {

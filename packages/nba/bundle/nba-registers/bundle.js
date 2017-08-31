@@ -59,6 +59,10 @@ function () {
             "lang": "en",
             "type": "text/javascript",
             "src": "../../../../bundles/nba/nba-registers/resources/locale/en.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/nba/nba-registers/resources/locale/sv.js"
         }]
     },
     "bundle": {
