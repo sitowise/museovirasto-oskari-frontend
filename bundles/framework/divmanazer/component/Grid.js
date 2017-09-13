@@ -459,7 +459,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             if (dataArray.length > me.maxVisibleSubColumns) {
                                 fullFieldNames.push(
                                     {
-                                        key: key + '.' + field,
+                                        key: '.' + field,
                                         baseKey: key,
                                         subKey: field,
                                         type: 'default',
@@ -469,7 +469,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             } else {
                                 fullFieldNames.push(
                                     {
-                                        key: key + '.' + field,
+                                        key: '.' + field,
                                         baseKey: key,
                                         subKey: field,
                                         type: 'default',
