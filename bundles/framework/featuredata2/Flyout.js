@@ -515,7 +515,7 @@ Oskari.clazz.define(
                     // localizations
                     if (locales) {
                         for (k = 0; k < locales.length; k += 1) {
-                            grid.setColumnUIName(fields[k], locales[k]);
+                            grid.setColumnUIName(layer.getFields()[k], locales[k]);
                         }
                     }
 

@@ -456,10 +456,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     );
                     for (field in value) {
                         if (value.hasOwnProperty(field)) {
-                            if (dataArray.length > me.maxVisibleSubColumns) {
+                            if (value.length > me.maxVisibleSubColumns) {
                                 fullFieldNames.push(
                                     {
-                                        key: key + '.' + field,
+                                        key: '.' + field,
                                         baseKey: key,
                                         subKey: field,
                                         type: 'default',
@@ -469,7 +469,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             } else {
                                 fullFieldNames.push(
                                     {
-                                        key: key + '.' + field,
+                                        key: '.' + field,
                                         baseKey: key,
                                         subKey: field,
                                         type: 'default',
@@ -515,7 +515,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (fullFieldNames[i].type === 'default') {
                     link.bind('click', headerClosureMagic(fullFieldNames[i].key));
                 } else if (fullFieldNames[i].type === 'object') {
-                    if (dataArray.length > me.maxVisibleSubColumns) {
+                    if (data[fullFieldNames[i].key].length > me.maxVisibleSubColumns) {
                         header.addClass('closedSubTable');
                         header.addClass('base');
                     } else {
