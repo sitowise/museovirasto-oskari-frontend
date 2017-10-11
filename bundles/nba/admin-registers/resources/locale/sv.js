@@ -3,30 +3,30 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "admin-registers",
     "value": {
-        "title": "Rekisterien oikeudet",
+        "title": "Rätter till register",
         "desc": "NOT TRANSLATED",
         "tile": {
-            "title": "Rekisterien oikeudet"
+            "title": "Rätter till register"
         },
         "flyout": {
-            "title": "Rekisterien oikeuksien hallinta",
-            "message": "Rekisterien oikeuksien hallinta"
+            "title": "Administrering av rätter till register",
+            "message": "Administrering av rätter till register"
         },
         "rights": {
-            "name": "Rekisteri",
-            "rightToPublish": "Julkaisuoikeus",
+            "name": "Register",
+            "rightToPublish": "Rätt att publicera",
             "success": {
-                "title": "Oikeudet on päivitetty",
-                "message": "Rekisterien oikeudet on päivitetty."
+                "title": "Rätter har uppdaterats",
+                "message": "Rätter till registret har uppdaterats."
             },
             "error": {
-                "title": "Virhe",
-                "message": "Rekisterien oikeuksia ei voitu päivittää."
+                "title": "Fel",
+                "message": "Sparning av rätter lyckas inte."
             },
-            "selectValue": "Valitse tunniste"
+            "selectValue": "Markera värdet"
         },
-        "save": "Tallenna",
-        "selectRole": "Rooli"
+        "save": "Lagra",
+        "selectRole": "Roll"
     }
 }
 );
