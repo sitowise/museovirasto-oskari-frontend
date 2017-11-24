@@ -184,27 +184,24 @@
         </div>
     </div>
 
+    <!-- % if(model.getStyles().length > 1) { % -->
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <% if(model.getStyles().length > 1) { %>
-            <select id="add-layer-style" class="admin-layer-style">
-                 <% for(var i = 0; i < model.getStyles().length; i++) { %>
-                <option value="<%= model.getStyles()[i].getName() %>"
-                    <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
-                         %>selected<% 
-                     } %>
-                     ><%= model.getStyles()[i].getTitle() %></option>
-                <% } %>
+       </div>
+       <div class="add-layer-input-area">
+           <select id="add-layer-style" class="admin-layer-style">
+                <% for(var i = 0; i < model.getStyles().length; i++) { %>
+               <option value="<%= model.getStyles()[i].getName() %>"
+                   <% if(model.getCurrentStyle().getName() === model.getStyles()[i].getName() ) {
+                        %>selected<% 
+                    } %>
+                    ><%= model.getStyles()[i].getTitle() %></option>
+               <% } %>
             </select>
-            <% } else if(model.getCurrentStyle().getTitle()) { %>
-                <input type="text" id="add-layer-style" class="add-layer-input long" value="<%= model.getCurrentStyle().getName() %>" />
-                <div class="icon-close"></div>
-            <% } %>
         </div>
     </div>
+    <!-- % } % -->
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">

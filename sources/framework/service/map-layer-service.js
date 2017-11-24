@@ -986,6 +986,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     style.setName(styleJson.name);
                     style.setTitle(styleJson.title);
                     style.setLegend(styleJson.legend);
+                    style.setId(styleJson.id);
                     layer.addStyle(style);
 
                     // only add the style once if not an array

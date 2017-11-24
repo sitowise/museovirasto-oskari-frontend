@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.Style',
         this._name = null;
         this._title = null;
         this._legend = null;
+        this._id = null;
     }, {
 
         /**
@@ -72,5 +73,24 @@ Oskari.clazz.define('Oskari.mapframework.domain.Style',
          */
         getLegend: function () {
             return this._legend;
+        },
+        /**
+         * @method setId
+         * Sets lid for the style
+         *
+         * @param {String} id
+         *            style id
+         */
+        setId: function (id) {
+            this._id = id;
+        },
+        /**
+         * @method getId
+         * Gets id for the style
+         *
+         * @return {String} style id
+         */
+        getId: function () {
+            return this._id;
         }
     });
