@@ -209,6 +209,11 @@ div.admin-layerselector {
     margin: 8px;
     border: 2pt solid blue;
   }
+  div.admin-layerselector .add-layer-style-edit-block {
+    display:none;
+    margin: 8px;
+    border: 2pt solid blue;
+  }
   div.admin-layerselector .add-layer-separation {
     margin-top: 15px; }
   div.admin-layerselector .admin-add-layer-btn {

@@ -39,7 +39,9 @@ define([
                 'click .fetch-ws-button': 'fetchCapabilities',
                 //'click .edit-wfs-button': 'editWfsLayerConfiguration',
                 'click .import-wfs-style-button': 'importSldStyle',
+                'click .edit-wfs-style-button': 'editSldStyle',
                 'click .save-wfs-style-button': 'saveSldStyle',
+                'click .update-wfs-style-button': 'updateSldStyle',
                 'click .cancel-wfs-style-button': 'cancelSldStyle',
                 'click .icon-close': 'clearInput',
                 'change .admin-layer-type': 'createLayerSelect',
@@ -374,10 +376,12 @@ define([
                 var me = this,
                     element = jQuery(e.currentTarget),
                     form = element.parents('.add-style-send'),
-                    sldImport = form.find('.add-layer-style-import-block');
+                    sldImport = form.find('.add-layer-style-import-block'),
+                    sldEditBtn = form.find('.edit-wfs-style-button');
 
                // set this element invisible
                 element.hide();
+                sldEditBtn.hide();
 
               // Show  new sld input block
                 sldImport.show();
@@ -394,14 +398,17 @@ define([
                     element = jQuery(e.currentTarget),
                     form = element.parents('.add-style-send'),
                     sldImport = form.find('.add-layer-style-import-block'),
-                    sldImportBtn = form.find('.import-wfs-style-button');
+                    sldEdit = form.find('.add-layer-style-edit-block'),
+                    sldImportBtn = form.find('.import-wfs-style-button'),
+                    sldEditBtn = form.find('.edit-wfs-style-button');
 
                 // set this element invisible
                 sldImportBtn.show();
+                sldEditBtn.show();
 
                 // Show  new sld input block
                 sldImport.hide();
-
+                sldEdit.hide();
             },
             /**
              * Save new sld style to data base
@@ -414,6 +421,7 @@ define([
                     form = element.parents('.add-style-send'),
                     sldImport = form.find('.add-layer-style-import-block'),
                     sldImportBtn = form.find('.import-wfs-style-button'),
+                    sldEditBtn = form.find('.edit-wfs-style-button'),
                     sldName = form.find('.add-layer-sld-style-sldname').val(),
                     sldXml = form.find('.add-sld-file').val(),
                     newId = 0;
@@ -430,10 +438,107 @@ define([
 
                 // set this element invisible
                 sldImportBtn.show();
+                sldEditBtn.show();
 
                 // Show  new sld input block
                 sldImport.hide();
 
+            },
+            /**
+             * Update sld style to data base
+             *
+             * @method updateSldStyle
+             */
+            updateSldStyle: function (e) {
+                var me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.add-style-send'),
+                    sldImport = form.find('.add-layer-style-edit-block'),
+                    sldImportBtn = form.find('.import-wfs-style-button'),
+                    sldEditBtn = form.find('.edit-wfs-style-button'),
+                    sldName = sldImport.find('.add-layer-sld-style-sldname').val(),
+                    sldXml = sldImport.find('.add-sld-file').val(),
+                    id = sldImport.find('.add-layer-sld-style-id').val();
+
+                //Check if sld is valid
+                if(me._checkXml(sldXml)){
+                    // Save new style
+                   me._saveSldStyle(sldName, sldXml, id);
+                }
+                else {
+                    return;
+                }
+
+                // set this element invisible
+                sldImportBtn.show();
+                sldEditBtn.show();
+
+                // Show  new sld input block
+                sldImport.hide();
+
+            },
+            /**
+             * New sld style management for importing it to server
+             *
+             * @method editSldStyle
+             */
+            editSldStyle: function (e) {
+                e.stopPropagation();
+                var me = this, 
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer');
+                    selections = me.selectedSldStyles(form);
+
+                if(selections.selectedStyles.length === 0) {
+                    me._showDialog(me.instance.getLocalization('admin')['noStyleSelected'], me.instance.getLocalization('admin')['noStyleSelectedDesc']);
+                } if (selections.selectedStyles.length === 1) {
+                    me._editSld(me, selections.selectedStyles[0].id, form);
+                } else {                    
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        btn = dialog.createCloseButton(me.instance.getLocalization().ok),
+                        cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+                        content = $('<div/>'),
+                        select = $('<select/>');
+                    
+                    for(var i = 0; selections != null && i < selections.selectedStyles.length; i++) {
+                        select.append('<option value=' + selections.selectedStyles[i].id + ' >' + selections.selectedStyles[i].name + '</option>');
+                    }
+
+                    content.append(select);
+
+                    btn.addClass('primary');
+                    cancelBtn.setTitle(me.instance.getLocalization().cancel);
+                    btn.setHandler(function() {
+                        me._editSld(me, select.val(), form);
+                        dialog.close();
+                    });
+                    cancelBtn.setHandler(function() {
+                        dialog.close();
+                    });
+
+                    dialog.show(me.instance.getLocalization('admin')['selectOneSld'], content, [btn, cancelBtn]);
+                }
+
+            },
+            _editSld(me, id, form) {
+                var sldImport = form.find('.add-layer-style-edit-block'),
+                    sldName = sldImport.find('.add-layer-sld-style-sldname'),
+                    sldXml = sldImport.find('.add-sld-file'),
+                    sldId = sldImport.find('.add-layer-sld-style-id'),
+                    sldImportBtn = form.find('.import-wfs-style-button'),
+                    sldEditBtn = form.find('.edit-wfs-style-button'),
+                    style = $.grep(me.sldStyles, function(obj, index) {
+                        return ""+obj.id === id; 
+                    })[0];
+
+                sldName.val(style.name);
+                sldXml.val(style.sld_style);
+                sldId.val(style.id);
+
+                sldImport.show();
+
+                sldImportBtn.hide();
+                sldEditBtn.hide();
             },
             /**
              * Check, that xml has valid  syntax
@@ -1114,7 +1219,7 @@ define([
              *
              * @method _saveSldStyle
              */
-            _saveSldStyle: function (sldName, sldXml) {
+            _saveSldStyle: function (sldName, sldXml, id) {
                 var me = this,
                     baseUrl = me.options.instance.getSandbox().getAjaxUrl();
 
@@ -1124,18 +1229,22 @@ define([
                     dataType: 'json',
                     data:{
                         name: sldName,
-                        xml: encodeURIComponent(sldXml)
+                        xml: encodeURIComponent(sldXml),
+                        id: id
                     },
                     url: baseUrl + 'action_route=SldStyles',
                     success: function (resp) {
-                            me._showDialog("title", "New sld saved success / " + sldName);
+                            me._showDialog("title", "Sld saved success / " + sldName);
                         //Update UI
-                        me._SldStylesAppendUI(resp.id, sldName);
-
+                        if(typeof id === 'undefined') {
+                            me._SldStylesAppendUI(resp.id, sldName);
+                        } else {
+                            me._setupSldStyles();
+                        }
                     },
                     error: function (jqXHR) {
                         if (jqXHR.status !== 0) {
-                            me._showDialog("title", "Save of new sld xml failed");
+                            me._showDialog("title", "Save of sld xml failed");
                         }
                     }
                 });
@@ -1144,9 +1253,32 @@ define([
                 var me = this,
                     sldSele = elem.find('#add-layer-sld-style');
 
+                sldSele.empty();
+                
+                var selectedIds = $.map(me.model.getStyles(), function(value, index) {
+                    return value.getId();
+                });
+                
+                var selectedOptions = [];
+                var unselectedOptions = [];
+
                 for(var i = 0; me.sldStyles != null && i < me.sldStyles.length; i++) {
-                    sldSele.append('<option value=' + me.sldStyles[i].id + ' >' + me.sldStyles[i].name + '</option>');
+                    var option = $('<option value=' + me.sldStyles[i].id + ' >' + me.sldStyles[i].name + '</option>');
+                    if($.inArray(""+me.sldStyles[i].id, selectedIds) > -1) {
+                        option.attr('selected','selected');
+                        selectedOptions.push(option);
+                    } else {
+                        unselectedOptions.push(option);
+                    }
                 }
+                
+                $.each(selectedOptions, function(index, value) {
+                    sldSele.append(value);
+                })
+                
+                $.each(unselectedOptions, function(index, value) {
+                    sldSele.append(value);
+                })
 
             },
             _SldStylesAppendUI: function (id, name) {
