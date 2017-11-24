@@ -137,7 +137,7 @@ Oskari.registerLocalization(
             "sldStyleName":"Stil namn",
             "sldFileContentDesc":"Kopiera/sätta SLD fil innehåll (xml) till tekst block",
             "sldFileContent":"SLD fil innehåll",
-            "sldStylesFetchError": "SLD stilen kunde inte hämtas"
+            "sldStylesFetchError": "SLD stilen kunde inte hämtas",
             "styleDesc": "Förvald stil",
             "editStyle": "Editera SLD stil",
             "noStyleSelected": "No styles selected",
