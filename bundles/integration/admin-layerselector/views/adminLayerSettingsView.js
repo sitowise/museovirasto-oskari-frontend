@@ -1240,6 +1240,7 @@ define([
                             me._SldStylesAppendUI(resp.id, sldName);
                         } else {
                             me._setupSldStyles();
+                            me._clearTiles(id);
                         }
                     },
                     error: function (jqXHR) {
@@ -1248,6 +1249,26 @@ define([
                         }
                     }
                 });
+            },
+            _clearTiles: function(id) {
+                var me = this,
+                    wfsLayerPlugin = me.instance.sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin'),
+                    mapModule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+
+                var layers = me.instance.sandbox.findAllSelectedMapLayers();
+                $.each(layers, function(index, layer) {
+                    $.each(layer.getStyles(), function(index, style) {
+                        if(id === style.getId()) {
+                            wfsLayerPlugin.deleteTileCache(me.model.getId, layer.getCurrentStyle().getName());
+
+                            var evt = me.instance.sandbox.getEventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                            me.instance.sandbox.notifyAll(evt);
+                        }
+                    });
+                });
+
+                //force refresh of layers
+                mapModule.adjustZoomLevel(0);
             },
             _SldStylesUI: function (elem) {
                 var me = this,
