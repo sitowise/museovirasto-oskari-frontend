@@ -18,8 +18,27 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin';
         me._defaultLocation = 'top right';
-        me._index = 4;
+        me._index = 40;
         me._name = 'MyLocationPlugin';
+
+        me._mobileDefs = {
+            buttons:  {
+                'mobile-my-location': {
+                    iconCls: 'mobile-my-location',
+                    tooltip: '',
+                    sticky: false,
+                    show: true,
+                    callback: function (el) {
+                        me._setupLocation();
+                    }
+                }
+            },
+            buttonGroup: 'mobile-toolbar'
+        };
+
+        me._templates = {
+            plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
+        }
     }, {
         /**
          * @private @method _createControlElement
@@ -30,9 +49,8 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var el = jQuery(
-                    '<div class="mapplugin mylocationplugin icon mylocation-rounded-dark"></div>'
-                ),
+            var me = this,
+                el = me._templates.plugin.clone(),
                 me = this;
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
@@ -46,15 +64,6 @@ Oskari.clazz.define(
             return el;
         },
 
-        _createRequestHandlers: function () {
-            return {
-                'MyLocationPlugin.GetUserLocationRequest': Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler',
-                    this
-                )
-            };
-        },
-
         /**
          * @private @method _setLayerToolsEditModeImpl
          *
@@ -62,6 +71,9 @@ Oskari.clazz.define(
          */
         _setLayerToolsEditModeImpl: function () {
             var me = this;
+            if(!me.getElement()) {
+                return;
+            }
             if (me.inLayerToolsEditMode()) {
                 // disable icon
                 me.getElement().unbind('click');
@@ -109,17 +121,9 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'mylocation-' + (style ? style : 'rounded-dark');
+            var styleClass = 'toolstyle-' + (style ? style : 'rounded-dark');
 
-            me.changeCssClasses(styleClass, /^mylocation-/, [el]);
-        },
-
-        /**
-         * @method  @public getUserLocation
-         */
-        getUserLocation: function(centerMap){
-            var me = this;
-            me._setupLocation(centerMap);
+            me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
         },
 
         /**
@@ -127,51 +131,46 @@ Oskari.clazz.define(
          * Tries to get the geolocation from browser and move the map to the
          * location
          *
-         * @param {Boolean} centerMap centermap to location
          */
-        _setupLocation: function (centerMap) {
-            var me = this,
-                sandbox = me.getSandbox(),
-                callback = function (lon, lat) {
-                    // transform coordinates from browser projection to current
-                    var mapModule = me.getMapModule(),
-                        lonlat = mapModule.transformCoordinates({ lon : lon, lat : lat}, 'EPSG:4326'),
-                        zoomAdjust = mapModule.getMaxZoomLevel() - mapModule.getMapZoom();
+        _setupLocation: function () {
+            var mapmodule = this.getMapModule();
+            mapmodule.getUserLocation(function (lon, lat) {
+                if(!lon || !lat) {
+                    // error getting location
+                    return;
+                }
+                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+            });
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            var mobileDefs = this.getMobileDefs();
 
-                    if(typeof centerMap === 'undefined' || centerMap === true){
-                        mapModule.moveMapToLonLat(lonlat, zoomAdjust);
-                    }
-                    var locationEvent = sandbox.getEventBuilder('UserLocationEvent')(lonlat.lon, lonlat.lat);
-                    sandbox.notifyAll(locationEvent);
-                };
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            if(!forced && toolbarNotReady) {
+                return true;
+            }
+            this.teardownUI();
 
-            if (navigator.geolocation) {
-                // if users just ignores/closes the browser dialog
-                // -> error handler won't be called in most browsers
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        var lat = position.coords.latitude,
-                            lon = position.coords.longitude;
-
-                        callback(lon, lat);
-                    },
-                    function (errors) {
-                        //ignored
-                    },
-                    {
-                        // accept and hour long cached position
-                        maximumAge: 3600000,
-                        // timeout after 6 seconds
-                        timeout: 6000
-                    }
-                );
-            } else if (typeof window.geoip_latitude === 'function' &&
-                typeof window.geoip_longitude === 'function') {
-                // if available, use http://dev.maxmind.com/geoip/javascript
-                var lat = window.geoip_latitude(),
-                    lon = window.geoip_longitude();
-
-                callback(lon, lat);
+            if (!toolbarNotReady && mapInMobileMode) {
+                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+            } else {
+                me._element = me._createControlElement();
+                me.refresh();
+                this.addToPluginContainer(me._element);
             }
         }
     }, {

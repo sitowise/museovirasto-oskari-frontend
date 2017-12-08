@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Bakgrunnskort",
             "type-wms": "Kortalag (WMS, WMTS)",
-            "type-wfs": "Gögn (WFS)"
+            "type-wfs": "Gögn (WFS)",
+            "type-wfs-manual": "Uppfærðu fitjurnar með því að smella á \"Fitjugögn\" eða \"Uppfæra\" hnappinn í kortaglugganum."
         },
         "backendStatus": {
             "OK": {
@@ -42,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Kortalagið er ekki tiltækt í augnablikinu.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kortalagið getur verið ófánlegt í nokkra daga.",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "bakvinnslustaða-viðhald"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -57,21 +66,20 @@ Oskari.registerLocalization(
         "types": {
             "syn": "Samheiti",
             "lk": "Tengt hugtak",
-            "vk": "Coordinate concept",
+            "vk": "Hnitahugtak",
             "ak": "Víkjandi hugtak",
             "yk": "Ríkjandi hugtak"
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Nýjast",
+                "featuredata": "Vektorlög"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Sýna ## nýjustu kortalög",
+                "featuredata": "Sýna einungis vektorlög",
+                "remove": "Fjarlægja síu"
             }
         }
     }
-}
-);
+});

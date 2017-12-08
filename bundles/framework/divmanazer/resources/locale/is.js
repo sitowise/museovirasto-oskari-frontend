@@ -140,13 +140,13 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Breyta stíl á punktafitju",
-                "area": "Breyta stíl á svæðisfitju",
-                "line": "Breyta stíl á línufitju"
+                "dot": "Breyta stíl á punkti",
+                "area": "Breyta stíl á fláka",
+                "line": "Breyta stíl á línu"
             },
             "dot": {
                 "title": "Stíll punktafitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir punkta.",
                 "symbol": {
                     "label": "Tákn"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Stíll línufitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir línur.",
                 "style": {
                     "label": "Dash"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Stíll svæðisfitju",
-                "tooltip": "",
+                "tooltip": "Skilgreina stíl fyrir fláka.",
                 "linestyle": {
                     "label": "Brotin lína"
                 },
@@ -242,7 +242,8 @@ Oskari.registerLocalization(
                 "additional": {
                     "title": "Aðrar stillingar",
                     "dataSource": "Gagnaheimild",
-                    "metadata": "Hlekkur á lýsigögn"
+                    "metadata": "Hlekkur á lýsigögn",
+                    "export_selection": "Flytja einungis valdar aðgerðir."
                 },
                 "columns": {
                     "title": "Dálkar",
@@ -261,7 +262,68 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulator"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Sía",
+            "description": "Veldu fitjurnar úr kortalaginu.",
+            "cancelButton": "Hætta við",
+            "clearButton": "Hreinsa síu",
+            "refreshButton": "Endurnýja síu",
+            "addFilter": "Bæta við nýrri síu",
+            "removeFilter": "Eyða síu",
+            "content": {
+                "title": "Landfræðileg sía"
+            },
+            "bbox": {
+                "on": "Aðeins fitjan sem er sýnileg í kortasjá.",
+                "off": "Allar fitjur."
+            },
+            "clickedFeatures": {
+                "clickedFeaturesLabel": "Aðeins fitjur sem eru sýnilegar á kortinu",
+                "filterByGeometryLabel": "Aðeins fitjur sem uppfylla þann valkost sem valinn er:",
+                "filterByGeometryIntersect": "Fitjur sem skara valdar fitjur",
+                "filterByGeometryContains": "Fitjur innan valinna fitja"
+            },
+            "values": {
+                "title": "Sía fitjur eftir eigindum gagna",
+                "placeholders": {
+                    "case-sensitive": "Sían er háð há- og lágstöfum",
+                    "attribute": "Eigindi",
+                    "boolean": "Rökvirkir",
+                    "operator": "Virkir",
+                    "attribute-value": "Gildi"
+                },
+                "info": {
+                    "bboxOff": "Án landfræðilegrar síu yrðu allar fitjurnar taldar með í greiningunni. Vinsamlegast bættu við síueigindum eða veldu \"Einungis fitjur sem sjást á kortinu\" í landfræðilegu síunni.",
+                    "filterByGeometrySelected": "Þú getur einungis síað eigindin ef \"Allar fitjur\" er valið í landfræðilegu síunni að ofan."
+                },
+                "equals": "er jafnt og",
+                "like": "er eins og",
+                "notEquals": "er ekki jafnt og",
+                "notLike": "er ekki eins og",
+                "greaterThan": "er stærri en",
+                "lessThan": "er minni en",
+                "greaterThanOrEqualTo": "er stærri en eða jafn stór og",
+                "lessThanOrEqualTo": "er minni en eða jafn stór og"
+            },
+            "validation": {
+                "title": "Ekki var hægt að uppfæra síu vegna eftirfarandi mistaka:",
+                "attribute_missing": "Eigindi vantar.",
+                "operator_missing": "Virkjann vantar.",
+                "value_missing": "Gildi vantar.",
+                "boolean_operator_missing": "Rökvirkjann vantar.",
+                "bbox_selected_with_no_properties": "Án landfræðilegrar síu yrðu allar fitjurnar taldar með í greiningunni. Vinsamlegast bættu við síueigindum eða veldu \"Einungis fitjur sem sjást á kortinu\" í landfræðilegu síunni."
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Veldu heildargildi",
+                "aggregateValueSelectTitle": "Nota heildargildi í síu",
+                "selectAggregateAnalyse": "Velja heildargreiningu",
+                "selectIndicator": "Velja vísi",
+                "selectReadyButton": "Tilbúið",
+                "getAggregateAnalysisFailed": "Ekki var hægt að finna heildargögnin.",
+                "noAggregateAnalysisPopupTitle": "Ekki var hægt að finna heildargreininguna.",
+                "noAggregateAnalysisPopupContent": "Þú hefur ekki gert heildargreiningu. Þú getur búið til þín eigin heildargögn í greiningartólinu og notað síðan gildi þegar þú síar."
+            }
         }
     }
-}
-);
+});

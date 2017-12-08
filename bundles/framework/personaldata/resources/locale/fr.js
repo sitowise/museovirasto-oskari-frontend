@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "title": "Mes données",
         "desc": "Mes données",
         "notLoggedIn": "\"Mes données\" contient votre profil d’utilisateur et toutes vos caractéristiques enregistrées ainsi que vos vues cartographiques, cartes intégrées, indicateurs, analyses et fichiers de données. <a href='/web/fr/identification'>Identifiez-vous pour vérifier vos données</a>.",
-        "notLoggedInText": "Log in to check your data.",
+        "notLoggedInText": "Se connecter",
         "tabs": {
             "myviews": {
                 "title": "Mes vues cartographiques",
@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Description",
                     "publish": "Publié(es)",
                     "edit": "Modifier",
-                    "delete": "Supprimer"
+                    "delete": "Supprimer",
+                    "default": "Défaut"
                 },
                 "popup": {
                     "edit": "Modifier la vue cartographique",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Annuler",
                     "error_noname": "Saisissez le nom de la vue cartographique",
                     "deletetitle": "Supprimer la vue cartographique",
-                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique ?"
+                    "deletemsg": "Souhaitez-vous supprimer cette vue cartographique \"{name}\"?",
+                    "default": "Vue par défaut"
                 },
                 "save": {
                     "success": "La vue cartographique a été enregistrée.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Enregistrer",
                     "cancel": "Annuler",
-                    "toolbarsave": "Enregistrer la vue cartographique"
+                    "toolbarsave": "Enregistrer la vue cartographique",
+                    "saveCurrent": "Enregistrer la vue en cours"
                 },
                 "error": {
                     "title": "Erreur !",
@@ -75,7 +78,7 @@ Oskari.registerLocalization(
                     "delete": "Supprimer"
                 },
                 "published": {
-                    "desc": "Intégrer la carte en ajoutant à votre site internet le code html ci-dessous."
+                    "desc": "Intégrer la carte en ajoutant à votre site internet le code HTML ci-dessous."
                 },
                 "popup": {
                     "edit": "Modifier le nom de la carte",
@@ -119,7 +122,7 @@ Oskari.registerLocalization(
                 "firstName": "Prénom",
                 "lastName": "Nom",
                 "nickName": "Pseudonyme",
-                "email": "e-mail",
+                "email": "courriel",
                 "changeInfo": "Mettre à jour les informations relatives à votre compte",
                 "changePassword": "Modifier votre mot de passe",
                 "removeAccount": "Supprimer votre compte",
@@ -129,7 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Oui",
             "no": "Non"
+        },
+        "guidedTour": {
+            "title": "My Data",
+            "message": "\"My data\" -menu contains all your saved places, map views, embedded maps, indicators, analysis and datasets. There you can also check your account information. My data are shown only for logged-in users.",
+            "openLink": "Show My data",
+            "closeLink": "Hide My data",
+            "tileText": "My Data"
         }
     }
-}
-);
+});

@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         this.pages = {};
 
-        this.additionalTabs = {};
+        this.asyncTabs = {};
 
     }, {
 
@@ -69,10 +69,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
 
         getOptions: function () {
 
-        },
-
-        setState: function (state) {
-            this.state = state;
         },
 
         /**
@@ -115,8 +111,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     panel: page,
                     data: data
                 };
-                if (me.additionalTabs) {
-                    page.additionalTabs = me.additionalTabs;
+
+                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                    page.asyncTabs = me.asyncTabs;
                 }
             }
             for (p in this.pages) {
@@ -129,29 +126,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
+            me.instance.state = {current:allMetadata};
         },
 
-        /**
-         * @method setContentState
-
-         * restore state from store
-         */
-        setContentState: function (contentState) {
-            this.contentState = contentState;
-        },
-
-        /**
-         * @method getContentState
-         *
-         * get state for store
-         */
-        getContentState: function () {
-            return this.contentState;
-        },
-
-        resetContentState: function () {
-            this.contentState = {};
-        },
         /**
          *
          * Basically a tab template to add to each metadatapanel created.
@@ -159,7 +136,23 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
         addTabs: function (data) {
-            this.additionalTabs = data;
+
+            //add to bookkeeping
+            var me = this;
+            for (var key in data) {
+                if (data.hasOwnProperty(key)) {
+                    me.asyncTabs[key] = data[key];
+                }
+            }
+
+            //in case flyout already rendered add tabs to each page
+            for (var uuid in me.pages) {
+                if (me.pages.hasOwnProperty(uuid)) {
+                    me.pages[uuid].page.addTabsAsync(data);
+                }
+            }
+
+
         }
     }, {
         'protocol': ['Oskari.userinterface.Flyout']

@@ -1,33 +1,32 @@
 Oskari.registerLocalization(
 {
-    "lang": "es",
+    "lang": "sk",
     "key": "GenericAdmin",
     "value": {
-        "title": "Nombre de Usuario o Contraseña no válido",
-        "desc": "Usuario",
+        "title": "Neplatné heslo alebo prihlasovacie meno",
+        "desc": "Prihlasovacie meno",
         "tile": {
-            "title": "Contraseña"
+            "title": "Heslo"
         },
         "flyout": {
-            "title": "Acceso",
+            "title": "Prihlásiť",
             "defaultviews": {
-                "title": "NOT TRANSLATED",
-                "desc": "NOT TRANSLATED",
-                "headerName": "NOT TRANSLATED",
-                "globalViewTitle": "NOT TRANSLATED",
-                "setButton": "NOT TRANSLATED",
-                "forceButton": "NOT TRANSLATED",
+                "title": "",
+                "desc": "",
+                "headerName": "",
+                "globalViewTitle": "",
+                "setButton": "",
+                "forceButton": "",
                 "notifications": {
-                    "errorTitle": "NOT TRANSLATED",
-                    "warningTitle": "NOT TRANSLATED",
-                    "successTitle": "NOT TRANSLATED",
-                    "errorLoadingFailed": "NOT TRANSLATED",
-                    "errorUpdating": "NOT TRANSLATED",
-                    "listTitle": "NOT TRANSLATED",
-                    "viewUpdated": "NOT TRANSLATED"
+                    "errorTitle": "",
+                    "warningTitle": "",
+                    "successTitle": "",
+                    "errorLoadingFailed": "",
+                    "errorUpdating": "",
+                    "listTitle": "",
+                    "viewUpdated": ""
                 }
             }
         }
     }
-}
-);
+});

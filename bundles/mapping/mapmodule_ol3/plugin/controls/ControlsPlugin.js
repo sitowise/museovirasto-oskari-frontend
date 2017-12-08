@@ -41,7 +41,6 @@ Oskari.clazz.define(
          */
         _startPluginImpl: function () {
             var me = this;
-
             me._createMapInteractions();
         },
 
@@ -52,12 +51,21 @@ Oskari.clazz.define(
                 * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
                 */
                 'DrawingEvent': function (event) {
-                    var   me = this,
+                    if(event.getId() !== 'measureline' && event.getId() !== 'measurearea') {
+                        // this isn't about measurements, stop processing it
+                        return;
+                    }
+
+                    var me = this,
                         measureValue,
                         data = event.getData(),
                         finished = event.getIsFinished(),
                         geoJson = event.getGeoJson(),
                         geomMimeType = 'application/json';
+
+                    if (data.showMeasureOnMap) {
+                        return;
+                    }
 
                     // FIXME! Does StopDrawingRequest need to send drawingEvent?
                     if (finished) {
@@ -69,13 +77,10 @@ Oskari.clazz.define(
                     } else if (data.shape === 'Polygon') {
                          measureValue = data.area;
                     }
-
-                    me.getSandbox().request(
-                        me,
-                        me.getSandbox().getRequestBuilder(
-                            'ShowMapMeasurementRequest'
-                        )(measureValue, finished, geoJson, geomMimeType)
-                    );
+                    var reqBuilder = me.getSandbox().getRequestBuilder('ShowMapMeasurementRequest');
+                    if(reqBuilder) {
+                        me.getSandbox().request(me, reqBuilder(measureValue, finished, geoJson, geomMimeType));
+                    }
                 },
                 /**
                  * @method Toolbar.ToolSelectedEvent
@@ -111,23 +116,36 @@ Oskari.clazz.define(
          *
          */
         _createMapInteractions: function () {
-             var me = this,
+            var me = this,
             conf = me.getConfig();
+            var mouseInteractionRemove = [];
+            var kbInteractionRemove = [];
+
 
             //TODO: add Esc button handler
 
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
-                me.getMap().removeInteraction(ol.interaction.KeyboardPan);
-                me.getMap().removeInteraction(ol.interaction.KeyboardZoom);
+              me.getMap().getInteractions().forEach(function(interaction){
+                if (interaction instanceof ol.interaction.KeyboardPan ||interaction instanceof ol.interaction.KeyboardZoom ){
+                  kbInteractionRemove.push(interaction);
+                }
+              });
+              kbInteractionRemove.forEach(function(interaction){
+                me.getMap().removeInteraction(interaction);
+              })
             }
 
             // mouse control
             if (conf.mouseControls === false) {
-                me.getMap().removeInteraction(ol.interaction.DragPan);
-                me.getMap().removeInteraction(ol.interaction.MouseWheelZoom);
-                me.getMap().removeInteraction(ol.interaction.DoubleClickZoom);
-                me.getMap().removeInteraction(ol.interaction.DragZoom);
+              me.getMap().getInteractions().forEach(function(interaction){
+                if (interaction instanceof ol.interaction.DragPan ||interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom ){
+                  mouseInteractionRemove.push(interaction);
+                }
+              });
+              mouseInteractionRemove.forEach(function(interaction){
+                me.getMap().removeInteraction(interaction);
+              })
             }
         }
     }, {

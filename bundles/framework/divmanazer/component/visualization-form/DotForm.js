@@ -21,9 +21,9 @@ Oskari.clazz.define(
         this.messageEnabled = false;
 
         this.values = {
-            size: this.defaultValues.size,
-            color: this.defaultValues.color,
-            shape: this.defaultValues.shape,
+            size: this.defaultValues.size || 1,
+            color: this.defaultValues.color || 'ffde00',
+            shape: this.defaultValues.shape || 2,
             message: ''
         };
 
@@ -57,58 +57,6 @@ Oskari.clazz.define(
             ];
         this.paper = null;
         this.activeColorCell = 6;
-
-        this.symbolButtons = {
-            'square': {
-                iconCls: 'marker-square',
-                iconId: 1,
-                offset: [5,36],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            },
-            'dot': {
-                iconCls: 'marker-dot',
-                iconId: 5,
-                offset: [5,30],
-                scale: 0
-                //            tooltip : loc.tooltip, //todo
-            },
-            'arrow': {
-                iconCls: 'marker-arrow',
-                iconId: 6,
-                offset: [5,35],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            },
-            'pin': {
-                iconCls: 'marker-pin',
-                iconId: 3,
-                offset: [2,35],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            },
-            'pin2': {
-                iconCls: 'marker-pin2',
-                iconId: 2,
-                offset: [5,35],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            },
-            'stud': {
-                iconCls: 'marker-stud',
-                iconId: 0,
-                offset: [2,35],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            },
-            'flag': {
-                iconCls: 'marker-flag',
-                iconId: 4,
-                offset: [9,35],
-                scale: 2
-                //            tooltip : loc.tooltip, //todo
-            }
-        };
 
         this.templateSymbolDialogContent = jQuery('<div class="pointform">' +
             '<div class="container clearfix">' +
@@ -154,7 +102,8 @@ Oskari.clazz.define(
         this.templateColorValue = jQuery('<label class="color-label"></label><br><input type="text" name="color-input" value="0" disabled="disabled" class="custom-color">');
         this.templateSizerValue = jQuery('<div class="sizer-value"></div>');
         this.templateMessage = jQuery('<div class = "message"><label class="message-label"></label><div class="field"><input type="text" name="message-text" class="message-text"/></div></div>');
-        this.previewSize = 50;
+        this._previewTemplate = jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><svg viewBox="0 0 32 32" width="32" height="32" x="9" y="9" id="marker"></svg></svg>');
+        this._previewSize = 50;
     }, {
         /**
          * @method getValues
@@ -184,7 +133,8 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         showForm: function (renderButton, state, dialogLocation) {
-            var me = this;
+            var me = this,
+                tempValues = jQuery.extend(true, {}, me.values);
             if (state !== null && state !== undefined) {
                 jQuery.extend(true, me.values, state.dot);
                 this.messageEnabled = state.messageEnabled;
@@ -199,26 +149,43 @@ Oskari.clazz.define(
             // Shape selection
             var dialogContent = me.templateSymbolDialogContent.clone(),
                 content = dialogContent.find('div.symbols'),
-                buttonName,
-                btnContainer,
-                button;
-            for (buttonName in this.symbolButtons) {
-                if (this.symbolButtons.hasOwnProperty(buttonName)) {
-                    btnContainer = this.templateSymbolButton.clone();
-                    button = this.symbolButtons[buttonName];
-                    btnContainer.addClass(button.iconCls);
-                    btnContainer.attr('id', button.iconId + 'marker');
-                    if (button.iconId === parseInt(me.values.shape, 10)) {
-                        btnContainer.css('border', '2px solid');
-                    }
-                    // FIXME create function outside loop
-                    btnContainer.click(function () {
-                        me.values.shape = parseInt(jQuery(this).attr('id').charAt(0),10);
-                        me._selectButton(me.values.shape);
-                        me._updatePreview(dialogContent);
-                    });
-                    content.append(btnContainer);
+                btnContainer;
+
+            var btnHandler = function(buttonId){
+                me.values.shape = buttonId;
+                me._selectButton(me.values.shape);
+                me._updatePreview(dialogContent);
+            };
+
+            var markers = Oskari.getMarkers();
+
+            for (var i=0;i<markers.length;i++) {
+                btnContainer = this.templateSymbolButton.clone();
+
+                var svgObj = jQuery(markers[i].data);
+                svgObj.find('path').attr({
+                    fill: '#000000',
+                    stroke: '#000000'
+                });
+
+                svgObj.attr({
+                    x: 0,
+                    y: 0
+                });
+
+                btnContainer.html(svgObj.outerHTML());
+
+                if(i == this.values.shape) {
+                    btnContainer.css('border', '2px solid');
                 }
+
+                btnContainer.attr('id', i + 'marker');
+                btnContainer.attr('data-button-id', i);
+
+                btnContainer.click(function () {
+                    btnHandler(parseInt(jQuery(this).attr('data-button-id')));
+                });
+                content.append(btnContainer);
             }
 
             // Size slider
@@ -227,7 +194,6 @@ Oskari.clazz.define(
                 numIntervals = me.maxSize - me.minSize,
                 intervalWidth = sizerWidth / numIntervals,
                 numVisValues = 0,
-                i,
                 newSizerValue,
                 position;
 
@@ -265,6 +231,7 @@ Oskari.clazz.define(
                 id,
                 cellIndex,
                 activeCell;
+
             // Color chooser
             content = dialogContent.find('.color-rectangle');
             for (i = 0; i < me.basicColors.length; i += 1) {
@@ -278,7 +245,8 @@ Oskari.clazz.define(
                 colorCell.attr('id', id);
                 colorCell.click(function () {
                     if (jQuery('.color-source').prop('checked')) {
-                        return;
+                        jQuery('.color-source').attr('checked', false);
+                        jQuery('input.custom-color').prop('disabled', true);
                     }
                     cellIndex = parseInt(this.id.substring(0, 2), 10);
                     if (cellIndex === me.activeColorCell) {
@@ -314,10 +282,18 @@ Oskari.clazz.define(
             var colorCheckbox = me.templateColorSource.clone();
 
             colorCheckbox.change(function () {
+                var cell = me.activeColorCell.toString();
                 jQuery('input.custom-color').prop('disabled', !this.checked);
-                var activeCell = jQuery('#' + me.activeColorCell + 'ColorCell');
+                if (me.activeColorCell < 10) {
+                    cell = '0' + cell;
+                }
+                var activeCell = jQuery('#' + cell + 'ColorCell');
                 if (this.checked) {
                     activeCell.css('border', '1px solid #000000');
+                    jQuery('.custom-red-value').val(parseInt(me.values.color.substring(0, 2), 16));
+                    jQuery('.custom-green-value').val(parseInt(me.values.color.substring(2, 4), 16));
+                    jQuery('.custom-blue-value').val(parseInt(me.values.color.substring(4), 16));
+                    me.activeColorCell = -1;
                 } else {
                     activeCell.css('border', '3px solid #ffffff');
                 }
@@ -416,9 +392,9 @@ Oskari.clazz.define(
 
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             cancelBtn.setHandler(function () {
-                me.values.size = me.defaultValues.size;
-                me.values.color = me.defaultValues.color;
-                me.values.shape = me.defaultValues.shape;
+                me.values.size = tempValues.size;
+                me.values.color = tempValues.color;
+                me.values.shape = tempValues.shape;
                 me.renderDialog.close();
             });
             this.cancelButton = cancelBtn;
@@ -454,24 +430,14 @@ Oskari.clazz.define(
         /**
          * @method _selectButton
          * Selects the chosen button
-         * @param {String} selectedButton Name of the selected button
+         * @param {Integer} selectedButtonId Button id for selected button
          * @private
          */
-        _selectButton: function (selectedButton) {
-            var buttonName,
-                button,
-                container;
-            for (buttonName in this.symbolButtons) {
-                if (this.symbolButtons.hasOwnProperty(buttonName)) {
-                    button = this.symbolButtons[buttonName];
-                    container = jQuery('div#' + button.iconId + 'marker.icon-button');
-                    if (button.iconId.toString() === selectedButton.toString()) {
-                        container.css('border', '2px solid');
-                    } else {
-                        container.css('border', '1px solid');
-                    }
-                }
-            }
+        _selectButton: function (selectedButtonId) {
+            var dialogContent = jQuery('.pointform');
+            var content = dialogContent.find('div.symbols');
+            content.find('.icon-button').css('border', '1px solid');
+            content.find('.icon-button[data-button-id=' + selectedButtonId + ']').css('border', '2px solid');
         },
 
         /**
@@ -492,41 +458,55 @@ Oskari.clazz.define(
          * @param {Object} dialog
          */
         _updatePreview: function (dialog) {
-            var me = this,
-                view = dialog === undefined || dialog === null ? jQuery('.pointform') : dialog,
-                content = view.find('.preview'),
-                preview;
-            if (content.length > 0) {
-                preview = content.get(0);
-                if (preview.children.length === 0) {
-                    this.paper = Raphael(preview,50,50);
-                }
-            } else {
+            var me = this;
+            var view = dialog === undefined || dialog === null ? jQuery('.pointform') : dialog,
+                preview = view.find('.preview');
+
+            if (preview.length === 0) {
                 return;
             }
 
-            var charIndex = 0,
-                offset = [0,0],
-                scale = 0;
-            for (var buttonName in me.symbolButtons) {
-                if (me.symbolButtons.hasOwnProperty(buttonName)) {
-                    var button = me.symbolButtons[buttonName];
-                    if (button.iconId.toString() === me.values.shape.toString()) {
-                        charIndex = button.iconId;
-                        offset = button.offset;
-                        scale = button.scale;
-                        break;
-                    }
-                }
+            var previewTemplate = me._previewTemplate.clone();
+            var marker = previewTemplate.find('#marker');
+
+            var iconObj = Oskari.getMarkers()[me.values.shape];
+            if(!iconObj) {
+                iconObj = Oskari.getDefaultMarker();
             }
-            var font = this.paper.getFont('dot-markers'),
-                baseFontIndex = 57344;
-            this.paper.clear();
-            var x = offset[0]-this.values.size*5,
-                y = offset[1]+this.values.size*scale,
-                size = 40+this.values.size*10;
-            this.paper.print(x,y,String.fromCharCode(charIndex+baseFontIndex),font,size).attr({'stroke-width': 1, fill: '#'+me.values.color, 'stroke': '#b4b4b4'});
-            this.paper.circle(0,0,0); // IE8 refresh work-around
+            if(!iconObj){
+                preview.empty();
+                return;
+            }
+
+            var size = 20 + this.values.size * 5;
+
+            var iconSvg = jQuery(iconObj.data);
+            iconSvg.attr({
+                x: 0,
+                y: 0
+            });
+
+            var x = (me._previewSize - size)/2;
+            var y = (me._previewSize - size)/2;
+
+            iconSvg.find('path').attr({
+                'stroke-width': 1,
+                'fill': '#'+me.values.color,
+                'stroke': '#b4b4b4'
+            });
+
+            marker.append(iconSvg);
+
+            marker.attr({
+                height: size,
+                width: size,
+                x: x,
+                y: y
+            });
+
+
+            preview.empty();
+            preview.append(previewTemplate);
         },
 
         /**

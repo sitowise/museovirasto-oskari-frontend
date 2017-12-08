@@ -4,19 +4,19 @@ Oskari.registerLocalization(
     "key": "DivManazer",
     "value": {
         "buttons": {
-            "add": "Add",
-            "cancel": "Cancel",
-            "close": "Close",
-            "delete": "Delete",
-            "edit": "Edit",
-            "exit": "Exit",
+            "add": "Pridať",
+            "cancel": "Zrušiť",
+            "close": "Zatvoriť",
+            "delete": "Vymazať",
+            "edit": "Editovať",
+            "exit": "Odísť",
             "ok": "OK",
-            "save": "Save",
-            "search": "Search"
+            "save": "Uložiť",
+            "search": "Vyhľadávať"
         },
         "LanguageSelect": {
             "title": "Jazyk",
-            "tooltip": "Select language",
+            "tooltip": "Vybrať jazyk",
             "languages": {
                 "af": "afrikánčina",
                 "ak": "akančina",
@@ -140,129 +140,190 @@ Oskari.registerLocalization(
         },
         "VisualizationForm": {
             "tooltips": {
-                "dot": "Edit point feature style",
-                "area": "Edit area feature style",
-                "line": "Edit line feature style"
+                "dot": "Editovať štýl bodového objektu",
+                "area": "Editovať štýl plošného objektu",
+                "line": "Editovať štýl líniového objektu"
             },
             "dot": {
-                "title": "Point feature style",
-                "tooltip": "",
+                "title": "Štýl bodového objektu",
+                "tooltip": "Definovať štýl pre bodové objekty.",
                 "symbol": {
-                    "label": "Icon"
+                    "label": "Ikona"
                 },
                 "size": {
-                    "label": "Size"
+                    "label": "Veľkosť"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             },
             "line": {
-                "title": "Line feature style",
-                "tooltip": "",
+                "title": "Štýl líniového objektu",
+                "tooltip": "Definovať štýl pre líniové objekty.",
                 "style": {
-                    "label": "Dash"
+                    "label": "Čiarkovaná"
                 },
                 "cap": {
-                    "label": "Endings"
+                    "label": "Konce"
                 },
                 "corner": {
-                    "label": "Corners"
+                    "label": "Rohy"
                 },
                 "width": {
-                    "label": "Width"
+                    "label": "Šírka"
                 },
                 "color": {
-                    "label": "Colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             },
             "area": {
-                "title": "Area feature style",
-                "tooltip": "",
+                "title": "Štýl plošného objektu",
+                "tooltip": "Definovať štýl pre plošné objekty.",
                 "linestyle": {
-                    "label": "Line dash"
+                    "label": "Čiarkovaná línia"
                 },
                 "linecap": {
-                    "label": "Line endings"
+                    "label": "Konce línie"
                 },
                 "linecorner": {
-                    "label": "Line corners"
+                    "label": "Rohy línie"
                 },
                 "linewidth": {
-                    "label": "Line width"
+                    "label": "Šírka línie"
                 },
                 "linecolor": {
-                    "label": "Line colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba línie",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "color": {
-                    "label": "Fill colour",
-                    "labelOr": "or",
-                    "labelCustom": "Custom colour (RGB 0-255)"
+                    "label": "Farba výplne",
+                    "labelOr": "alebo",
+                    "labelCustom": "Vlastná farba (RGB 0-255)"
                 },
                 "fill": {
-                    "label": "Fill pattern"
+                    "label": "Vzor výplne"
                 },
                 "preview": {
-                    "label": "Preview"
+                    "label": "Náhľad"
                 },
                 "buttons": {
-                    "save": "Save",
-                    "cancel": "Cancel"
+                    "save": "Uložiť",
+                    "cancel": "Zrušiť"
                 }
             }
         },
         "Grid": {
             "columnSelector": {
-                "title": "Properties",
-                "tooltip": "Show columns"
+                "title": "Vlastnosti",
+                "tooltip": "Zobraziť stĺpce"
             },
             "export": {
-                "title": "Export data",
-                "export": "Export",
+                "title": "Exportovať údaje",
+                "export": "Exportovať",
                 "additional": {
-                    "title": "Additional settings",
-                    "dataSource": "Data source",
-                    "metadata": "Metadata link",
-                    "export_selection": "Export only selected features"
+                    "title": "Ďalšie nastavenia",
+                    "dataSource": "Zdroj údajov",
+                    "metadata": "Metaúdajový link",
+                    "export_selection": "Exportovať iba vybrané objekty"
                 },
                 "columns": {
-                    "title": "Columns",
-                    "all": "All",
-                    "visible": "Opened"
+                    "title": "Stĺpce",
+                    "all": "Všetko",
+                    "visible": "Otvorené"
                 },
                 "format": {
-                    "title": "File format",
+                    "title": "Formát súboru",
                     "xlsx": "Excel",
                     "csv": "CSV"
                 },
                 "delimiter": {
-                    "title": "CSV-file separator",
-                    "comma": "Comma",
-                    "semicolon": "Semicolon",
-                    "tabulator": "Tabulator"
+                    "title": "CSV-oddeľovník súboru",
+                    "comma": "Čiarka",
+                    "semicolon": "Bodkočiarka",
+                    "tabulator": "Tabulátor"
                 }
+            }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Filtrovať hodnoty na mapovej vrstve:",
+            "cancelButton": "Zrušiť",
+            "clearButton": "Vyčistiť filter",
+            "refreshButton": "Obnoviť filter",
+            "addFilter": "Pridať filter",
+            "removeFilter": "Odstrániť filter",
+            "content": {
+                "title": "Geografický filter"
+            },
+            "bbox": {
+                "on": "Iba objekty viditeľné na mape",
+                "off": "Všetky objkety"
+            },
+            "clickedFeatures": {
+                "clickedFeaturesLabel": "Iba objekty vybraté na mape",
+                "filterByGeometryLabel": "Iba objekty, ktoré spĺňajú zvolenú možnosť:",
+                "filterByGeometryIntersect": "Objekty pretínajúce zvolené objekty",
+                "filterByGeometryContains": "Objekty vo vnútry zvolených objektov"
+            },
+            "values": {
+                "title": "Filter výberu vlastností",
+                "placeholders": {
+                    "case-sensitive": "Filter rozlišuje veľkosť písmen",
+                    "attribute": "Vlastnosť",
+                    "boolean": "Logický operátor",
+                    "operator": "Operátor",
+                    "attribute-value": "Hodnota"
+                },
+                "info": {
+                    "bboxOff": "Bez geografického filtra sú všetky objekty zahrnuté do analýzy. Prosím, pridajte filter vlastností alebo zvoľte \"Iba objekty viditeľné na mape\" v geografickom filtri.",
+                    "filterByGeometrySelected": "Môžete filtrovať podľa vlastností iba ak sú zvolené \"Všetky objekty\" v horeuvedenom geografickom filtri."
+                },
+                "equals": "je rovná",
+                "like": "je ako",
+                "notEquals": "nie je rovná",
+                "notLike": "nie je ako",
+                "greaterThan": "je väčšia než",
+                "lessThan": "je menšia než",
+                "greaterThanOrEqualTo": "je väčšia než alebo rovná",
+                "lessThanOrEqualTo": "je menšia než alebo rovná"
+            },
+            "validation": {
+                "title": "Objekty sa nedali filtrovať. Vyskytli sa nasledovné chyby:",
+                "attribute_missing": "Chýba vlastnosť.",
+                "operator_missing": "Chýba operátor.",
+                "value_missing": "Chýba hodnota.",
+                "boolean_operator_missing": "Chýba logický operátor.",
+                "bbox_selected_with_no_properties": "Bez geografického filtra sú všetky objekty zahrnuté do analýzy. Prosím, pridajte filter vlastností alebo zvoľte \"Iba objekty viditeľné na mape\" v geografickom filtri."
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Použiť štatistické hodnoty",
+                "aggregateValueSelectTitle": "Vybrať štatistické hodnoty",
+                "selectAggregateAnalyse": "Vybrať vrstvu pre analýzu",
+                "selectIndicator": "Vybrať vlastnosť",
+                "selectReadyButton": "Zatvoriť",
+                "getAggregateAnalysisFailed": "Štatistické hodnoty sa nedali vyvolať.",
+                "noAggregateAnalysisPopupTitle": "Štatistické hodnoty nenájdené",
+                "noAggregateAnalysisPopupContent": "Štatistické hodnoty sa nedajú vypočítať pre túto mapovú vrstvu. Môžete ich vypočítať pomocou funkcie Analýza"
             }
         }
     }
-}
-);
+});

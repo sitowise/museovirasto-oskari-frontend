@@ -51,7 +51,7 @@ define([
                 'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
                 'change .admin-interface-version': 'handleInterfaceVersionChange',
                 'change .admin-sld-styles': 'handleSldStylesChange',
-                'change .admin-layer-style': 'handleLayerStyleChange',
+                'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
                 'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup'
             },
             showCapabilitiesPopup : function() {
@@ -75,6 +75,7 @@ define([
              */
             initialize: function () {
                 var me = this;
+
                 this.instance = this.options.instance;
                 // for new layers/sublayers, model is always null at this point
                 // if we get baseLayerId -> this is a sublayer
@@ -99,7 +100,7 @@ define([
 
                 this._rolesUpdateHandler();
                 this.supportedTypes = this.options.supportedTypes;
-                
+
                 if (this.model) {
                     // listenTo will remove dead listeners, use it instead of on()
                     this.listenTo(this.model, 'change', function() {
@@ -161,7 +162,7 @@ define([
              */
             _rolesUpdateHandler: function () {
                 var sandbox = Oskari.getSandbox(),
-                    roles = sandbox.getUser().getRoles();
+                    roles = Oskari.user().getRoles();
 
                 this.roles = new userRoleCollection(roles).getRoles();
             },
@@ -172,9 +173,14 @@ define([
              * @method createLayerSelect
              */
             createLayerSelect: function (e) {
-                jQuery('.add-layer-wrapper').remove();
-                jQuery('.admin-add-group').remove();
-                jQuery('.layer-type-wrapper').remove();
+                 var me = this,
+                    element = jQuery(e.currentTarget),
+                    addLayerWrappers = element.parents('.add-layer-wrapper'),
+                    addGroups = element.parents('.admin-add-group'),
+                    layerTypeWrappers =  element.parents('.layer-type-wrapper');
+                addLayerWrappers.remove();
+                addGroups.remove();
+                layerTypeWrappers.remove();
 
                 var layerType = e.currentTarget.value;
                 if (layerType === 'base' || layerType === 'groupMap') {
@@ -198,9 +204,9 @@ define([
                     return type.id === layerType;
                 }) ;
             },
-
             createLayerForm: function (layerType) {
                 var me = this,
+                    sandbox = Oskari.getSandbox(),
                     lcId,
                     layerGroups,
                     urlInput,
@@ -208,11 +214,14 @@ define([
                     urlSource = [],
                     i,
                     j;
-
                 if (!me.model) {
                     me.model = this._createNewModel(layerType);
                     this.listenTo(this.model, 'change', this.render);
                 }
+                if ((me.model.getSrs_name() === null || me.model.getSrs_name() === undefined) && sandbox.getMap()) {
+                    me.model.setSrs_name(sandbox.getMap().getSrsName());
+                }
+
                 // make sure we have correct layer type (from model)
                 layerType = me.model.getLayerType() + 'layer';
                 if(!this.__isSupportedLayerType(layerType)) {
@@ -317,7 +326,6 @@ define([
                         me.model = this._createNewModel('groupMap');
                     }
                 }
-
                 // This propably isn't the best way to get reference to inspire themes
                 var inspireGroups = this.instance.models.inspire.getGroupTitles();
                 me.$el.append(me.groupTemplate({
@@ -615,17 +623,158 @@ define([
             /**
              * Handle layer style change
              *
-             * @method handleLayerStyleChange
+             * @method importSldStyle
              */
-            handleLayerStyleChange: function (e) {
+            importSldStyle: function (e) {
+                e.stopPropagation();
+                var me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.add-style-send'),
+                    sldImport = form.find('.add-layer-style-import-block');
+
+               // set this element invisible
+                element.hide();
+
+              // Show  new sld input block
+                sldImport.show();
+
+            },
+            /**
+             * Cancel sld style management for importing it to server
+             *
+             * @method cancelSldStyle
+             */
+            cancelSldStyle: function (e) {
+                e.stopPropagation();
+                var me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.add-style-send'),
+                    sldImport = form.find('.add-layer-style-import-block'),
+                    sldImportBtn = form.find('.import-wfs-style-button');
+
+                // set this element invisible
+                sldImportBtn.show();
+
+                // Show  new sld input block
+                sldImport.hide();
+
+            },
+            /**
+             * Save new sld style to data base
+             *
+             * @method saveSldStyle
+             */
+            saveSldStyle: function (e) {
+                var me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.add-style-send'),
+                    sldImport = form.find('.add-layer-style-import-block'),
+                    sldImportBtn = form.find('.import-wfs-style-button'),
+                    sldName = form.find('.add-layer-sld-style-sldname').val(),
+                    sldXml = form.find('.add-sld-file').val(),
+                    newId = 0;
+
+                //Check if sld is valid
+                if(me._checkXml(sldXml)){
+                    // Save new style
+                   me._saveSldStyle(sldName, sldXml);
+                }
+                else {
+                    return;
+                }
+
+
+                // set this element invisible
+                sldImportBtn.show();
+
+                // Show  new sld input block
+                sldImport.hide();
+
+            },
+            /**
+             * Check, that xml has valid  syntax
+             *
+             * @method checkXml
+             */
+            _checkXml: function (xml) {
+                var me = this,
+                    isValid = true;
+
+                if(xml){
+                    try{
+                        oDOM = jQuery.parseXML(xml);
+                    }catch(e){
+                        isValid = false;
+                    }
+                }
+
+                if(!isValid){
+                    me._showDialog("title", "Not valid sld xml");
+                }
+                return isValid;
+
+            },
+            /**
+             * Handle sld styles selection
+             *
+             * @method handleSldStylesChange
+             */
+            handleSldStylesChange: function (e) {
+                e.stopPropagation();
+                var me = this,
+                    element = jQuery(e.currentTarget),
+                    form = element.parents('.admin-add-layer');
+
+                styles = me.selectedSldStyles(form);
+                me._DefaultStylesUI(element, styles);
+
+            },
+            /**
+             * selected sld styles selection
+             *
+             * @method selectedSldStyles
+             */
+            selectedSldStyles: function (form) {
+
+                var me = this,
+                    selectedStyles = {},
+                    styles = [];
+
+                form.find("#add-layer-sld-style option:selected").each(function () {
+                    var sel = jQuery(this);
+                    if (sel.length) {
+                        var style = {};
+                        style.id = sel.val();
+                        style.name = sel.text();
+                        styles.push(style);
+                    }
+                });
+                selectedStyles.selectedStyles = styles;
+                return selectedStyles;
+            },
+            _DefaultStylesUI: function (element, selection) {
+                var me = this,
+                    form = element.parents('.admin-add-layer'),
+                    defaelem = form.find('#add-layer-style');
+
+                defaelem.find('option').remove();
+                for(var i = 0; selection != null && i < selection.selectedStyles.length; i++) {
+                    defaelem.append('<option value=' + selection.selectedStyles[i].id + ' >' + selection.selectedStyles[i].name + '</option>');
+                }
+
+            },
+            /**
+             * Handle layer style legend Url change
+             *
+             * @method handleLayerLegendUrlChange
+             */
+            handleLayerLegendUrlChange: function (e) {
                 e.stopPropagation();
                 var element = jQuery(e.currentTarget),
                     form = element.parents('.admin-add-layer'),
-                    cur_style_name = form.find('#add-layer-style').val();
-                this.model.selectStyle(cur_style_name);
-                form.find('#add-layer-legendImage').val(this.model.getLegendUrl());
+                    cur_legendUrl = form.find('#add-layer-legendUrl').val();
+                form.find('#add-layer-legendImage').val(cur_legendUrl);
             },
-
             /**
              * Remove layer
              *
@@ -714,7 +863,7 @@ define([
             * @param {Object} data saved data
             * @param {jQuery} element jQuery element
             */
-            _addLayerAjax: function(data, element){
+            _addLayerAjax: function(data, element, callback){
                 var me = this,
                     form = element.parents('.admin-add-layer'),
                     accordion = element.parents('.accordion'),
@@ -750,6 +899,9 @@ define([
                             }
                             form.remove();
 
+                            if (typeof callback === 'function') {
+                                callback();
+                            }
                             //trigger event to View.js so that it can act accordingly
                             accordion.trigger({
                                 type: 'adminAction',
@@ -809,7 +961,7 @@ define([
              *
              * @method addLayer
              */
-            addLayer: function (e) {
+            addLayer: function (e, callback) {
                 if (e && e.stopPropagation) {
                     e.stopPropagation();
                 }
@@ -863,8 +1015,8 @@ define([
                 data.opacity = form.find('#opacity-slider').val();
 
                 data.style = form.find('#add-layer-style').val();
-                data.minScale = form.find('#add-layer-minscale').val();
-                data.maxScale = form.find('#add-layer-maxscale').val();
+                data.minScale = form.find('#add-layer-minscale').val() || -1;
+                data.maxScale = form.find('#add-layer-maxscale').val() || -1;
                 data.legendImage = form.find('#add-layer-legendImage').val();
                 data.inspireTheme = form.find('#add-layer-inspire-theme').val();
                 data.metadataId = form.find('#add-layer-datauuid').val();
@@ -876,9 +1028,6 @@ define([
                     data.xslt = form.find('#add-layer-xslt').val();
                     data.gfiType = form.find('#add-layer-responsetype').val();
                     data.params = form.find('#add-layer-selectedtime').val();
-                }
-                else if(data.layerType === 'wmtslayer') {
-                    data.matrixSetId = form.find('#add-layer-matrixSetId').val();
                 }
                 else if(data.layerType === 'wfslayer') {
                     admin = me.model.getAdmin();
@@ -904,6 +1053,7 @@ define([
                 data.jobType =  form.find("input[type='radio'][name='jobtype']:checked").val();
 
                 data.manualRefresh =  form.find("input[type='checkbox'][name='manualRefresh']:checked").val();
+                data.resolveDepth =  form.find("input[type='checkbox'][name='resolveDepth']:checked").val();
 
                 data.username = form.find('#add-layer-username').val();
                 data.password = form.find('#add-layer-password').val();
@@ -947,7 +1097,7 @@ define([
 
                     btn.setHandler(function() {
                         dialog.close();
-                        me._addLayerAjax(data, element);
+                        me._addLayerAjax(data, element, callback);
                     });
 
                     cancelBtn.setHandler(function() {
@@ -957,7 +1107,7 @@ define([
                     dialog.show(me.instance.getLocalization('admin')['warningTitle'], confirmMsg, [btn, cancelBtn]);
                     dialog.makeModal();
                 } else {
-                    me._addLayerAjax(data, element);
+                    me._addLayerAjax(data, element, callback);
                 }
             },
             /**
@@ -1009,7 +1159,7 @@ define([
                         });
                     },
                     url: sandbox.getAjaxUrl() + 'action_route=SaveLayer',
-                    success: function () {
+                    success: function (resp) {
                         jQuery('body').css('cursor', '');
                         if (!me.model.getId()) {
                             //trigger event to View.js so that it can act accordingly
@@ -1079,13 +1229,15 @@ define([
                     layerType = form.find('#add-layer-layertype').val(),
                     user = form.find('#add-layer-username').val(),
                     pw =  form.find('#add-layer-password').val(),
-                    version =  form.find('#add-layer-interface-version').val();
+                    version =  form.find('#add-layer-interface-version').val(),
+                    crs = me.instance.getSandbox().getMap().getSrsName();
 
                 me.model.set({
                     '_layerUrls': [serviceURL]
                 }, {
                     silent: true
                 });
+                me.model.setVersion(version);
                 me.model.set({_admin:{
                     username: user,
                     password: pw,
@@ -1101,7 +1253,8 @@ define([
                         type : layerType,
                         user: user,
                         pw: pw,
-                        version: version
+                        version: version,
+                        crs: crs
                     },
                     url: baseUrl + 'action_route=GetWSCapabilities',
                     success: function (resp) {
@@ -1143,10 +1296,11 @@ define([
                 // stop propagation so handler on outer tags won't be triggered as well
                 e.stopPropagation();
                 var layerName = current.attr('data-layername'),
-                    additionalId = current.attr('data-additionalId');
+                    additionalId = current.attr('data-additionalId'),
+                    title = current.text();
                 if (layerName) {
                     // actual layer node -> populate model
-                    me.model.setupCapabilities(layerName, null, additionalId);
+                    me.model.setupCapabilities(layerName, null, additionalId, title);
                 } else {
                     // toggle class to hide submenu
                     current.toggleClass('closed');

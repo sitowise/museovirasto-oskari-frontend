@@ -32,23 +32,33 @@ module.exports = function(grunt) {
         //TODO: make configurable
         this.templateLanguage = "en";
 
+        var _ = require('lodash');
+
         // Hackhack, easy way to read/load the localization files
         var Oskari = {
             localizations: {
             },
             registerLocalization: function (localization, boolParam) {
-                if (!this.localizations[localization.lang]) {
-                    this.localizations[localization.lang] = {};
-                }
-                this.localizations[localization.lang][localization.key] = {
+                var localizationObj = {
                     localization: localization,
                     prefix: 'Oskari.registerLocalization('    
-                }
+                };
+
                 var suffix = '),'
                 if (boolParam !== undefined && boolParam !== null) {
                     suffix = ', '+boolParam.toString()+'),';
                 }
-                this.localizations[localization.lang][localization.key].suffix = suffix;
+                localizationObj.suffix = suffix;
+
+                if (!this.localizations[localization.lang]) {
+                    this.localizations[localization.lang] = {};
+                }
+
+               if(boolParam !== undefined && boolParam !== null && boolParam === true) {
+                    this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, localizationObj, this.localizations[localization.lang][localization.key]);
+                } else {
+                    this.localizations[localization.lang][localization.key] = _.defaultsDeep({}, this.localizations[localization.lang][localization.key], localizationObj);
+                }
             }
         };
         // internal minify i18n files function
@@ -72,7 +82,8 @@ module.exports = function(grunt) {
                     this.minifyLanguageJS(langfiles[id], id);
                 }
             }
-
+            // TODO: 'all' languages content should be added to all the language specific data
+            //  this way the file doesn't need additional link in jsp since it rarely exists
             //after looping all languages write all to disk.
             for (var id in Oskari.localizations) {
                 var outputFile = path + 'oskari_lang_' + id + '.js'
@@ -111,7 +122,7 @@ module.exports = function(grunt) {
                 }
                 languageAllTempHash[localization.lang][localization.key] = {
                     localization: localization,
-                    prefix: 'Oskari.registerLocalization('    
+                    prefix: 'Oskari.registerLocalization('
                 };
                 var suffix = '),'
                 if (boolParam !== undefined && boolParam !== null) {
@@ -122,7 +133,7 @@ module.exports = function(grunt) {
             var result = this.readAndUglifyLocalization(files, languageId);
             if (!result) {
                 return;
-            }            
+            }
             eval(result.code);
 
             var templateJSON = languageAllTempHash[this.templateLanguage];
@@ -139,7 +150,7 @@ module.exports = function(grunt) {
 
             var outputFile = path + 'oskari_lang_all.js'
             var data = '';
-            
+
             for (var id in languageAllTempHash) {
                 for (var key in languageAllTempHash[id]) {
                     data += languageAllTempHash[id][key].prefix+
@@ -297,7 +308,7 @@ module.exports = function(grunt) {
         };
 
         // internal minify JS function
-        this.minifyJS = function(files, outputFile, concat) {
+        this.minifyJS = function(files, outputFile, concat, htmlImports) {
             var okFiles = [],
                 fileMap = {},
                 result = null;
@@ -322,7 +333,11 @@ module.exports = function(grunt) {
             if (!concat) {
                 try {
                     result = UglifyJS.minify(okFiles, {
-                        //outSourceMap : "out.js.map",
+                        outSourceMap : "oskari.min.js.map",
+                        sourceMapUrl : "oskari.min.js.map",
+                        //p  : "relative",
+                        //sourceRoot : "/Oskari",
+                        sourceMapIncludeSources : true,
                         warnings : true,
                         compress : true
                     });
@@ -346,9 +361,47 @@ module.exports = function(grunt) {
                     result.code += fs.readFileSync(okFiles[j], 'utf8');
                 }
             }
+            var code = result.code;
+            htmlImports = htmlImports || [];
+            var links = htmlImports.map(function(href) {
+                // FIXME: all over the build we have references to statsgrid.polymer
+                // those should be generalized so that any polymer bundle can benefit from this
+                var file = '../dist/bundles/statistics/statsgrid.polymer/vulcanized.html';
+                var stats = fs.readFileSync(file).toString();
+                var index = stats.split('typeof define');
+                var cleanedCode = index.join('"s"');
+                fs.writeFileSync(file, cleanedCode, 'utf8');
+                // update the one under bundles (not dist/bundles) to make developer life easier
+                fs.writeFileSync('../bundles/statistics/statsgrid.polymer/vulcanized.html', cleanedCode, 'utf8');
+                // /Oskari/bundles/statistics/statsgrid.polymer/vulcanized.html
+                return "Oskari.loader.linkFile('" + href + "','import','text/html');";
+            });
+            code = code + links.join('');
+        //
+            // -----------------------------------------------------------------------------------------------
+            // "custom requirejs optimizer"
+            // replaces all instances of [typeof define] to ["s"]
+            // This way all amd-modules will work ok in minified output since the check
+            //  they use [typeof define === 'function'] will become ["s" === 'function'] and always return false
+            //  This results in define never being called from minified code which results in no "Mismatched anonymous define() module" errors
+            var index = code.split('typeof define');
+            var cleanedCode = index.join('"s"');
+            // -----------------------------------------------------------------------------------------------
 
             // write result to disk
-            fs.writeFileSync(outputFile, result.code, 'utf8');
+            fs.writeFileSync(outputFile, cleanedCode, 'utf8');
+            try {
+                // source map
+                // replace "C:\\Omat\\alusta\\oskari -> oskari
+                var srcMap = JSON.parse(result.map);
+                var srcMapPath = srcMap.sources[0].toLowerCase();
+                var prefixToRemove = srcMap.sources[0].substring(0, srcMapPath.indexOf("oskari")).split('\\').join('\\\\');
+
+                var cleanedMap = result.map.split(prefixToRemove);
+                cleanedMap = cleanedMap.join('');
+                fs.writeFileSync(outputFile + ".map", cleanedMap, 'utf8');
+            } catch (ignored) {}
+
         }
 
         // validate parsed appsetup
@@ -357,11 +410,14 @@ module.exports = function(grunt) {
             fs.mkdirSync(compiledDir);
         }
         var files = [];
+        var vulcanizedImports = [];
         for (var j = 0; j < processedAppSetup.length; ++j) {
             var array = parser.getFilesForComponent(processedAppSetup[j], 'javascript');
             files = files.concat(array);
+            var importArray = parser.getFilesForComponent(processedAppSetup[j], 'vulcanizedHtml');
+            vulcanizedImports = vulcanizedImports.concat(importArray);
         }
-        this.minifyJS(files, compiledDir + 'oskari.min.js', options.concat);
+        this.minifyJS(files, compiledDir + 'oskari.min.js', options.concat, vulcanizedImports);
 
         var langfiles = {};
         for (var j = 0; j < processedAppSetup.length; ++j) {

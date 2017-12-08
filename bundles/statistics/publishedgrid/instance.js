@@ -33,7 +33,6 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             if (!me.state) {
                 return;
             }
-
             me.gridVisible = null;
             var conf = me.conf;
             // Let's use statsgrid's locale files.
@@ -87,27 +86,34 @@ Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleI
             if (!statsLayer) {
                 return;
             }
-
             // Register grid plugin to the map.
             var gridConf = {
                 'published': true,
-                'state': me.state,
-                'layer': statsLayer
+                'state': me.state
             };
             var gridPlugin = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
                 gridConf,
-                locale
+                locale,
+                statsLayer
             );
             mapModule.registerPlugin(gridPlugin);
             mapModule.startPlugin(gridPlugin);
             me.gridPlugin = gridPlugin;
 
+            //if classification not explicitly allowed, don't allow it.
+            //This will however also change the behaviour of existing published maps where classification has previously been allwed.
+            //Those maps need to be manually updated in order to get the classifying back in action.
+            var state = me.getState();
+            if (!me.conf || (me.conf && !me.conf.allowClassification)) {
+                state.allowClassification = false;
+            }
+
             // Register classification plugin to the map.
             var classifyPlugin = Oskari.clazz.create(
                 'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
                 {
-                    'state': me.getState()
+                    'state': state
                 },
                 locale
             );

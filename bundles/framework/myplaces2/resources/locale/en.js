@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Delete Place",
-                    "confirm": "Do you want to delete this place?",
+                    "confirm": "Do you want to delete place \"{name}\"?",
                     "btnDelete": "Delete",
                     "btnCancel": "Cancel",
                     "success": "The place has been deleted.",
@@ -285,8 +285,8 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Delete Map Layer",
-                "deleteConfirmMove": "You are deleting the map layer {0}. There are {1} places on the map layer. Do you want to: <br/> 1. delete the map layer and its places <br/> 2. move places to the default map layer before deleting the map layer?",
-                "deleteConfirm": "Do you want to delete the map layer {0}?",
+                "deleteConfirmMove": "You are deleting the map layer \"{0}\". There {1, plural, one {is # place} other {are # places}} on the map layer. Do you want to: <br/> 1. delete the map layer and its {1, plural, one {place} other {places}} <br/> 2. move the {1, plural, one {place} other {places}} to the default map layer before deleting the map layer?",
+                "deleteConfirm": "Do you want to delete the map layer \"{0}\"?",
                 "deleted": "The map layer has been deleted."
             },
             "categoryToPublic": {
@@ -311,9 +311,9 @@ Oskari.registerLocalization(
             "title": "The given data are invalid:",
             "placeName": "A place name is missing.",
             "categoryName": "A map layer name is missing.",
-            "placeNameIllegal": "The place name contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
-            "descIllegal": "The place description contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
-            "categoryNameIllegal": "The map layer name contains illegal characters. The allowed characters are letters (a-z, A-Z and å,ä,ö,Å,Ä,Ö), numbers (0-9), backspaces and hyphens (-).",
+            "placeNameIllegal": "The place name contains illegal characters.",
+            "descIllegal": "The place description contains illegal characters.",
+            "categoryNameIllegal": "The map layer name contains illegal characters.",
             "dotSize": "The point size is invalid. It must be between 1 and 5.",
             "dotColor": "The point colour is invalid. All the RGB values must be between 0 and 255.",
             "dotShape": "The point icon is invalid.",
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "The fill colour is invalid. All the RGB values must be between 0 and 255."
         }
     }
-}
-);
+});

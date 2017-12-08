@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
         conf.name = 'Publisher2';
         conf.flyoutClazz = 'Oskari.mapframework.bundle.publisher2.Flyout';
         this.defaultConf = conf;
-
         this.publisher = null;
     }, {
         /**
@@ -103,23 +102,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var reqHandler = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler',
                     this);
-            sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', reqHandler);
+            sandbox.requestHandler('Publisher.PublishMapEditorRequest', reqHandler);
 
             // Let's add publishable filter to layerlist if user is logged in
-            if(sandbox.getUser().isLoggedIn()) {
-                request = sandbox.getRequestBuilder('AddLayerListFilterRequest')(
-                    loc.layerFilter.buttons.publishable,
-                    loc.layerFilter.tooltips.publishable,
-                    function(layer){
-                        return (layer.getPermission('publish') === 'publication_permission_ok');
-                    },
-                    'layer-publishable',
-                    'layer-publishable-disabled',
-                    'publishable'
-                );
+            if(Oskari.user().isLoggedIn()) {
+                var mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService.registerLayerFilter('publishable', function(layer){
+                    return (layer.getPermission('publish') === 'publication_permission_ok');
+                });
 
-                sandbox.request(this, request);
+                // Add layerlist filter button
+                Oskari.getSandbox().postRequestByName('AddLayerListFilterRequest', [
+                        loc.layerFilter.buttons.publishable,
+                        loc.layerFilter.tooltips.publishable,
+                        'layer-publishable',
+                        'layer-publishable-disabled',
+                        'publishable'
+                ]);
             }
+            this._registerForGuidedTour();
         },
         /**
          * @return {Oskari.mapframework.bundle.publisher2.PublisherService} service for state holding
@@ -140,10 +141,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          */
         setPublishMode: function (blnEnabled, deniedLayers, data) {
             var me = this,
-                map = jQuery('#contentMap'),
-                requestBuilder;
+                map = jQuery('#contentMap');
+            // trigger an event letting other bundles know we require the whole UI
+            var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
+            this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
-            var statsLayer = this._resetStatsUI();
             if (blnEnabled) {
                 me.getService().setNonPublisherLayers(deniedLayers);
                 me.getService().removeLayers();
@@ -167,17 +169,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 //call set enabled before rendering the panels (avoid duplicate "normal map plugins")
                 me.publisher.setEnabled(true);
                 me.publisher.render(map);
-
-
-                //calling this results in calling each of the panels' init-method twice, because init is already called when the forms are created at publisherSideBar's render.
-                //and that causes trouble.
-//                me.publisher.initPanels();
             } else {
-                me._destroyGrid();
                 Oskari.setLang(me.oskariLang);
 
                 //change the mapmodule toolstyle back to normal
                 var mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                // TODO: reset to what it was when publisher was started instead of removing it (mapmodule.getToolStyle())
                 mapModule.changeToolStyle(null);
 
                 if (me.publisher) {
@@ -195,44 +192,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
                 // FIXME: not like this! see setter...
-                if (me.sandbox._mapMode === 'mapPublishMode') {
-                    delete me.sandbox._mapMode;
+                if (me.sandbox.mapMode === 'mapPublishMode') {
+                    delete me.sandbox.mapMode;
                 }
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
             }
-            // publishing mode should be sent to mapfull to disable resizing
-            requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
-            if (requestBuilder) {
-                me.sandbox.request(me, requestBuilder(!blnEnabled));
-            }
-        },
-        /**
-         * Resets Thematic maps UI and returns the stats layer if found
-         * @return {Oskari.mapframework.bundle.mapstats.domain.StatsLayer} stats layer if one was in selected layers
-         */
-        _resetStatsUI : function() {
-            var me = this;
-            var sandbox = me.sandbox;
-            // check if statsgrid mode is on -> disable statsgrid mode
-            var statsLayers = _.filter(sandbox.findAllSelectedMapLayers(), function(layer) {
-                return layer.isLayerOfType('stats');
-            });
-
-            if(!statsLayers.length) {
-                // no statslayers
-                return;
-            }
-            // assume only one which is true for now.
-            var layer = statsLayers[0];
-
-            // TODO: replace with "ResetUIRequest" or similar (handled by divmanazer)
-            // or "ModeActivationEvent" which StatsGrid and others will listen and clear the UI.
-            var request = sandbox.getRequestBuilder('StatsGrid.StatsGridRequest')(false, layer);
-            sandbox.request(me.getName(), request);
-
-            return layer;
         },
         /**
          * @method hasPublishRight
@@ -271,26 +237,89 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             }
             return deniedLayers;
         },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplate: {
+            priority: 40,
+            show: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
+            },
+            hide: function(){
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
+            },
+            getTitle: function () {
+                return this.getLocalization().guidedTour.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.getLocalization().guidedTour.message);
+                return content;
+            },
+            getLinks: function() {
+                var me = this;
+                var loc = this.getLocalization().guidedTour;
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.bind('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'Publisher2']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
 
         /**
-         * @method _destroyGrid
-         * Destroys Grid
-         * @private
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _destroyGrid: function () {
-            jQuery('#contentMap').width('');
-            jQuery('.oskariui-left')
-                .css({
-                    'width': '',
-                    'height': '',
-                    'float': ''
-                })
-                .removeClass('published-grid-left')
-                .empty();
-            jQuery('.oskariui-center').css({
-                'width': '100%',
-                'float': ''
-            }).removeClass('published-grid-center');
+        _registerForGuidedTour: function() {
+            var me = this;
+            function sendRegister() {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if(requestBuilder){
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for(var prop in me.__guidedTourDelegateTemplate){
+                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler(msg){
+                if(msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if(tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }, {
         "extend" : ["Oskari.userinterface.extension.DefaultExtension"]

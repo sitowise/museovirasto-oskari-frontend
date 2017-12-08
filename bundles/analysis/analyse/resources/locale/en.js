@@ -3,19 +3,17 @@ Oskari.registerLocalization(
     "lang": "en",
     "key": "Analyse",
     "value": {
-        "title": "Analysis <font color=red>(BETA)</font>",
-        "flyouttitle": "Analysis <font color=red>(BETA)</font>",
+        "title": "Analysis",
+        "flyouttitle": "Analysis",
         "desc": "",
         "btnTooltip": "Analysis",
         "NotLoggedView": {
             "text": "With Analysis function you can make simple spatial analysis for map layers including feature data. The function is available only for logged-in users.",
             "signup": "Log in",
-            "signupUrl": "/web/en/login",
-            "register": "Register",
-            "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "AnalyseView": {
-            "title": "Analysis <font color=red>(BETA)</font>",
+            "title": "Analysis",
             "content": {
                 "label": "Map Layers",
                 "drawToolsLabel": "Feature Tools",
@@ -129,7 +127,7 @@ Oskari.registerLocalization(
                         "tooltip": "Select features from the layer to be intersected. The features partially or totally inside the features on the intersecting layer are selected."
                     },
                     {
-                        "id": "oskari_analyse_areas_and_sectors",
+                        "id": "oskari_analyse_layer_union",
                         "label": "Analysis Layer Union",
                         "classForPreview": "layer_union",
                         "tooltip": "Combine the selected map layers. You can combine them only if they have same attributes."
@@ -193,7 +191,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Select attribute",
-                "footer": "Authorised features are not included in the analysis."
+                "footer": "Authorised features are not included in the analysis.",
+                "aggregateAdditionalInfo": "Note! You have selected one or more attributes containing textual data. Only the feature count can be calculated for them. If the feature count is not selected, textual attribute data are not included in the analysis result."
             },
             "buffer_size": {
                 "label": "Buffer size",
@@ -280,7 +279,33 @@ Oskari.registerLocalization(
                 "mode": "Spatial join mode",
                 "modeTooltip": "Select if you want to use descriptive statististic in the spatial join.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Aggregate descritpive statistic"
+                "aggregateMode": "Aggregate descritpive statistic",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Feature count"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Sum"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minimum"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Maximum"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Average"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standard deviation"
+                    }
+                ]
             },
             "params": {
                 "label": "Attributes in the result",
@@ -315,58 +340,6 @@ Oskari.registerLocalization(
                 "save": "Save and finish",
                 "analyse": "Make analysis",
                 "data": "More map layers"
-            },
-            "filter": {
-                "title": "Filter Features",
-                "description": "Filter Features at Layer:",
-                "cancelButton": "Cancel",
-                "clearButton": "Clear All",
-                "refreshButton": "Refresh",
-                "addFilter": "Add Filter",
-                "removeFilter": "Remove Filter",
-                "content": {
-                    "title": "Geographical Filter"
-                },
-                "bbox": {
-                    "on": "Only features visible on the map",
-                    "off": "All features"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Only features selected on the map",
-                    "filterByGeometryLabel": "Only features filling the selected option:",
-                    "filterByGeometryIntersect": "Features intersecting selected features",
-                    "filterByGeometryContains": "Features inside selected features"
-                },
-                "values": {
-                    "title": "Attribute Filter",
-                    "placeholders": {
-                        "case-sensitive": "Filter is case-sensitive.",
-                        "attribute": "Attribute",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Value"
-                    },
-                    "info": {
-                        "bboxOff": "Without geographic filter all the features are included in the analysis. Please add an attribute filter or select \"Only features visible on the map\" in the geographic filter.",
-                        "filterByGeometrySelected": "You can filter by attributes only if \"All features\" is selected in the geographic filter above."
-                    },
-                    "equals": "equals",
-                    "like": "is like",
-                    "notEquals": "does not equal",
-                    "notLike": "is not like",
-                    "greaterThan": "is greater than",
-                    "lessThan": "is less than",
-                    "greaterThanOrEqualTo": "is greater than or equal to",
-                    "lessThanOrEqualTo": "is less than or equal to"
-                },
-                "validation": {
-                    "title": "Error",
-                    "attribute_missing": "The attribute is missing. Please select an attribute and try again.",
-                    "operator_missing": "The operator is missing. Please select an operator and try again.",
-                    "value_missing": "The value is missing. Please type a value and try again.",
-                    "boolean_operator_missing": "The logical operator is missing. Please select a logical operator and try again.",
-                    "bbox_selected_with_no_properties": "Without geographic filter all the features are included in the analysis. Please add an attribute filter or select \"Only features visible on the map\" in the geographic filter."
-                }
             },
             "help": "Help",
             "success": {
@@ -431,7 +404,7 @@ Oskari.registerLocalization(
                 "placeholder": "Type a map layer name."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Point",
                     "color": "Colour",
@@ -461,7 +434,7 @@ Oskari.registerLocalization(
                 "delete": "Remove"
             },
             "title": "Analysis",
-            "confirmDeleteMsg": "Do you want to remove the analysis layer:",
+            "confirmDeleteMsg": "Do you want to remove the analysis layer \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Cancel",
@@ -477,5 +450,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

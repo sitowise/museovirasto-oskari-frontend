@@ -61,9 +61,6 @@ function() {
             "src" : "../../../../bundles/framework/mapfull/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/mapfull/enhancement/start-map-with-link-enhancement.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/mapfull/request/MapResizeEnabledRequest.js"
         }, {
             "type" : "text/javascript",
@@ -125,13 +122,17 @@ function() {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/sl.js"
         }, {
-            "lang": "sl",
+            "lang": "sk",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/mapfull/resources/locale/sl.js"
+            "src": "../../../../bundles/framework/mapfull/resources/locale/sk.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/sv.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/mapfull/resources/locale/fr.js"
         }]
     },
     "bundle" : {

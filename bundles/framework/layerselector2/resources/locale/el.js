@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "el",
     "key": "LayerSelector",
     "value": {
@@ -9,19 +10,19 @@ Oskari.registerLocalization({
             "generic": "Σφάλμα συστήματος. Παρακαλώ δοκιμάστε αργότερα.",
             "loadFailed": "Σφάλμα κατά την φόρτωση των επιπέδων χάρτη. Ανανεώστε την ιστοσελίδα και επιλέξτε επίπεδα χάρτη.",
             "noResults": "Η αναζήτηση δεν απέφερε αποτελέσματα.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
-        "loading": "NOT TRANSLATED",
+        "loading": "",
         "filter": {
             "text": "Αναζήτηση επιπέδων χάρτη",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Κατά αντικείμενο/θέμα",
             "organization": "Κατά παρόχους δεδομένων",
             "published": "Χρήστες",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Δημοσιευμένο επίπεδο χάρτη",
@@ -41,35 +42,50 @@ Oskari.registerLocalization({
                 "tooltip": "Το επίπεδο χάρτη είναι προσωρινά μη διαθέσιμο.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Το επίπεδο χάρτη είναι προσωρινά μη διαθέσιμο.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Το επίπεδο χάρτη μπορεί να είναι περιοδικά μη διαθέσιμο για τις επόμενες ημέρες.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Πληροφορίες για την κατάσταση του επιπέδου του χάρτη δεν διατίθενται,.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Επίπεδα χάρτη",
+            "message": "Μπορείτε να επιλέξετε τα δεδομένα που θα προβάλλονται στον χάρτη μέσω των επιπέδων του χάρτη.Κάντε κλικ σε μια κατηγορία για να την ανοίξετε και επιλέξτε ένα επίπεδο, ή γράψτε μερικά γράμματα  από τα δεδομένα στο πεσδίο αναζήτησης.",
+            "openLink": "Εμφάνιση επιπέδων χάρτη",
+            "closeLink": "Απόκρυψη επιπέδων χάρτη",
+            "tileText": "Επίπεδα χάρτη"
         }
     }
 });

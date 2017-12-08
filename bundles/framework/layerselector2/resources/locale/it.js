@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Sfondo cartografico",
             "type-wms": "Layer (WMS, WMTS)",
-            "type-wfs": "Dato (WFS)"
+            "type-wfs": "Dato (WFS)",
+            "type-wfs-manual": "Aggiorna i dati degli elementi cliccando su 'Dati Elementi ' o su 'Aggiorna' nella finestra della mappa ."
         },
         "backendStatus": {
             "OK": {
@@ -42,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Il layer non è disponibile.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Il layer non è disponibile.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Il layer potrebbe non essere disponibile nei prossimi giorni.",
                 "iconClass": "backendstatus-down"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -56,22 +65,21 @@ Oskari.registerLocalization(
         },
         "types": {
             "syn": "Sinonimo",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
         }
     }
-}
-);
+});

@@ -12,11 +12,11 @@ Oskari.registerLocalization(
         "errorscale": "Gegevens kunnen niet op dit schaalniveau worden getoond. Wijzig het schaalniveau.",
         "errordata": "Gegevens van de server bevatten fouten. Verschuif de kaart om te actualiseren.",
         "columnSelectorTooltip": "Toon kolommen",
-        "featureDataPopup": "NOT TRANSLATED",
+        "featureDataPopup": "Statistical values",
         "selectionTools": {
             "title": "Selecteer kenmerken op de kaart",
-            "instructions": "NOT TRANSLATED",
-            "selectFromTop": "NOT TRANSLATED",
+            "instructions": "",
+            "selectFromTop": "From topmost layer",
             "selectAll": "Selecteer van alle lagen",
             "link": {
                 "title": "Meer selecteren"
@@ -91,61 +91,13 @@ Oskari.registerLocalization(
                 "type-base": "Achtergrond kaart",
                 "type-wms": "Kaartlaag",
                 "type-wfs": "Data product"
-            },
-            "filter": {
-                "title": "Filter",
-                "description": "Selecteer de features van de kaartlaag",
-                "cancelButton": "Annuleren",
-                "clearButton": "Wis het filter",
-                "refreshButton": "Vernieuw het filter",
-                "addFilter": "Voeg nieuwe filter toe",
-                "removeFilter": "Verwijder filter",
-                "bbox": {
-                    "title": "Kaartvenster filter",
-                    "on": "Alleen de feature zichtbaar op het kaartvenster",
-                    "off": "Alle features"
-                },
-                "clickedFeatures": {
-                    "title": "Feature selectie filter",
-                    "label": "Alleen de features geselecteerd op de kaart"
-                },
-                "values": {
-                    "title": "Filter de features door attribuutgegevens",
-                    "placeholders": {
-                        "case-sensitive": "Het filter is hoofdlettergevoelig.",
-                        "attribute": "Attribuut",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Waarde"
-                    },
-                    "equals": "is gelijk aan",
-                    "like": "is zoals",
-                    "notEquals": "is niet gelijk aan",
-                    "notLike": "is niet zoals",
-                    "greaterThan": "is groter dan",
-                    "lessThan": "is kleiner dan",
-                    "greaterThanOrEqualTo": "is groter dan, of gelijk aan",
-                    "lessThanOrEqualTo": "is kleiner dan, of gelijk aan"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Selecteer de totale waarde",
-                    "aggregateValueSelectTitle": "Gebruik de totale waarde in de filter",
-                    "selectAggregateAnalyse": "Selecteer de totale analyse",
-                    "selectIndicator": "Selecteer de indicator",
-                    "selectReadyButton": "Gereed",
-                    "getAggregateAnalysisFailed": "De geaggregeerde gegevens kon niet worden gevonden.",
-                    "noAggregateAnalysisPopupTitle": "De geaggregeerde analyse kon niet worden gevonden.",
-                    "noAggregateAnalysisPopupContent": "Je hebt geen totale analyse gedaan. U kunt uw eigen geaggregeerde data maken door de analyse functie te gebruiken en vervolgens de waarden filteren."
-                },
-                "validation": {
-                    "title": "De filter kon niet worden ververst door de volgende fouten:",
-                    "attribute_missing": "Het attribuut ontbreekt",
-                    "operator_missing": "De operator ontbreekt.",
-                    "value_missing": "De waarde ontbreekt",
-                    "boolean_operator_missing": "De logische operator ontbreekt."
-                }
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Count",
+            "differenceMessage": "The difference of unauthorized feature values is presented with value",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
-}
-);
+});

@@ -53,7 +53,11 @@ Oskari.registerLocalization(
             "remove": "Verwijderen uit de zoekresultaten",
             "rating": "Rating"
         },
-        "licenseText": "Ontvang licentie"
+        "licenseText": "Ontvang licentie",
+        "identificationCode": {
+            "creation": "creation",
+            "publication": "publication",
+            "revision": "revision"
+        }
     }
-}
-);
+});

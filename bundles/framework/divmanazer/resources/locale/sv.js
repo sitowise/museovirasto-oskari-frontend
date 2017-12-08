@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Punktens stil",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "symbol": {
                     "label": "Ikon"
                 },
@@ -214,6 +214,7 @@ Oskari.registerLocalization(
                     "labelOr": "eller",
                     "labelCustom": "Egen RGB-färg (0-255)"
                 },
+                "lineRemove": "Ta bort linjens stil och färg",
                 "color": {
                     "label": "Ifyllnadsfärg för område",
                     "labelOr": "eller",
@@ -222,6 +223,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Ifyllnandsmönster för område"
                 },
+                "fillRemove": "Ta bort ifyllnadsfärg och mönster",
                 "preview": {
                     "label": "Förhandsvisning"
                 },
@@ -243,6 +245,7 @@ Oskari.registerLocalization(
                     "title": "Ytterligare inställningar",
                     "dataSource": "Datakälla",
                     "metadata": "Metadata länk",
+                    "layerName": "Kartlagrets namn",
                     "export_selection": "Exportera utvald objekter"
                 },
                 "columns": {
@@ -262,7 +265,55 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulator"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Välj funktionerna från kartlagret:",
+            "cancelButton": "Avbryt",
+            "clearButton": "Töm filter",
+            "refreshButton": "Uppdatera filter",
+            "addFilter": "Lägg till ett nytt filter",
+            "removeFilter": "Ta bort filtret",
+            "bbox": {
+                "on": "Endast funktionen syns på kartvyn.",
+                "off": "Alla funktioner."
+            },
+            "clickedFeatures": {},
+            "values": {
+                "title": "Filtrera funktionerna efter attributdata",
+                "placeholders": {
+                    "case-sensitive": "Filtret är skiftlägeskänsligt.",
+                    "attribute": "Attribut",
+                    "boolean": "Logisk operatör",
+                    "operator": "Operatör",
+                    "attribute-value": "Värde"
+                },
+                "equals": "är lika med",
+                "like": "är ungefär lika med",
+                "notEquals": "är inte lika med",
+                "notLike": "är inte ungefär lika med",
+                "greaterThan": "är större än",
+                "lessThan": "är mindre än",
+                "greaterThanOrEqualTo": "är större än eller lika med",
+                "lessThanOrEqualTo": "är mindre än eller lika med"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Välj det sammanlagda värdet",
+                "aggregateValueSelectTitle": "Använd det sammanlagda värdet i filtret",
+                "selectAggregateAnalyse": "Välj den sammanlagda analysen",
+                "selectIndicator": "Välj indikatorn",
+                "selectReadyButton": "Färdig",
+                "getAggregateAnalysisFailed": "De aggregerade uppgifterna kunde inte hittas.",
+                "noAggregateAnalysisPopupTitle": "Den sammanlagda analysen hittade inte.",
+                "noAggregateAnalysisPopupContent": "Du har inte gjort en sammanlagd analys. Du kan skapa dina egna aggregerade uppgifter från analysfunktion och sedan använda värdena i filtrering."
+            },
+            "validation": {
+                "title": "Uppdatering av filter misslyckades beroende av följande orsaker:",
+                "attribute_missing": "Attributet saknas.",
+                "operator_missing": "Operatören saknas.",
+                "value_missing": "Värdet saknas.",
+                "boolean_operator_missing": "Den logiska operatören saknas."
+            }
         }
     }
-}
-);
+});

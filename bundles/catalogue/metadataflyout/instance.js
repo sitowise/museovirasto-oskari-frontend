@@ -15,6 +15,8 @@ Oskari.clazz.define(
         this.loader = null;
         this.layerPlugin = null;
         this.layer = null;
+        this.conf = this.conf || {};
+        this.state = this.state || {};
     }, {
         /**
          * @static
@@ -123,6 +125,7 @@ Oskari.clazz.define(
          *
          */
         start: function () {
+            var me = this;
             if (this.started) {
                 return;
             }
@@ -139,11 +142,15 @@ Oskari.clazz.define(
                 p;
 
             this.sandbox = sandbox;
-
+            this.mapmodule = this.sandbox.findRegisteredModuleInstance("MainMapModule");
             /* loader */
             this.loader = Oskari.clazz.create(
                 'Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader',
-                sandbox.getAjaxUrl()
+                {
+                    baseUrl: sandbox.getAjaxUrl(),
+                    srs: me.mapmodule.getProjection()
+
+                }
             );
 
             sandbox.register(this);
@@ -192,10 +199,12 @@ Oskari.clazz.define(
                 sandbox.addRequestHandler(key, this._requestHandlers[key])
             }
 
-
-
             /* stateful */
             sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+            // handle state
+            var state = me.getState();
+            me.setState(state);
 
         },
 
@@ -241,10 +250,19 @@ Oskari.clazz.define(
                 /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
             },
             /**
-             * @method AfterMapLayerRemoveEvent
+             * @method userinterface.ExtensionUpdatedEvent
+             * Fetch when flyout is opened
              */
-            AfterMapMoveEvent: function (event) {
-                /* this might react when map moved */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this;
+                if (event.getExtension().getName() !== me.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                var viewState = event.getViewState();
+                if (viewState == 'close') {
+                    this.state = {};
+                }
             }
         },
 
@@ -332,56 +350,15 @@ Oskari.clazz.define(
                 'userinterface.UpdateExtensionRequest', [this, 'detach']
             );
         },
-
-        /**
-         *  @method showExtentOnMap
-         */
-        showExtentOnMap: function (uuid, env, atts) {
-            var me = this,
-                sandbox = me.getSandbox();
-            if (!env) {
-                return;
-            }
-
-            var feats = [],
-                n,
-                vals,
-                e,
-                ep,
-                ef;
-
-            for (n = 0; n < env.length; n += 1) {
-                vals = env[n];
-                e = new OpenLayers.Bounds(
-                    vals.westBoundLongitude,
-                    vals.southBoundLatitude,
-                    vals.eastBoundLongitude,
-                    vals.northBoundLatitude
-                );
-                ep = e.toGeometry();
-                ef = new OpenLayers.Feature.Vector(ep);
-                ef.attributes = atts || ef.attributes;
-                feats.push(ef);
-            }
-
-            var evt = sandbox.getEventBuilder('FeaturesAvailableEvent')(
-                me.layer,
-                feats,
-                'application/nlsfi-x-openlayers-feature',
-                Oskari.getSandbox().getMap().getSrsName(),
-                //"EPSG:3067",
-                'replace'
-            );
-
-            me.sandbox.notifyAll(evt);
-        },
-
         /**
          * @method setState
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
+            this.state = state;
+            if (state && state.current){
+                this.scheduleShowMetadata(state.current);
+            }
         },
 
         /**
@@ -389,9 +366,7 @@ Oskari.clazz.define(
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            return this.plugins[
-                'Oskari.userinterface.Flyout'
-            ].getContentState();
+            return this.state;
         }
     }, {
         protocol: [

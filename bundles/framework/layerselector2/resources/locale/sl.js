@@ -9,8 +9,8 @@ Oskari.registerLocalization(
             "title": "Napaka!",
             "generic": "Sistemska napaka! Prosim poskusi kasneje.",
             "loadFailed": "Napaka v nalaganju slojev karte. Osveži stran v brskalniku in izberi sloje karte.",
-            "noResults": "Iskanje ni vrnilo rezultatov.",
-            "noResultsForKeyword": "Za to ključno besedo ni slojev na karti.",
+            "noResults": "Iskanje ni vrnilo rezultatov. Preveri iskalni niz.",
+            "noResultsForKeyword": "Za to ključno besedo ni slojev na karti. Preveri iskalni niz.",
             "minChars": "Vpiši vsaj štiri znake. Dovoljeni znaki so črke a-z, kot tudi  å, ä in ö, številke, vračalke in vezaji."
         },
         "loading": "Nalaganje...",
@@ -32,24 +32,32 @@ Oskari.registerLocalization(
             "type-base": "Karta za ozadje",
             "type-wms": "Sloj karte (WMS, WMTS)",
             "type-wfs": "Podatkovni proizvod (WFS)",
-            "type-wfs-manual": "NOT TRANSLATED"
+            "type-wfs-manual": "Osveži podatke s klikom na ''Podatki po pojavu'' ali na tipko ''Osveži''."
         },
         "backendStatus": {
             "OK": {
                 "tooltip": "Sloj karte je trenutno na voljo",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "zaledni sistem deluje"
             },
             "DOWN": {
                 "tooltip": "Sloj karte trenutno ni na voljo",
-                "iconClass": "backendstatus-down"
+                "iconClass": "zaledni sistem ne deluje"
+            },
+            "ERROR": {
+                "tooltip": "Sloj karte trenutno ni na voljo",
+                "iconClass": "backendstatus-error"
             },
             "MAINTENANCE": {
                 "tooltip": "Sloj karte v naslednjih dneh občasno ne bo na voljo",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "status zalednega sistema-vzdrževanje"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -64,15 +72,21 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Novejši",
+                "featuredata": "Vektorski sloji"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Prikaži ## novejše sloje karte",
+                "featuredata": "Prikaži samo vektorske sloje",
+                "remove": "Odstrani filter"
             }
+        },
+        "guidedTour": {
+            "title": "Sloji karte",
+            "message": "Za prikaz podatkovnih proizvodov na karti izberi sloje karte. Klikni na kategorijo in izberi sloj ali vpiši nekaj črk, ki vsebujejo ime podatkovnega proizvoda, ki ga iščeš v iskalnem polju.",
+            "openLink": "Prikaži sloje karte",
+            "closeLink": "Skrij sloje karte",
+            "tileText": "Sloji karte"
         }
     }
-}
-);
+});

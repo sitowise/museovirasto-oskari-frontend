@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "ruotsi",
                     "en": "englanti"
                 },
-                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja teksteihin kartalla."
+                "tooltip": "Valitse kartalla käytettävä kieli. Valinta vaikuttaa käyttöliittymään ja kartalla näkyviin teksteihin. Huom! Kielivalinnat eivät näy esikatselukartalla.",
+                "languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla."
             },
             "size": {
                 "label": "Kartan koko",
@@ -61,7 +62,13 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Karttatyökalut",
                 "selectDrawLayer": "Valitse tallennustaso",
                 "LayerSelectionPlugin": "Karttatasovalikko",
+                "CoordinateToolPlugin": "Koordinaattityökalu",
+                "FeedbackServiceTool": "Palautteen antaminen (Open311)",
+                "MapLegend": "Näytä karttaselitteet",
+                "MapRotator": "Salli kartan pyörittäminen",
+                "CrosshairTool": "Näytä kartan keskipiste",
                 "toolbarToolNames": {
+                    "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",
                     "history_forward": "Siirtyminen seuraavaan näkymään",
                     "measureline": "Matkan mittaus",
@@ -149,8 +156,14 @@ Oskari.registerLocalization(
                 }
             },
             "sizes": {
-                "mobile": "Mobiili",
-                "desktop": "Työpöytä"
+                "small": "Pieni",
+                "medium": "Keskikokoinen",
+                "large": "Suuri",
+                "fill": "Tilan täyttävä",
+                "custom": "Määritä oma koko",
+                "width": "leveys",
+                "height": "korkeus",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Tallenna",
@@ -184,16 +197,14 @@ Oskari.registerLocalization(
                 "name": "Kartan nimi on pakollinen tieto. Anna kartalle nimi ja yritä uudelleen.",
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Kartan tallennus epäonnistui.",
-                "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-). Poista kielletyt merkit ja yritä uudelleen.",
-                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
+                "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä (esim. html-tagit). Poista kielletyt merkit ja yritä uudelleen.",
+                "domainIllegalCharacters": "Verkkosivuston osoitteessa on kiellettyjä merkkejä. Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com. Sallittuja merkkejä ovat aakkoset (a-z, A-Z), numerot (0-9) sekä yhdysviiva (-), alaviiva (_), piste (.), huutomerkki (!), aaltoviiva (~), asteriski (*), puolilainausmerkki (') ja sulut ()."
             }
         },
         "NotLoggedView": {
             "text": "\"Julkaise kartta\" -toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla. Upotetussa kartassa näkyy valitsemasi karttanäkymä ja työkalut. Kartan julkaisu vaatii kirjautumisen palveluun.",
             "signup": "Kirjaudu sisään",
-            "signupUrl": "/web/fi/login",
-            "register": "Rekisteröidy",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Rekisteröidy"
         },
         "StartView": {
             "text": "Tervetuloa karttajulkaisuun. Toiminnon avulla voit julkaista upotetun kartan omalla verkkosivulla.",
@@ -233,7 +244,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Näytä vain julkaistavissa olevat karttatasot"
             }
+        },
+        "guidedTour": {
+            "title": "Karttajulkaisu",
+            "message": "Karttajulkaisu-toiminnolla voit julkaista karttoja omalla verkkosivullasi. <br/><br/> Valitse kartalla näytettävät karttatasot, kerro missä aiot julkaista kartan, valitse työkalut ja määrittele kartan ulkoasu. Paina Tallenna ja kartta on valmis julkaistavaksi. Kopioi vain saamasi html-koodi verkkosivullesi. <br/><br/> Voit myöhemmin päivittää karttaa Omat tiedot -valikon kautta. Muutokset näkyvät heti myös omalla verkkosivullasi.<br/><br/> Vain kirjautuneet käyttäjät voivat julkaista karttoja.",
+            "openLink": "Näytä Karttajulkaisu",
+            "closeLink": "Piilota Karttajulkaisu",
+            "tileText": "Karttajulkaisu"
         }
     }
-}
-);
+});

@@ -42,13 +42,21 @@ Oskari.registerLocalization(
                 "tooltip": "La capa no está actualmente disponible",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "La capa no está actualmente disponible",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "La capa puede no estar disponible de manera periódica durante los próximos días",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -64,14 +72,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Capas",
+            "message": "En el Menú de Capas, usted puede seleccionar la capa a mostrar en el mapa. Usted puede listar las capas por tema o por proveedor. Puede también buscar capas por nombre de capa, nombre del productor de datos o una palabra clave. Y puede chequear las capas seleccionadas en el menú de Capas seleccionadas.",
+            "openLink": "Mostrar las capas",
+            "closeLink": "Ocultar las capas",
+            "tileText": "Capas"
         }
     }
-}
-);
+});

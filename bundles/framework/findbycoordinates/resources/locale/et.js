@@ -1,18 +1,23 @@
 Oskari.registerLocalization(
 {
-    "lang": "en",
+    "lang": "et",
     "key": "findbycoordinates",
     "value": {
-        "title": "FindByCoordinates",
+        "title": "Leia lähim aadress",
         "desc": "FindByCoordinates",
         "tool": {
-            "tooltip": "Find nearest address by clicking the map"
+            "tooltip": "Vajuta kaardil teid huvitavasse piirkonda, et leida lähim aadress ja punkti koordinaadid."
         },
-        "resultsTitle": "Search results",
-        "grid": {
-            "address": "Address",
-            "coordinates": "Coordinates"
-        }
+        "resultsTitle": "Otsingutulemused",
+        "close": "",
+        "channels": {
+            "WHAT3WORDS_CHANNEL": "",
+            "NLS_NEAREST_FEATURE_CHANNEL": "",
+            "ELFGEOLOCATOR_CHANNEL": ""
+        },
+        "channelDescriptions": {
+            "WHAT3WORDS_CHANNEL": ""
+        },
+        "popupTitle": ""
     }
-}
-);
+});

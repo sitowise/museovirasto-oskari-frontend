@@ -48,6 +48,9 @@ Oskari.registerLocalization(
                 "type-wms": "Kaartlaag",
                 "type-wfs": "Productgegevens"
             },
+            "refresh_load": {
+                "tooltip": "Refresh the map layer data. Data is not updated automatically on the map."
+            },
             "filter": {
                 "title": "Filter",
                 "description": "Selecteer de features van de kaart laag:",
@@ -101,7 +104,13 @@ Oskari.registerLocalization(
                     "boolean_operator_missing": "De logische operator ontbreekt."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Geselecteerde kaartlagen",
+            "message": "U kunt de volgorde waarin de kaartlagen worden weergegeven wijzigen door te klikken en slepen, alsmede de transparantie wijzigen. Veranderingen worden weergegeven in het kaartvenster.",
+            "openLink": "Toon geselecteerde kaartlagen",
+            "closeLink": "Verberg geselecteerde kaartlagen",
+            "tileText": "Geselecteerde kaartlagen"
         }
     }
-}
-);
+});

@@ -3,9 +3,9 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "maplegend",
     "value": {
-        "title": "Legendy",
+        "title": "Mapové legendy",
         "desc": "",
-        "noLegendsText": "No map legends available"
+        "noLegendsText": "Mapové legendy sú nedostupné",
+        "invalidLegendUrl": "Mapová legenda je nedostupná"
     }
-}
-);
+});

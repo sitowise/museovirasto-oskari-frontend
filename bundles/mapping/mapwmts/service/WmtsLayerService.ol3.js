@@ -56,7 +56,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             return;
         }
 
-
         // gather capabilities requests
         // make ajax call just once and invoke all callbacks once finished
         var triggerAjaxBln = false;
@@ -75,7 +74,35 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 type : "GET",
                 url : getCapsUrl,
                 success : function(response) {
-                    var caps = format.read(response);
+                    var responseXml = response;
+
+                    // Fixed IE9 issue when getting capabilities XML.
+                    // If IE9 then response capabilities XML is in reposne.xml
+                    if(response.xml){
+                        responseXml = response.xml;
+                    }
+
+                    var caps = format.read(responseXml);
+                    // Check if need reverse matrixset top left coordinates.
+                    // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
+                    // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
+                    var isTileMatrixSets = (caps && caps.Contents && caps.Contents.TileMatrixSet) ? true : false;
+                    if(isTileMatrixSets) {
+                        var matrixSets = caps.Contents.TileMatrixSet;
+                        for(var index = 0; index < matrixSets.length; index++) {
+                            var key = matrixSets[index].Identifier;
+                            var isReverseAttribute = (typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]) ? true : false;
+
+                            if(isReverseAttribute ) {
+                                var matrixSet = matrixSets[index];
+                                for (var i = 0; i < matrixSet.TileMatrix.length; i++) {
+                                    var matrix = matrixSet.TileMatrix[i];
+                                    matrix.TopLeftCorner.reverse();
+                                }
+                            }
+                        }
+                    }
+
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },
@@ -97,7 +124,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         _.each(this.requestsMap[url], function(args) {
             if(!invokeFailure) {
                 var layer = args[0];
-                var options = ol.source.WMTS.optionsFromCapabilities(caps, {layer: layer.getLayerName(), matrixSet: layer.getWmtsMatrixSetId()});
+                var config = me.__getLayerConfig(caps, layer);
+                var options = ol.source.WMTS.optionsFromCapabilities(caps, config);
+                //this doesn't get merged automatically by ol3
+                options.crossOrigin = config.crossOrigin;
+                if(config.url) {
+                    // override capabilities url with the configured one
+                    options.urls = [config.url];
+                }
 
                 var wmtsLayer = new ol.layer.Tile({
                     opacity: layer.getOpacity() / 100.0,
@@ -123,7 +157,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 params : {},
                 buffer: 0,
                 displayInLayerSwitcher: false,
-                isBaseLayer: false
+                isBaseLayer: false,
+                crossOrigin : layer.getAttributes('crossOrigin')
             };
 
             var capsLayer = _.find(caps.Contents.Layer, function(capsLayer) {

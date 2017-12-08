@@ -32,7 +32,7 @@ Oskari.registerLocalization(
             "type-base": "Hintergrundkarte",
             "type-wms": "Kartenebene (WMS, WMTS)",
             "type-wfs": "Datenprodukt (WFS)",
-            "type-wfs-manual": "NOT TRANSLATED"
+            "type-wfs-manual": ""
         },
         "backendStatus": {
             "OK": {
@@ -43,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Die Kartenebene ist derzeit nicht verfügbar.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Die Kartenebene ist derzeit nicht verfügbar.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Die Kartenebene könnte in den nächsten Tagen teilweise nicht verfügbar sein.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Die Informationen zur Verfügbarkeit der Kartenebene liegen nicht vor.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -65,14 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kartenebenen",
+            "message": "Sie können die Datenprodukte auswählen, die auf der Karte angezeigt werden sollen, indem Sie die Kartenebenen markieren. Klicken Sie auf eine Kategorie, um sie zu öffnen und wählen Sie eine Ebene aus. Oder geben Sie einige Buchstaben Ihres Suchbegriffs in das Suchfeld ein.",
+            "openLink": "Zeige Kartenebenen",
+            "closeLink": "Verberge Kartenebenen",
+            "tileText": "Kartenebenen"
         }
     }
-}
-);
+});

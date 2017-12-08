@@ -41,13 +41,41 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplacesimport/resources/locale/en.js"
         }, {
+            "lang": "es",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/es.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/et.js"
+        }, {
             "lang": "is",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplacesimport/resources/locale/is.js"
         }, {
-            "lang": "es",
+            "lang": "it",
             "type": "text/javascript",
-            "src": "../../../../bundles/framework/myplacesimport/resources/locale/es.js"
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/it.js"
+        }, {
+            "lang": "nl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/nl.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/sk.js"
+        }, {
+            "lang": "sl",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/sl.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/nb.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplacesimport/resources/locale/fr.js"
         }]
     },
     "bundle": {

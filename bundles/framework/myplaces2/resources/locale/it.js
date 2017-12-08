@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Questo layer è privato. Clicca qui per pubblicarlo",
                 "publicTooltip": "Questo layer è pubblico. Clicca qui per sospendere la pubblicazione."
             },
+            "addCategoryFormButton": "Nuovo layer",
             "addCategory": "Aggiungi il layer",
             "editCategory": "Modifica il layer",
             "deleteCategory": "Cancella il layer",
@@ -38,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Cancella luogo",
-                    "confirm": "Vuoi cancellare questo luogo?",
+                    "confirm": "Vuoi cancellare questo luogo \"{name}\"?",
                     "btnDelete": "Cancella",
                     "btnCancel": "Cancella",
                     "success": "Il luogo è stato cancellato",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Misura la distanza",
                 "tooltip": "Misura la distanza",
-                "add": "",
-                "next": "",
+                "add": "Aggiungi linea",
+                "next": "Avanti",
                 "edit": "Puoi modificare la linea cliccando e trascinando i vertici.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Misura l'area",
                 "tooltip": "Misura l'area",
-                "add": "",
-                "next": "",
+                "add": "Aggiungi area",
+                "next": "Avanti",
                 "edit": "Puoi modificare l'area cliccando e trascinando i vertici",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Collegamento all'immagine",
-                "previewLabel": "Anteprima immagine",
-                "add": "Nuovo layer"
+                "previewLabel": "Anteprima immagine"
             },
             "rendering": {
                 "label": "Stile luogo",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Stile punto",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi puntuali",
             "symbol": {
                 "label": "Icona"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Stile linea",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi lineari",
             "style": {
                 "label": "Stile"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Stile area",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi areali",
             "linestyle": {
                 "label": "Stile lato"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Il colore di riempimento non è valido. Il valore del colore deve essere compreso tra 0 e 255"
         }
     }
-}
-);
+});

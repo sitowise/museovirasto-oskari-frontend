@@ -1,3 +1,7 @@
+$lightBgColor: rgba(255, 255, 255, 0.9);
+$darkBgColor: rgba(20, 20, 20, 0.8);
+$toolShadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+
 /* Mixins */
 @mixin border-radius($radius) {
     -webkit-border-radius: $radius;
@@ -11,6 +15,14 @@
 }
 
 .featuredata {
+    label.oskari-formcomponent {
+        display: inline-block;
+        width: 140px;
+    }
+
+    .oskariTabs {
+        overflow: auto;
+    }
 
     div.tab-content {
         max-height: 535px;
@@ -23,7 +35,7 @@
     }
 
     /* Override common table settings */
-    th, td  {
+    th, td {
         text-align: left;
         padding-left: 2px;
         padding-right: 15px;
@@ -34,21 +46,24 @@
         &.asc, &.desc {
             background-position: right center;
         }
-     }
+    }
 
     td {
-        &.link  {
+        &.link {
             padding: 20px 0px 0px 0px;
             color: #0091FF;
             text-decoration: underline;
             display: block;
         }
     }
-    
+
     div.icon-funnel {
         cursor: pointer;
     }
 
+    div.gridMessageContainer {
+        margin: 30px 10px 10px 10px;
+    }
 }
 
 div.analyse-filter-popup-content div.filter-option {
@@ -61,6 +76,7 @@ div.analyse-filter-popup-content div.filter-option {
         div.add-filter-option, div.remove-filter-option {
             cursor: pointer;
             display: inline-block;
+
             /* These are icons, so it's OK to have a custom font here. */
             font-size: 48px;
             font-weight: bold;
@@ -68,7 +84,6 @@ div.analyse-filter-popup-content div.filter-option {
             min-width: 16px;
             text-align: center;
         }
-        
     }
 
     &.filter-option-aggregate {
@@ -95,7 +110,6 @@ div.analyse-filter-popup-content div.filter-option {
     }
 
     select {
-
         &.attribute {
             width: 150px;
         }
@@ -108,21 +122,26 @@ div.analyse-filter-popup-content div.filter-option {
         &.operator {
             width: 210px;
         }
-
     }
 }
 
-div.oskariTabs .tabsHeader ul li {
+div.oskariTabs {
+    .tabsHeader ul li {
+        a {
+            display: inline-block;
+        }
 
-    a {
-        display: inline-block;
+        .union-filter {
+            display: inline-block;
+            margin-right: 10px;
+        }
     }
 
-    .union-filter{
-        display: inline-block;
-        margin-right: 10px;
+    .tabsContent {
+        .oskari-checkboxinput {
+            margin-left: 10px;
+        }
     }
-
 }
 
 div.flyout-resizer {
@@ -131,39 +150,146 @@ div.flyout-resizer {
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin {
+    cursor: pointer;
     clear: both;
     display: block;
-    background: #3c3c3c;
+
+    /*    background: #3c3c3c;*/
     @include border-radius(2px);
+
     line-height: 28px;
     margin: 10px auto;
     padding: 0 9px;
 
     a {
-        color: white;
         text-decoration: none;
     }
 
+    /* default and rounded-dark theme */
+    &.toolstyle-default, &.toolstyle-rounded-dark {
+        background-color: $darkBgColor;
+
+        a {
+            color: $lightBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* rounded-light theme */
+    &.toolstyle-rounded-light {
+        background-color: $lightBgColor;
+
+        a {
+            color: $darkBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* sharp-dark theme */
+    &.toolstyle-sharp-dark {
+        background-color: $darkBgColor;
+
+        a {
+            color: $lightBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* sharp-light theme */
+    &.toolstyle-sharp-light {
+        background-color: $lightBgColor;
+
+        a {
+            color: $darkBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* 3d-dark theme */
+    &.toolstyle-3d-dark {
+        background-color: $darkBgColor;
+
+        a {
+            color: $lightBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
+
+    /* 3d-light theme */
+    &.toolstyle-3d-light {
+        background-color: $lightBgColor;
+
+        a {
+            color: $darkBgColor;
+        }
+
+        box-shadow: $toolShadow;
+        -moz-box-shadow: $toolShadow;
+        -webkit-box-shadow: $toolShadow;
+        -o-box-shadow: $toolShadow;
+    }
 }
 
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.error a {
     color: red;
 }
+
 div.mapplugins .mappluginsContainer .mappluginsContent div.featuredataplugin.mapplugin.loading {
-    background: url("../images/ajax-loader.gif") no-repeat 0 0 / cover;
+    background: url("../images/ajax-loader.gif") no-repeat 0 (0 / cover);
 }
 
 div.oskari-flyoutcontent.featuredata ul.tabsItem li a.loading {
-  color : #939393;
-}
-div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
-  color: red;
+    color: #939393;
 }
 
-div.tool.active { 
+div.oskari-flyoutcontent.featuredata ul.tabsItem li a.error {
+    color: red;
+}
+
+div.tool.active {
     background-color: #e6e6e6;
 }
 
 label.selectFeaturesOptions {
     display: block;
+}
+
+div.oskari-flyout.ui-draggable.mobile.oskari-detached {
+    left: 0px !important;
+    border: 2px solid rgb(192, 192, 192);
+    min-width: 200px !important;
+    max-width: 800px;
+
+    div.oskari-flyouttoolbar {
+        background-color: rgb(230, 230, 230);
+        height: 41px;
+
+        div.oskari-flyoutheading {
+            display: none;
+        }
+    }
+}
+
+div.featuredata-go-to-location {
+    cursor: pointer;
 }

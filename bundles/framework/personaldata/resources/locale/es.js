@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Descripción",
                     "publish": "Publicado",
                     "edit": "Editar",
-                    "delete": "Borrar"
+                    "delete": "Borrar",
+                    "default": "Defecto"
                 },
                 "popup": {
                     "edit": "Editar la vista",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Cancelar",
                     "error_noname": "Teclear el nombre de la vista",
                     "deletetitle": "Borrar la vista",
-                    "deletemsg": "¿Desea borrar esta vista?"
+                    "deletemsg": "¿Desea borrar esta vista \"{name}\"?",
+                    "default": "vista por defecto"
                 },
                 "save": {
                     "success": "Se ha guardado la vista",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "Hecho",
                     "save": "Guardar",
                     "cancel": "Cancelar",
-                    "toolbarsave": "Guardar vista"
+                    "toolbarsave": "Guardar vista",
+                    "saveCurrent": "salvar vista actual"
                 },
                 "error": {
                     "title": "¡Error!",
@@ -129,7 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Sí",
             "no": "No"
+        },
+        "guidedTour": {
+            "title": "Mis datos",
+            "message": "El meúu «Mis datos» contiene todos sus sitios salvados, vistas de mapa, mapas embebidos, indicadores, análisis y conjuntos de datos. Usted puede también verificar su información de cuenta. «Mis datos» sólo se muestran a usuarios que han entrado en el sistema",
+            "openLink": "Mostrar mis datos",
+            "closeLink": "Ocultar mis datos",
+            "tileText": "Mis datos"
         }
     }
-}
-);
+});

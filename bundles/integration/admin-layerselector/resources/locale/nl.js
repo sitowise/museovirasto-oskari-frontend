@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Kaart laag",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "De kaart laag is beschikbaar.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "De kaart laag is niet beschikbaar.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Er zal een korte pauze in de beschikbaarheid van de kaart laag zijn tijdens de komende dagen.",
-                "iconClass": "backendstatus-onderhoud"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "confirmResourceKeyChange": "U heeft de unieke naam of het interface-adres voor deze kaartlaag gewijzigd. Om veiligheidsredenen zijn de gebruikers rechten voor deze kaart laag verwijderd en moet u ze opnieuw instellen. Wil je verdergaan?",
@@ -114,6 +96,8 @@ Oskari.registerLocalization(
             "username": "Gebruikers naam",
             "password": "Wachtwoord",
             "attributes": "Attributen",
+            "selectedTime": "Selected time",
+            "time": "Supported time",
             "addInspireName": "Thema naam",
             "addInspireNameTitle": "Naam van het Inspire thema",
             "addOrganizationName": "Organisatie",
@@ -131,21 +115,24 @@ Oskari.registerLocalization(
             "styleDesc": "Default style",
             "minScale": "Minimale schaal",
             "minScaleDesc": "Minimale schaal",
-            "minScalePlaceholder": "Minimale schaal",
+            "minScalePlaceholder": "Minimale schaal in de form van",
             "maxScale": "Maximale schaal",
             "maxScaleDesc": "Maximale schaal",
-            "maxScalePlaceholder": "Maximale schaal",
+            "maxScalePlaceholder": "Maximale schaal in de form van",
             "srsName": "Coordineer systeem",
             "srsNamePlaceholder": "Coordineer systeem",
             "legendImage": "Kaart legenda URL",
             "legendImageDesc": "Het URL-adres van de kaart legenda die de kaart laag beschrijft.",
             "legendImagePlaceholder": "Geef het URL address van de kaart legenda.",
+            "legendUrl": "Legend URL selection",
+            "legendUrlDesc": "Select default legend via legend url selection",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Extra content voor \"Get Feature Info\" -dialoog.",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type voor Get Feature Info (GFI)",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "GFI style (XSLT)",
-            "manualRefresh": "NOT TRANSLATED",
+            "manualRefresh": "Manual refresh",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "De identificatiecode voor WMTS TileMatrixSet",
             "matrixSet": "JSON voor WMTS laag",
@@ -202,5 +189,4 @@ Oskari.registerLocalization(
         "delete": "Verwijder",
         "ok": "OK"
     }
-}
-);
+});

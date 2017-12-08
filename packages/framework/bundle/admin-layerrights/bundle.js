@@ -52,10 +52,10 @@ function() {
             "type" : "text/css",
             "src" : "../../../../bundles/framework/admin-layerrights/resources/css/style.css"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.jquery.js",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.jquery.js",
             "type" : "text/javascript"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.css",
+            "src" : "../../../../libraries/chosen/1.5.1/chosen.css",
             "type" : "text/css"
         }],
 
@@ -71,6 +71,42 @@ function() {
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/en.js"
+        }, {
+            "lang" : "et",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/et.js"
+        }, {
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/is.js"
+        }, {
+            "lang" : "it",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/it.js"
+        }, {
+            "lang" : "nl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/nl.js"
+        }, {
+            "lang" : "sk",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/sk.js"
+        }, {
+            "lang" : "sl",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/sl.js"
+        }, {
+            "lang" : "nb",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/nb.js"
+        }, {
+            "lang" : "es",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/es.js"
+        }, {
+            "lang" : "fr",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/admin-layerrights/resources/locale/fr.js"
         }]
     },
     "bundle" : {

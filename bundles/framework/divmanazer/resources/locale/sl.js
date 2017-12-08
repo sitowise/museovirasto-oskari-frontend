@@ -141,12 +141,12 @@ Oskari.registerLocalization(
         "VisualizationForm": {
             "tooltips": {
                 "dot": "Urejaj slog točkovnega pojava",
-                "area": "Urejaj slog območja  pojava",
+                "area": "Urejaj slog za območje pojava",
                 "line": "Urejaj slog linijskega pojava"
             },
             "dot": {
                 "title": "Slog točkovnega pojava",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za točkovne pojave",
                 "symbol": {
                     "label": "Ikona"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Slog linijskega pojava",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za linijske pojave",
                 "style": {
                     "label": "Pomišljaj"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Slog območja",
-                "tooltip": "",
+                "tooltip": "Definiraj slog za območje pojava",
                 "linestyle": {
                     "label": "Oblika linije"
                 },
@@ -262,7 +262,55 @@ Oskari.registerLocalization(
                     "tabulator": "Tipka Tab"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Izberi pojave iz te karte",
+            "cancelButton": "Prekliči",
+            "clearButton": "Prekliči filter",
+            "refreshButton": "Osveži filter",
+            "addFilter": "Dodaj nov filter",
+            "removeFilter": "Briši filter",
+            "bbox": {
+                "on": "Le izbrani pojavi, ki so vidni v oknu karte",
+                "off": "Vsi pojavi"
+            },
+            "clickedFeatures": {},
+            "values": {
+                "title": "Filtriraj pojave glede na atributne podatke",
+                "placeholders": {
+                    "case-sensitive": "Filter je občutljiv na velike in male črke",
+                    "attribute": "Atribut",
+                    "boolean": "Logični operator",
+                    "operator": "Operator",
+                    "attribute-value": "Vrednost"
+                },
+                "equals": "je enako kot",
+                "like": "je podobno kot",
+                "notEquals": "ni enako kot",
+                "notLike": "ni kot",
+                "greaterThan": "je večje kot",
+                "lessThan": "je manjše kot",
+                "greaterThanOrEqualTo": "je večje kot ali enako kot",
+                "lessThanOrEqualTo": "je manjše kot ali enako kot"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Izberi združeno vrednost",
+                "aggregateValueSelectTitle": "Uporabi združeno vrednost v filtru",
+                "selectAggregateAnalyse": "Izberi združeno analizo",
+                "selectIndicator": "Izberi indikator",
+                "selectReadyButton": "Pripravljen",
+                "getAggregateAnalysisFailed": "Združenih podatkov ni bilo mogoče najti",
+                "noAggregateAnalysisPopupTitle": "Združene analize ni bilo mogoče najti",
+                "noAggregateAnalysisPopupContent": "Združena analiza ni bila izdelana. Lahko izdelaš lastno združeno analizo podatkov z analitično funkcijo in potem uporabiš te podatke za filtriranje."
+            },
+            "validation": {
+                "title": "Filtra ni mogoče osvežiti zaradi naslednjih napak:",
+                "attribute_missing": "Manjka atribut",
+                "operator_missing": "Manjka operator",
+                "value_missing": "Manjka vrednost",
+                "boolean_operator_missing": "Manjka logični operator"
+            }
         }
     }
-}
-);
+});

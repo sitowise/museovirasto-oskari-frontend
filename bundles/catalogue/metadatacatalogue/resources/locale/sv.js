@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Sökområde",
         "delimitArea": "Avgränsa sökområdet på kartan",
         "deleteArea": "Ta bort sökområdet",
+        "startDraw": "Avgränsa sökområdet",
         "dataset": "Dataset",
         "series": "Serie",
         "service": "Tjänst",
@@ -29,10 +30,17 @@ Oskari.registerLocalization(
         "other": "Annan",
         "transformation": "Omvandling",
         "view": "Visa",
+        "service-discovery": "Söktjänst",
+        "service-download": "Nedladdningstjänst",
+        "service-other": "Andra tjänster",
+        "service-transformation": "Omvandlingstjänst",
+        "service-view": "Visningstjänst",
         "Language": "Metadataspråk",
         "ResourceLanguage": "Resursspråk",
         "modifySearch": "Redigera sökalternativ",
         "showSearch": "Visa alla sökresultatet",
+        "showDatasets": "Show only datasets",
+        "showServices": "Show only services",
         "metadataCatalogueResults": "Sökresultat",
         "show": "Visa kartlagret på kartan.",
         "hide": "Dölj kartlagret från kartan.",
@@ -45,6 +53,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Sökordet måste innehålla minst ett tecken. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror och bindestreck backsteg.",
         "too_many_stars": "Sökordet innehåller för många (* -tecken). Det kan innehålla högst N * -tecken.",
         "searching": "Söker…",
+        "updated": "underhållsfrekvens",
         "grid": {
             "name": "Namn",
             "removeBBOX": "Göm geografisk datatäckning",
@@ -53,7 +62,11 @@ Oskari.registerLocalization(
             "remove": "Bort från sökresultaten",
             "rating": "Beskattning"
         },
-        "licenseText": "Sök licens"
+        "licenseText": "Sök licens",
+        "identificationCode": {
+            "creation": "skapandedatum",
+            "publication": "publiceringsdatum",
+            "revision": "datum för senaste revidering"
+        }
     }
-}
-);
+});

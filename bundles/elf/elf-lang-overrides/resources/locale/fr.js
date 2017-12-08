@@ -1,30 +1,40 @@
 Oskari.registerLocalization(
 {
     "lang": "fr",
-    "key": "admin-layerselector",
+    "key": "catalogue.bundle.metadataflyout",
     "value": {
-        "admin": {
-            "en": {
-                "title": "En",
-                "placeholder": "Name in English",
-                "descplaceholder": "Description in English"
+        "flyout": {
+            "heading": {
+                "datasetInformation": "",
+                "contactInformation": "",
+                "metadataContact": "",
+                "technicalInformation": "",
+                "dataQuality": ""
             },
-            "fi": {
-                "title": "Fi",
-                "placeholder": "Name in Finnish",
-                "descplaceholder": "Description in Finnish"
-            },
-            "sv": {
-                "title": "Sv",
-                "placeholder": "Name in Swedish",
-                "descplaceholder": "Description in Swedish"
-            },
-            "es": {
-                "title": "Es",
-                "placeholder": "Name in Spanish",
-                "descplaceholder": "Description in Spanish"
+            "tableHeaders": {
+                "datasetInformation": {
+                    "referenceDate": "",
+                    "temporalInformation": "",
+                    "resourceLanguage": "",
+                    "bbox": "",
+                    "crs": ""
+                },
+                "contactInformation": {
+                    "pointOfContact": ""
+                },
+                "metadataContact": {
+                    "pointOfContact": ""
+                },
+                "technicalInformation": {
+                    "accessConstraintInformation": "",
+                    "lineage": "",
+                    "metadataChangeDate": "",
+                    "uniqueIdentifier": ""
+                },
+                "dataQuality": {
+                    "conformance": ""
+                }
             }
         }
     }
-}
-);
+});

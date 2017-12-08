@@ -32,7 +32,7 @@ Oskari.registerLocalization(
             "type-base": "Bakgrunnskart",
             "type-wms": "Kartlag (WMS, WMTS)",
             "type-wfs": "Dataprodukt (WFS)",
-            "type-wfs-manual": "NOT TRANSLATED"
+            "type-wfs-manual": "Oppdater egenskapsdata ved å klikke på 'Objektegenskaper' eller 'Oppdater'-knappen i kartvinduet."
         },
         "backendStatus": {
             "OK": {
@@ -43,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "Kartlaget er for tiden utilgjengelig",
                 "iconClass": "backendstatus-nede"
             },
+            "ERROR": {
+                "tooltip": "Kartlaget er for tiden utilgjengelig",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Kartlaget kan være midlertidig utilgjengelig de nærmeste dagene",
                 "iconClass": "backendstatus-vedlikehold"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-ok"
+                "iconClass": "backendstatus-ukjent"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-ustabil"
             }
         },
         "buttons": {
@@ -64,15 +72,14 @@ Oskari.registerLocalization(
         },
         "layerFilter": {
             "buttons": {
-                "newest": "Newest",
-                "stats": "Vector layers"
+                "newest": "Nyeste",
+                "featuredata": "Vektorlag"
             },
             "tooltips": {
-                "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
-                "remove": "Remove filter"
+                "newest": "Vis ## nyeste kartlag",
+                "featuredata": "Vis bare vektorlag",
+                "remove": "Ta bort filter"
             }
         }
     }
-}
-);
+});

@@ -31,7 +31,8 @@ Oskari.registerLocalization(
         "tooltip": {
             "type-base": "Achergrondkaart",
             "type-wms": "Kaartlaag (WMS, WMTS)",
-            "type-wfs": "Productgegevens (WFS)"
+            "type-wfs": "Productgegevens (WFS)",
+            "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window."
         },
         "backendStatus": {
             "OK": {
@@ -42,13 +43,21 @@ Oskari.registerLocalization(
                 "tooltip": "De kaartlaag is momenteel niet beschikbaar.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "De kaartlaag is momenteel niet beschikbaar.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "De kaartlaag kan tijdens de komende dagen periodiek niet beschikbaar zijn.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "NOT TRANSLATED",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -64,14 +73,20 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Kaartlagen",
+            "message": "U kunt de productgegevens op de kaart laten weergeven door kaartlagen te selecteren. Klik op een categorie om deze te openen en selecteer een laag of typ een paar letters in van de naam van het product dat u zoekt in het zoekveld.",
+            "openLink": "Toon kaartlagen",
+            "closeLink": "Verberg kaartlagen",
+            "tileText": "Kaartlagen"
         }
     }
-}
-);
+});

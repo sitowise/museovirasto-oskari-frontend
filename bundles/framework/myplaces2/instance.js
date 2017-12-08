@@ -11,7 +11,7 @@ Oskari.clazz.define(
      * @static
      */
     function () {
-        this._localization = null;
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
         this.sandbox = null;
         this.buttons = undefined;
         this.categoryHandler = undefined;
@@ -29,34 +29,10 @@ Oskari.clazz.define(
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this.sandbox;
-        },
-        /**
-         * @method getLocalization
-         * Returns JSON presentation of bundles localization data for current language.
-         * If key-parameter is not given, returns the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization: function (key) {
-            if (!this._localization) {
-                this._localization = Oskari.getLocalization(this.getName());
-            }
-            if (key) {
-                if (this._localization &&
-                    this._localization[key]) {
-                    return this._localization[key];
-                } else {
-                    return key;
-                }
-            }
-            return this._localization;
         },
         /**
          * @method showMessage
@@ -67,10 +43,10 @@ Oskari.clazz.define(
         showMessage: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
-
             okBtn.setHandler(function () {
                 dialog.close(true);
             });
+            dialog.makeModal();
             dialog.show(title, message, [okBtn]);
         },
         /**
@@ -80,10 +56,9 @@ Oskari.clazz.define(
          */
         forceDisable: function () {
             this.buttons.disableButtons();
-            var loc = this.getLocalization();
 
-            this.showMessage(loc.category.organization + ' - ' +
-                loc.notification.error.title, loc.notification.error.generic);
+            this.showMessage(this.loc('category.organization') + ' - ' +
+            this.loc('notification.error.title'), this.loc('notification.error.generic'));
         },
         /**
          * @method enableGfi
@@ -141,6 +116,50 @@ Oskari.clazz.define(
          */
         init: function () {},
         /**
+         * @method  @private _addEventHandlers Add event handlers
+         */
+        _addRequestHandlers: function(){
+            var me = this,
+                conf = me.conf,
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
+                sandbox = Oskari.getSandbox(sandboxName);
+
+            var editRequestHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler',
+                sandbox,
+                me
+            );
+            var openAddLayerDialogHandler = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler',
+                sandbox,
+                me
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.EditPlaceRequest',
+                editRequestHandler
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.DeletePlaceRequest',
+                editRequestHandler
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.EditCategoryRequest',
+                editRequestHandler
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.DeleteCategoryRequest',
+                editRequestHandler
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.PublishCategoryRequest',
+                editRequestHandler
+            );
+            sandbox.addRequestHandler(
+                'MyPlaces.OpenAddLayerDialogRequest',
+                openAddLayerDialogHandler
+            );
+        },
+        /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
@@ -163,7 +182,7 @@ Oskari.clazz.define(
             this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
             this.buttons.start();
 
-            var user = sandbox.getUser();
+            var user = Oskari.user();
             if (!user.isLoggedIn()) {
                 // guest users don't need anything else
                 return;
@@ -178,8 +197,7 @@ Oskari.clazz.define(
                 actionUrl = this.conf.queryUrl;
             // Set max features to configured.
             var maxFeatures = (conf ? conf.maxFeatures : undefined);
-            //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
-            // this.conf.queryUrl;
+
             // back end communication
             this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
                 actionUrl, user.getUuid(), sandbox, defaults, this, {
@@ -194,47 +212,11 @@ Oskari.clazz.define(
             this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
             this.view.start();
 
-            this.editRequestHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler',
-                sandbox,
-                me
-            );
-            this.openAddLayerDialogHandler = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDialogHandler',
-                sandbox,
-                me
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.EditPlaceRequest',
-                this.editRequestHandler
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.DeletePlaceRequest',
-                this.editRequestHandler
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.EditCategoryRequest',
-                this.editRequestHandler
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.DeleteCategoryRequest',
-                this.editRequestHandler
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.PublishCategoryRequest',
-                this.editRequestHandler
-            );
-            sandbox.addRequestHandler(
-                'MyPlaces.OpenAddLayerDialogRequest',
-                this.openAddLayerDialogHandler
-            );
-
-            var tabLocalization = this.getLocalization('tab');
+            me._addRequestHandlers();
 
             this.tab = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
-                this,
-                tabLocalization
+                this
             );
 
             this.tab.initContainer();
@@ -246,7 +228,7 @@ Oskari.clazz.define(
             var title = this.tab.getTitle(),
                 content = this.tab.getContent(),
                 first = true,
-                id = 'oskari_myplaces2_tabpanel_header',
+                id = me.idPrefix,
                 reqName = 'PersonalData.AddTabRequest',
                 reqBuilder = sandbox.getRequestBuilder(reqName),
                 req = reqBuilder(title, content, first, id);
@@ -275,12 +257,11 @@ Oskari.clazz.define(
                     "Oskari.mapframework.bundle.myplaces2.CategoryHandler",
                     me
                 ),
-                btnLoc = me.getLocalization('buttons'),
                 buttons = [],
                 saveBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.buttons.SaveButton'
                 ),
-                cancelBtn = dialog.createCloseButton(btnLoc.cancel);
+                cancelBtn = dialog.createCloseButton(me.loc('buttons.cancel'));
 
             saveBtn.setHandler(function () {
                 var values = categoryForm.getValues(),
@@ -302,7 +283,7 @@ Oskari.clazz.define(
             // TODO add buttons
             var form = categoryForm.getForm();
             dialog.show(
-                me.getLocalization('tab').addCategory,
+                me.loc('tab.addCategory'),
                 form,
                 buttons
             );
@@ -318,7 +299,7 @@ Oskari.clazz.define(
 
         _getCategoryDefaults: function () {
             var defaults = {
-                name: this.getLocalization('category').defaultName,
+                name: this.loc('category.defaultName'),
                 point: {
                     shape: 1,
                     color: "000000",
@@ -340,8 +321,12 @@ Oskari.clazz.define(
                     fill: -1
                 }
             };
-            if (!this.conf) return defaults;
-            if (!this.conf.defaults) return defaults;
+            if (!this.conf) {
+                return defaults;
+            }
+            if (!this.conf.defaults) {
+                return defaults;
+            }
             for (var prop in defaults) {
                 if (this.conf.defaults[prop]) {
                     defaults[prop] = this.conf.defaults[prop];

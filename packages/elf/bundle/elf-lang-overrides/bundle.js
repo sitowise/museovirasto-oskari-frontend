@@ -1,6 +1,6 @@
 /**
  * Definition for bundle. See source for details.
- * 
+ *
  * @class Oskari.elf.lang.overrides.Bundle
  */
 Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
@@ -26,22 +26,58 @@ Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
                 "lang": "fi",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-lang-overrides/resources/locale/fi.js"
-            }, 
+            },
             {
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-lang-overrides/resources/locale/sv.js"
-            }, 
+            },
             {
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-lang-overrides/resources/locale/en.js"
-            }, 
+            },
             {
                 "lang": "es",
                 "type": "text/javascript",
                 "src": "../../../../bundles/elf/elf-lang-overrides/resources/locale/es.js"
-            }
+            }, {
+                "lang" : "et",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/et.js"
+            }, {
+                "lang" : "is",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/is.js"
+            }, {
+                "lang" : "it",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/it.js"
+            }, {
+                "lang" : "nl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/nl.js"
+            }, {
+                "lang" : "sk",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/sk.js"
+            }, {
+                "lang" : "sl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/sl.js"
+            }, {
+                "lang" : "nb",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/nb.js"
+            }, {
+                "lang" : "fr",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/fr.js"
+              }, {
+                  "lang" : "nn",
+                  "type" : "text/javascript",
+                  "src" : "../../../../bundles/elf/elf-lang-overrides/resources/locale/nn.js"
+              }
         ]
     },
     "bundle" : {
@@ -81,5 +117,5 @@ Oskari.clazz.define("Oskari.elf.lang.overrides.Bundle", function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("elf-lang-overrides", 
+Oskari.bundle_manager.installBundleClass("elf-lang-overrides",
     "Oskari.elf.lang.overrides.Bundle");

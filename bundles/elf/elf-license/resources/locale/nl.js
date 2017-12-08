@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Fout bij het verkrijgen van licentie-informatie",
                 "message": "Kan licentie-informatie niet krijgen"
             },
-            "failedGetLicenseInformation": {
-                "title": "Licentie informatie verkrijgen mislukt",
-                "message": "Kan geen verbinding maken met licentie server"
-            },
             "cannotGetLicensePrice": {
                 "title": "Licentie prijs krijgen mislukt",
                 "message": "Kan licentie prijs niet krijgen"
@@ -42,6 +38,11 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Licentie details",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
             "licenseModelsTitle": "Licentie modellen:",
             "noRightToAnyLicenseModels": "Je hebt geen rechten op de licentie modellen.",
             "loginShort": "Inloggen om licentie modellen te laten zien",
@@ -53,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Vul licentie gegevens, alle verplichte velden zijn gemarkeerd met sterretje (*). Druk op 'Volgende' om licentie samenvatting en de prijs te zien. Als u een ander licentie model wilt selecteren druk dan op 'Vorige'. U kunt ook uw bestelling te stoppen door op de knop 'Sluiten' te drukken.",
                 "summary": "Lees licentie en accepteer de ingevulde licentie door op 'Acceptatie' te drukken. Als u gevulde velden wilt bewerken, druk dan op de knop 'Terug'. U kunt ook uw bestelling stoppen door op de knop 'Sluiten' te drukken.",
                 "orderDetails": "Hierboven ziet u uw licentie bestelgegevens. Sluit dialoog venster door te drukken op de knop 'Sluiten'. Als u uw bestelling wilt annuleren, druk dan op 'Annuleer licentie' ."
-            },
-            "concludeSuccessTitle": "License concluded successfully",
-            "conclude": {
-                "title": "Details licentie bestelling",
-                "productid": "Product",
-                "licenseid": "Licentie",
-                "validto": "Geldig tot"
             },
             "deactivateConfirm": {
                 "title": "licentie deactiveren",
@@ -83,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Ja"
         }
     }
-}
-);
+});

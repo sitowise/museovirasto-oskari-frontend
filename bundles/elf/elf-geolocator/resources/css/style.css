@@ -1,6 +1,7 @@
 div.geolocator-search div.errors {
   /* Error color, this should prolly be generalized */
   color: red; }
+
 div.geolocator-search div.search-additionals {
   margin: 15px 0 15px; }
   div.geolocator-search div.search-additionals div.input-fields {
@@ -11,22 +12,28 @@ div.geolocator-search div.search-additionals {
       width: 50%; }
       div.geolocator-search div.search-additionals div.input-fields div.additional-input div.controls label {
         margin-left: 5px; }
+
 div.geolocator-search div.search-buttons {
   display: flex;
   justify-content: space-between; }
   div.geolocator-search div.search-buttons div.geolocator-button input[type="button"] {
     width: 100% !important; }
+
 div.geolocator-search div.search-fields input[type="text"] {
   width: 80% !important; }
+
 div.geolocator-search div.search-fields label {
   display: block; }
+
 div.geolocator-search div.search-fields div.search-field {
   margin: 8px 0 8px; }
+
 div.geolocator-search input.elf-error {
   border: 1px solid red; }
 
 div.geolocator-results div.header-results span.back {
   float: right; }
+
 div.geolocator-results div.search-results {
   margin-top: 15px; }
   div.geolocator-results div.search-results.loading {
@@ -40,6 +47,54 @@ div.geolocator-results div.search-results {
   div.geolocator-results div.search-results li.exonymList {
     text-decoration: none !important;
     margin-left: 40px; }
+
+div.geoLocatorRow div.rowLabel {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.geoLocatorDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.ui-country-autocomplete-widget {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.locationTypeDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.geoLocatorRow div.nameLanguageDropdown {
+  display: table-cell;
+  vertical-align: middle;
+  margin-left: 0;
+  min-width: 130px;
+  width: 130px;
+  white-space: nowrap; }
+
+div.moreLess {
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
+div.geoLocatorRow {
+  padding-top: 10px;
+  padding-bottom: 10px; }
 
 .elf-fake-link {
   /* This should apparently look like a normal link */

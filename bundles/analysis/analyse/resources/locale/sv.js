@@ -3,19 +3,17 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "Analyse",
     "value": {
-        "title": "Analys <font color=red>(BETA)</font>",
-        "flyouttitle": "Analys <font color=red>(BETA)</font>",
+        "title": "Analys",
+        "flyouttitle": "Analys",
         "desc": "",
         "btnTooltip": "Analys",
         "NotLoggedView": {
             "text": "Med häjlp av Analys funktion man kan göra enkla geografiska analys. Analyser kan göras för data produkter. Endast inloggade användare kan göra analys. Logga in <a href=\"/web/sv/login\">här</a>.",
             "signup": "Logga in",
-            "signupUrl": "/web/sv/login",
-            "register": "Registrera dig",
-            "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Registrera dig"
         },
         "AnalyseView": {
-            "title": "Analys <font color=red>(BETA)</font>",
+            "title": "Analys",
             "content": {
                 "label": "Kartlager",
                 "drawToolsLabel": "Objekt verktyg",
@@ -160,7 +158,7 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "oskari_analyse_Count",
-                        "label": "Objekt antal",
+                        "label": "Antal objekt",
                         "selected": true
                     },
                     {
@@ -193,7 +191,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Välj en attribut",
-                "footer": "Skyddade objekt tas inte med i beräkning."
+                "footer": "Skyddade objekt tas inte med i beräkning.",
+                "aggregateAdditionalInfo": "Obs! Du har valt attribut data som innehåller text. Endast antal objekt kan beräknas för dem. Om antal objekt inte har valts, textlig attributdata tas inte med i analysresultatet."
             },
             "buffer_size": {
                 "label": "Zon storlek",
@@ -280,14 +279,40 @@ Oskari.registerLocalization(
                 "mode": "Välj metodstyp",
                 "modeTooltip": "Välj om du vill använda statistiska mått i analys.",
                 "normalMode": "Normal spatial join",
-                "aggregateMode": "Statistiska mått"
+                "aggregateMode": "Statistiska mått",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Objekt antal"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Minsta värde"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Största värde"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Medelvärde"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Standardavvikelse"
+                    }
+                ]
             },
             "params": {
                 "label": "Resultat attribut",
                 "aggreLabel": "Attribut data för statistiska mått",
                 "aggreLabelTooltip": "Välj högst 10 attributer. Statistiska mått beräknas till dem.",
                 "labelTooltip": "Välj högst 10 attributer som tas med i resultaten.",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "oskari_analyse_all",
@@ -315,58 +340,6 @@ Oskari.registerLocalization(
                 "save": "Lagra och sluta",
                 "analyse": "Gör analys",
                 "data": "Mera kartlager"
-            },
-            "filter": {
-                "title": "Filtrering",
-                "description": "Filtrera objekt från analyslager:",
-                "cancelButton": "Avbryt",
-                "clearButton": "Töm filter",
-                "refreshButton": "Uppdatera filter",
-                "addFilter": "Tilllägg",
-                "removeFilter": "Ta bort",
-                "content": {
-                    "title": "Geografisk filter"
-                },
-                "bbox": {
-                    "on": "Endast objekt som syns på kartan",
-                    "off": "Alla objekt"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Endast objekt som utvalda på kartan",
-                    "filterByGeometryLabel": "Endast objekt som:",
-                    "filterByGeometryIntersect": "klipper utvalda objekt",
-                    "filterByGeometryContains": "är inom utvalda objekt"
-                },
-                "values": {
-                    "title": "På grund av attribut data",
-                    "placeholders": {
-                        "case-sensitive": "Bokstavsstorlek verkar på val.",
-                        "attribute": "Attribut",
-                        "boolean": "Logisk operator",
-                        "operator": "Operator",
-                        "attribute-value": "Värde"
-                    },
-                    "info": {
-                        "bboxOff": "Utan geografisk filter analys riktas sig alla objekt. Tillsätt en attributfilter eller välj \"endast objekt som visas på kartan\".",
-                        "filterByGeometrySelected": "Du kan filtrera attributer endast om du använder inte filter för valda objekt."
-                    },
-                    "equals": "är lika med",
-                    "like": "är ungefär lika med",
-                    "notEquals": "är inte lika med",
-                    "notLike": "är inte ungefär lika med",
-                    "greaterThan": "är större än",
-                    "lessThan": "är mindre än",
-                    "greaterThanOrEqualTo": "är större än eller lika med",
-                    "lessThanOrEqualTo": "är mindre än eller lika med"
-                },
-                "validation": {
-                    "title": "Fixa följande fel och försök igen:",
-                    "attribute_missing": "Attribute saknas. Välj en attribut.",
-                    "operator_missing": "Operator saknas. Välj en operator.",
-                    "value_missing": "Värde saknas. Välj ett värde.",
-                    "boolean_operator_missing": "Logisk operator saknas. Välj en logisk operator.",
-                    "bbox_selected_with_no_properties": "Utan geografisk filter alla objekt ska tas med i analys. Tilllägg en attributfilter eller välj \"Endast objekt som syns på kartan\"."
-                }
             },
             "help": "Anvisning",
             "success": {
@@ -431,7 +404,7 @@ Oskari.registerLocalization(
                 "placeholder": "Skriv analyslager namn."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Punkt",
                     "color": "Färg",
@@ -461,7 +434,7 @@ Oskari.registerLocalization(
                 "delete": "Ta bort"
             },
             "title": "Analyser",
-            "confirmDeleteMsg": "Vill du ta bort analyslager:",
+            "confirmDeleteMsg": "Vill du ta bort analyslager \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Avbryt",
@@ -477,5 +450,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

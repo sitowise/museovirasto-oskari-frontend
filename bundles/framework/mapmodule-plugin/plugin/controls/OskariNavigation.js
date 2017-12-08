@@ -19,7 +19,7 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
     setup : function(mapmodule) {
         this.mapmodule = mapmodule;
         this.sandbox = this.mapmodule.getSandbox();
-        this._hoverEventBuilder = this.sandbox.getEventBuilder('MouseHoverEvent');
+        this._hoverEventBuilder = Oskari.eventBuilder('MouseHoverEvent');
         this._hoverEvent = this._hoverEventBuilder();
     },
 
@@ -45,10 +45,17 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             };
         };
 
+
         var clickCallbacks = {
             'dblclick': movementHook(this.defaultDblClick),
-            'dblrightclick': movementHook(this.defaultDblRightClick)
+            'dblrightclick': movementHook(this.defaultDblRightClick),
+            'click': function(evt) {
+                me.mapmodule.__sendMapClickEvent(evt);
+                return true;
+            }
+
         };
+
         // </custom hooking>
         var clickOptions = {
             'double': true,
@@ -64,9 +71,12 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
                 documentDrag: this.documentDrag
             }, this.dragPanOptions)
         );
+
         // <custom hooking>
         var originalPanDone = this.dragPan.panMapDone;
         this.dragPan.panMapDone = movementHook(originalPanDone, this.dragPan);
+
+
         // used by MouseWheel up/down
         this.wheelChange = movementHook(this.wheelChange);
         // </custom hooking>
@@ -138,3 +148,4 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         this.sandbox.notifyAll(this._hoverEvent);
     }
 });
+

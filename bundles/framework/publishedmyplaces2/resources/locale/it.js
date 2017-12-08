@@ -51,16 +51,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Misura distanza",
                 "tooltip": "Misura distanza",
-                "add": "",
-                "next": "",
+                "add": "Aggiungi linea",
+                "next": "Avanti",
                 "edit": "Puoi modificare la linea cliccando e trascinando i suoi vertici",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Misura area",
                 "tooltip": "MisuRa area",
-                "add": "",
-                "next": "",
+                "add": "Aggiungi area",
+                "next": "Avanti",
                 "edit": "Puoi modificare l'area cliccando e spostando i suoi vertici",
                 "noResult": "0 m²"
             },
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Stile punto",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi puntuali",
             "symbol": {
                 "label": "Icona"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Stile linea",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi lineari",
             "style": {
                 "label": "Stile"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Stile area",
-            "tooltip": "",
+            "tooltip": "Definisci uno stile per gli elementi areali",
             "linestyle": {
                 "label": "Stile lato"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Il colore di riempimento non è valido. Il valore del colore deve essere compreso tra 0 e 255"
         }
     }
-}
-);
+});

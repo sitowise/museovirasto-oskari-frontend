@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "Map layer",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "The map layer is currently available.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "The map layer is currently not available.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "There will be short breaks in the map layer's availability during the next few days.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "This map layer group will be deleted. Do you want to continue?",
             "confirmDeleteLayer": "This map layer will be deleted. Do you want to continue?",
@@ -114,6 +97,8 @@ Oskari.registerLocalization(
             "username": "User name",
             "password": "Password",
             "attributes": "Attributes",
+            "selectedTime": "Selected time",
+            "time": "Supported time",
             "addInspireName": "Theme name",
             "addInspireNameTitle": "The name of the Inspire theme.",
             "addOrganizationName": "Organization",
@@ -129,6 +114,14 @@ Oskari.registerLocalization(
             "opacityDesc": "Define the layer opacity. If the setting is 0%, the layer will be completely transparent.",
             "style": "Default style",
             "styleDesc": "Default style",
+            "importStyle": "New sld style",
+            "addNewStyle": "Add new SLD style",
+            "sldStyleName": "Style name",
+            "sldFileContentDesc": "Copy/paste SLD file content (xml) to text area",
+            "sldFileContent": "SLD file content",
+            "sldStylesFetchError": "Couldn't get SLD styles",
+            "addSldStyleDesc": "Select styles for the current layer",
+            "addSldStyle": "Sld style selection",
             "minScale": "Minimum scale",
             "minScaleDesc": "Minimum scale",
             "minScalePlaceholder": "Minimum scale",
@@ -140,12 +133,16 @@ Oskari.registerLocalization(
             "legendImage": "Map legend URL",
             "legendImageDesc": "The URL address of the map legend describing the map layer.",
             "legendImagePlaceholder": "Give the URL address of the map legend.",
+            "legendUrl": "Legend URL selection",
+            "legendUrlDesc": "Select default legend via legend url selection",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Additional content for \"Get Feature Info\"-dialog.",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "GFI style (XSLT)",
-            "manualRefresh": "NOT TRANSLATED",
+            "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve depth",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "The identifier for WMTS TileMatrixSet",
             "matrixSet": "JSON for WMTS layer",
@@ -202,5 +199,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});

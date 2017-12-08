@@ -1,8 +1,9 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "is",
     "key": "elf-language-selector",
     "value": {
-        "title" : "Change language",
-        "change": "Change"
+        "title": "Skipta um tungumál",
+        "change": "Breyta"
     }
 });

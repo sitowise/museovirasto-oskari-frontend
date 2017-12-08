@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Beschrijving",
                     "publish": "Gepubliceerd",
                     "edit": "Wijzigen",
-                    "delete": "Verwijderen"
+                    "delete": "Verwijderen",
+                    "default": "Default"
                 },
                 "popup": {
                     "edit": "Wijzig informatie van de weergave",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Annuleren",
                     "error_noname": "Typ de naam",
                     "deletetitle": "Verwijderen bevestigen",
-                    "deletemsg": "Wilt u deze kaartweergave verwijderen?"
+                    "deletemsg": "Wilt u deze kaartweergave verwijderen?",
+                    "default": "Default view"
                 },
                 "save": {
                     "success": "De kaartweergave is opgeslagen.",
@@ -45,7 +47,8 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "save": "Opslaan",
                     "cancel": "Annuleren",
-                    "toolbarsave": "Kaartweergave opslaan"
+                    "toolbarsave": "Kaartweergave opslaan",
+                    "saveCurrent": "Save current view"
                 },
                 "error": {
                     "title": "Fout!",
@@ -129,7 +132,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Ja",
             "no": "Nee"
+        },
+        "guidedTour": {
+            "title": "Mijn gegevens",
+            "message": "Alle plaatsen die u op de kaart hebt gemarkeerd, uw opgeslagen kaartweergaves en geïntegreerde kaarten worden hier weergegeven wanneer u bent aangemeld bij de dienst.",
+            "openLink": "Toon mijn gegevens",
+            "closeLink": "Verberg mijn gegevens",
+            "tileText": "Mijn gegevens"
         }
     }
-}
-);
+});

@@ -3,22 +3,21 @@ Oskari.registerLocalization(
     "lang": "et",
     "key": "BackendStatus",
     "value": {
-        "title": "NOT TRANSLATED",
+        "title": "Backend Status",
         "desc": "",
         "feedback": {
             "missing_backendstatus_status": {
-                "title": "NOT TRANSLATED",
-                "message": "NOT TRANSLATED"
+                "title": "Kaardikihid",
+                "message": "Info selle kaardikihi kohta puudub"
             },
             "missing_backendstatus_information": {
-                "title": "NOT TRANSLATED",
-                "message": "NOT TRANSLATED"
+                "title": "Kaardikihid",
+                "message": "Info selle kaardikihi kohta puudub"
             },
             "missing_backendstatus_infourl": {
-                "title": "NOT TRANSLATED",
-                "message": "NOT TRANSLATED"
+                "title": "Kaardikihid",
+                "message": "Info selle kaardikihi kohta puudub"
             }
         }
     }
-}
-);
+});

@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Fel",
                 "message": "Licensinfo kunde inte hämtas."
             },
-            "failedGetLicenseInformation": {
-                "title": "Fel",
-                "message": "Licensserver kunde inte anslutas."
-            },
             "cannotGetLicensePrice": {
                 "title": "Fel",
                 "message": "Licenspris kunde inte hämtas."
@@ -42,6 +38,11 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "Licensinfo",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
             "licenseModelsTitle": "Licensmodeller",
             "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
             "loginShort": "Log in to show licensemodels.",
@@ -53,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Fyll in licensinfo. Obligatoriska data har markerat med en asterisk (*). Om du vill se licensreferaten och pris, klicka \"Nästa\". Om du vill välja en olik modell, klicka \"Tillbaka\". Om du vill avbryta beställningen, klicka \"Stäng\".",
                 "summary": "Läsa licensvillkor och godkänn dem genom att klicka \"Beställ licens\". Om du vill bearbeta beställningen, klicka \"Tillbaka\". Om du vill avbryta beställningen, klicka \"Stäng\".",
                 "orderDetails": "Du kan se licensinfo ovanför. Om du vill stänga fönster, klicka \"Stäng\". Om du vill avbryta beställningen, klicka \"Aktivera av beställning\"."
-            },
-            "concludeSuccessTitle": "Licens har beställt.",
-            "conclude": {
-                "title": "Licensinfo",
-                "productid": "Produkt",
-                "licenseid": "Licens",
-                "validto": "Giltig till"
             },
             "deactivateConfirm": {
                 "title": "Licens avaktivering",
@@ -83,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Ja"
         }
     }
-}
-);
+});

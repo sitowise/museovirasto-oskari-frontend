@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "kartlager",
             "type-wfs": "Dataprodukt"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Kartlagret är tillgängligt just nu.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Kartlagret är inte tillgängligt just nu.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Kart CRS är inte understödja i service capabilities",
             "confirmResourceKeyChange": "Du har ändrat gränssnittjänstens unik namn- eller URL-address. För säkerhets skull, nuvarande rättigheter till kartlager ska raderas. Fortsätt?",
             "confirmDeleteLayerGroup": "Kartlagergrupp blir raderad. Fortsätt?",
             "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
@@ -134,9 +117,9 @@ Oskari.registerLocalization(
             "addSldStyle": "Välj sld stil",
             "importStyle": "Ny SLD stil",
             "addNewStyle": "Sätta ny SLD stil",
-            "sldStyleName":"Stil namn",
-            "sldFileContentDesc":"Kopiera/sätta SLD fil innehåll (xml) till tekst block",
-            "sldFileContent":"SLD fil innehåll",
+            "sldStyleName": "Stil namn",
+            "sldFileContentDesc": "Kopiera/sätta SLD fil innehåll (xml) till tekst block",
+            "sldFileContent": "SLD fil innehåll",
             "sldStylesFetchError": "SLD stilen kunde inte hämtas",
             "styleDesc": "Förvald stil",
             "editStyle": "Editera SLD stil",
@@ -155,12 +138,16 @@ Oskari.registerLocalization(
             "legendImage": "URL adress för kartförklaringar",
             "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+            "legendUrl": "Välja kartförklaring URL",
+            "legendUrlDesc": "Välja standardval kartförklaring",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Tilläggande text för GFI-dialog",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
             "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve xlink:hrefs",
             "matrixSetId": "WMTS MatrixSetId",
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
@@ -217,5 +204,4 @@ Oskari.registerLocalization(
         "delete": "Ta bort",
         "ok": "OK"
     }
-}
-);
+});

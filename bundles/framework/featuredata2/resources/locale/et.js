@@ -10,139 +10,94 @@ Oskari.registerLocalization(
         "nodata": "Valitud kaardikihid ei sisalda atribuutandmeid.",
         "featureNameAll": "Andmete tüüp",
         "errorscale": "Andmeid ei saa selles mõõtkavas näidata. Palun muuda mõõtkava.",
-        "errordata": "Serverist edastatud andmed sisaldavad vigu. Palun nihuta kaarti veidi selle uuendamiseks.",
+        "errordata": "Serverist edastatud andmed sisaldavad vigu. Palun nihuta kaarti veidi päringu kordamiseks.",
         "columnSelectorTooltip": "Näita veerge",
+        "featureDataPopup": "Statistilised andmed",
         "selectionTools": {
             "title": "Vali nähtused kaardil",
-            "instructions": "NOT TRANSLATED",
+            "instructions": "",
+            "selectFromTop": "Kõige pealmisest kaardikihist",
+            "selectAll": "Kõigist kaardikihtidest",
             "link": {
                 "title": "Vali rohkem"
             },
             "button": {
-                "cancel": "Cancel",
-                "empty": "Tühista",
-                "show": "NOT TRANSLATED",
+                "cancel": "Sulge",
+                "empty": "Deselekteeri",
+                "show": "Näita objekte",
                 "close": "Sulge",
-                "edit": "Toimeta"
+                "edit": "Muuda"
             },
             "tools": {
                 "point": {
-                    "tooltip": "Lisa punkt"
+                    "tooltip": "Lisa punkt. Kui punkt asub objekti sees, siis objekt selekteeritakse."
                 },
                 "line": {
-                    "tooltip": "Lisa joon"
+                    "tooltip": "Vea joon. Kui joon lõikub objektiga, objekt selekteeritakse."
                 },
                 "polygon": {
-                    "tooltip": "Lisa polügoon"
+                    "tooltip": "Joonista polügoon. Kui polügoon lõikub objektiga, objekt selekteeritakse."
                 },
                 "square": {
-                    "tooltip": "Lisa kolmnurk"
+                    "tooltip": "Joonista ruut. Kui ruut lõikub objektiga, objekt selekteeritakse."
                 },
                 "circle": {
-                    "tooltip": "Lisa ring"
+                    "tooltip": "Joonista ring. Kui ruut lõikub objektiga, objekt selekteeritakse."
                 },
                 "select": {
-                    "tooltip": "NOT TRANSLATED"
+                    "tooltip": "Joonista vabakäe geomeetria. Selekteeritakse objektid joonistuse alusel."
                 }
             }
         },
         "layer": {
-            "style": "NOT TRANSLATED",
-            "show": "NOT TRANSLATED",
-            "hide": "NOT TRANSLATED",
-            "hidden": "NOT TRANSLATED",
-            "out-of-scale": "NOT TRANSLATED",
-            "move-to-scale": "NOT TRANSLATED",
-            "out-of-content-area": "NOT TRANSLATED",
-            "move-to-content-area": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
-            "object-data": "NOT TRANSLATED",
+            "style": "Stiil",
+            "show": "Näita",
+            "hide": "Peida",
+            "hidden": "Kaadikiht on ajutiselt peidetud.",
+            "out-of-scale": "Kaardikiht ei ole antud mõõtkavas nähtav.",
+            "move-to-scale": "Muuda mõõtkava sobivaks.",
+            "out-of-content-area": "Nähtavas kaardiaknas ei ole selle kaardikihi objekte.",
+            "move-to-content-area": "Liigu asukohta, kus kaardikiht on nähtav.",
+            "description": "Kirjeldus",
+            "object-data": "Objekti info",
             "rights": {
-                "notavailable": "NOT TRANSLATED",
-                "guest": "NOT TRANSLATED",
-                "loggedin": "NOT TRANSLATED",
-                "official": "NOT TRANSLATED",
-                "need-login": "NOT TRANSLATED",
+                "notavailable": "Avalikustamine keelatud",
+                "guest": "Logi sisse, kui soovid kaarti avalikustada lõimkaardil",
+                "loggedin": "Avalikustamine lubatud",
+                "official": "Avalikustamine lubatud ametkondadele",
+                "need-login": "Logi sisse, et avalikustada lõimkaarti",
                 "can_be_published_by_provider": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Avalikustamine lubatud andmevaldajatele.",
+                    "tooltip": "Kaardikiht on avalikustamiseks lõimkaartidel ainult andmevaldajatele. Kontakteeru andmevaldaja toega."
                 },
                 "can_be_published": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Avalikustamine lubatud.",
+                    "tooltip": "Kaardikiht on avalikustatav lõimkaardil. Kasutuslimiit ei ole piiratud."
                 },
                 "can_be_published_map_user": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Avalikustamine lubatud",
+                    "tooltip": "Kaardikiht on avalikustatav lõimkaardil. Kasutusulimiit võib olla määratud."
                 },
                 "no_publication_permission": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Avalikustamine keelatud",
+                    "tooltip": "Kaardikiht ei ole avalikustatav lõimkaardil. Anmdehaldaja ei ole seda lubanud."
                 },
                 "can_be_published_by_authority": {
-                    "label": "NOT TRANSLATED",
-                    "tooltip": "NOT TRANSLATED"
+                    "label": "Avalikustamine lubatud ametkondadele",
+                    "tooltip": "Kaart on avalikustatav lõimkaardil ametkondadele. Kui oled ametkonna esindaja, kontakteeru toega."
                 }
             },
             "tooltip": {
-                "type-base": "NOT TRANSLATED",
-                "type-wms": "NOT TRANSLATED",
-                "type-wfs": "NOT TRANSLATED"
-            },
-            "filter": {
-                "title": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "cancelButton": "NOT TRANSLATED",
-                "clearButton": "NOT TRANSLATED",
-                "refreshButton": "NOT TRANSLATED",
-                "addFilter": "NOT TRANSLATED",
-                "removeFilter": "NOT TRANSLATED",
-                "bbox": {
-                    "title": "NOT TRANSLATED",
-                    "on": "NOT TRANSLATED",
-                    "off": "NOT TRANSLATED"
-                },
-                "clickedFeatures": {
-                    "title": "NOT TRANSLATED",
-                    "label": "NOT TRANSLATED"
-                },
-                "values": {
-                    "title": "NOT TRANSLATED",
-                    "placeholders": {
-                        "case-sensitive": "NOT TRANSLATED",
-                        "attribute": "NOT TRANSLATED",
-                        "boolean": "NOT TRANSLATED",
-                        "operator": "NOT TRANSLATED",
-                        "attribute-value": "NOT TRANSLATED"
-                    },
-                    "equals": "NOT TRANSLATED",
-                    "like": "NOT TRANSLATED",
-                    "notEquals": "NOT TRANSLATED",
-                    "notLike": "NOT TRANSLATED",
-                    "greaterThan": "NOT TRANSLATED",
-                    "lessThan": "NOT TRANSLATED",
-                    "greaterThanOrEqualTo": "NOT TRANSLATED",
-                    "lessThanOrEqualTo": "NOT TRANSLATED"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "NOT TRANSLATED",
-                    "aggregateValueSelectTitle": "NOT TRANSLATED",
-                    "selectAggregateAnalyse": "NOT TRANSLATED",
-                    "selectIndicator": "NOT TRANSLATED",
-                    "selectReadyButton": "NOT TRANSLATED",
-                    "getAggregateAnalysisFailed": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
-                },
-                "validation": {
-                    "title": "NOT TRANSLATED",
-                    "attribute_missing": "NOT TRANSLATED",
-                    "operator_missing": "NOT TRANSLATED",
-                    "value_missing": "NOT TRANSLATED",
-                    "boolean_operator_missing": "NOT TRANSLATED"
-                }
+                "type-base": "Taustakaart",
+                "type-wms": "Kaardikiht",
+                "type-wfs": "Andmetoode"
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Loenda",
+            "differenceMessage": "The difference of unauthorized feature values is presented with value",
+            "noDataMessage": "Count = Number of features without unauthorized features",
+            "noDataCommonMessage": "There are unauthorized feature values in the data"
         }
     }
-}
-);
+});

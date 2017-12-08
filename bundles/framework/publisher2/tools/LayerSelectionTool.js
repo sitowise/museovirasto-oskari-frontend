@@ -91,9 +91,6 @@ function() {
             setTimeout(function(){
                 me._checkLayerSelections();
             }, 300);
-            if(me.state.mode && me.__plugin && typeof me.__plugin.setMode === 'function'){
-                me.__plugin.setMode(me.state.mode);
-            }
         } else if(me.__started === true) {
             me.__plugin.stopPlugin(me.__sandbox);
         }
@@ -139,7 +136,7 @@ function() {
      *
      * @returns {Object} jQuery element
      */
-    getExtraOptions: function (toolContainer) {
+    getExtraOptions: function () {
         var me = this;
             backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
         if(!me._backgroundLayerSelector) {
@@ -253,7 +250,8 @@ function() {
     shouldPreselectLayer: function(id){
 
         var me = this;
-        var isPlugins = (me.data && me.data.configuration && me.data.configuration.mapfull
+        var isConfig = (me.data && me.data.configuration) ? true : false;
+        var isPlugins = (isConfig && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
         if(isPlugins) {
             var plugins = me.data.configuration.mapfull.conf.plugins;
@@ -265,10 +263,10 @@ function() {
                     break;
                 }
             }
-            var isConfig = (toolPlugin && toolPlugin.config
+            var isPluginConfig = (toolPlugin && toolPlugin.config
                 && toolPlugin.config.baseLayers) ? true : false;
 
-            if(isConfig) {
+            if(isPluginConfig) {
                 var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
                 return isFound !== -1;
             } else {
@@ -357,17 +355,6 @@ function() {
             }
             me.__mapmodule.unregisterPlugin(me.__plugin);
         }
-    },
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
     }
 }, {
     'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

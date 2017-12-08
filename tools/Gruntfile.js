@@ -1,6 +1,9 @@
 /*global module:false*/
 var _ = require('lodash'),
     path =  require('path');
+var workDir = process.cwd();
+console.log('Running process from:', workDir);
+var OSKARI_FOLDER = path.basename(path.join(workDir,'..'));
 
 module.exports = function (grunt) {
     'use strict';
@@ -13,45 +16,16 @@ module.exports = function (grunt) {
         compileAppSetupToStartupSequence: {
             files: ['../tests/minifierFullMapAppSetup.json']
         },
-        watch: {
-            appsetup: {
-                files: '<%= compileAppSetupToStartupSequence.files %>',
-                tasks: ['compileAppSetupToStartupSequence']
-            },
-            src: {
-                //            files: '<config:lint.files>',
-                files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
-                // uncommented as validate causes unnecessary delay
-                //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-                tasks: ['compileDev', 'karma:dev:run']
-            },
-            test: {
-                files: ['../tests/**/*.js'],
-                tasks: ['karma:dev:run']
-            },
-            sass: {
-                files: ['../bundles/**/scss/*.scss', '../applications/**/scss/*.scss'],
-                tasks: ['compileDev']
-            }
-        },
         sprite: {
-            options: {
-                iconDirectoryPath: '../applications/sample/servlet/icons',
-                resultImageName: '../applications/sample/servlet/icons/icons.png',
-                resultCSSName: '../applications/sample/servlet/css/icons.css',
-                spritePathInCSS: '../icons'
+            main : {
+                options: {
+                    //targetDir: '../resources'
+                }
             }
         },
-        compileDev: {
+        releaseManual: {
             options: {
-                appSetupFile: '../tests/minifierFullMapAppSetup.json',
-                dest: '../dist/',
-                concat: true
-            }
-        },
-        release: {
-            options: {
-                configs: '../applications/sample/servlet/minifierAppSetup.json',
+                configs: '../applications/sample/servlet/minifierAppSetup.json,../applications/sample/servlet_published_ol3/minifierAppSetup.json',
                 defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },
@@ -63,52 +37,12 @@ module.exports = function (grunt) {
                 defaultIconDirectoryPath: '../applications/default/icons/'
             }
         },
-        karma: {
-            options: {
-                configFile: 'karma.conf.js'
-            },
-            dev: {
-                background: true
-            },
-            ci: {
-                browsers: ['PhantomJS'],
-                proxies: {
-                    '/': 'http://demo.oskari.org/'
-                },
-                reporters: ['junit'],
-                junitReporter: {
-                    outputFile: 'test-results.xml'
-                },
-                singleRun: true
-            },
-            test: {
-                configFile: 'src.conf.js'
-            }
-        },
         clean: {
             options: {
                 force: true
             },
-            build: ['../build'],
+            build: ['../build', 'Oskari', '../bundles/statistics/statsgrid.polymer/vulcanized.html'],
             dist: ['../dist']
-        },
-        oskaridoc: {
-            dist: {
-                options: {
-                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../oskari.org/api/<%= version %>',
-                    themedir: '../docs/yui/theme'
-                }
-            }
-        },
-        mddocs: {
-            options: {
-                'toolsPath': process.cwd(),
-                'docsPath': '../docs',
-                'docsurl': '/Oskari/<%= version %>docs/',
-                'apiurl': '/Oskari/<%= version %>api/classes/',
-                'outdir': '../dist/<%= version %>docs/'
-            }
         },
         validateLocalizationJSON: {
             target: {
@@ -135,46 +69,12 @@ module.exports = function (grunt) {
                 src: ['../bundles/*/*/']
             }
         },
-        compress: {
-            zip: {
-                options: {
-                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.zip',
-                    mode: 'zip',
-                    pretty: true
-                },
-                files: [
-                    // Copy all files under the application template folder
-                    {
-                        cwd: './oskari_application_template/',
-                        src: '**',
-                        dest: '/',
-                        expand: true
-                    },
-                    // Copy all minified oskari files
-                    {
-                        cwd: '../dist/<%= versionNum %>/<%= compress.options.fullMap %>',
-                        src: 'oskari*',
-                        dest: '/min/',
-                        expand: true
-                    }, {
-                        src: '../bundles/bundle.js',
-                        dest: '/',
-                    }, {
-                        src: '../packages/openlayers/startup.js',
-                        dest: '/',
-                    }
-                ]
-            },
-            tgz: {
-                options: {
-                    archive: '../oskari.org/archives/oskari.<%= versionNum %>.tgz',
-                    mode: 'tgz',
-                    pretty: true
-                },
-                files: '<%= compress.zip.files %>'
+        genL10nEmptyExcelsLog: {
+            target: {
+                expand: true,
+                src: ['../bundles/*/*/']
             }
         },
-
         trimtrailingspaces: {
             main: {
               src: ['../bundles/**/*.js'],
@@ -189,6 +89,10 @@ module.exports = function (grunt) {
             target: {
                 src: ['../bundles/**/locale/*.js']
             }
+        },
+        buildOskariOL3: {
+            main: {
+            }
         }
     });
 
@@ -196,82 +100,30 @@ module.exports = function (grunt) {
     // Actually load this plugin's task(s).
     grunt.loadTasks('tasks');
 
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
-    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-trimtrailingspaces');
 
     // Default task(s).
-    grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
-    grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
-    // Default task.
-    //    grunt.registerTask('default', 'watch testacularServer:dev');
-    //    grunt.registerTask('default', 'testacularServer:dev watch');
-    //    grunt.registerTask('default', 'lint test concat min');
-    grunt.registerTask('compileDev', 'Developer compile', function () {
-        var options = this.options();
-        // set task configs
-        grunt.config.set('compile.dev.options', options);
-        grunt.task.run('compile');
+    grunt.registerTask('default', ['build']);
 
-        grunt.config.set(
-            'compileAppCSS.dev.options', {
-                appSetupFile: '../applications/sample/servlet/minifierAppSetup.json',
-                dest: options.dest
-            }
-        );
-        grunt.task.run('compileAppCSS');
+    grunt.registerTask('devRelease', 'Release build without minification',
+        function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
+            var releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
+            grunt.task.run(releaseManualTaskStr);
     });
 
-    grunt.registerTask('compileAppSetupToStartupSequence', function () {
-        var done = this.async(),
-            starttime = (new Date()).getTime(),
-            files,
-            outputFilename,
-            fs = require('fs'),
-            cfgFile,
-            startupSequence,
-            definedBundles = {},
-            bundle,
-            result = 'var _defaultsStartupSeq = ',
-            i,
-            ilen;
-
-        grunt.log.writeln('Running compile AppSetup to startupSequence...');
-
-        // read files and parse output name
-        files = grunt.config(this.name).files[0];
-        outputFilename = files.replace('.json', '.opts.js');
-
-        // read file
-        cfgFile = fs.readFileSync(files, 'utf8');
-
-        // convert to usable format
-        startupSequence = JSON.parse(cfgFile).startupSequence;
-
-        // loop startup sequence bundles and add to hashmap of defined bundles
-        for (i = 0, ilen = startupSequence.length; i < ilen; i += 1) {
-            bundle = startupSequence[i];
-            // Add here code to change bundlePath to "ignored/butRequiredToBeInMinifierFullMapAppSetupInTests/packages/framework/bundle/"
-            // or something similar as the bundlePaths are not used with minifierAppSetup
-            definedBundles[bundle.bundlename] = bundle;
-        }
-
-        // add stringified bundle definitions
-        result += JSON.stringify(definedBundles);
-
-        // write file to be used in testing as is
-        fs.writeFileSync(outputFilename, result, 'utf8');
-
-        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + (((new Date()).getTime() - starttime) / 1000) + ' seconds');
-        done();
+    grunt.registerTask('release', 'Release build',
+        function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
+            var releaseManualTaskStr = 'releaseManual:' + (version || '') + ':' + (configs || '') + ':' +
+                    (defaultIconDirectoryPath || '') + ':' + (copyResourcesToApplications || '') + ':' + (skipDocumentation || '');
+            grunt.task.run(releaseManualTaskStr);
     });
 
-    grunt.registerTask('release', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
+    grunt.registerTask('releaseManual', 'Release build', function (version, configs, defaultIconDirectoryPath, copyResourcesToApplications, skipDocumentation) {
         var i,
             ilen,
             config,
@@ -291,12 +143,12 @@ module.exports = function (grunt) {
         if(!version) {
             version  = new Date().toISOString().replace(/:/g,'');
             grunt.log.writeln('No version specified, using current timestamp: ' + version + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.configs && !configs) {
             configs = options.configs;
             grunt.log.writeln('No setup specified, using default: ' + configs + 
-                '\nUsage: grunt release:<version>:"../path/to/minifierAppSetup.json"');
+                '\nUsage: grunt releaseManual:<version>:"../path/to/minifierAppSetup.json"');
         }
         if (options.defaultIconDirectoryPath && !defaultIconDirectoryPath) {
             defaultIconDirectoryPath = options.defaultIconDirectoryPath;
@@ -316,11 +168,8 @@ module.exports = function (grunt) {
             dest = '../dist/<%= version %>' + appName + '/';
             imageDest = './' + appName + '/images/';
             options = {
-                iconDirectoryPath: config.substring(0, last) + '/icons',
-                resultImageName: '../dist/<%= version %>' + appName + '/icons/icons.png',
-                resultCSSName: '../dist/<%= version %>' + appName + '/css/icons.css',
-                spritePathInCSS: '../icons',
-                defaultIconDirectoryPath: defaultIconDirectoryPath
+                targetDir: '../dist/<%= version %>' + appName,
+                appIconsDir : config.substring(0, last) + '/icons'
             };
             files = [];
             copyFiles = {
@@ -343,7 +192,7 @@ module.exports = function (grunt) {
                     dest: dest
                 });
                 // modify css-sprite to use parent icons instead
-                options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
+                options.appIconsDir = options.appIconsDir.replace(appName, parentAppName);
             }
 
             // add files to be copied
@@ -352,45 +201,34 @@ module.exports = function (grunt) {
             // setting task configs
             grunt.config.set('copy.' + appName + '.files', files);
 
+            // Change to true to get oskari.min.js with non-minified content (it's big, don't use in production)
+            var concatInsteadOfMinify = false;
+            if(concatInsteadOfMinify) {
+                grunt.log.warn('!!!Using concatenated instead of minified build!!!');
+            }
             grunt.config.set('compile.' + appName + '.options', {
                 appSetupFile: config,
-                dest: dest
+                dest: dest,
+                concat: concatInsteadOfMinify
             });
             grunt.config.set('compileAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: config,
                 dest: dest,
-                imageDest: imageDest
+                imageDest: imageDest,
+                concat: true
             });
             grunt.config.set('sprite.' + appName + '.options', options);
-
-            if (appName === 'full-map') {
-                grunt.config.set('compress.options.fullMap', appName);
-            }
         }
 
         // add resources to dist
         grunt.config.set('copy.common.files', [{
             expand: true,
             cwd: '../',
-            src: ['libraries/**', 'bundles/**'],
+            src: ['libraries/**', 'bundles/**', 'resources/**'],
             dest: '../dist/'
         }
         ]);
-        // 'resources/**', , 'sources/**', 'packages/**', 'src/**', 'applications/**'
-        // {
-//            expand: true,
-//            cwd: '../docs/',
-//            src: ['images/**', 'layout/**'],
-//            dest: grunt.config.get('mddocs.options.outdir')
-//        }, 
-//        {
-//            expand: true,
-//            cwd: '../',
-//            src: ['**/resources/images/**/*.{png,jpg,jpeg,svg,gif}'],
-//            dest: dest + '/images/',
-//            flatten: true
-//        }
 
         // configure copy-task to copy back the results from dist/css and dist/icons to applications/appname/(css || icons)
         if (copyResourcesToApplications) {
@@ -422,13 +260,7 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         //grunt.task.run('sprite');
-        if (!skipDocumentation) {
-//            grunt.task.run('oskaridoc');
-        }
 
-        if (grunt.config.get('compress.options.fullMap')) {
-            grunt.task.run('compress');
-        }
         if (copyResourcesToApplications) {
             grunt.task.run('copy:final');
         }
@@ -510,7 +342,7 @@ module.exports = function (grunt) {
 
 
         if (this.data && this.data.options) {
-            grunt.log.writeln('Minifying...');
+            grunt.log.writeln('Minifying... ' + appName);
             grunt.config.set('minifyAppCSS.' + appName + '.options', {
                 appName: appName,
                 appSetupFile: this.data.options.appSetupFile,
@@ -535,7 +367,6 @@ module.exports = function (grunt) {
                 src: '**/*.scss',
                 dest: '../bundles/',
                 rename: function (dest, src) {
-                    
                     var target = dest + src.replace('/scss/', '/resources/css/');
                     grunt.log.writeln('Target: ' + target);
                     return target;
@@ -598,15 +429,17 @@ module.exports = function (grunt) {
             });
         };
         var getResourcePaths = function(list) {
-            var TO_MATCH = path.sep + 'bundles' + path.sep,
-                matcherSize = TO_MATCH.length + 1;
+            var TO_MATCH = (OSKARI_FOLDER + path.sep + 'bundles').toLowerCase();
+            console.log('Trying to find resources under:', TO_MATCH);
+            var matcherSize = TO_MATCH.length + 1;
             var value = [];
             _.each(list, function(dep) {
+                // resourcesPath is the one we find the first CSS-reference for the bundle
                 var actual =  dep.resourcesPath || '';
                 var index = actual.toLowerCase().indexOf(TO_MATCH);
                 if(index !== -1) {
-                    //console.log(actual.substring(index + matcherSize));
                     var imagePath = actual + path.sep + 'resources' + path.sep + 'images';
+                    console.log(imagePath);
                     if(fs.existsSync(imagePath)) {
                         value.push(imagePath);
                     }
@@ -618,6 +451,7 @@ module.exports = function (grunt) {
         // gather css files from bundles' minifierAppSetups
         grunt.log.writeln('Getting files from processedAppSetups');
         for (i = 0; i < processedAppSetup.length; i += 1) {
+            //console.log(JSON.stringify(processedAppSetup[i], null, 3));
             imageDirs = imageDirs.concat(getResourcePaths(processedAppSetup[i].dependencies));
             pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
             cssfiles = cssfiles.concat(pasFiles);

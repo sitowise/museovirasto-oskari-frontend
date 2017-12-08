@@ -10,9 +10,9 @@ Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
         this._channel = null;
-        this._localization = {};
         this.eventHandlers = {};
         this.requestHandlers = {};
+        this.log = Oskari.log('RPC');
     },
     {
         /**
@@ -27,7 +27,12 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
-
+        isClientSupported : function(clientVer) {
+            if(!clientVer) {
+                return false;
+            }
+            return clientVer.indexOf("2.0.") === 0;
+        },
         /**
          * @public @method start
          * BundleInstance protocol method
@@ -44,26 +49,23 @@ Oskari.clazz.define(
             me.sandbox = sandbox;
             sandbox.register(this);
 
-            // check configured requests/events
-            this.__init(conf);
-
             if (!Channel) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
                 return;
             }
 
             if (domain === null || domain === undefined || !domain.length) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
                 return;
             }
 
             if (domain === '*') {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
                 return;
             }
 
             if (window === window.parent) {
-                me.sandbox.printWarn('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
+                me.log.warn('RemoteProcedureCallInstance.startPlugin(): Target window is same as present window - not allowed.');
                 return;
             }
 
@@ -101,7 +103,7 @@ Oskari.clazz.define(
             );
 
             // Makes it possible to post requests
-            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom, marker, srsName]]})
+            // channel.call({method: 'postRequest', params: ['MapMoveRequest', [centerX, centerY, zoom]]})
             channel.bind(
                 'postRequest',
                 function (trans, params) {
@@ -127,54 +129,75 @@ Oskari.clazz.define(
         },
         /**
          * Initialize allowed requests/events/functions based on config
+         * Triggered by sandbox.register(this)
          * @param  {Object} conf bundle configuration
          */
-        __init : function(conf) {
-            var me = this;
-            // sanitize conf to prevent unnecessary errors
-            conf = conf || {};
-            var allowedEvents = conf.allowedEvents;
-            var allowedFunctions = conf.allowedfunctions;
-            var allowedRequests = conf.allowedRequests;
+        init: function () {
+          var me = this;
+          // sanitize conf to prevent unnecessary errors
+          var conf = this.conf || {};
+          var allowedEvents = conf.allowedEvents;
+          var allowedFunctions = conf.allowedfunctions;
+          var allowedRequests = conf.allowedRequests;
 
-            if (allowedEvents === null || allowedEvents === undefined) {
-                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                'RouteResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent"];
-            }
+          if (allowedEvents === null || allowedEvents === undefined) {
+              allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
+              'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+              'RPCUIEvent', 'map.rotated'];
+          }
 
-            if (allowedFunctions === null || allowedFunctions === undefined) {
-                allowedFunctions = [];
-                // allow all available functions by default
-                var funcs = this._availableFunctions;
-                for(var name in funcs) {
-                    if(!funcs.hasOwnProperty(name)) {
-                        continue;
-                    }
-                    allowedFunctions.push(name);
+          if (allowedFunctions === null || allowedFunctions === undefined) {
+              allowedFunctions = [];
+              // allow all available functions by default
+              var funcs = this._availableFunctions;
+
+              // Special handling for getScreenshot() since it's not always present
+              var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+              if(typeof mapModule.getScreenshot === 'function') {
+                  // this is only available in Openlayers3 implementation of mapmodule
+                  funcs['getScreenshot'] = function(transaction) {
+                    mapModule.getScreenshot(function(image){
+                      transaction.complete(image);
+                    });
                 }
-            }
+              }
 
-            if (allowedRequests === null || allowedRequests === undefined) {
-                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
-                    'MapModulePlugin.AddMarkerRequest',
-                    'MapModulePlugin.AddFeaturesToMapRequest',
-                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
-                    'MapModulePlugin.GetFeatureInfoRequest',
-                    'MapModulePlugin.MapLayerVisibilityRequest',
-                    'MapModulePlugin.RemoveMarkersRequest',
-                    'MapMoveRequest',
-                    'ShowProgressSpinnerRequest',
-                    'GetRouteRequest',
-                    'SearchRequest',
-                    'ChangeMapLayerOpacityRequest',
-                    'MyLocationPlugin.GetUserLocationRequest',
-                    'DrawTools.StartDrawingRequest',
-                    'DrawTools.StopDrawingRequest'];
-            }
-            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
-            // try to get event/request builder for each of these to see that they really are supported!!
-            me.__setupAvailableEvents(allowedEvents);
-            me.__setupAvailableRequests(allowedRequests);
+              for(var name in funcs) {
+                  if(funcs.hasOwnProperty(name)) {
+                      allowedFunctions.push(name);
+                  }
+              }
+          }
+          if (allowedRequests === null || allowedRequests === undefined) {
+              allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                  'InfoBox.HideInfoBoxRequest',
+                  'MapModulePlugin.AddMarkerRequest',
+                  'MapModulePlugin.AddFeaturesToMapRequest',
+                  'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                  'MapModulePlugin.GetFeatureInfoRequest',
+                  'MapModulePlugin.MapLayerVisibilityRequest',
+                  'MapModulePlugin.RemoveMarkersRequest',
+                  'MapModulePlugin.MarkerVisibilityRequest',
+                  'MapMoveRequest',
+                  'ShowProgressSpinnerRequest',
+                  'GetRouteRequest',
+                  'GetFeedbackServiceRequest',
+                  'GetFeedbackServiceDefinitionRequest',
+                  'GetFeedbackRequest',
+                  'PostFeedbackRequest',
+                  'SearchRequest',
+                  'ChangeMapLayerOpacityRequest',
+                  'MyLocationPlugin.GetUserLocationRequest',
+                  'DrawTools.StartDrawingRequest',
+                  'DrawTools.StopDrawingRequest',
+                  'MapModulePlugin.ZoomToFeaturesRequest',
+                  'MapModulePlugin.MapLayerUpdateRequest',
+                  'rotate.map'];
+          }
+          me._allowedFunctions = this.__arrayToObject(allowedFunctions);
+          // try to get event/request builder for each of these to see that they really are supported!!
+          me.__setupAvailableEvents(allowedEvents);
+          me.__setupAvailableRequests(allowedRequests);
         },
         __setupAvailableEvents : function(allowedEvents) {
             var available = [];
@@ -220,16 +243,41 @@ Oskari.clazz.define(
             getSupportedRequests : function() {
                 return this._allowedRequests;
             },
+            getInfo : function(transaction, clientVersion) {
+                var sbMap = this.sandbox.getMap();
+                return {
+                    version : Oskari.VERSION,
+                    clientSupported : this.isClientSupported(clientVersion),
+                    srs  : sbMap.getSrsName()
+                };
+            },
             getAllLayers : function() {
-                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var me = this;
+                var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
+                mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
+                mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
-                    return {
-                        id: layer.getId(),
-                        opacity: layer.getOpacity(),
-                        visible: layer.isVisible(),
-                        name : layer.getName()
-                    };
+                    if (layer.getMaxScale() && layer.getMinScale()) {
+                        var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
+                        var minZoomLevel = mapResolutions.indexOf(layerResolutions[0]);
+                        var maxZoomLevel = mapResolutions.indexOf(layerResolutions[layerResolutions.length - 1]);
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName(),
+                            minZoom: minZoomLevel,
+                            maxZoom: maxZoomLevel
+                        };
+                    } else {
+                        return {
+                            id: layer.getId(),
+                            opacity: layer.getOpacity(),
+                            visible: layer.isVisible(),
+                            name : layer.getName()
+                        };
+                    }
                 });
             },
             getMapBbox : function() {
@@ -259,14 +307,89 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
+            zoomIn : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomOut : function() {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var newZoom = mapModule.getNewZoomLevel(-1);
+                mapModule.setZoomLevel(newZoom);
+                return newZoom;
+            },
+            zoomTo : function(transaction, newZoom) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                mapModule.setZoomLevel(newZoom);
+                return mapModule.getMapZoom();
+            },
+            getPixelMeasuresInScale : function(transaction, mmMeasures, scale) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    scalein = scale,
+                    pixelMeasures = [],
+                    zoomLevel = 0,
+                    nextScale;
+
+                if(mmMeasures && mmMeasures.constructor === Array){
+                    if(!scalein){
+                        scalein = mapModule.calculateFitScale4Measures(mmMeasures);
+                    }
+                    pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
+                }
+
+                var scales = mapModule.getScaleArray();
+                scales.forEach(function(sc, index) {
+                    if ((!nextScale || nextScale > sc) && sc > scalein) {
+                        nextScale = sc;
+                        zoomLevel = index;
+                    }
+                });
+
+                return {
+                    pixelMeasures: pixelMeasures,
+                    scale: scalein,
+                    zoomLevel: zoomLevel
+                };
+            },
             resetState : function() {
                 this.sandbox.resetState();
+                return true;
             },
             getCurrentState : function() {
                 return this.sandbox.getCurrentState();
             },
-            useState : function(state) {
+            useState : function(transaction,state) {
                 this.sandbox.useState(state);
+                return true;
+            },
+            getFeatures: function(transaction,includeFeatures) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    plugin = mapModule.getLayerPlugins(['vectorlayer']),
+                    features = {};
+                if(!plugin) {
+                    return features;
+                }
+                var layers = plugin.getLayerIds();
+                layers.forEach(function(id) {
+                    if(includeFeatures === true) {
+                        features[id] = plugin.getLayerFeatures(id);
+                    }
+                    else {
+                        features[id] = [];
+                    }
+                });
+                return features;
+            },
+            setCursorStyle: function(transaction, cursorStyle) {
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                return mapModule.setCursorStyle(cursorStyle);
+            },
+            sendUIEvent: function(transaction, bundleId, payload) {
+                var me = this,
+                    event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
+                me.sandbox.notifyAll(event);
+                return true;
             }
         },
 
@@ -290,7 +413,15 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    return me._availableFunctions[name].apply(me, params);
+                    params = params || [];
+                    params.unshift(trans);
+
+                    var value =  me._availableFunctions[name].apply(me, params);
+                    if(typeof value === 'undefined') {
+                      trans.delayReturn(true);
+                      return;
+                    }
+                    return value;
                 });
             }
 
@@ -315,37 +446,27 @@ Oskari.clazz.define(
             'use strict';
             var sb = this.sandbox;
             if(!origin) {
-                sb.printWarn('No origin in RPC message');
+                this.log.warn('No origin in RPC message');
                 // no origin, always deny
                 return false;
             }
             // Allow subdomains and different ports
-            var domain = this.conf.domain,
-                ret = origin.indexOf(domain) !== -1,
-                parts;
+            var domain = this.conf.domain
 
-            // always allow from localhost
-            if(origin.indexOf('http://localhost') === 0) {
-                return true;
-            }
+            var url = document.createElement('a');
+            url.href = origin;
+            var originDomain = url.hostname;
 
-            if (ret) {
-                parts = origin.split(domain);
-                if (parts) {
-                    ret = /^https?:\/\/([a-zA-Z0-9_-]+[.])*$/.test(parts[0]);
-                    if (ret && parts.length > 1) {
-                        ret = /^(:\d+)?$/.test(parts[1]);
-                    }
-                } else {
-                    // origin must have a protocol
-                    ret = false;
+            var allowed = originDomain.endsWith(domain);
+            if(!allowed) {
+                // always allow from localhost
+                if(originDomain === 'localhost') {
+                    this.log.warn('Origin mismatch, but allowing localhost. Published to: ' + domain);
+                    return true;
                 }
+                this.log.warn('Origin not allowed for RPC: ' + origin);
             }
-            if(!ret) {
-                sb.printWarn('Origin not allowed for RPC: ' + origin);
-            }
-
-            return ret;
+            return allowed;
         },
 
         /**
@@ -396,16 +517,6 @@ Oskari.clazz.define(
             }
             sandbox.unregister(this);
             this.sandbox = null;
-        },
-
-        /**
-         * @public @method init
-         *
-         *
-         */
-        init: function () {
-            'use strict';
-            return null;
         },
 
         /**

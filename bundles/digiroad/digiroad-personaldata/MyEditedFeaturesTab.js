@@ -70,7 +70,7 @@ function(instance, localization) {
         // Determining the dataTypes ('nopeusrajoitus' etc.) for each feature.
         // Also creating the tab panels and grids.
         for(var i = 0; i < features.length; ++i) {
-            f = features[i],
+            var f = features[i],
             dataType = f.attributes['TIETOLAJI'];
 
             panel = this.tabPanels[dataType];
@@ -101,7 +101,7 @@ function(instance, localization) {
     _showPlace : function(geometry) {
         // center map on selected place
         var center = geometry.getCentroid();
-        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds(), false);
+        var mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds());
         this.instance.sandbox.request(this.instance, mapmoveRequest);
 
         // add the myplaces layer to map

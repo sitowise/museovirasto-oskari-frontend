@@ -150,9 +150,10 @@ if (!Function.prototype.bind) {
              * @param  {String} layerName      name to search for
              * @param  {Object} capabilities (optional capabilities object)
              * @param  {String} additionalId additional id used for searching (optional)
+             * @param  {String} title used for  mapping capabilities because of duplicate layer names
              * @return {Boolean}             true if name was found
              */
-            setupCapabilities: function (layerName, capabilities, additionalId) {
+            setupCapabilities: function (layerName, capabilities, additionalId, title) {
                 if (!layerName) {
                     return;
                 }
@@ -161,13 +162,27 @@ if (!Function.prototype.bind) {
                     capabilities = this.get('capabilities');
                 }
                 // layer node
-                if (capabilities.layerName === layerName) {
-                    if(!additionalId) {
-                        me._setupFromCapabilitiesValues(capabilities);
-                        return true;
-                    } else if(capabilities.additionalId === additionalId) {
-                        me._setupFromCapabilitiesValues(capabilities);
-                        return true;
+                // title is also used for matching because of duplicate layernames in capabilities
+                if(title) {
+                    if (capabilities.layerName === layerName && capabilities.title === title) {
+                        if (!additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        } else if (capabilities.additionalId === additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        }
+                    }
+                }
+                else {
+                    if (capabilities.layerName === layerName) {
+                        if (!additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        } else if (capabilities.additionalId === additionalId) {
+                            me._setupFromCapabilitiesValues(capabilities);
+                            return true;
+                        }
                     }
                 }
                 // group node
@@ -180,7 +195,7 @@ if (!Function.prototype.bind) {
                 // check layers directly under this
                 _.each(capabilities.layers, function (layer) {
                     if (!found) {
-                        found = me.setupCapabilities(layerName, layer, additionalId);
+                        found = me.setupCapabilities(layerName, layer, additionalId, title);
                     }
                 });
                 // if not found, check any groups under this
@@ -275,6 +290,17 @@ if (!Function.prototype.bind) {
                 return false;
             },
             /**
+             * Returns wfs service resolveDepth param
+             * @return {Boolean} true/false
+             */
+            isResolveDepth: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.resolveDepth;
+                }
+                return false;
+            },
+            /**
              * Returns interface url
              * @return {String} url
              */
@@ -323,24 +349,60 @@ if (!Function.prototype.bind) {
             getLegendUrl: function() {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
-                var currentStyleName = this.getCurrentStyle().getName();
 
-                if (capabilitiesBlock) {
-                    if(currentStyleName && capabilitiesBlock.styles) {
-                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles ||[], function(style){
-                            return style.name === currentStyleName;
+                if (capabilitiesBlock && adminBlock) {
+                        return adminBlock.legendImage;
+                }
+
+                return '';
+            },
+            /**
+             * Returns style legend url
+             * @param styleName  style name
+             * @returns {String} legend url
+             */
+            getStyleLegendUrl: function (styleName) {
+                var capabilitiesBlock = this.getCapabilities();
+
+
+                if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
+                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                            return style.name === styleName;
                         });
 
-                        if(selectedStyle.length>0) {
+                        if (selectedStyle.length > 0) {
                             return selectedStyle[0].legend;
                         }
-                    }
-                    if(adminBlock) {
-                        return adminBlock.legendImage;
+                }
+
+                return '';
+            },
+            /**
+             * Returns style legend urls
+             * @returns {String} legend url
+             */
+            getStyleLegendUrls: function () {
+                var capabilitiesBlock = this.getCapabilities(),
+                    styleName,
+                    legends = [];
+
+                if (capabilitiesBlock && this.getStyles()) {
+                    for (i = 0; i < this.getStyles().length; i += 1) {
+                        styleName = this.getStyles()[i].getName();
+
+                        if (styleName && capabilitiesBlock.styles) {
+                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                                return style.name === styleName;
+                            });
+
+                            if (selectedStyle.length > 0) {
+                                legends.push( selectedStyle[0].legend);
+                            }
+                        }
                     }
                 }
 
-                return ''; //this.getCurrentStyle().getLegend();
+                return legends;
             },
 
             /**

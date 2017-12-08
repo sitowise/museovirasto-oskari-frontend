@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Search area",
         "delimitArea": "Limit the search area on the map",
         "deleteArea": "Delete search area",
+        "startDraw": "Select area from map",
         "dataset": "Dataset",
         "series": "Series",
         "service": "Service",
@@ -29,10 +30,17 @@ Oskari.registerLocalization(
         "other": "Other",
         "transformation": "Transformation",
         "view": "View",
+        "service-discovery": "Discovery service",
+        "service-download": "Download service",
+        "service-other": "Other service",
+        "service-transformation": "Transformation service",
+        "service-view": "View service",
         "Language": "Metadata language",
         "ResourceLanguage": "Resource language",
         "modifySearch": "Edit search options",
         "showSearch": "Show all search results",
+        "showDatasets": "Show only datasets",
+        "showServices": "Show only services",
         "metadataCatalogueResults": "Search Results",
         "show": "Show map layer",
         "hide": "Hide map layer",
@@ -45,6 +53,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "The search term is empty. There must be at least one character.",
         "too_many_stars": "The search term contains too many asterisks (*). You can use only one asterisk in the end of the term.",
         "searching": "Searching…",
+        "updated": "update frequency",
         "grid": {
             "name": "Name",
             "removeBBOX": "Hide coverage area",
@@ -53,7 +62,11 @@ Oskari.registerLocalization(
             "remove": "Remove from search results",
             "rating": "Rating"
         },
-        "licenseText": "Get licence"
+        "licenseText": "Get licence",
+        "identificationCode": {
+            "creation": "creation",
+            "publication": "publication",
+            "revision": "revision"
+        }
     }
-}
-);
+});

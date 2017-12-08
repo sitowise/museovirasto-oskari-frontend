@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Punktstil",
-                "tooltip": "",
+                "tooltip": "Definer en punktstil",
                 "symbol": {
                     "label": "Ikon"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Linjestil",
-                "tooltip": "",
+                "tooltip": "Definer en linjestil",
                 "style": {
                     "label": "Linje"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Arealstil",
-                "tooltip": "",
+                "tooltip": "Definer en arealstil",
                 "linestyle": {
                     "label": "Linje"
                 },
@@ -262,7 +262,68 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulator"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filter",
+            "description": "Velg forekomster fra kartlaget",
+            "cancelButton": "Avbryt",
+            "clearButton": "Tøm filter",
+            "refreshButton": "Oppfrisk filteret",
+            "addFilter": "Legg til nytt filter",
+            "removeFilter": "Slett filter",
+            "content": {
+                "title": "Geografisk filter"
+            },
+            "bbox": {
+                "on": "Kun den synlige forekomsten i kartvinduet",
+                "off": "Alle forekomster"
+            },
+            "clickedFeatures": {
+                "clickedFeaturesLabel": "Kun valgte forekomster i kartet",
+                "filterByGeometryLabel": "Kun forekomster i følge valgt opsjon:",
+                "filterByGeometryIntersect": "Forekomster som krysser valgte forekomster",
+                "filterByGeometryContains": "Forekomster innenfor valgte forekomster"
+            },
+            "values": {
+                "title": "Filtrér forekomster basert på egenskaper",
+                "placeholders": {
+                    "case-sensitive": "Filteret er versalsensitivt",
+                    "attribute": "Egenskap",
+                    "boolean": "Logisk operator",
+                    "operator": "Operator",
+                    "attribute-value": "Verdi"
+                },
+                "info": {
+                    "bboxOff": "Uten geografisk filter er alle forekomster tatt med i analysen. Vennligst legg til et attributtfilter eller velg \"Kun valgte forekomster i kartet\" i det geografiske filteret.",
+                    "filterByGeometrySelected": "Du kan filtrere på attributter bare dersom \"Alle forekomster\" er valgt i det geografiske filteret over."
+                },
+                "equals": "er lik",
+                "like": "er omtrentlig lik",
+                "notEquals": "er ikke lik",
+                "notLike": "er ikke omtrentlig lik",
+                "greaterThan": "er større enn",
+                "lessThan": "er mindre enn",
+                "greaterThanOrEqualTo": "er større enn eller lik",
+                "lessThanOrEqualTo": "er mindre enn eller lik"
+            },
+            "validation": {
+                "title": "Filteret kunne ikke oppfriskes på grunn av følgende feil:",
+                "attribute_missing": "Egenskapen mangler",
+                "operator_missing": "Operatoren mangler",
+                "value_missing": "Verdien mangler",
+                "boolean_operator_missing": "Logisk operator mangler",
+                "bbox_selected_with_no_properties": "Uten geografisk filter er alle forekomster tatt med i analysen. Vennligst legg til et attributtfilter eller velg \"Kun valgte forekomster i kartet\" i det geografiske filteret."
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Velg aggregert verdi",
+                "aggregateValueSelectTitle": "Bruk aggregert verdi i filteret",
+                "selectAggregateAnalyse": "Velg aggregert analyse",
+                "selectIndicator": "Velg indikator",
+                "selectReadyButton": "Klar",
+                "getAggregateAnalysisFailed": "Aggregerte data ikke funnet",
+                "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
+                "noAggregateAnalysisPopupContent": "Du har ikke gjort noen aggregert analyse. Du kan sette sammen dine egne aggregerte data ved hjelp av analysefunksjonen, og deretter filtrere på verdier."
+            }
         }
     }
-}
-);
+});

@@ -9,10 +9,6 @@ Oskari.registerLocalization(
                 "title": "Error for getting license information",
                 "message": "Cannot get license information"
             },
-            "failedGetLicenseInformation": {
-                "title": "Failed to get license information",
-                "message": "Cannot connect to license server"
-            },
             "cannotGetLicensePrice": {
                 "title": "Failed to get license price",
                 "message": "Cannot get license price"
@@ -42,6 +38,11 @@ Oskari.registerLocalization(
         },
         "dialog": {
             "licenseTitle": "License details",
+            "licenseModelDescriptionsTitle": "General descriptions of ELF license models:",
+            "licenseModelDescriptions": {
+                "evaluation": "Evaluation Licence – This licence enables you to access ELF products and services for the purpose of evaluating its suitability only. It is a time limited licence.",
+                "developer": "Developer Licence – This licence enables you to access ELF products and services for the purpose of developing new products and services that include the data licensed by ELF. It is a time limited licence."
+            },
             "licenseModelsTitle": "Licensemodels:",
             "noRightToAnyLicenseModels": "You have no rights to any licensemodels.",
             "loginShort": "Log in to show licensemodels.",
@@ -53,13 +54,6 @@ Oskari.registerLocalization(
                 "details": "Fill license details, all required fields are marked with asterisk (*). Press 'Next' to see license summary and price. If you want select different license model then press 'Previous'. You can also stop your order by pressing 'Close' button.",
                 "summary": "Read license and accept filled license pressing 'Conclude'. If you want edit some filled information, go back to by pressing 'Back' button. You can also stop your order by pressing 'Close' button.",
                 "orderDetails": "Above you will see your license order information. Close dialog by pressing 'Close' button. If you want deactivate your order then press 'Deactivate license' button."
-            },
-            "concludeSuccessTitle": "License concluded successfully",
-            "conclude": {
-                "title": "License order details",
-                "productid": "Product",
-                "licenseid": "License",
-                "validto": "Valid to"
             },
             "deactivateConfirm": {
                 "title": "License deactivate",
@@ -83,5 +77,4 @@ Oskari.registerLocalization(
             "yes": "Yes"
         }
     }
-}
-);
+});

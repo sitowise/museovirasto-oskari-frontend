@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Karttatasot",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "Karttataso",
             "type-wfs": "Tietotuote"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Karttataso on saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "Karttataso ei ole saatavilla tällä hetkellä.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Karttatason saatavuudessa on tiedossa katkoksia lähipäivinä.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Nykyisen kartan koordinaatisto ei ole tuettuna palvelun capabilities tiedoissa",
             "confirmResourceKeyChange": "Olet muuttanut Karttatason yksilöivä nimi- tai Rajapinnan osoite -kentän arvoja. Tietoturvasyistä karttatason käyttöoikeudet poistetaan ja ne täytyy asettaa uudelleen. Haluatko jatkaa?",
             "confirmDeleteLayerGroup": "Karttatasoryhmä poistetaan. Haluatko jatkaa?",
             "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
@@ -134,9 +117,9 @@ Oskari.registerLocalization(
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta. Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
             "importStyle": "Uusi SLD tyyli",
             "addNewStyle": "Lisää uuden SLD tyylin sisältö",
-            "sldStyleName":"Tyylin nimi",
-            "sldFileContentDesc":"Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
-            "sldFileContent":"SLD:n sisältö",
+            "sldStyleName": "Tyylin nimi",
+            "sldFileContentDesc": "Kopioi/liitä SLD tiedoston sisältö (xml) tekstikenttään",
+            "sldFileContent": "SLD:n sisältö",
             "sldStylesFetchError": "SLD haku epäonnistui",
             "addSldStyleDesc": "Valitse listalta, mitä tyylejä käytetään ko tasolle",
             "addSldStyle": "Sld tyylivalinta",
@@ -153,15 +136,19 @@ Oskari.registerLocalization(
             "maxScalePlaceholder": "Suurin mittakaava muodossa 1 (1:1)",
             "srsName": "Koordinaatti&shy;järjestelmä",
             "srsNamePlaceholder": "Koordinaattijärjestelmä",
-            "legendImage": "Karttaselitteen osoite",
-            "legendImageDesc": "Linkki karttaselitteeseen haetaan automaattisesti GetCapabilities-vastausviestistä.",
-            "legendImagePlaceholder": "Anna karttaselitteen url-osoite.",
+            "legendImage": "Oletuskarttaselite",
+            "legendImageDesc": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
+            "legendImagePlaceholder": "URL-osoite karttaselitteelle, joka näytetään tyyleillä, joilla ei palvelussa ole määritelty karttaselitettä",
+            "legendUrl": "Tuo oletuskarttaselite tyyliltä",
+            "legendUrlDesc": "Valitse oletuskarttaselite tarvittaessa tason selitteistä",
+            "noServiceLegendUrl": "Ei tuoda tyylien selitteistä",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
             "gfiResponseType": "GFI-vastaustyyppi",
             "gfiResponseTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
             "manualRefresh": "Manuaalinen päivitys",
+            "resolveDepth": "xlink:href haku",
             "matrixSetId": "WMTS-tiilimatrisin tunniste",
             "matrixSetIdDesc": "WMTS-tiilimatriisin tunniste (TileMatrixSet id) on tekninen tunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "matrixSet": "WMTS-tason JSON",
@@ -218,5 +205,4 @@ Oskari.registerLocalization(
         "delete": "Poista",
         "ok": "OK"
     }
-}
-);
+});

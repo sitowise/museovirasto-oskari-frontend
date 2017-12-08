@@ -8,11 +8,6 @@ Oskari.registerLocalization(
         "tool": {
             "tooltip": "Trova indirizzo più vicino cliccando sulla mappa"
         },
-        "resultsTitle": "Risultati di ricerca",
-        "grid": {
-            "address": "Indirizzo",
-            "coordinates": "Coordinate"
-        }
+        "resultsTitle": "Risultati di ricerca"
     }
-}
-);
+});

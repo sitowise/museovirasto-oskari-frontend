@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
          * @method init
          * @param {Object} pData initial data
          */
-        init: function (pData, languageChangedCB) {
+        init: function (pData) {
             var me = this,
                 fkey,
                 data,
@@ -80,7 +80,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 return errors;
             });
             me.fields.name.field.setRequired(true, me.loc.error.name);
-            me.fields.name.field.setContentCheck(true, me.loc.error.nameIllegalCharacters);
+            me.fields.name.field.setValidator(function (inputField) {
+                var value = inputField.getValue(),
+                    name = inputField.getName(),
+                    sanitizedValue,
+                    errors = [];
+                inputField.setValue(value);
+                sanitizedValue = Oskari.util.sanitize(value);
+                if (sanitizedValue !== value) {
+                    errors.push({
+                        field: name,
+                        error: me.loc.error.nameIllegalCharacters
+                    });
+                    return errors;
+                }
+                return errors;
+            });
 
             if (pData.metadata) {
                 // set initial values
@@ -89,7 +104,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 if (pData.metadata.language) {
                     // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
                     selectedLang = pData.metadata.language;
-                    languageChangedCB(selectedLang);
                 }
             }
 
@@ -100,11 +114,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             langField.setValue(selectedLang);
             // plugins should change language when user changes selection
             langField.setHandler(function (value) {
-                languageChangedCB(value);
+                me._languageChanged(value);
             });
             langElement.append(langField.getElement());
+            langElement.append('<div class="info-label"></div>');
             me.langField.field = langField;
             me.langField.element = langElement;
+
+            me._languageChanged(selectedLang);
         },
 
         /**
@@ -133,7 +150,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             this.panel = panel;
             return panel;
         },
+        /**
+         * Show notification if selected language is different from the oskari's main language selection
+         * @param {String} value
+         */
+        _languageChanged: function(value) {
+            var me = this,
+                message = (value !== Oskari.getLang() ? me.loc.language.languageChangedDisclaimer:"");
+            jQuery(me.langField.element).find('div.info-label').html(message);
 
+        },
         /**
          * Returns the selections the user has done with the form inputs.
          * {

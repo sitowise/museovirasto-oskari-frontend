@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Gebruikers feedback",
-            "subject": "Onderwerp",
-            "subjectPlaceholder": "Titel voor uw feedback onderwerp",
             "ratingScore": "Rating score",
             "ratingJustification": "Rating motivering"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specificatie",
-            "targetIdentification": "Target identificatie",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "Niet gedefinieerd.",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Niet gedefinieerd.",
-            "natureOfTarget": "Aard van de target"
+            "tabTitle": "Feedback",
+            "average": "Average rating"
         },
         "userInformation": {
             "userInformation": "Gebruikers informatie",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Opslaan van de feedback is gelukt"
         }
     }
-}
-);
+});

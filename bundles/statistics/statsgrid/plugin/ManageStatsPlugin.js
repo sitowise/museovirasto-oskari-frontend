@@ -17,14 +17,13 @@ Oskari.clazz.define(
      *
      * @static
      */
-    function (config, locale) {
+    function (config, locale, statslayer) {
         var me = this;
-
         me._clazz =
             'Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin';
         me._name = 'ManageStatsPlugin';
         me._locale = locale || {};
-        me._layer = null;
+        me._layer = statslayer;
         me._state = null;
         me.statsService = null;
         me.userIndicatorsService = undefined;
@@ -116,7 +115,44 @@ Oskari.clazz.define(
         this._selectedRegionCategory = undefined;
         this._defaultRegionCategory = 'KUNTA';
         this._dataSources = {};
+        this._acceptedRegionCategories = this.CATEGORY_MAPPINGS.categories;
     }, {
+        // moved from statslayers in preparation for the new statsgrid implementation
+        CATEGORY_MAPPINGS : {
+            'categories': [
+                'KUNTA',
+                'ALUEHALLINTOVIRASTO',
+                'MAAKUNTA',
+                'NUTS1',
+                'SAIRAANHOITOPIIRI',
+                //'SUURALUE',
+                'SEUTUKUNTA',
+                'ERVA',
+                'ELY-KESKUS'
+            ],
+            'wmsNames': {
+                'KUNTA': 'oskari:kunnat2013',
+                'ALUEHALLINTOVIRASTO': 'oskari:avi',
+                'MAAKUNTA': 'oskari:maakunta',
+                'NUTS1': 'oskari:nuts1',
+                'SAIRAANHOITOPIIRI': 'oskari:sairaanhoitopiiri',
+                //'SUURALUE': 'oskari:',
+                'SEUTUKUNTA': 'oskari:seutukunta',
+                'ERVA': 'oskari:erva-alueet',
+                'ELY-KESKUS': 'oskari:ely'
+            },
+            'filterProperties': {
+                'KUNTA': 'kuntakoodi',
+                'ALUEHALLINTOVIRASTO': 'avi_nro',
+                'MAAKUNTA': 'maakuntanro',
+                'NUTS1': 'code',
+                'SAIRAANHOITOPIIRI': 'sairaanhoitopiirinro',
+                //'SUURALUE': '',
+                'SEUTUKUNTA': 'seutukuntanro',
+                'ERVA': 'erva_numero',
+                'ELY-KESKUS': 'ely_nro'
+            }
+        },
         /**
          * @private @method startPlugin
          *
@@ -129,6 +165,17 @@ Oskari.clazz.define(
             var me = this,
                 config = me.getConfig();
 
+            if(!me._layer) {
+                // in publisher we don't get the layer as constructor param so find one from the layer service
+                var layerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+                var statsLayers  = layerService.getLayersOfType('STATS');
+                if(statsLayers.length) {
+                    // this implementation only supports one statslayer, the new one supports multiple
+                    me._layer = statsLayers[0];
+                }
+                // TODO: notify failure if layer is not available
+            }
+
             me.statsService = me.getSandbox().getService(
                 'Oskari.statistics.bundle.statsgrid.StatisticsService'
             );
@@ -137,7 +184,6 @@ Oskari.clazz.define(
             );
             me._published = (config.published || false);
             me._state = (config.state || {});
-            me._layer = (config.layer || null);
             me.selectMunicipalitiesMode = false;
         },
 
@@ -190,8 +236,6 @@ Oskari.clazz.define(
                 return;
             }
 
-            this._acceptedRegionCategories =
-                layer.getCategoryMappings().categories;
             // indicator params are select-elements
             // (indicator drop down select and year & gender selects)
             this.prepareIndicatorParams(container);
@@ -268,10 +312,9 @@ Oskari.clazz.define(
                 me.changeDataSource(e.target.value, container);
             });
             // FIXME explain magic number
-            sel.css({
-                'width': '191px'
-            });
+            // 1.5 chosen version makes the select width 0px if it's not on DOM _OR_ setting width when calling sel.chosen()
             sel.chosen({
+                width: '191px',
                 no_results_text: this._locale.noDataSource,
                 placeholder_text: this._locale.selectDataSource
             });
@@ -300,7 +343,7 @@ Oskari.clazz.define(
             if (dataSource) {
                 dataSource.data.push(data);
                 select = jQuery('#indi');
-                select.trigger('liszt:update');
+                select.trigger('chosen:updated');
             }
         },
 
@@ -315,7 +358,7 @@ Oskari.clazz.define(
                     option.prop('selected', true);
                 }
                 select.append(option);
-                select.trigger('liszt:updated');
+                select.trigger('chosen:updated');
             }
         },
 
@@ -1246,7 +1289,7 @@ Oskari.clazz.define(
             // ajax call
             me.statsService.fetchStatsData(
                 // url
-                me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
+                me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.1&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
                 // success callback
 
                 function (data) {
@@ -1303,6 +1346,45 @@ Oskari.clazz.define(
             var columnId = 'indicator' + indicatorId + year + gender;
             return columnId;
         },
+        /**
+         * Initialize group for indicators in DataProviderInfoService
+         */
+        initDatasourceInfo : function() {
+            if(this.___DataProviderInfoServiceInitDone) {
+                return;
+            }
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.addGroup('indicators', this._locale.dataProviderInfoTitle || 'Indicators');
+            this.___DataProviderInfoServiceInitDone = true;
+        },
+        /**
+         * Notify DataProviderInfoService that indicator was added
+         */
+        notifyIndicatorAdded : function(id, name, source) {
+            this.initDatasourceInfo();
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.addItemToGroup('indicators', {
+                'id' : id,
+                'name' : name,
+                'source' : source
+            });
+        },
+        /**
+         * Notify DataProviderInfoService that indicator was removed
+         */
+        notifyIndicatorRemoved : function(id) {
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            if(!service) {
+                return;
+            }
+            service.removeItemFromGroup('indicators', id);
+        },
 
         /**
          * Add indicator data to the grid.
@@ -1318,11 +1400,12 @@ Oskari.clazz.define(
             var me = this,
                 columnId = me._getIndicatorColumnId(indicatorId, gender, year),
                 columns = me.grid.getColumns(),
-                indicatorName = meta.title[Oskari.getLang()] || meta.title;
+                indicatorName = Oskari.getLocalized(meta.title);
 
             if (me.isIndicatorInGrid(columnId)) {
                 return false;
             }
+            meta.organization = meta.organization || { title : ''};
 
             var headerButtons = [{
                 cssClass: 'icon-close-dark statsgrid-remove-indicator',
@@ -1396,7 +1479,6 @@ Oskari.clazz.define(
             me.autosizeColumns();
 
             // TODO do we still need this stuff?
-
             if (silent) {
                 // Show classification
                 me.sendStatsData(columns[columns.length - 1]);
@@ -1404,6 +1486,7 @@ Oskari.clazz.define(
 
             me.updateDemographicsButtons(indicatorId, gender, year);
             me.grid.setSortColumn(me._state.currentColumn, true);
+            this.notifyIndicatorAdded(indicatorId, indicatorName, Oskari.getLocalized(meta.organization.title));
         },
 
         _updateIndicatorDataToGrid: function (columnId, data, columns) {
@@ -1592,8 +1675,8 @@ Oskari.clazz.define(
 
             this.updateDemographicsButtons(indicatorId, gender, year);
 
-
             this.sendStatsData(undefined);
+            this.notifyIndicatorRemoved(indicatorId);
             /*
             if (columnId === this._state.currentColumn) {
                 // hide the layer, as we just removed the "selected"
@@ -1768,7 +1851,7 @@ Oskari.clazz.define(
                 CHECKED_COUNT: this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
                 CUR_COL: curCol,
                 VIS_NAME: me._layer.getLayerName(), //"ows:kunnat2013",
-                VIS_ATTR: me._layer.getFilterPropertyName(), //"kuntakoodi",
+                VIS_ATTR: me.layerFilterPropertyName, //"kuntakoodi",
                 VIS_CODES: munArray,
                 COL_VALUES: statArray
             });
@@ -1899,7 +1982,7 @@ Oskari.clazz.define(
                 // ajax call
                 me.statsService.fetchStatsData(
                     // url
-                    me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+                    me.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.1&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                     // success callback
                     // FIXME create function outside loop
 
@@ -2072,7 +2155,6 @@ Oskari.clazz.define(
                 );
                 me.addIndicatorMeta(indicator);
             });
-
             // FIXME change sotka to something general
             if (indicators.sotka && indicators.sotka.length > 0) {
                 //send ajax calls and build the grid
@@ -2492,12 +2574,10 @@ Oskari.clazz.define(
         },
         _setLayerToCategory: function (category) {
             var layer = this.getLayer(),
-                categoryMappings = layer.getCategoryMappings();
+                categoryMappings = this.CATEGORY_MAPPINGS;
 
             layer.setLayerName(categoryMappings.wmsNames[category]);
-            layer.setFilterPropertyName(
-                categoryMappings.filterProperties[category]
-            );
+            this.layerFilterPropertyName = categoryMappings.filterProperties[category];
         },
 
         /**
@@ -2810,6 +2890,7 @@ Oskari.clazz.define(
                 i;
 
             inputArray = _.map(inputArray, this._numerizeValue);
+            this.dataView.beginUpdate();
 
             for (i = 0; i < items.length; i += 1) {
                 item = items[i];
@@ -2857,6 +2938,7 @@ Oskari.clazz.define(
                 }
 
             }
+            this.dataView.endUpdate();
             this.dataView.refresh();
             data.collapseGroup('empty');
             // sendstats ...update map
@@ -3034,7 +3116,7 @@ Oskari.clazz.define(
 
         _getHilightPropertyName: function () {
             var layer = this.getLayer(),
-                categoryMappings = layer.getCategoryMappings() || {},
+                categoryMappings = this.CATEGORY_MAPPINGS || {},
                 propertyMappings = categoryMappings.filterProperties || {},
                 property = propertyMappings[this._selectedRegionCategory || 'KUNTA'];
 
@@ -3076,6 +3158,7 @@ Oskari.clazz.define(
                 i,
                 j,
                 id;
+            this.dataView.beginUpdate();
 
             for (i = 0; i < items.length; i += 1) {
                 item = items[i];
@@ -3089,6 +3172,7 @@ Oskari.clazz.define(
                 }
                 data.updateItem(item.id, item);
             }
+            this.dataView.endUpdate();
             data.collapseGroup('empty');
             data.refresh();
         },

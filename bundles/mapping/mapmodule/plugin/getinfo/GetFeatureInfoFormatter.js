@@ -4,7 +4,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         getinfoResultTable: '<table class="getinforesult_table"></table>',
         tableRow: '<tr></tr>',
         tableCell: '<td></td>',
-        span: '<span></span>',
         header: '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
         headerTitle: '<div class="getinforesult_header_title"></div>',
         myPlacesWrapper: '<div class="myplaces_place">' + 
@@ -12,6 +11,198 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             '<p class="myplaces_desc"></p>' + 
             '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>',
         linkOutside: '<a target="_blank"></a>'
+    },
+    formatters: {
+        html: function(datumContent){
+            // html has to be put inside a container so jquery behaves
+            var parsedHTML = jQuery('<div></div>').append(datumContent);
+            // Remove stuff from head etc. that we don't need/want
+            parsedHTML.find('link, meta, script, style, title').remove();
+            // Add getinforesult class etc. so the table is styled properly
+            parsedHTML.find('table').addClass('getinforesult_table');
+            // FIXME this is unnecessary, we can do this with a css selector.
+            parsedHTML.find('tr').removeClass('odd');
+            parsedHTML.find('tr:even').addClass('odd');
+            return parsedHTML;
+        },
+    /**
+         * Formats the html to show for my places layers' gfi dialog.
+         *
+         * @method myplace
+         * @param {Object} place response data to format
+         * @return {jQuery} formatted html
+         */
+        myplace: function(place){
+            var content = jQuery('<div class="myplaces_place">' + '<h3 class="myplaces_header"></h3>' + '<p class="myplaces_desc"></p>' + '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>'),
+                desc = content.find('p.myplaces_desc'),
+                img = content.find('a.myplaces_imglink'),
+                link = content.find('a.myplaces_link');
+
+            content.find('h3.myplaces_header').html(place.name);
+
+            if (place.place_desc) {
+                desc.html(place.place_desc);
+            } else if (place.description) {
+                desc.html(place.description);
+            } else {
+                desc.remove();
+            }
+
+            if (place.image_url && typeof place.image_url === 'string') {
+                img.attr({
+                    'href': place.image_url
+                }).find('img.myplaces_img').attr({
+                    'src': place.image_url
+                });
+            } else if (place.imageUrl && typeof place.imageUrl === 'string') {
+                img.attr({
+                    'href': place.imageUrl
+                }).find('img.myplaces_img').attr({
+                    'src': place.imageUrl
+                });
+            } else {
+                img.remove();
+            }
+
+            if (place.link) {
+                link.attr({
+                    'href': place.link
+                }).html(place.link);
+            } else {
+                link.remove();
+            }
+
+            return content;
+        },
+        /**
+         * @method json
+         * @private
+         * Formats a GFI response value to a jQuery object
+         * @param {pValue} datum response data to format
+         * @return {jQuery} formatted HMTL
+         */
+        json: function(pValue){
+            if (!pValue) {
+                return;
+            }
+            var value = jQuery('<span></span>');
+            // if value is an array -> format it first
+            // TODO: maybe some nicer formatting?
+            if (Object.prototype.toString.call(pValue) === '[object Array]') {
+                var i,
+                    obj,
+                    objAttr,
+                    innerValue,
+                    pluginLoc,
+                    myLoc,
+                    localizedAttr;
+
+                for (i = 0; i < pValue.length; i += 1) {
+                    obj = pValue[i];
+                    for (objAttr in obj) {
+                        if (obj.hasOwnProperty(objAttr)) {
+                            innerValue = this.formatters.json(obj[objAttr]);
+                            if (innerValue) {
+                                // Get localized attribute name
+                                // TODO this should only apply to omat tasot?
+                                pluginLoc = this.getMapModule().getLocalization('plugin', true);
+                                myLoc = pluginLoc[this._name];
+                                localizedAttr = myLoc[objAttr];
+                                value.append(localizedAttr || objAttr);
+                                value.append(': ');
+                                value.append(innerValue);
+                                value.append('<br class="innerValueBr" />');
+                            }
+                        }
+                    }
+                }
+            } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
+                var link = jQuery('<a target="_blank"></a>');
+                link.attr('href', pValue);
+                link.append(pValue);
+                value.append(link);
+            } else {
+                value.append(pValue);
+            }
+            return value;
+        },
+        registry: function (data, me) {
+            var layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(data.layerId),
+                layerName = (layer != null && layer != undefined) ? layer.getName() : '',
+                fields,
+                hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemClassName', 'geometry', 'pointGeometry', 'areaGeometry',
+                    'mapLayers', 'bounds', 'filtered', 'lines', 'points', 'subAreas', 'editable', 'registryIdentifier'],
+                type = 'wfslayer',
+                result,
+                markup,
+                locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView,
+                registryLayerConf = Oskari.getSandbox().findRegisteredModuleInstance('nba-registers').conf.registryLayers[data.layerId];
+
+            if (data.features === 'empty') {
+                return;
+            }
+            result = _.map(data.features, function (feature) {
+                var showNulls = false;
+                if (registryLayerConf != null && registryLayerConf.gfiAttributes != null) {
+                    fields = registryLayerConf.gfiAttributes;
+                    showNulls = true;
+                } else {
+                    fields = Object.keys(feature);
+                }
+
+                var feat = _.chain(fields)
+                    .filter(function (key) {
+                        return !_.contains(hiddenFields, key);
+                    })
+                    .foldl(function (obj, key) {
+                        var value = feature[key];
+                        var name = key;
+                        if (locale[key]) {
+                            name = locale[key];
+                        }
+                        if (locale.hasOwnProperty(key + "Values") && locale[key + "Values"].hasOwnProperty(value)) {
+                            value = locale[key + "Values"][value];
+                        }
+                        if (_.isArray(value)) {
+                            value = value.join(", ");
+                        }
+                        obj[name] = value;
+                        return obj;
+                    }, {})
+                    .value();
+
+                markup = me._json2html(feat, showNulls);
+
+                return {
+                    markup: markup,
+                    layerId: data.layerId,
+                    layerName: layerName,
+                    type: type,
+                    isMyPlace: false
+                };
+            });
+
+            return result;
+        },
+        /**
+         * Checks if the given string is a html document
+         *
+         * @method _isHTML
+         * @private
+         * @param datumContent
+         * @return true if HTML
+         */
+        isHTML: function(datumContent){
+            var ret = false;
+            if (datumContent && typeof datumContent === 'string') {
+                if (datumContent.indexOf('<html') >= 0) {
+                    ret = true;
+                } else if (datumContent.indexOf('<HTML') >= 0) {
+                    ret = true;
+                }
+            }
+            return ret;
+        }
     },
     /**
      * Wraps the html feature fragments into a container.
@@ -77,7 +268,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             return;
         }
         var me = this,
-            sandbox = this._sandbox,
+            sandbox = Oskari.getSandbox(),
             coll;
 
         coll = _.chain(data.features)
@@ -104,25 +295,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
 
         return coll || [];
     },
-    /**
-     * Checks if the given string is a html document
-     *
-     * @method _isHTML
-     * @private
-     * @param datumContent
-     * @return true if HTML
-     */
-    _isHTML: function (datumContent) {
-        var ret = false;
-        if (datumContent && typeof datumContent === 'string') {
-            if (datumContent.indexOf('<html') >= 0) {
-                ret = true;
-            } else if (datumContent.indexOf('<HTML') >= 0) {
-                ret = true;
-            }
-        }
-        return ret;
-    },
+
     /**
      * Formats a GFI HTML or JSON object to result HTML
      *
@@ -144,8 +317,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             // This is for my places info popup
             if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
                 return _.foldl(datum.content.parsed.places, function (div, place) {
-                    div.append(me._formatMyPlacesGfi(place));
-
+                    div.append(me.formatters.myplace(place));
                     return div;
                 }, jQuery('<div></div>'));
             }
@@ -176,7 +348,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 table = me.template.getinfoResultTable.clone();
                 for (attr in jsonData) {
                     if (jsonData.hasOwnProperty(attr)) {
-                        value = me._formatJSONValue(jsonData[attr]);
+                        value = me.formatters.json(jsonData[attr]);
                         if (value) {
                             row = me.template.tableRow.clone();
                             // FIXME this is unnecessary, we can do this with a css selector.
@@ -203,20 +375,11 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 }
                 response.append(table);
             }
-        } else if (me._isHTML(datum.content)) {
-            // html has to be put inside a container so jquery behaves
-            var parsedHTML = jQuery('<div></div>').append(datum.content);
-            // Remove stuff from head etc. that we don't need/want
-            parsedHTML.find('link, meta, script, style, title').remove();
-            // let's not return a bunch of empty html
+        } else if (me.formatters.isHTML(datum.content)) {
+            var parsedHTML = me.formatters.html(datum.content);
             if (jQuery.trim(parsedHTML.html()) === '') {
                 return null;
             }
-            // Add getinforesult class etc. so the table is styled properly
-            parsedHTML.find('table').addClass('getinforesult_table');
-            // FIXME this is unnecessary, we can do this with a css selector.
-            parsedHTML.find('tr').removeClass('odd');
-            parsedHTML.find('tr:even').addClass('odd');
             response.append(parsedHTML.html());
         } else {
             response.append(datum.content);
@@ -229,65 +392,13 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
         return response;
     },
-    /**
-     * @method _formatJSONValue
-     * @private
-     * Formats a GFI response value to a jQuery object
-     * @param {pValue} datum response data to format
-     * @return {jQuery} formatted HMTL
-     */
-    _formatJSONValue: function (pValue) {
-        if (!pValue) {
-            return;
-        }
-        var value = this.template.span.clone();
-        // if value is an array -> format it first
-        // TODO: maybe some nicer formatting?
-        if (Object.prototype.toString.call(pValue) === '[object Array]') {
-            var i,
-                obj,
-                objAttr,
-                innerValue,
-                pluginLoc,
-                myLoc,
-                localizedAttr;
-
-            for (i = 0; i < pValue.length; i += 1) {
-                obj = pValue[i];
-                for (objAttr in obj) {
-                    if (obj.hasOwnProperty(objAttr)) {
-                        innerValue = this._formatJSONValue(obj[objAttr]);
-                        if (innerValue) {
-                            // Get localized attribute name
-                            // TODO this should only apply to omat tasot?
-                            pluginLoc = this.getMapModule().getLocalization('plugin', true);
-                            myLoc = pluginLoc[this._name];
-                            localizedAttr = myLoc[objAttr];
-                            value.append(localizedAttr || objAttr);
-                            value.append(': ');
-                            value.append(innerValue);
-                            value.append('<br class="innerValueBr" />');
-                        }
-                    }
-                }
-            }
-        } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
-            var link = this.template.linkOutside.clone();
-            link.attr('href', pValue);
-            link.append(pValue);
-            value.append(link);
-        } else {
-            value.append(pValue);
-        }
-        return value;
-    },
 
     /**
      * @method _formatWFSFeaturesForInfoBox
      */
     _formatWFSFeaturesForInfoBox: function (data) {
         var me = this,
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
+            layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(data.layerId),
             isMyPlace = layer.isLayerOfType('myplaces'),
             fields = layer.getFields().slice(),
             //hiddenFields = ['__fid', '__centerX', '__centerY'],
@@ -317,21 +428,29 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         }
 
         result = _.map(data.features, function (feature) {
-            var feat = _.chain(fields)
-                .zip(feature)
-                .filter(function (pair) {
-                    return !_.contains(hiddenFields, _.first(pair));
-                })
-                .foldl(function (obj, pair) {
-                    obj[_.first(pair)] = _.last(pair);
-                    return obj;
-                }, {})
-                .value();
+            if (fields.length) {
+                var feat = _.chain(fields)
+                    .zip(feature)
+                    .filter(function (pair) {
+                        return !_.contains(hiddenFields, _.first(pair));
+                    })
+                    .foldl(function (obj, pair) {
+                        obj[_.first(pair)] = _.last(pair);
+                        return obj;
+                    }, {})
+                    .value();
 
-            if (isMyPlace) {
-                markup = me._formatMyPlacesGfi(feat);
+                if (isMyPlace) {
+                    markup = me.formatters.myplace(feat);
+                } else {
+                    if (!jQuery.isEmptyObject(feat)) {
+                        markup = me._json2html(feat);
+                    } else {
+                        markup = "<table><tr><td>" + me._loc.noAttributeData + "</td></tr></table>";
+                    }
+                }
             } else {
-                markup = me._json2html(feat);
+                markup = "<table><tr><td>" + me._loc.noAttributeData + "</td></tr></table>";
             }
             return {
                 markup: markup,
@@ -340,125 +459,10 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 type: type,
                 isMyPlace: isMyPlace
             };
+
         });
 
         return result;
-    },
-
-    /**
-     * @method _formatRegistryFeaturesForInfoBox
-     */
-    _formatRegistryFeaturesForInfoBox: function (data) {
-        var me = this,
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(data.layerId),
-            layerName = (layer != null && layer != undefined) ? layer.getName() : '',
-            fields,
-            hiddenFields = ['__fid', '__centerX', '__centerY', 'subItems', 'areas', 'itemClassName', 'geometry', 'pointGeometry', 'areaGeometry', 
-                'mapLayers', 'bounds', 'filtered', 'lines', 'points', 'subAreas', 'editable', 'registryIdentifier'],
-            type = 'wfslayer',
-            result,
-            markup,
-            locale = Oskari.getLocalization("RegistryEditor").RegistryEditorView,
-            registryLayerConf = this._sandbox.findRegisteredModuleInstance('nba-registers').conf.registryLayers[data.layerId];
-
-        if (data.features === 'empty') {
-            return;
-        }
-        result = _.map(data.features, function (feature) {
-            var showNulls = false;
-            if (registryLayerConf != null && registryLayerConf.gfiAttributes != null) {
-                fields = registryLayerConf.gfiAttributes;
-                showNulls = true;
-            } else {
-                fields = Object.keys(feature);
-            }
-            
-            var feat = _.chain(fields)
-                .filter(function (key) {
-                    return !_.contains(hiddenFields, key);
-                })
-                .foldl(function (obj, key) {
-                    var value = feature[key];
-                    var name = key;
-                    if(locale[key]) {
-                        name = locale[key];
-                    }
-                    if(locale.hasOwnProperty(key + "Values") && locale[key + "Values"].hasOwnProperty(value)) {
-                        value = locale[key + "Values"][value];
-                    }
-                    if(_.isArray(value)) {
-                        value = value.join(", ");
-                    }
-                    obj[name] = value;
-                    return obj;
-                }, {})
-                .value();
-
-            markup = me._json2html(feat, showNulls);
-            
-            return {
-                markup: markup,
-                layerId: data.layerId,
-                layerName: layerName,
-                type: type,
-                isMyPlace: false
-            };
-        });
-
-        return result;
-    },
-
-    /**
-     * Formats the html to show for my places layers' gfi dialog.
-     *
-     * @method _formatMyPlacesGfi
-     * @param {Object} place response data to format
-     * @return {jQuery} formatted html
-     */
-    _formatMyPlacesGfi: function (place) {
-        var me = this,
-            content = me.template.myPlacesWrapper.clone(),
-            desc = content.find('p.myplaces_desc'),
-            img = content.find('a.myplaces_imglink'),
-            link = content.find('a.myplaces_link');
-
-        
-        content.find('div.myplaces_header').html(place.name);
-        content.find('div.myplaces_header').attr('title', place.name);
-
-        if (place.place_desc) {
-            desc.html(place.place_desc);
-        } else if (place.description) {
-            desc.html(place.description);
-        } else {
-            desc.remove();
-        }
-
-        if (place.image_url && typeof place.image_url === 'string') {
-            img.attr({
-                'href': place.image_url
-            }).find('img.myplaces_img').attr({
-                'src': place.image_url
-            });
-        } else if (place.imageUrl && typeof place.imageUrl === 'string') {
-            img.attr({
-                'href': place.imageUrl
-            }).find('img.myplaces_img').attr({
-                'src': place.imageUrl
-            });
-        } else {
-            img.remove();
-        }
-
-        if (place.link) {
-            link.attr({
-                'href': place.link
-            }).html(place.link);
-        } else {
-            link.remove();
-        }
-
-        return content;
     },
 
     /**
@@ -479,6 +483,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             row = null,
             keyColumn = null,
             valColumn = null,
+            arrayObject = {},
             key,
             value,
             vType,
@@ -486,7 +491,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             valueDiv,
             innerTable,
             i;
-
         for (key in node) {
             if (node.hasOwnProperty(key)) {
                 value = node[key];
@@ -527,11 +531,23 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     // format array
                     if (jQuery.isArray(value)) {
                         valueDiv = this.template.wrapper.clone();
+                        if(value.length > 0){
+                            if ((typeof value[0]).toLowerCase() === 'object'){
                         for (i = 0; i < value.length; i += 1) {
                             innerTable = this._json2html(value[i]);
                             valueDiv.append(innerTable);
                         }
                         valpres = valueDiv;
+
+                    } else {
+                                // Create object for array values
+                                for (i = 0; i < value.length; i += 1) {
+                                    arrayObject[key+'.'+i] =  value[i];
+                                }
+                                valpres = this._json2html(arrayObject);
+                            }
+                        }
+
                     } else {
                         valpres = this._json2html(value);
                     }

@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "hr",
     "key": "LayerSelector",
     "value": {
@@ -9,19 +10,19 @@ Oskari.registerLocalization({
             "generic": "Greška sustava! Pokušajte ponovno kasnije.",
             "loadFailed": "Greška u učitavanju slojeva karte! Osvježite stranice u pregledniku i odaberite slojeve karte.",
             "noResults": "Pretraga nije dala rezultate.",
-            "noResultsForKeyword": "NOT TRANSLATED",
-            "minChars": "NOT TRANSLATED"
+            "noResultsForKeyword": "",
+            "minChars": ""
         },
         "loading": "Učitavanje...",
         "filter": {
             "text": "Pretraži slojeve karte",
-            "keywordsTitle": "NOT TRANSLATED",
-            "shortDescription": "NOT TRANSLATED",
-            "description": "NOT TRANSLATED",
+            "keywordsTitle": "",
+            "shortDescription": "",
+            "description": "",
             "inspire": "Po temi",
             "organization": "Po pružateljima podataka",
             "published": "Korisnici",
-            "didYouMean": "NOT TRANSLATED"
+            "didYouMean": ""
         },
         "published": {
             "organization": "Objavljeni sloj karte",
@@ -41,35 +42,50 @@ Oskari.registerLocalization({
                 "tooltip": "Sloj karte trenutno nije dostupan.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "Sloj karte trenutno nije dostupan.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "Sloj karte možda povremeno neće biti dostupan tijekom sljedećih par dana.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informacija o statusu sloja karte nije dostupna.",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
             "ok": "OK"
         },
         "types": {
-            "syn": "NOT TRANSLATED",
-            "lk": "NOT TRANSLATED",
-            "vk": "NOT TRANSLATED",
-            "ak": "NOT TRANSLATED",
-            "yk": "NOT TRANSLATED"
+            "syn": "",
+            "lk": "",
+            "vk": "",
+            "ak": "",
+            "yk": ""
         },
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Slojevi karte",
+            "message": "Odabirom slojeva karte možete odabrati podatkovne proizvode koji će biti prikazani na karti. Kliknite na kategoriju koju želite otvoriti i odaberite sloj ili u polje za pretraživanje unesite nekoliko slova iz naziva podatkovnog proizvoda koji tražite.",
+            "openLink": "Prikaži slojeve karte",
+            "closeLink": "Sakrij slojeve karte",
+            "tileText": "Slojevi karte"
         }
     }
 });

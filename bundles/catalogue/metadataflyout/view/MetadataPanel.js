@@ -37,6 +37,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          * @private @property _model
          */
         this._model = model;
+
         // Put locale into model so templates can get codeList values...
         model.locale = locale;
 
@@ -44,6 +45,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          * @private @property _tabContainer {Oskari.userinterface.component.TabContainer}
          */
         this._tabContainer = null;
+
+        this._maplayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         /**
          * @static @private @property _templates HTML/underscore templates for the User Interface
@@ -439,161 +442,180 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 ),
                 'quality': _.template(
                     '<article>' +
-
-                    '    <% if (dataQualities.some(function (dq) {return dq.lineageStatement.length})) { %>' +
-                    '        <h2>' + this.locale.heading.lineageStatement + '</h2>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '            <% _.forEach(dataQuality.lineageStatement, function (paragraph) { %>' +
-                    '                <p><%= paragraph %></p>' +
-                    '            <% }); %>' +
-                    '        <% }); %>' +
-                    '    <% } %>' +
-                    '    <% if (dataQualities.length) { %>' +
-                    '        <% _.forEach(dataQualities, function (dataQuality) { %>' +
-                    '           <% if (dataQuality.absoluteExternalPositionalAccuracyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.absoluteExternalPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.absoluteExternalPositionalAccuracyList, function(dataQualityItem) { %>'+
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
+                    '    <% if (dataQualityObject.dataQualityNodes.length) { %>' +
+                    '        <% _.forEach(dataQualityObject.dataQualityNodes, function (dataQuality) { %>' +
+                    '           <br> <h2> ${dataQuality.UIlabel}</h2>' +
+                    '           <% if (dataQuality.linageStatement) { %>' +
+                                    this.locale.heading.lineageStatement + ' : <%= dataQuality.linageStatement %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.nameOfMeasure) { %>' +
+                                    this.locale.qualityContent.nameOfMeasure + ' : <%= dataQuality.nameOfMeasure %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureDescription) { %>' +
+                                    this.locale.qualityContent.measureDescription + ' : <%= dataQuality.measureDescription %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.evaluationMethodType) { %>' +
+                                    this.locale.qualityContent.evaluationMethodType + ' : <%= dataQuality.evaluationMethodType %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationAuthorization) { %>' +
+                                    this.locale.qualityContent.measureIdentificationAuthorization + ' : <%= dataQuality.measureIdentificationAuthorization %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.measureIdentificationCode) { %>' +
+                                   this.locale.qualityContent.measureIdentificationCode + ' : <%= dataQuality.measureIdentificationCode %> <br>' +
+                    '           <% } %>' +
+                    '           <% if (dataQuality.dateTime.length) { %>' +
+                    '               <% _.forEach(dataQuality.dateTime, function (dateTime) { %>' +
+                    '                   <% if (dateTime) { %>' +
+                                            this.locale.qualityContent.dateTime + ' : <%= dateTime %> <br>' +
+                    '                   <% } %>' +
                     '               <% }); %> '+
-                    '           <% } %>'+
-                    '           <% if (dataQuality.accuracyOfTimeMeasurementList.length) { %>' +
-                    '               <h2>' + this.locale.heading.accuracyOfTimeMeasurement + '</h2>' +
-                    '               <% _.forEach(dataQuality.accuracyOfTimeMeasurementList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }) %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.completenessCommissionList.length) { %>' +
-                    '               <h2>' + this.locale.heading.completenessCommission + '</h2>' +
-                    '               <% _.forEach(dataQuality.completenessCommissionList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.completenessOmissionList.length) { %>' +
-                    '              <h2>' + this.locale.heading.completenessOmission + '</h2>' +
-                    '               <% _.forEach(dataQuality.completenessOmissionList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.conceptualConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.conceptualConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.conceptualConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.domainConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.domainConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.domainConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.formatConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.formatConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.formatConsistencyList, function (dataQualityItem) { %>' +
-                    '                 <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                    <p><%= item %></p>' +
-                    '                 <% }); %>' +
-                    '                 <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.griddedDataPositionalAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.griddedDataPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.griddedDataPositionalAccuracyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.nonQuantitativeAttributeAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.nonQuantitativeAttributeAccuracy + '</h2>' +
-                    '              <% _.forEach(dataQuality.nonQuantitativeAttributeAccuracyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.quantitativeAttributeAccuracyList.length) { %>' +
-                    '              <h2>' + this.locale.heading.quantitativeAttributeAccuracy + '</h2>' +
-                    '              <% _.forEach(dataQuality.quantitativeAttributeAccuracyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                      <p><%= item %></p>' +
-                    '                  <% }); %>' +
-                    '                  <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '              <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.relativeInternalPositionalAccuracyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.relativeInternalPositionalAccuracy + '</h2>' +
-                    '               <% _.forEach(dataQuality.relativeInternalPositionalAccuracyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.temporalConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.temporalConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.temporalConsistencyList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.temporalValidityList.length) { %>' +
-                    '               <h2>' + this.locale.heading.temporalValidity + '</h2>' +
-                    '               <% _.forEach(dataQuality.temporalValidityList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.thematicClassificationCorrectnessList.length) { %>' +
-                    '               <h2>' + this.locale.heading.thematicClassificationCorrectness + '</h2>' +
-                    '               <% _.forEach(dataQuality.thematicClassificationCorrectnessList, function (dataQualityItem) { %>' +
-                    '                   <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '           <% if (dataQuality.topologicalConsistencyList.length) { %>' +
-                    '               <h2>' + this.locale.heading.topologicalConsistency + '</h2>' +
-                    '               <% _.forEach(dataQuality.topologicalConsistencyList, function (dataQualityItem) { %>' +
-                    '                  <% _.forEach(dataQualityItem.list, function (item) { %>' +
-                    '                       <p><%= item %></p>' +
-                    '                   <% }); %>' +
-                    '                   <% if (dataQualityItem.pass == "true") {%><p><%=locale.qualityContent.qualityPassTrue%></p><%} else { %> <p><%=locale.qualityContent.qualityPassFalse%></p> <% } %> '+
-                    '               <% }); %>' +
-                    '           <% } %>'+
-                    '       <br/><br/>'+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.conformanceResultList.length) { %>' +
+                    '               <br> <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
+                    '               <% _.forEach(dataQuality.conformanceResultList, function (conformanceResult) { %>' +
+                    '                   <% if (conformanceResult.specification) { %>' +
+                                            this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (conformanceResult.pass == "true") {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
+                    '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
+                    '                   <% if (conformanceResult.explanation) { %>' +
+                                            this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
+                    '           <% if (dataQuality.quantitativeResultList.length) { %>' +
+                    '               <br> <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
+                    '               <% _.forEach(dataQuality.quantitativeResultList, function (quantitativeResult) { %>' +
+                    '                   <% if (quantitativeResult.valueType) { %>' +
+                                            this.locale.qualityContent.valueType + ': <%= quantitativeResult.valueType %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.valueUnit) { %>' +
+                                            this.locale.qualityContent.valueUnit + ': <%= quantitativeResult.valueUnit %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (quantitativeResult.errorStatistic) { %>' +
+                                            this.locale.qualityContent.errorStatistic + ': <%= quantitativeResult.errorStatistic %> <br>' +
+                    '                   <% } %>' +
+                    '                   <% if (dataQuality.quantitativeResult.length) { %>' +
+                    '                       <% _.forEach(dataQuality.quantitativeResult, function (value) { %>' +
+                    '                           <% if (value) { %>' +
+                                                    this.locale.qualityContent.value + ': <%= value %> <br>' +
+                    '                           <% } %>' +
+                    '                       <% }); %> '+
+                    '                   <% } %>' +
+                    '               <% }); %> '+
+                    '           <% } %>' +
                     '       <% }); %> '+
                     '    <% } %> '+
                     '</article>'
+                ),
+                'actions': _.template(
+                    '<article>'+
+                    '</article>'
                 )
-
-            }
+            },
+            'layerList': _.template(
+                '<table class="metadataSearchResult">'+
+                '   <tr>'+
+                '       <td>'+
+                '           <div class="layerListHeader"><h2></h2></div>'+
+                '           <ul class="layerList">'+
+                '           </ul>'+
+                '       </td>'+
+                '   </tr>'+
+                '</table>'
+            ),
+            'layerItem': _.template(
+                '<li>'+
+                '   <%=layer.getName()%>&nbsp;&nbsp;'+
+                '   <a href="JavaScript:void(0);" class="layerLink">'+
+                '       <%=hidden ? locale.layerList.show : locale.layerList.hide%>'+
+                '   </a>'+
+                '</li>'
+            )
         };
     }, {
+        /**
+         * @static
+         * @property __name
+         *
+         */
+        __name: 'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
+
+        getName: function () {
+            return this.__name;
+        },
+        /**
+         * @method onEvent
+         */
+        onEvent: function (event) {
+            var handler = this.eventHandlers[event.getName()];
+            if (!handler) {
+                return;
+            }
+
+            return handler.apply(this, [event]);
+
+        },
+
+        /**
+         * @property eventHandlers
+         * @static
+         *
+         */
+        eventHandlers: {
+            AfterMapLayerAddEvent: function (event) {
+                /* this might react when layer added */
+                this.renderMapLayerList();
+            },
+            /**
+             * @method AfterMapLayerRemoveEvent
+             */
+            AfterMapLayerRemoveEvent: function (event) {
+                this.renderMapLayerList();
+            },
+            MapLayerVisibilityChangedEvent: function(event) {
+                this.renderMapLayerList();
+            },
+            MapLayerEvent: function(event) {
+                /*add + no layerid -> mass load -> all map layers probably loaded*/
+                if (event.getOperation() === "add" && event.getLayerId() === null) {
+                    this.renderMapLayerList();
+                }
+            },
+            /**
+             * @method userinterface.ExtensionUpdatedEvent
+             * Catch my flyout
+             */
+            'userinterface.ExtensionUpdatedEvent': function (event) {
+                var me = this;
+                if (event.getExtension().getName() !== me.instance.getName()) {
+                    // not me -> do nothing
+                    return;
+                }
+                var viewState = event.getViewState();
+                if (viewState === 'close') {
+                    //parent closing -> clear my eventhandlers
+                    for (var p in me.eventHandlers) {
+                        if (me.eventHandlers.hasOwnProperty(p)) {
+                            me.instance.sandbox.unregisterFromEventByName(me, p);
+                        }
+                    }
+                }
+            }
+        },
+
+        preprocessModel : {
+            'quality' : function(model) {
+                if(!model.dataQualityObject || !model.dataQualityObject.dataQualityNodes || !model.dataQualityObject.dataQualityNodes.length) {
+                    return model;
+                };
+                var loc = this.locale.heading;
+                model.dataQualityObject.dataQualityNodes.forEach(function(dataQuality) {
+                    dataQuality.UIlabel =  loc[dataQuality.nodeName];
+                });
+                return model;
+            }
+        },
         /**
          * @public @method init
          *
@@ -607,7 +629,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 identification,
                 images = [],
                 me = this,
-                links,
                 locale = me.locale,
                 model = me._model,
                 tabContainerHeader,
@@ -620,6 +641,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             me._tabContainer.insertTo(me.getContainer());
             /* let's create view selector tabs */
+            var additionalTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
                     entry = Oskari.clazz.create(
@@ -631,23 +653,31 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     if (me._templates.tabs[tabId]) {
                         //the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
+                        if(me.preprocessModel[tabId]) {
+                            me.preprocessModel[tabId].apply(me, [model]);
+                        }
                         entry.setContent(
                             me._templates.tabs[tabId](model)
                         );
                     } else if (me._additionalTabs && me._additionalTabs[tabId] && me._additionalTabs[tabId].tabActivatedCallback) {
+                        additionalTabsFound = true;
                         var newTabTitle = me._additionalTabs[tabId].title ? me._additionalTabs[tabId].title : "";
                         entry.setTitle(newTabTitle);
-                        me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
-                            if (newTab && newTab.getId() && !newTab.content) {
-                                if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
-                                    me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab);
-                                }
-                            }
-                        });
                     }
                     me._tabContainer.addPanel(entry);
                     me._tabs[tabId] = entry;
                 }
+            }
+
+            /*add the tab change event listener only once.*/
+            if (additionalTabsFound) {
+                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                    if (newTab && newTab.getId() && !newTab.content) {
+                        if (me._additionalTabs[newTab.getId()] && me._additionalTabs[newTab.getId()].tabActivatedCallback) {
+                            me._additionalTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
+                        }
+                    }
+                });
             }
 
             browseGraphics =
@@ -662,37 +692,17 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 images[i] = new Image();
                 images[i].src = identification.browseGraphics[i].fileName;
             }
-
-            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
-                entry = jQuery('<a />');
-                entry.html(locale.xml);
-                entry.attr('href', model.metadataURL);
-                entry.attr('target', '_blank');
-                links = entry;
-            }
-
-            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
-                entry = jQuery('<a />');
-                entry.html(locale.pdf);
-                entry.attr(
-                    'href',
-                    '/catalogue/portti-metadata-printout-service/' +
-                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
-                    '&title=' + me.locale.metadata_printout_title +
-                    '&metadataresourceuuid=' + me._model.fileIdentifier
-                );
-                entry.attr('target', '_blank');
-                if(links){
-                    links = links.add(entry);
-                } else {
-                    links = entry;
-                }
-            }
-
-            me._tabContainer.setExtra(links);
+            me.addActionLinks();
+            me.renderMapLayerList();
             me.setTitle(me._model.identification.citation.title);
             if (open) {
                 me.open();
+            }
+
+            for (var p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    me.instance.sandbox.registerForEventByName(this, p);
+                }
             }
         },
         /**
@@ -715,13 +725,119 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function(tabsJSON) {
+            //TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
             me._additionalTabs = tabsJSON;
             for (var tabId in tabsJSON) {
                 me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
             }
         },
+        addActionLinks: function() {
+            var me = this,
+                locale = me.locale,
+                model = me._model,
+                links;
+            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
+                entry = jQuery('<a /><br/>');
+                entry.html(locale.xml);
+                entry.attr('href', model.metadataURL);
+                entry.attr('target', '_blank');
+                links = entry;
+            }
 
+            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
+                entry = jQuery('<a /><br/>');
+                entry.html(locale.pdf);
+                entry.attr(
+                    'href',
+                    '/catalogue/portti-metadata-printout-service/' +
+                    'MetadataPrintoutServlet?lang=' + Oskari.getLang() +
+                    '&title=' + me.locale.metadata_printout_title +
+                    '&metadataresourceuuid=' + me._model.fileIdentifier
+                );
+                entry.attr('target', '_blank');
+                if(links){
+                    links = links.add(entry);
+                } else {
+                    links = entry;
+                }
+            }
+            me.addActions(links);
+        },
+        /**
+         * @method addActions
+         *
+         * set up actions tab content based on conf
+         */
+        addActions: function(links) {
+            var me = this,
+                container = me._tabs['actions'].getContainer();
+            _.each(links, function(link) {
+                container.append(link);
+            });
+        },
+
+        renderMapLayerList: function() {
+            var me = this,
+                container = me._tabs['actions'].getContainer(),
+                layers = me._maplayerService.getLayersByMetadataId(me._model.uuid);
+
+            container.find('table.metadataSearchResult').remove();
+            container.append(me._templates['layerList']());
+
+            layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : "";
+            container.find('h2').html(layerListHeader);
+
+            layerListElement = container.find('ul.layerList');
+            _.each(layers, function(layer) {
+                var layerListItem = jQuery(me._templates['layerItem']({
+                    layer: layer,
+                    hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
+                    locale: me.locale
+                }));
+                layerListElement.append(layerListItem);
+
+                jQuery(layerListItem).find('a.layerLink').on('click', function() {
+                    var labelText = me._toggleMapLayerVisibility(layer);
+                    jQuery(this).html(labelText);
+                });
+            });
+        },
+        /**
+         * @method @private _toggleMapLayerVisibility
+         *
+         * add / remove map layer from map and turn visible.
+         * return labeltext to show / hide maplayer
+         */
+        _toggleMapLayerVisibility: function(layer) {
+            var me = this,
+                labelText;
+            //not added -> add.
+            if (me.isLayerSelected(layer) && layer.isVisible()) {
+                //added -> remove from map
+                me.instance.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
+                labelText = me.locale.layerList.show;
+            } else {
+                me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
+                //turn visible in case was invisible
+                if (!layer.isVisible()) {
+                    me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
+                }
+                labelText = me.locale.layerList.hide;
+            }
+            return labelText;
+        },
+        isLayerSelected: function(layer) {
+            var me = this,
+                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            for (var k = 0; k < selectedLayers.length; k += 1) {
+                selectedLayer = selectedLayers[k];
+                if (layer.getId() === selectedLayer.getId()) {
+                    return true;
+                }
+            }
+            return false;
+        },
         /**
          * @public @method getState
          *

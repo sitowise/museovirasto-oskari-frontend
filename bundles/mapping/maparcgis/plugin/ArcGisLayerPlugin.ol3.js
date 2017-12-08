@@ -92,7 +92,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                         urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
                         params : {
                             'layers' : 'show:' + layer.getLayerName()
-                        }
+                        },
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -105,7 +106,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 // Layer URL is like: http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x} format
                 openlayer = new ol.layer.Tile({
                     source: new ol.source.XYZ({
-                         url: layer.getLayerUrl()
+                        url: layer.getLayerUrl(),
+                        crossOrigin : layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -117,21 +119,40 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             layer.setQueryable(true);
             openlayer.opacity = layer.getOpacity() / 100;
 
-            me.getMap().addLayer(openlayer);
+            me._registerLayerEvents(openlayer, layer);
+            me.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openlayer);
-
-            if (keepLayerOnTop) {
-                me.getMapModule().setLayerIndex(openlayer, me.getMap().getLayers().getArray().length);
-            } else {
-                me.getMapModule().setLayerIndex(openlayer, 0);
-            }
 
             me.getSandbox().printDebug(
                 '#!#! CREATED ' + layerType + ' for ArcGisLayer ' +
                 layer.getId()
             );
-        }
+        },
+        /**
+         * Adds event listeners to ol-layers
+         * @param {OL3 layer} layer
+         * @param {Oskari layerconfig} oskariLayer
+         *
+         */
+        _registerLayerEvents: function(layer, oskariLayer){
+        var me = this;
+        var source = layer.getSource();
+
+        source.on('tileloadstart', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), true);
+        });
+
+        source.on('tileloadend', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), false);
+        });
+
+        source.on('tileloaderror', function() {
+          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+
+        });
+
+      }
     }, {
         "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
         /**

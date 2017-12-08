@@ -19,8 +19,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                     conf: {
                         plugins: [
                             {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'}
+                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
+                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
                         ]
+                    }
+                },
+                "featuredata2": {
+                    conf: {
                     }
                 }
             }
@@ -59,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                 var defaultToolsConfig = me.__defaultToolsConfig;
                 me.instance.setPublishMode(true, me.instance.getLayersWithoutPublishRights(), defaultToolsConfig);
             }
-            
+
         },
         /**
          * @method _showEditNotification

@@ -39,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Ta bort plats",
-                    "confirm": "Vill du ta bort denna plats?",
+                    "confirm": "Vill du ta bort denna plats \"{name}\"?",
                     "btnDelete": "Ta bort",
                     "btnCancel": "Avbryt",
                     "success": "Platsen har tagits bort.",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punktens stil",
-            "tooltip": "NOT TRANSLATED",
+            "tooltip": "",
             "symbol": {
                 "label": "Ikon"
             },
@@ -285,8 +285,8 @@ Oskari.registerLocalization(
             },
             "categoryDelete": {
                 "title": "Ta bort kartlagret",
-                "deleteConfirmMove": "Kartlager: {0} innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret {2} eller vill du ta bort kartlagret och dess platser?",
-                "deleteConfirm": "Vill du ta bort kartlagret {0}?",
+                "deleteConfirmMove": "Kartlager \"{0}\" innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret \"{2}\" eller vill du ta bort kartlagret och dess platser?",
+                "deleteConfirm": "Vill du ta bort kartlagret \"{0}\"?",
                 "deleted": "Kartlagret har tagtits bort."
             },
             "categoryToPublic": {
@@ -311,9 +311,9 @@ Oskari.registerLocalization(
             "title": "Brister i uppgifterna:",
             "placeName": "Platsnamnet saknas.",
             "categoryName": "Kartlagrets namn saknas.",
-            "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
-            "descIllegal": "Platsens beskrivning innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
-            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken. De tillåtna tecken är bokstäver (az, AZ och å, ä, ö, Å, Ä, Ö), siffror (0-9), backsteg och bindestreck (-).",
+            "placeNameIllegal": "Platsnamnet innehåller otillåtna tecken.",
+            "descIllegal": "Platsens beskrivning innehåller otillåtna tecken.",
+            "categoryNameIllegal": "Kartlagrets namn innehåller otillåtna tecken.",
             "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
             "dotColor": "Punktens färg är ogiltig. Färgvärdena måste vara mellan 0 och 255.",
             "dotShape": "Punktens form är ogiltig.",
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Områdets ifyllnadsfärg är ogiltig. Färgvärdena måste vara mellan 0 och 255."
         }
     }
-}
-);
+});

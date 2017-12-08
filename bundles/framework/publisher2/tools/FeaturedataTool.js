@@ -40,7 +40,6 @@ function() {
      */
     init: function(data) {
         var me = this;
-
         if (data.configuration[me.bundleName]) {
             me.setEnabled(true);
         }
@@ -63,7 +62,7 @@ function() {
             json.configuration[me.bundleName] = {
                 conf: pluginConfig,
                 state: {}
-            }
+            };
             return json;
         } else {
             return null;

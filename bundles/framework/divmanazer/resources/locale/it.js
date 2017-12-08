@@ -146,7 +146,7 @@ Oskari.registerLocalization(
             },
             "dot": {
                 "title": "Stile dell'elemento puntuale",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento puntuale",
                 "symbol": {
                     "label": "Icona"
                 },
@@ -168,7 +168,7 @@ Oskari.registerLocalization(
             },
             "line": {
                 "title": "Stile dell'elemento lineare",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento lineare",
                 "style": {
                     "label": "Tratteggio"
                 },
@@ -196,7 +196,7 @@ Oskari.registerLocalization(
             },
             "area": {
                 "title": "Stile dell'elemento areale",
-                "tooltip": "",
+                "tooltip": "Definisci uno stile per l'elemento areale",
                 "linestyle": {
                     "label": "Tratteggio bordo"
                 },
@@ -262,7 +262,60 @@ Oskari.registerLocalization(
                     "tabulator": "Tabulatore"
                 }
             }
+        },
+        "FilterDialog": {
+            "title": "Filtro",
+            "description": "Seleziona elementi dal layer:",
+            "cancelButton": "Cancella",
+            "clearButton": "Pulisci il filtro",
+            "refreshButton": "Aggiorna il filtro",
+            "addFilter": "Aggiungi un filtro",
+            "removeFilter": "Cancella il filtro",
+            "bbox": {
+                "on": "Solo gli elementi visibili in mappa.",
+                "off": "Tutti gli elementi."
+            },
+            "clickedFeatures": {},
+            "values": {
+                "title": "Filtra gli elementi in base agli attributi.",
+                "placeholders": {
+                    "case-sensitive": "Il filtro è sensibile al maiuscolo/minuscolo.",
+                    "attribute": "Attributo",
+                    "boolean": "Operatore logico",
+                    "operator": "Operatore",
+                    "attribute-value": "Valore"
+                },
+                "info": {
+                    "bboxOff": "",
+                    "filterByGeometrySelected": ""
+                },
+                "equals": "è uguale a",
+                "like": "è simile a",
+                "notEquals": "non è uguale a",
+                "notLike": "non è simile a",
+                "greaterThan": "è più grande di",
+                "lessThan": "è più piccolo di",
+                "greaterThanOrEqualTo": "è più grande o uguale a",
+                "lessThanOrEqualTo": "è più piccolo o uguale a"
+            },
+            "aggregateAnalysisFilter": {
+                "addAggregateFilter": "Seleziona il valore aggregato",
+                "aggregateValueSelectTitle": "Usa il valore aggregato nel filtro",
+                "selectAggregateAnalyse": "Seleziona l'analisi aggregata",
+                "selectIndicator": "Seleziona l'indicatore",
+                "selectReadyButton": "Pronto",
+                "getAggregateAnalysisFailed": "Il dato aggregato non è stato trovato.",
+                "noAggregateAnalysisPopupTitle": "L'analisi aggregata non è andata a buon fine.",
+                "noAggregateAnalysisPopupContent": "Non hai condotto nessuna analisi aggregata. Puoi creare il tuo dato aggregato e quindi usarlo per filtrare."
+            },
+            "validation": {
+                "title": "Il filtro non può essere aggiornato a causa degli errori seguenti:",
+                "attribute_missing": "Non è stato selezionato alcun attributo.",
+                "operator_missing": "Non è stato scelto alcun operatore.",
+                "value_missing": "Non è stato selezionato alcun valore.",
+                "boolean_operator_missing": "Non è stato selezionato alcun operatore logico.",
+                "bbox_selected_with_no_properties": ""
+            }
         }
     }
-}
-);
+});

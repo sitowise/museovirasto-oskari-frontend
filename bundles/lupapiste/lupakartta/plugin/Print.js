@@ -46,10 +46,10 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin', fun
         me._map.addControl(this._printer);
 
         hub.subscribe("map-print", function (e) {
-            var sandbox = Oskari.$('sandbox');
+            var sandbox = Oskari.getSandbox();
             sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.plugin.PrintPlugin] map-print");
             var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var printPlugin = mapmodule.getPluginInstance('lupakartta.PrintPlugin');
+            var printPlugin = mapmodule.getPluginInstances('lupakartta.PrintPlugin');
             printPlugin._printer.print();
         });
     },

@@ -35,7 +35,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
             if (me.data) {
               _.each(me.tools, function (tool) {
+                try {
                   tool.init(me.data);
+                } catch(e) {
+                    Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
+                }
               });
             }
 
@@ -136,6 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
                 ui.find('input').change(function() {
                     var enabled = jQuery(this).is(':checked');
+                    // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
                     tool.setEnabled(enabled);
                     if(enabled) {
                         ui.find('.extraOptions').show();
@@ -241,12 +246,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             _.each(me.tools, function(tool){
                 if(tool.isDisplayedInMode(mode) === true){
                     cont.find('#tool-' + tool.getTool().id).attr('disabled', 'disabled');
+                    cont.find('#tool-' + tool.getTool().id).removeAttr('checked');
                 } else {
                     cont.find('#tool-' + tool.getTool().id).removeAttr('disabled');
-                }
-
-                if(typeof tool.setMode === 'function'){
-                    tool.setMode(mode);
                 }
             });
         },
@@ -260,8 +262,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         **/
         stop: function(){
             var me = this;
-            _.each(me.tools, function(tool){
-                tool.stop();
+            _.each(me.tools, function(tool) {
+                try {
+                    tool.stop();
+                } catch(e) {
+                    Oskari.log('publisher2.view.PanelMapTools').error('Error stopping publisher tool ' + tool.getTool().id);
+                }
             });
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {

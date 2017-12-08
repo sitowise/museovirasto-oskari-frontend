@@ -1,4 +1,5 @@
-Oskari.registerLocalization({
+Oskari.registerLocalization(
+{
     "lang": "cs",
     "key": "LayerSelector",
     "value": {
@@ -41,13 +42,21 @@ Oskari.registerLocalization({
                 "tooltip": "V současnosti není mapová vrstva dostupná.",
                 "iconClass": "backendstatus-down"
             },
+            "ERROR": {
+                "tooltip": "V současnosti není mapová vrstva dostupná.",
+                "iconClass": "backendstatus-error"
+            },
             "MAINTENANCE": {
                 "tooltip": "V následujících dnech může být mapová vrstva nedostupná.",
                 "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
-                "tooltip": "Informace o stavu mapové vrstvy je nedostupná",
-                "iconClass": "backendstatus-ok"
+                "tooltip": "",
+                "iconClass": "backendstatus-unknown"
+            },
+            "UNSTABLE": {
+                "tooltip": "",
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
@@ -63,13 +72,20 @@ Oskari.registerLocalization({
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "stats": "Vector layers"
+                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "stats": "Show only vector layers",
+                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
+        },
+        "guidedTour": {
+            "title": "Mapové vrstvy",
+            "message": "Výběrem mapových vrstev lze vybrat datové produkty pro zobrazení v mapě. Pro otevření kategorie na ni klikněte a vyberte vrstvu nebo napište do vyhledávacího pole pár písmen, které jsou obsaženy ve jménu datového produktu, který hledáte.",
+            "openLink": "Zobrazit mapové vrstvy",
+            "closeLink": "Skrýt mapové vrstvy",
+            "tileText": "Mapové vrstvy"
         }
     }
 });

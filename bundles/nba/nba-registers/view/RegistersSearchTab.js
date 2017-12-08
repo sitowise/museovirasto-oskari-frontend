@@ -373,7 +373,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     var registryData = {
                         "via": "registry",
                         "features": [data],
-                        "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule')._getMapCenter()
+                        "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMapCenter()
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
 

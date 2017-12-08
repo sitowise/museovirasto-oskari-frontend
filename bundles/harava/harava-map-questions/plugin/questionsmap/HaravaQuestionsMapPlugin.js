@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          *
          * Interface method for the module protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         init: function (sandbox) {
@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          *
          * Interface method for the plugin protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         startPlugin: function (sandbox) {
@@ -686,7 +686,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          *
          * Interface method for the plugin protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         stopPlugin: function (sandbox) {
@@ -709,7 +709,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          *
          * Interface method for the module protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         start: function (sandbox) {
@@ -720,7 +720,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
          *
          * Interface method for the module protocol
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *          reference to application sandbox
          */
         stop: function (sandbox) {},
@@ -774,8 +774,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
             }
 
             if (centerLon !== null && centerLon !== undefined && centerLon !== '' && centerLat !== null && centerLat !== undefined && centerLat !== '') {
-                var centerPoint = new OpenLayers.LonLat(centerLon, centerLat);
-                mapModule.panMapToLonLat(centerPoint);
+                mapModule.centerMap({lon : centerLon, lat : centerLat });
             }
         },
         /**

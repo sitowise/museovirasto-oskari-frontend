@@ -9,38 +9,38 @@ Oskari.registerLocalization(
             "style": "Stiil",
             "show": "Näita",
             "hide": "Peida",
-            "hidden": "Kaart on ajutiselt peidetud.",
-            "out-of-scale": "Selle kaardilehe andmeid ei saa valitud mõõtkavas näidata.",
+            "hidden": "Kaardikiht on ajutiselt peidetud.",
+            "out-of-scale": "Selle kaardikihi andmeid ei saa valitud mõõtkavas näidata.",
             "move-to-scale": "Liigu sobivasse mõõtkavasse.",
             "out-of-content-area": "Kaardikiht ei sisalda antud asukohas andmeid.",
-            "move-to-content-area": "Liigu sisuala keskpunkti.",
+            "move-to-content-area": "Liigu teise asukohta.",
             "description": "Kirjeldus",
             "object-data": "Objekti andmed",
             "rights": {
-                "notavailable": "Avaldamine keelatud.",
-                "guest": "Selle kaardikihi avaldamiseks logige sisse.",
-                "loggedin": "Avaldamine lubatud.",
-                "official": "Avaldamine lubatud ametkondlikuks kasutuseks.",
-                "need-login": "Peate sisse logima.",
+                "notavailable": "Avalikustamine keelatud",
+                "guest": "Kaardikihi avalikustamiseks lõimkaardil logige sisse.",
+                "loggedin": "Avalikustamine lubatud.",
+                "official": "Avalikustamine lubatud ametkondlikuks kasutuseks.",
+                "need-login": "Logige sisse, et avalikustada lõimkaarti.",
                 "can_be_published_by_provider": {
-                    "label": "Avaldamine lubatud andmete tarnijale.",
-                    "tooltip": "Selle kaardikihi avaldamiseks on vaja andmete tarnija nõusolekut. Kui olete andmete tarnija, siis pöörduge toe pakkuja poole ja küsige avaldamise nõusolekut."
+                    "label": "Avalikustamine lubatud andmete valdajale.",
+                    "tooltip": "Selle kaardikihi avalikustamiseks lõimkaardil on vajalik andmevaldaja nõusolekut. Kui olete andmevaldaja, siis pöörduge toe pakkuja poole ja küsige nõusolekut."
                 },
                 "can_be_published": {
                     "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ilma kasutajate arvu piiramata."
+                    "tooltip": "Kaarikihti saab avalikustada lõimkaardil piiranguteta."
                 },
                 "can_be_published_map_user": {
-                    "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib avaldada põimitud kaardiaknas ja kasutajate arvu nädalas võib piirata."
+                    "label": "Avalikustamine lubatud.",
+                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil kuid kasutuste arv nädalas võib olla piiratud."
                 },
                 "no_publication_permission": {
-                    "label": "Avaldamine keelatud.",
-                    "tooltip": "Andmete tarnija ei ole andnud õigust seda kaardikihti põimitud kaardiaknas avaldada."
+                    "label": "Avalikustamine keelatud.",
+                    "tooltip": "Andmete valdaja ei ole andnud õigust seda kaardikihti lõimkaardil kasutada."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Avaldamine lubatud.",
-                    "tooltip": "Kaardikihti võib kasutuspiiranguteta avaldada põimitud kaardiaknas."
+                    "label": "Avalikustamine lubatud ametkondlikuks kasutuseks.",
+                    "tooltip": "Kaardikihti saab avalikustada lõimkaardil vaid ametkondlikuks kasutuseks.Kontakteeru andmevaldajaga."
                 }
             },
             "tooltip": {
@@ -48,60 +48,69 @@ Oskari.registerLocalization(
                 "type-wms": "Kaardikiht",
                 "type-wfs": "Andmetoode"
             },
+            "refresh_load": {
+                "tooltip": "Värskenda kaardikihti, andmed ei uuene kaardil automaatselt."
+            },
             "filter": {
-                "title": "NOT TRANSLATED",
-                "description": "NOT TRANSLATED",
-                "cancelButton": "NOT TRANSLATED",
-                "clearButton": "NOT TRANSLATED",
-                "refreshButton": "NOT TRANSLATED",
-                "addFilter": "NOT TRANSLATED",
-                "removeFilter": "NOT TRANSLATED",
+                "title": "Filter",
+                "description": "Filtreeri kaardikihi andmed:",
+                "cancelButton": "Tühista",
+                "clearButton": "Tühista filter",
+                "refreshButton": "Värskenda filter",
+                "addFilter": "Lisa filter",
+                "removeFilter": "Eemalda filter",
                 "bbox": {
-                    "title": "NOT TRANSLATED",
-                    "on": "NOT TRANSLATED",
-                    "off": "NOT TRANSLATED"
+                    "title": "Filter",
+                    "on": "Ainult objektid kaardil nähtavad",
+                    "off": "Kõik objektid"
                 },
                 "clickedFeatures": {
-                    "title": "NOT TRANSLATED",
-                    "label": "NOT TRANSLATED"
+                    "title": "Objekti filter",
+                    "label": "Ainult objektid kaardil nähtavad"
                 },
                 "values": {
-                    "title": "NOT TRANSLATED",
+                    "title": "Andmefilter",
                     "placeholders": {
-                        "case-sensitive": "NOT TRANSLATED",
-                        "attribute": "NOT TRANSLATED",
-                        "boolean": "NOT TRANSLATED",
-                        "operator": "NOT TRANSLATED",
-                        "attribute-value": "NOT TRANSLATED"
+                        "case-sensitive": "Filter on tõstutundlik(eristab suur-ja väiketähti)",
+                        "attribute": "Atribuut",
+                        "boolean": "Loogiline operaator",
+                        "operator": "Operaator",
+                        "attribute-value": "Väärtus"
                     },
-                    "equals": "NOT TRANSLATED",
-                    "like": "NOT TRANSLATED",
-                    "notEquals": "NOT TRANSLATED",
-                    "notLike": "NOT TRANSLATED",
-                    "greaterThan": "NOT TRANSLATED",
-                    "lessThan": "NOT TRANSLATED",
-                    "greaterThanOrEqualTo": "NOT TRANSLATED",
-                    "lessThanOrEqualTo": "NOT TRANSLATED"
+                    "equals": "on võrdne",
+                    "like": "on sarnane",
+                    "notEquals": "ei ole võrdne",
+                    "notLike": "ei ole sarnane",
+                    "greaterThan": "on suurem kui",
+                    "lessThan": "on väiksem kui",
+                    "greaterThanOrEqualTo": "on suurem/võrdne",
+                    "lessThanOrEqualTo": "on väiksem/võrdne"
                 },
                 "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "NOT TRANSLATED",
-                    "aggregateValueSelectTitle": "NOT TRANSLATED",
-                    "selectAggregateAnalyse": "NOT TRANSLATED",
-                    "selectIndicator": "NOT TRANSLATED",
-                    "selectReadyButton": "NOT TRANSLATED",
-                    "getAggregateAnalysisFailed": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupTitle": "NOT TRANSLATED",
-                    "noAggregateAnalysisPopupContent": "NOT TRANSLATED"
+                    "addAggregateFilter": "Kasuta statistilisi parameetreid",
+                    "aggregateValueSelectTitle": "Määra statistilised parameetrid",
+                    "selectAggregateAnalyse": "Määra analüüsikiht",
+                    "selectIndicator": "Määra objekt",
+                    "selectReadyButton": "Sulge",
+                    "getAggregateAnalysisFailed": "Statistikat ei kuvata",
+                    "noAggregateAnalysisPopupTitle": "Statistikat ei leitud",
+                    "noAggregateAnalysisPopupContent": "Antud kihile ei ole stetistikat arvutatud. Saate seda teha kasutades analüüsi funktsiooni."
                 },
                 "validation": {
-                    "title": "NOT TRANSLATED",
-                    "attribute_missing": "NOT TRANSLATED",
-                    "operator_missing": "NOT TRANSLATED",
-                    "value_missing": "NOT TRANSLATED",
-                    "boolean_operator_missing": "NOT TRANSLATED"
+                    "title": "Obkete ei saa filtreerida. Esinesid alljärgnevad probleemid:",
+                    "attribute_missing": "Atribuut puudub.",
+                    "operator_missing": "Operaator puudub",
+                    "value_missing": "Väärtus puudub",
+                    "boolean_operator_missing": "Loogiline operaator puudub."
                 }
             }
+        },
+        "guidedTour": {
+            "title": "Valitud kaardikihid",
+            "message": "Kaardikihtide kuvamise järjestust saab muuta klikkimise ja vedamisega, samuti saab muuta nende läbipaistvust. Muudatused väljenduvad kaardiaknas.",
+            "openLink": "Näita valitud kaardikihte",
+            "closeLink": "Peida valitud kaardikihid",
+            "tileText": "Valitud kaardikihid"
         }
     }
-}
-);
+});

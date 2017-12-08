@@ -16,39 +16,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         this.newCategoryId = '-new-';
         this.placeId = undefined;
         this.initialValues = undefined;
-
-        var loc = instance.getLocalization('placeform');
+        this.loc = Oskari.getMsg.bind(null, 'MyPlaces2');
 
         this.template = jQuery(
             '<div class="myplacesform">' +
             '  <div class="field">' +
-            '    <div class="help icon-info" title="' + loc.tooltip + '"></div>' +
-            '    <input type="text" name="placename" placeholder="' + loc.placename.placeholder + '" />' +
+            '    <div class="help icon-info" title="' + this.loc('placeform.tooltip') + '"></div>' +
+            '    <input type="text" data-name="placename" placeholder="' + this.loc('placeform.placename.placeholder') + '" />' +
             '  </div>' +
             '  <div class="field">' +
-            '    <textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '"></textarea>' +
+            '    <input type="text" data-name="placedesc" placeholder="' + this.loc('placeform.placedesc.placeholder') + '" />' +
             '  </div>' +
             '  <div class="field">' +
-            '    <input type="text" name="placeAttention" placeholder="' + loc.placeAttention.placeholder + '"/>' +
+            '    <input type="text" data-name="placeAttention" placeholder="' + this.loc('placeform.placeAttention.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field measurementResult"></div>' +
             '  <div class="field">' +
-            '    <input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
+            '    <input type="text" data-name="placelink" placeholder="' + this.loc('placeform.placelink.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field">' +
-            '    <input type="text" name="imagelink" placeholder="' + loc.imagelink.placeholder + '"/>' +
+            '    <input type="text" data-name="imagelink" placeholder="' + this.loc('placeform.imagelink.placeholder') + '"/>' +
             '  </div>' +
             '  <div class="field imagePreview">' +
-            '    <label>' + loc.imagelink.previewLabel + '</label><br clear="all" />' +
+            '    <label>' + this.loc('placeform.imagelink.previewLabel') + '</label><br clear="all" />' +
             '    <a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
             '  </div>' +
             '  <div id="extraParams"></div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
-            '      <a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + " " + loc.category.choose +
+            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + " " + this.loc('placeform.category.choose') +
             '    </label>' +
             '    <br clear="all" />' +
-            '    <select name="category"></select>' +
+            '    <select data-name="category"></select>' +
             '  </div>' +
             '</div>'
         );
@@ -83,23 +82,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
          */
         getForm: function (categories) {
             var ui = this.template.clone(),
-                loc = this.instance.getLocalization('placeform'),
                 isPublished = (this.options ? this.options.published : false),
                 me = this;
             // TODO: if a place is given for editing -> populate fields here
             // populate category options (only if not in a published map)
             if (categories && !isPublished) {
-                var selection = ui.find('select[name=category]'),
+                var selection = ui.find('select[data-name=category]'),
                     option,
                     i,
                     cat;
-                //option.append(loc.category['new']);
-                //option.attr('value', this.newCategoryId);
-                //selection.append(option);
                 for (i = 0; i < categories.length; ++i) {
                     cat = categories[i];
                     option = this.templateOption.clone();
-                    option.append(cat.getName());
+                    option.text(cat.getName());
                     option.attr('value', cat.getId());
                     // find another way if we want to keep selection between places
                     if (this.initialValues) {
@@ -127,11 +122,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             this._bindImageUrlChange();
 
             if (this.initialValues) {
-                ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
-                ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
-                ui.find('input[name=placeAttention]').attr('value', this.initialValues.place.attention_text);
-                ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
-                ui.find('input[name=imagelink]').attr('value', this.initialValues.place.imageLink);
+                ui.find('input[data-name=placename]').attr('value', this.initialValues.place.name);
+                ui.find('input[data-name=placedesc]').attr('value', this.initialValues.place.desc);
+                ui.find('input[data-name=placeAttention]').attr('value', this.initialValues.place.attention_text);
+                ui.find('input[data-name=placelink]').attr('value', this.initialValues.place.link);
+                ui.find('input[data-name=imagelink]').attr('value', this.initialValues.place.imageLink);
                 this._updateImageUrl(this.initialValues.place.imageLink, ui);
 
                 $.each(this.instance.conf.extraParams, function(index, param) {
@@ -179,10 +174,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 
             if (onScreenForm.length > 0) {
                 // found form on screen
-                var placeName = onScreenForm.find('input[name=placename]').val(),
-                    placeDesc = onScreenForm.find('textarea[name=placedesc]').val(),
-                    placeAttention = onScreenForm.find('input[name=placeAttention]').val(),
-                    placeLink = onScreenForm.find('input[name=placelink]').val();
+                var placeName = onScreenForm.find('input[data-name=placename]').val(),
+                    placeDesc = onScreenForm.find('input[data-name=placedesc]').val(),
+                    placeAttention = onScreenForm.find('input[data-name=placeAttention]').val(),
+                    placeLink = onScreenForm.find('input[data-name=placelink]').val();
                 if (placeLink) {
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
@@ -190,8 +185,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                     placeLink = placeLink.replace("<", '');
                     placeLink = placeLink.replace(">", '');
                 }
-                var imageLink = onScreenForm.find('input[name=imagelink]').val(),
-                    categorySelection = onScreenForm.find('select[name=category]').val();
+                var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
+                    categorySelection = onScreenForm.find('select[data-name=category]').val();
                 var attributes = {};
                 $.each(this.instance.conf.extraParams, function(index, param) {
                     if(param.type === 'text') {
@@ -235,11 +230,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             if (onScreenForm.length > 0) {
                 // found form on screen
                 onScreenForm.find('input[name=placename]').val(data.place.name);
-                onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
+                onScreenForm.find('input[name=placedesc]').val(data.place.desc);
                 onScreenForm.find('input[name=placeAttention]').val(data.place.attention_text);
                 onScreenForm.find('input[name=placelink]').val(data.place.link);
                 onScreenForm.find('input[name=imagelink]').val(data.place.imageLink);
-                onScreenForm.find('select[name=category]').val(data.place.category);
+                onScreenForm.find('select[data-name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
 
                 $.each(this.instance.conf.extraParams, function(index, param) {
@@ -256,10 +251,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             this.initialValues = data;
         },
         setMeasurementResult: function (geometry, drawMode) {
-            var loc = this.instance.getLocalization('placeform'),
-                measurementWithUnit = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geometry, drawMode);
+            var measurementWithUnit = this.instance.getDrawPlugin().getMapModule().formatMeasurementResult(geometry, drawMode);
 
-            this.measurementResult = loc.measurement[drawMode] + ' ' + measurementWithUnit;
+            this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
 
             this._getOnScreenForm().
             find('div.measurementResult').
@@ -276,7 +270,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         _bindCategoryChange: function () {
             var me = this,
                 onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[name=category]').live('change', function () {
+            onScreenForm.find('select[data-name=category]').live('change', function () {
                 // remove category form is initialized
                 if (me.categoryForm) {
                     me.categoryForm.destroy();
@@ -295,7 +289,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         _bindImageUrlChange: function () {
             var me = this,
                 onScreenForm = me._getOnScreenForm();
-            onScreenForm.find('input[name=imagelink]').live('change keyup', function () {
+            onScreenForm.find('input[data-name=imagelink]').live('change keyup', function () {
                 me._updateImageUrl(jQuery(this).val(), me._getOnScreenForm());
             });
         },
@@ -344,8 +338,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
         destroy: function () {
             // unbind live bindings
             var onScreenForm = this._getOnScreenForm();
-            onScreenForm.find('select[name=category]').die();
-            onScreenForm.find('input[name=imagelink]').die();
+            onScreenForm.find('select[data-name=category]').die();
+            onScreenForm.find('input[data-name=imagelink]').die();
             onScreenForm.find('a.newLayerLink').die();
             if (this.categoryForm) {
                 this.categoryForm.destroy();

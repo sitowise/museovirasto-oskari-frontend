@@ -21,6 +21,7 @@ Oskari.registerLocalization(
                 "privateTooltip": "Þetta kortalag er lokað. Smelltu hér til að birta það.",
                 "publicTooltip": "Þetta kortalag er opið. Smelltu hér til að afturkalla birtingu."
             },
+            "addCategoryFormButton": "Nýtt kortalag",
             "addCategory": "Bæta kortalaginu við",
             "editCategory": "Breyta kortalaginu",
             "deleteCategory": "Eyða kortalagi",
@@ -38,7 +39,7 @@ Oskari.registerLocalization(
             "notification": {
                 "delete": {
                     "title": "Eyða stað",
-                    "confirm": "Viltu eyða þessum stað?",
+                    "confirm": "Viltu eyða þessum stað \"{name}\"?",
                     "btnDelete": "Eyða",
                     "btnCancel": "Hætta við",
                     "success": "Staðnum var eytt.",
@@ -51,16 +52,16 @@ Oskari.registerLocalization(
             "measureline": {
                 "title": "Mæla lengd",
                 "tooltip": "Mæla lengd",
-                "add": "",
-                "next": "",
+                "add": "Bæta við línu",
+                "next": "Næst",
                 "edit": "Þú getur breytt línunni með því að smella á rofstaðina og draga þá til.",
                 "noResult": "0 m"
             },
             "measurearea": {
                 "title": "Mæla svæði",
-                "tooltip": "Mæla svæði",
-                "add": "",
-                "next": "",
+                "tooltip": "Teikna svæði og mæla það.",
+                "add": "Bæta við svæði",
+                "next": "Næst",
                 "edit": "Þú getur breytt svæðinu með því að smella á brúnina á rofstöðunum og draga þá til.",
                 "noResult": "0 m²"
             },
@@ -130,8 +131,7 @@ Oskari.registerLocalization(
             },
             "imagelink": {
                 "placeholder": "Hlekkur á myndina",
-                "previewLabel": "Forskoðun myndar",
-                "add": "Nýtt kortalag"
+                "previewLabel": "Forskoðun myndar"
             },
             "rendering": {
                 "label": "Staðsetningarmát",
@@ -190,7 +190,7 @@ Oskari.registerLocalization(
         },
         "pointform": {
             "title": "Punktamát",
-            "tooltip": "",
+            "tooltip": "Skilgreina stíl fyrir punkta.",
             "symbol": {
                 "label": "Vémynd"
             },
@@ -212,7 +212,7 @@ Oskari.registerLocalization(
         },
         "lineform": {
             "title": "Línumát",
-            "tooltip": "",
+            "tooltip": "Skilgreina stíl fyrir línur.",
             "style": {
                 "label": "Gerð"
             },
@@ -240,7 +240,7 @@ Oskari.registerLocalization(
         },
         "areaform": {
             "title": "Svæðismát",
-            "tooltip": "",
+            "tooltip": "Skilgreina stíl fyrir fláka.",
             "linestyle": {
                 "label": "Línugerð"
             },
@@ -324,5 +324,4 @@ Oskari.registerLocalization(
             "areaFillColor": "Fylltur litur er ógildur. Litagildið á að vera á bilinu 0 og 255."
         }
     }
-}
-);
+});

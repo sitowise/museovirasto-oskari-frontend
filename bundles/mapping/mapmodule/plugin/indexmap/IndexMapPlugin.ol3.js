@@ -45,44 +45,16 @@ Oskari.clazz.define(
             } else {
                 el = jQuery('<div class="mapplugin indexmap"></div>');
             }
-
-            return el;
-        },
-
-        /**
-         * @private @method _createControlAdapter
-         * Constructs/initializes the control adapter for the plugin
-         *
-         * @param {jQuery} el
-         *
-         */
-        _createControlAdapter: function (el) {
-            // FIXME this seems to be completely FI-specific?
-            /*
-             * create an overview map control with non-default
-             * options
-             */
-            var me = this;
-            // initialize control, pass container
-            me._indexMap = new ol.control.OverviewMap();
-            me._indexMap.setCollapsed(true);
             // Ol indexmap target
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
-            me.getElement().append(me._indElement);
+            el.append(me._indElement);
 
-            return me._indexMap;
-        },
-
-        refresh: function () {
-            var me = this,
-                toggleButton = me.getElement().find('.indexmapToggle');
-            if (!toggleButton.length) {
-                toggleButton = jQuery('<div class="indexmapToggle"></div>');
-                // button has to be added separately so the element order is correct...
-                me.getElement().append(toggleButton);
-            }
+            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
+            // button has to be added separately so the element order is correct...
+            el.append(toggleButton);
             // add toggle functionality to button
             me._bindIcon(toggleButton);
+            return el;
         },
 
         _bindIcon: function (icon) {
@@ -92,11 +64,18 @@ Oskari.clazz.define(
             icon.bind('click', function (event) {
 
                 //Add index map control - remove old one
-                if (me._indexMap.getCollapsed()) {
+                if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
-                    var layer = me._getLayers();
-                    var tt = me.getElement()[0];
+                    var layer = me._getBaseLayer();
                     if (layer) {
+                        if(typeof layer.createIndexMapLayer === 'function') {
+                            // this is used for statslayer to create a copied layer as indexmap
+                            // as using it directly results in weird behavior:
+                            // - the normal map not refreshing on move after indexmap is opened
+                            // - in some cases indexmap + normal map going to an infinite update-loop when zooming out
+                            layer = layer.createIndexMapLayer();
+                        }
+
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
@@ -107,10 +86,12 @@ Oskari.clazz.define(
                             })
                         };
                         // initialize control, pass container
-                        me.getMapModule().removeMapControl(me._name, me._indexMap);
+                        if(me._indexMap) {
+                            me.getMap().removeControl(me._indexMap);
+                        }
                         me._indexMap = new ol.control.OverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
-                        me.getMapModule().addMapControl(me._name, me._indexMap);
+                        me.getMap().addControl(me._indexMap);
 
                     }
                     me._indexMap.setCollapsed(false);
@@ -158,9 +139,18 @@ Oskari.clazz.define(
                 this._bindIcon(icon);
             }
         },
-        _getLayers: function () {
-            if (this._indexMap) {
-                return this._map.getLayers().item(0);
+        /**
+         * Get 1st visible bottom layer
+         * @returns {*}
+         * @private
+         */
+        _getBaseLayer: function () {
+            var layer = null;
+            for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
+                layer = this._map.getLayers().item(i);
+                if(layer.getVisible()){
+                    return layer;
+                }
             }
             return null;
         }

@@ -1,6 +1,6 @@
 /**
- * @class Oskari.userinterface.component.Popup
- * Provides a popup window to replace alert
+ * @class Oskari.userinterface.component.Overlay
+ * Provides an Overlay panel
  */
 Oskari.clazz.define('Oskari.userinterface.component.Overlay',
 
@@ -13,13 +13,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         this.template = jQuery('<div class="oskarioverlay transparent"></div>');
         this._overlays = null;
         this._resizingWorkaround = null;
+        this.__listeners = {};
     }, {
         /**
          * @method overlay
          * Overlays an element
          * @param {String} elementSelector, selector for element to overlay
          */
-        overlay: function (elementSelector) {
+        overlay: function (elementSelector, addSpinner) {
             var me = this,
                 targetSelector = elementSelector,
                 targets;
@@ -35,6 +36,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
             _.forEach(me._overlays, function (overlay) {
                 overlay.target.append(overlay.overlay);
+                if(addSpinner) {
+                    var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+                    spinner.insertTo(overlay.overlay);
+                    spinner.start();
+                    overlay.spinner = spinner;
+                }
             });
             me._setupSizeAndLocation();
             _.forEach(me._overlays, function (overlay) {
@@ -78,11 +85,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             var me = this;
             _.forEach(me._overlays, function (overlay) {
                overlay.overlay.remove();
+               if(overlay.spinner) {
+                    overlay.spinner.stop();
+               }
             });
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
             }
+            me.__notifyListeners('close');
         },
+
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
@@ -90,5 +102,58 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
                     me.close();
                 });
             });
+        },
+
+        /**
+         * Add listener to be called when popup is closed
+         * @param  {Function} callback function to call on close
+         */
+        onClose: function (callback) {
+            this.__getListeners('close').push(callback);
+        },
+        /**
+         * Clears any listeners (registered with onClose(callback)-function).
+         */
+        clearListeners: function () {
+            var key;
+
+            for (key in this.__listeners) {
+                if (this.__listeners.hasOwnProperty(key)) {
+                    this.__listeners[key] = null;
+                    delete this.__listeners[key];
+                }
+            }
+        },
+        /**
+         * Notifies all listeners of given type. Passes optional event object to callback
+         * @param {String} type of listener ('close' for example)
+         * @param {Object} event (optional)
+         */
+        __notifyListeners: function (type, event) {
+            if (!type) {
+                return;
+            }
+            if (!this.__listeners[type]) {
+                return;
+            }
+            _.each(this.__listeners[type], function (cb) {
+                cb(event);
+            });
+        },
+        /**
+         * Returns an array of listeners for given type.
+         * @param {String} type of listener ('close' for example)
+         */
+        __getListeners: function (type) {
+            if (!type) {
+                return [];
+            }
+            if (!this.__listeners) {
+                this.__listeners = {};
+            }
+            if (!this.__listeners[type] || !this.__listeners[type].push) {
+                this.__listeners[type] = [];
+            }
+            return this.__listeners[type];
         }
     });

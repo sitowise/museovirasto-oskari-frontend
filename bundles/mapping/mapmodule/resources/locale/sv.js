@@ -23,8 +23,7 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Användarvillkor",
                 "dataSources": "Datakällor",
-                "layersHeader": "Kartlager",
-                "indicatorsHeader": "Indikatorer"
+                "layersHeader": "Kartlager"
             },
             "DataSourcePlugin": {
                 "link": "Datakälla",
@@ -38,7 +37,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
-                "chooseDefaultBaseLayer": "Välj bakgrundskarta"
+                "chooseDefaultBaseLayer": "Välj bakgrundskarta",
+                "chooseOtherLayers": "Välj andra kartlager"
             },
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",
@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "noresults": "Inga resultat hittades. Vänligen avgränsa din sökning.",
                 "toomanyresults": "Över 100 träffar hittades. Vänligen avgränsa din sökning.",
                 "column_name": "Namn",
+                "column_region": "Region",
                 "column_village": "Kommun",
                 "column_type": "Typ"
             },
@@ -57,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Egenskaper",
                 "description": "Beskrivning",
                 "link": "URL-address",
-                "name": "Namn"
+                "name": "Namn",
+                "noAttributeData": "Inga attributer att visa, vänligen öppna objektuppgifterna för att se de dolda attributerna."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
@@ -106,7 +108,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Centrera kartan till din plats"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Panorera kartvyn",
+                "message": "Du kan flytta vyn på kartan genom att klicka och dra eller med panoreringskontrollerna. Återgå till standardvyn genom att klicka på knappen i mitten av panoringskontrollerna. Tips: Du kan även panorera kartan med piltangenterna på tangentbordet."
+            },
+            "help2": {
+                "title": "Zooma in och zooma ut",
+                "message": "Du kan zooma in och ut på kartan med skalans glidreglage eller med hjälp av plus- och minusknapparna bredvid glidreglaget. Tips: Du kan även zooma genom att använda plus och minus på tangentbordet eller med rullhjulet på musen. Du kan också zooma in genom att dubbelklicka på kartan."
+            }
         }
     }
-}
-);
+});

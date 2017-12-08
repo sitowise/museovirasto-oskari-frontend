@@ -15,7 +15,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         op : {
             'add' : 'add',
             'remove' : 'remove',
-            'click' : 'click'
+            'click' : 'click',
+            'zoom': 'zoom',
+            'error': 'error'
         },
         setOpAdd : function() {
             this._operation = this.op.add;
@@ -29,6 +31,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
             this._operation = this.op.click;
             return this;
         },
+        setOpZoom : function() {
+            this._operation = this.op.zoom;
+            return this;
+        },
+        setOpError : function(msg) {
+            this._operation = this.op.error;
+            if(msg) {
+                this._msg = msg;
+            }
+            return this;
+        },
         getName: function () {
             return this.__name;
         },
@@ -40,11 +53,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
             });
             return this;
         },
+        hasFeatures : function() {
+            return this._features.length>0;
+        },
         /**
          * Serialization for RPC
          * @return {Object} object has key id which has the marker id
          */
         getParams: function () {
+            if(this._operation === 'error' && this._msg) {
+                return {
+                    operation: this._operation,
+                    features: this._features,
+                    msg: this._msg
+                };
+            }
             return {
                 operation: this._operation,
                 features: this._features

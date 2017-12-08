@@ -11,7 +11,7 @@ Oskari.registerLocalization(
         },
         "tile": {
             "title": "A: Map Layers",
-            "tooltip": "NOT TRANSLATED"
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -42,26 +42,9 @@ Oskari.registerLocalization(
             "type-wms": "Map layer",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "The map layer is currently available.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "The map layer is currently not available.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "There will be short breaks in the map layer's availability during the next few days.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
+            "capabilitiesRemarks": "(*)  Current map CRS is not supported in the service capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
             "confirmDeleteLayerGroup": "The map layer group will be removed. Do you want to continue?",
             "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
@@ -134,9 +117,9 @@ Oskari.registerLocalization(
             "styleDesc": "The style options are fetched automatically from the GetCapabilities response. Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
             "importStyle": "New sld style",
             "addNewStyle": "Add new SLD style",
-            "sldStyleName":"Style name",
-            "sldFileContentDesc":"Copy/paste SLD file content (xml) to text area",
-            "sldFileContent":"SLD file content",
+            "sldStyleName": "Style name",
+            "sldFileContentDesc": "Copy/paste SLD file content (xml) to text area",
+            "sldFileContent": "SLD file content",
             "sldStylesFetchError": "Couldn't get SLD styles",
             "addSldStyleDesc": "Select styles for the current layer",
             "addSldStyle": "Sld style selection",
@@ -153,15 +136,19 @@ Oskari.registerLocalization(
             "maxScalePlaceholder": "Maximum scale in the form 1 (1:1)",
             "srsName": "Coordinate system",
             "srsNamePlaceholder": "Define a appropriate coordinate system.",
-            "legendImage": "Map legend URL",
-            "legendImageDesc": "The URL address for map legend is fetched automatically from the GetCapabilities response.",
+            "legendImage": "Default legend URL",
+            "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
             "legendImagePlaceholder": "Give the URL address of the map legend.",
+            "legendUrl": "Legend URL selection",
+            "legendUrlDesc": "Select default legend via legend url selection",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Additional GFI info",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "manualRefresh": "Manual refresh",
+            "resolveDepth": "Resolve depth",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "WMTS TileMatrixSet ID is a technical tile matrix identifier. It is fetched automatically from the GetCapabilities response.",
             "matrixSet": "JSON for WMTS layer",
@@ -218,5 +205,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});

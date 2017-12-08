@@ -234,6 +234,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var opa = layerDiv.find('div.layer-opacity input.opacity'),
                 slider = this._addSlider(layer, layerDiv, opa);
         },
+        /**
+         * @private @method _switchRefreshIcon
+         * - not show refresh button, if layer is invisible or not in scale
+         *
+         * @param {jQuery} layerDiv
+         * @param {Object} layer
+         * @param {Boolean} isInScale
+         *
+         */
+        _switchRefreshIcon: function (layerDiv, layer, isInScale) {
+            var refreshDiv = layerDiv.find('div.layer-tool-refresh');
+
+            if (!isInScale || !layer.isVisible()) {
+                refreshDiv.css('display', 'none');
+            } else {
+                refreshDiv.css('display', '');
+            }
+
+        },
 
         /**
          * @private @method _addSlider
@@ -333,6 +352,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sel = stylesel.find('select'),
                     i,
                     opt;
+
+                styles.sort(function(a, b){
+                    if(a.getTitle() < b.getTitle()) return -1;
+                    if(a.getTitle() > b.getTitle()) return 1;
+                    return 0;
+                });
 
                 sel.empty();
                 for (i = 0; i < styles.length; i += 1) {
@@ -542,6 +567,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this._sliders[layer.getId()] = null;
 
             this._appendLayerFooter(layerDiv, layer, isInScale, isGeometryMatch);
+
+            this._switchRefreshIcon(layerDiv, layer, isInScale);
         },
 
         /**
@@ -806,7 +833,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                                 loc: loc
                             };
 
-                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', loc, fixedOptions);
+                        me.filterDialog = Oskari.clazz.create('Oskari.userinterface.component.FilterDialog', fixedOptions);
                         me.filterDialog.setUpdateButtonHandler(function (filters) {
                             // throw event to new wfs
                             var evt = me.instance.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, layer.getId());
@@ -814,10 +841,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                             me.instance.sandbox.notifyAll(evt);
                         });
 
-                        me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.aggregateAnalyseFilter', me.instance, me.instance.getLocalization('layer'), me.filterDialog);
-
                         if (me.service) {
-                            me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                            me.aggregateAnalyseFilter = Oskari.clazz.create('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter', me.instance, me.filterDialog);
+
+                            me.filterDialog.createFilterDialog(layer, prevJson, function () {
                                 me.service._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                             });
                         } else {
@@ -902,7 +929,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 loc = this.instance.getLocalization('layer'),
                 publishPermission = layer.getPermission('publish');
 
-            if (publishPermission === 'publication_permission_ok' && sandbox.getUser().isLoggedIn()) {
+            if (publishPermission === 'publication_permission_ok' && Oskari.user().isLoggedIn()) {
                 footer.find('div.layer-rights').html(
                     loc.rights.can_be_published_map_user.label
                 );

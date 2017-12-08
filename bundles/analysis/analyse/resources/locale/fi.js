@@ -3,19 +3,17 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Analyse",
     "value": {
-        "title": "Analyysi <font color=red>(BETA)</font>",
-        "flyouttitle": "Analyysi <font color=red>(BETA)</font>",
+        "title": "Analyysi",
+        "flyouttitle": "Analyysi",
         "desc": "",
         "btnTooltip": "Analyysi",
         "NotLoggedView": {
             "text": "Analyysi-toiminnon avulla voit tehdä yksinkertaisia paikkatietoanalyyseja kohdetietoja sisältäville karttatasoille. Toiminto edellyttää kirjautumista.",
             "signup": "Kirjaudu sisään",
-            "signupUrl": "/web/fi/login",
-            "register": "Rekisteröidy",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Rekisteröidy"
         },
         "AnalyseView": {
-            "title": "Analyysi <font color=red>(BETA)</font>",
+            "title": "Analyysi",
             "content": {
                 "label": "Karttatasot",
                 "drawToolsLabel": "Kohdetyökalut",
@@ -29,8 +27,8 @@ Oskari.registerLocalization(
                     },
                     "tooltips": {
                         "point": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "line": "Lisää väliaikainen piste käytettäväksi analyysin pohjana.",
-                        "area": "Lisää väliaikainen piste käytettäväksi analyysin pohjana."
+                        "line": "Lisää väliaikainen viiva käytettäväksi analyysin pohjana.",
+                        "area": "Lisää väliaikainen alue käytettäväksi analyysin pohjana."
                     },
                     "modes": {
                         "area": "Väliaikainen alue",
@@ -193,7 +191,8 @@ Oskari.registerLocalization(
                     }
                 ],
                 "attribute": "Valitse ominaisuustieto",
-                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa."
+                "footer": "Tietosuojatut kohteet eivät ole mukana laskennassa.",
+                "aggregateAdditionalInfo": "Huom! Olet valinnut tekstiä sisältäviä ominaisuustietoja. Niille voi laskea ainoastaan kohteiden lukumäärän. Jos kohteiden lukumäärä ei ole valittuna, tekstiä sisältäviä ominaisuustietoja ei oteta mukaan analyysin lopputulokseen."
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko",
@@ -280,14 +279,40 @@ Oskari.registerLocalization(
                 "mode": "Analyysimenetelmän tyyppi",
                 "modeTooltip": "Valitse haluatko käyttää yhdistämisessä tunnuslukuja.",
                 "normalMode": "Yhdistäminen sijainnin perusteella",
-                "aggregateMode": "Tunnuslukujen laskenta"
+                "aggregateMode": "Tunnuslukujen laskenta",
+                "backend_locale": [
+                    {
+                        "id": "count",
+                        "label": "Kohteiden lukumäärä"
+                    },
+                    {
+                        "id": "sum",
+                        "label": "Summa"
+                    },
+                    {
+                        "id": "min",
+                        "label": "Pienin arvo"
+                    },
+                    {
+                        "id": "max",
+                        "label": "Suurin arvo"
+                    },
+                    {
+                        "id": "avg",
+                        "label": "Keskiarvo"
+                    },
+                    {
+                        "id": "stddev",
+                        "label": "Keskihajonta"
+                    }
+                ]
             },
             "params": {
                 "label": "Mukaan otettavat ominaisuustiedot",
                 "aggreLabel": "Ominaisuustiedot joille tunnusluvut lasketaan",
                 "aggreLabelTooltip": "Valitse enintään 10 ominaisuustietoa, joille lasketaan tunnusluvut.",
                 "labelTooltip": "Valitse enintään 10 ominaisuustietoa, jotka otetaan mukaan lopputulokseen.",
-                "tooltip": "NOT TRANSLATED",
+                "tooltip": "",
                 "options": [
                     {
                         "id": "oskari_analyse_all",
@@ -315,58 +340,6 @@ Oskari.registerLocalization(
                 "save": "Tallenna ja lopeta",
                 "analyse": "Tee analyysi",
                 "data": "Lisää karttatasoja"
-            },
-            "filter": {
-                "title": "Kohteiden suodatus",
-                "description": "Suodata kohteita tasolta:",
-                "cancelButton": "Peruuta",
-                "clearButton": "Tyhjennä",
-                "refreshButton": "Päivitä",
-                "addFilter": "Lisää",
-                "removeFilter": "Poista",
-                "content": {
-                    "title": "Maantieteellisesti"
-                },
-                "bbox": {
-                    "on": "Vain kartalla näkyvät kohteet",
-                    "off": "Kaikki kohteet"
-                },
-                "clickedFeatures": {
-                    "clickedFeaturesLabel": "Vain kartalta valitut kohteet",
-                    "filterByGeometryLabel": "Vain kohteet, jotka:",
-                    "filterByGeometryIntersect": "leikkaavat valittua kohdetta",
-                    "filterByGeometryContains": "ovat valitun kohteen sisällä"
-                },
-                "values": {
-                    "title": "Ominaisuustietojen perusteella",
-                    "placeholders": {
-                        "case-sensitive": "Kirjainkoko vaikuttaa valintoihin.",
-                        "attribute": "Ominaisuustieto",
-                        "boolean": "Looginen operaattori",
-                        "operator": "Operaattori",
-                        "attribute-value": "Arvo"
-                    },
-                    "info": {
-                        "bboxOff": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\".",
-                        "filterByGeometrySelected": "Voit tehdä suodatuksia ominaisuustietojen perusteella vain, jos maantieteellisessä suodatuksessa valittuna on \"Kaikki kohteet\"."
-                    },
-                    "equals": "on yhtäsuuri kuin",
-                    "like": "on likimäärin yhtäsuuri kuin",
-                    "notEquals": "on erisuuri kuin",
-                    "notLike": "on likimäärin erisuuri kuin",
-                    "greaterThan": "on suurempi kuin",
-                    "lessThan": "on pienempi kuin",
-                    "greaterThanOrEqualTo": "on suurempi tai yhtä suuri kuin",
-                    "lessThanOrEqualTo": "on pienempi tai yhtä pieni kuin"
-                },
-                "validation": {
-                    "title": "Korjaa seuraavat virheet ja yritä uudelleen:",
-                    "attribute_missing": "Ominaisuustieto puuttuu. Valitse ominaisuustieto ja yritä uudelleen.",
-                    "operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
-                    "value_missing": "Arvo puuttuu. Anna arvo ja yritä uudelleen",
-                    "boolean_operator_missing": "Operaattori puuttuu. Valitse operaattori ja yritä uudelleen.",
-                    "bbox_selected_with_no_properties": "Ilman maantieteellistä rajausta analyysi kohdistuu koko aineistoon. Lisää ominaisuustietojen perusteella tehtävä suodatus tai valitse \"Vain kartalla näkyvät kohteet\"."
-                }
             },
             "help": "Ohje",
             "success": {
@@ -431,7 +404,7 @@ Oskari.registerLocalization(
                 "placeholder": "Anna karttatasolle nimi."
             },
             "drawing": {
-                "label": "NOT TRANSLATED",
+                "label": "",
                 "point": {
                     "label": "Piste",
                     "color": "Väri",
@@ -461,7 +434,7 @@ Oskari.registerLocalization(
                 "delete": "Poista"
             },
             "title": "Analyysit",
-            "confirmDeleteMsg": "Haluatko poistaa analyysin:",
+            "confirmDeleteMsg": "Haluatko poistaa analyysin \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Peruuta",
@@ -477,5 +450,4 @@ Oskari.registerLocalization(
             }
         }
     }
-}
-);
+});

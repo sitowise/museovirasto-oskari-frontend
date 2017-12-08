@@ -10,13 +10,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><div class="header"><h3 class="popupHeader"></h3></div><div class="content"></div><div class="actions"></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
         this.__listeners = {
-
         };
+        this._isVisible = false;
+        // for preventing things going infinity with onClose() handlers. show() and close() use this.
+        this._closingInProgress = false;
     }, {
         /**
          * @method show
@@ -25,15 +27,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {String} message
          * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
          */
-        show: function (title, message, buttons, closeIcon) {
+        show: function (title, message, buttons) {
+            this._closingInProgress = false;
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
                 actionDiv = this.dialog.find('div.actions'),
                 i,
                 contentHeight,
                 reasonableHeight,
-                focusedButton = -1;
-
+                focusedButton = -1,
+                screenWidth = window.innerWidth;
             this.setTitle(title);
             this.setContent(message);
 
@@ -46,22 +49,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                         focusedButton = i;
                     }
                 }
-            } else {
+            } else if (!this.dialog.find('.close-icon')) {
                 // if no actions, the user can click on popup to close it
                 this.dialog.bind('click', function () {
                     me.close(true);
                 });
+            } else {
+                actionDiv.remove();
             }
-
-            if(closeIcon) {
-                var closeIcon = jQuery('<div class="icon-close" title="' + Oskari.getLocalization('DivManazer').buttons.close + '"></div>');
-                closeIcon.bind('click', function () {
-                    me.close(true);
-                });
-                
-                this.dialog.find('div.header').append(closeIcon);
-            }
-
             jQuery('body').append(this.dialog);
             if (focusedButton >= 0) {
                 buttons[focusedButton].focus();
@@ -79,6 +74,39 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             // make popup to visible
             me.dialog.css('opacity', 1);
+
+            this._isVisible = true;
+
+            var map = Oskari.getSandbox().getMap();
+            if(map && contentDiv.width() > screenWidth) {
+                this.dialog.css('max-width', screenWidth + 'px');
+            }
+
+            this._bringMobilePopupToTop();
+
+            me.__notifyListeners('show');
+
+        },
+
+        /**
+         * @method _mobileBringToTop
+         * Adjusts the zIndex of this popup, in case there are other (mobile) popups open at the moment
+         * TODO: get rid of this, once we have a mechanism of identifying and killing all other open popups reliably
+         */
+        _bringMobilePopupToTop: function() {
+            var zIndex = 0;
+            if (jQuery(this.dialog).hasClass('mobile-popup')) {
+                var openPopups = jQuery('.mobile-popup');
+
+                _.each(openPopups, function(openPopup) {
+                    if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
+                        zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
+                    }
+                });
+            }
+            if (zIndex && zIndex > 0) {
+                this.dialog.css('z-index',zIndex);
+            }
         },
         /**
          * @method fadeout
@@ -103,6 +131,45 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         addClass: function (pClass) {
             this.dialog.addClass(pClass);
         },
+
+        setColourScheme: function (colourScheme) {
+            if (colourScheme.bgColour) {
+                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.bgColour});
+            }
+
+            if (colourScheme.titleColour) {
+                this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
+            }
+
+            if (colourScheme.iconCls) {
+                var div = this.dialog.find('.icon-close');
+                div.removeClass('icon-close icon-close:hover');
+                div.addClass(colourScheme.iconCls + ' close-icon');
+            }
+
+            if (colourScheme.bodyBgColour) {
+                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
+            }
+
+            /*buttons and actionlinks*/
+            if (colourScheme) {
+                if (colourScheme.linkColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
+                }
+                if (colourScheme.buttonBgColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background','none');
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                }
+                if (colourScheme.buttonLabelColour) {
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                }
+            }
+        },
+
+        setFont: function (font) {
+            this.dialog.find('h3.popupHeader').css({'font-family': font});
+        },
+
         /**
          * @method createCloseButton
          * Convenience method that creates a close button with
@@ -121,12 +188,33 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             });
             return okBtn;
         },
+
+        /**
+        * @method createCloseIcon
+         * Convenience method that creates a close icon to the right corner of popup header
+         */
+        createCloseIcon: function () {
+            var me = this,
+                header = this.dialog.find('h3');
+
+            jQuery(header).after('<div class="icon-close icon-close:hover close-icon"></div>');
+            this.dialog.find('.close-icon').on('click', function() {
+                me.close(true);
+            });
+            this.dialog.unbind('click');
+
+        },
+
         /**
          * @method close
          * Removes the popup after given time has passed
          * @param {Boolean} noAnimation true to close immediately (optional, defaults to fade out animation)
          */
         close: function (noAnimation) {
+            if(this._closingInProgress) {
+                return;
+            }
+            this._closingInProgress = true;
             var me = this;
             if (this.overlay) {
                 this.overlay.close();
@@ -135,8 +223,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 jQuery(this.dialog).off('keydown', this._stopKeydownPropagation);
             }
             if (noAnimation) {
-                me.dialog.remove();
                 me.__notifyListeners('close');
+                me.dialog.remove();
             } else {
                 me.dialog.animate({
                     opacity: 0
@@ -146,33 +234,39 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                     me.__notifyListeners('close');
                 }, 500);
             }
+            this._isVisible = false;
+        },
+        isVisible: function() {
+            return this._isVisible;
         },
         /**
          * @property alignment
          * Options for #moveTo() alignment parameter
          * @static
          */
-        alignment: ['left', 'right', 'top', 'bottom'],
+        alignment: ['left', 'right', 'top', 'bottom', 'center'],
         /**
          * @method moveTo
          * Removes the popup after given time has passed
          * @param {jQuery} target - target element which the popup should point
          * @param {String} alignment - one of #alignment (optional, defaults to right)
+         * @param {Boolean} noArrow - if true, arrow is not diplayed (optional, defaults to false)
+         * @param {jQuery} topOffsetElement - if set, the popup top is set according to this element (optional, used with mobile popups when adjusting to container instead of the tool)
          */
-        moveTo: function (target, alignment) {
+        moveTo: function (target, alignment, noArrow, topOffsetElement) {
             var me = this,
                 align = 'right',
                 //get the position of the target element
                 tar = jQuery(target),
-                pos = tar.offset();
+                pos = tar.offset(),
+                parent = jQuery(window);
 
             if (!tar || tar.length === 0 || !pos) {
                 // couldn't find target - aborting
                 return;
             }
 
-            var windowWidth = jQuery(window).height(),
-                windowHeight = jQuery(window).height(),
+            var windowHeight = jQuery(window).height(),
                 targetWidth = tar.outerWidth(),
                 targetHeight = tar.outerHeight(),
                 dialogWidth = me.dialog.outerWidth(),
@@ -195,18 +289,37 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             } else if (align === 'bottom') {
                 top = (top + targetHeight) + 5;
                 left = left + (targetWidth / 2) - (dialogWidth / 2);
+            } else if (align === 'center') {
+                top = top + (targetHeight / 2) - (dialogHeight / 2);
+                left = left + (targetWidth / 2) - (dialogWidth / 2);
             }
+
             top = Math.min(top, windowHeight - dialogHeight);
-            // TODO fix left like above
+
             if (left < 0) {
                 left = 0;
             }
             if (top < 0) {
                 top = 0;
             }
+
             // TODO: check for right and bottom as well
-            me.dialog.addClass('arrow');
+
+            if (!noArrow) {
+                me.dialog.addClass('arrow');
+            }
             me.dialog.addClass(alignment);
+
+            // Check at if popup is outside screen from right
+            if(parent.width() < (me.dialog.width() + left)) {
+                left = parent.width() - me.dialog.width();
+            }
+            // Check at if popup is outside screen from bottom
+            if(windowHeight < (me.dialog.outerHeight() + top)) {
+              //set the popup top-position to be the original top position - amount which is outside of screen
+                top = top - ((me.dialog.outerHeight() + top) - windowHeight);
+            }
+
             //move dialog to correct location
             me.dialog.css({
                 'left': left + 'px',
@@ -214,6 +327,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 'margin-left': 0,
                 'margin-top': 0
             });
+
+            if (topOffsetElement) {
+                me._adjustPopupTop(topOffsetElement);
+            }
+
+        },
+        /**
+         * @method @private _adjustPopupTop
+         * Adjusts the top position of this popup according to the element provided
+         * @param {jQuery} topOffsetElement
+         *
+         */
+        _adjustPopupTop: function(topOffsetElement) {
+            if (topOffsetElement) {
+                var top = jQuery(topOffsetElement).offset().top,
+                    height = jQuery(topOffsetElement).outerHeight(true),
+                    popupTop = parseInt(top)+parseInt(height);
+                this.dialog.css('top',popupTop+'px');
+            }
         },
         /**
          * @method resetPosition
@@ -250,7 +382,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             e.stopPropagation();
         },
         setTitle: function (title) {
-            this.dialog.find('h3').html(title);
+            if (title) {
+                this.dialog.find('h3').html(Oskari.util.sanitize(title));
+            } else {
+                jQuery(this.dialog).find('h3').remove();
+            }
         },
         getTitle: function () {
             return this.dialog.find('h3')[0].textContent;
@@ -295,6 +431,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         onClose: function (callback) {
             this.__getListeners('close').push(callback);
+        },
+        /**
+         * Add listener to be called when popup is shown
+         * @param  {Function} callback function to call on show
+         */
+        onShow: function (callback) {
+            this.__getListeners('show').push(callback);
         },
         /**
          * Clears any listeners (registered with onClose(callback)-function).
@@ -350,9 +493,79 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeDraggable: function (options) {
             var me = this,
                 dragOptions = options ? options : {
-                scroll: false
+                scroll: false,
+                handle: '.popupHeader'
             };
             me.dialog.css('position', 'absolute');
             me.dialog.draggable(dragOptions);
+        },
+
+        /**
+         * @method adaptToMapSize
+         * Makes dialog to adapt to mobile size screens and keeps it on the screen when screen size is changed
+         * @param {Oskari.Sandbox} sandbox for registering events
+         * @param {String} popupName any identifier for the popup. This is needed for listening events
+         */
+        adaptToMapSize: function (sandbox, popupName) {
+            this.sandbox = sandbox;
+            this.setName(popupName);
+
+            this.eventHandlers = {
+                MapSizeChangedEvent: function (evt) {
+                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+                }
+            };
+
+            this.onEvent = function (event) {
+                var eventHandler = this.eventHandlers[event.getName()];
+                if (eventHandler) {
+                    eventHandler.apply(this, [event]);
+                }
+            };
+
+            for (var p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    this.sandbox.registerForEventByName(this, p);
+                }
+            }
+        },
+
+        /**
+         * @method setName
+         * Sets name for the popup that is listening mapSizeChangedEvent
+         * @param {String} name Name for the popup
+         */
+        setName: function (name) {
+            this._name = name;
+        },
+
+        /**
+         * @method getName
+         * Returns name of the popup that is listening mapSizeChangedEvent
+         * @return {String} name of the popup
+         */
+        getName: function () {
+            return this._name;
+        },
+
+        /**
+         * @method  @private _handleMapSizeChanges handle map size changes
+         * @param  {Object} size {width:100, height:200} (optional, if not given gets the map size from ???)
+         */
+        _handleMapSizeChanges: function(size) {
+            var me = this,
+                popup = me.dialog;
+
+            // if dialog ends up offscreen, move it back to the screen
+            if (parseInt(popup[0].style.left) > (size.width - popup.width())) {
+                popup.css({
+                    'left': (size.width - popup.width() - 10) + 'px'
+                });
+            }
+            if (parseInt(popup[0].style.top) > (size.width - popup.height())) {
+                popup.css({
+                    'top': (size.width - popup.height() - 10) + 'px'
+                });
+            }
         }
     });

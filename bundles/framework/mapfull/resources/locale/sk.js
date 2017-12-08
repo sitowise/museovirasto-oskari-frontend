@@ -3,7 +3,6 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "Generic",
     "value": {
-        "default-style": "Default style"
+        "default-style": "Predvolený štýl"
     }
-}
-);
+});

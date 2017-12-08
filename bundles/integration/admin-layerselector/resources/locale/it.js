@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Layer della mappa",
             "type-wfs": "Prodotti"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "Il layer è attualmente disponibile",
-                "iconClass": "NOT TRANSLATED"
-            },
-            "DOWN": {
-                "tooltip": "Il layer non è attualmente disponibile",
-                "iconClass": "NOT TRANSLATED"
-            },
-            "MAINTENANCE": {
-                "tooltip": "Si verificheranno delle brevi interruzioni della disponibilità dei layers durante i prossimi giorni.",
-                "iconClass": "NOT TRANSLATED"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "NOT TRANSLATED"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Funzionalità",
             "confirmResourceKeyChange": "Hai modificato il nome unico o l'indirizzo per questo layer. Per motivi di sicurezza le condizioni d'uso di questo layer saranno rimosse e sarà necessario impostarle di nuovo. Vuoi continuare?",
@@ -114,6 +96,8 @@ Oskari.registerLocalization(
             "username": "Nome utente",
             "password": "Password",
             "attributes": "Attributi",
+            "selectedTime": "Tempo selezionato",
+            "time": "Tempo supportato",
             "addInspireName": "Nome del tema",
             "addInspireNameTitle": "Nome del tema Inspire",
             "addOrganizationName": "Organizzazione",
@@ -140,12 +124,15 @@ Oskari.registerLocalization(
             "legendImage": "URL della legenda",
             "legendImageDesc": "Indirizzo URL della legenda che descrive il layer.",
             "legendImagePlaceholder": "Fornire l'indirizzo URL della legenda.",
+            "legendUrl": "Legend URL selection",
+            "legendUrlDesc": "Select default legend via legend url selection",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Contenuti aggiuntivi per la finestra \"Get Feature Info\"",
             "gfiResponseType": "Tipo di risposta GFI",
             "gfiResponseTypeDesc": "Tipo di risposta per Get Feature Info (GFI)",
             "gfiStyle": "Stile GFI  (XSLT)",
             "gfiStyleDesc": "Stile GFI  (XSLT)",
-            "manualRefresh": "NOT TRANSLATED",
+            "manualRefresh": "Aggiornamento manuale",
             "matrixSetId": "WMTS TileMatrixSet ID",
             "matrixSetIdDesc": "Nome del WMTS TileMatrixSet",
             "matrixSet": "JSON per layer WMTS",
@@ -202,5 +189,4 @@ Oskari.registerLocalization(
         "delete": "Rimuovi",
         "ok": "OK"
     }
-}
-);
+});

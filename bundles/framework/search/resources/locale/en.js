@@ -8,7 +8,6 @@ Oskari.registerLocalization(
         "tabTitle": "Location search",
         "invalid_characters": "The search term contains illegal characters. Allowed characters are letters (a-z, å, ä, ö, A-Z, Å, Ä, Ö), numbers (0-9), a dot (.), a comma (,), a hyphen (-) and an exclamation mark (!). You can also replace one mark with a question mark (?) or an end part with an asterisk (*).",
         "searchDescription": "Search location by placename, address or real estate unit identifier.",
-        "searchButton": "Search",
         "searchAssistance": "Type search term",
         "searchResultCount": "You search returned",
         "searchResultCount2": "results.",
@@ -25,12 +24,19 @@ Oskari.registerLocalization(
         "grid": {
             "name": "Placename",
             "village": "Municipality",
+            "region": "Region",
             "type": "Type"
         },
         "resultBox": {
             "close": "Close",
             "title": "Search Results"
+        },
+        "guidedTour": {
+            "title": "Search",
+            "message": "In the Search menu you can search locations and spatial data <br/><br/>  Location Search: Search locations by placenames, address or real estate identifiers. Click the result and the map will be focused on the selected location. <br/><br/> Metadata Search: Search datasets, dataset series and services. Use a simple text search or advanced search conditions. In the search results you can open a metadata description or open the selected data on the map, if the map layer is available.",
+            "openLink": "Show Search",
+            "closeLink": "Hide Search",
+            "tileText": "Search"
         }
     }
-}
-);
+});

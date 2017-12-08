@@ -74,6 +74,17 @@ Oskari.clazz.define(
                         // disabled, do nothing
                         return;
                     }
+
+                    // remove old popup
+                    var reqBuilder = this.getSandbox().getRequestBuilder(
+                            'InfoBox.HideInfoBoxRequest'
+                        ),
+                        request;
+                    if(reqBuilder) {
+                        request = reqBuilder(this.infoboxId);
+                        this.getSandbox().request(this, request);
+                    }
+
                     this.clickLocation = {
                         lonlat: evt.getLonLat()
                     };
@@ -126,7 +137,11 @@ Oskari.clazz.define(
                 );
             return {
                 'MapModulePlugin.GetFeatureInfoRequest': handler,
-                'MapModulePlugin.GetFeatureInfoActivationRequest': handler
+                'MapModulePlugin.GetFeatureInfoActivationRequest': handler,
+                'GetInfoPlugin.ResultHandlerRequest': Oskari.clazz.create(
+                    'Oskari.mapframework.mapmodule.getinfoplugin.request.ResultHandlerRequestHandler',
+                    this
+                )
             };
         },
 
@@ -338,6 +353,11 @@ Oskari.clazz.define(
             });
         },
 
+        addInfoResultHandler: function(callback){
+            var me = this;
+            me._showGfiInfo = callback;
+        },
+
         /**
          * Formats the given data and sends a request to show infobox.
          *
@@ -360,7 +380,7 @@ Oskari.clazz.define(
             if (data.via === 'ajax') {
                 fragments = this._parseGfiResponse(data);
             } else if(data.via === 'registry') {
-                fragments = this._formatRegistryFeaturesForInfoBox(data);
+                fragments = this.formatters.registry(data, this);
                 wideHeader = true;
                 if (data.features != null && fragments.length) {
                     for (var i = 0; i < data.features.length; i++) {
@@ -372,24 +392,26 @@ Oskari.clazz.define(
                                 registryIdentifier: data.features[i].registryIdentifier,
                                 mapLayers: data.features[i].mapLayers
                             };
-                            
-                            actions[loc.editItem + ' ' + itemData.id] = function () {
-                                //showing all layers for the register
-                                if (itemData != null && itemData.mapLayers != null) {
-                                    for (var j = 0; j < itemData.mapLayers.length; j++) {
-                                        var mapLayerId = itemData.mapLayers[j].mapLayerID,
-                                            layer = Oskari.getSandbox().findMapLayerFromAllAvailable(mapLayerId);
-                                        if (layer != null) {
-                                            Oskari.getSandbox().postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                            actions = [];
+                            actions.push({name: loc.editItem + ' ' + itemData.id,
+                                type: 'link',
+                                action: function () {
+                                    //showing all layers for the register
+                                    if (itemData != null && itemData.mapLayers != null) {
+                                        for (var j = 0; j < itemData.mapLayers.length; j++) {
+                                            var mapLayerId = itemData.mapLayers[j].mapLayerID,
+                                                layer = Oskari.getSandbox().findMapLayerFromAllAvailable(mapLayerId);
+                                            if (layer != null) {
+                                                Oskari.getSandbox().postRequestByName('AddMapLayerRequest', [mapLayerId, true]);
+                                            }
                                         }
                                     }
-                                }
-                                //open registry editor
-                                Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
-                                //close Search bundle after moving to registry editor
-                                Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
-                                me._closeGfiInfo();
-                            };
+                                    //open registry editor
+                                    Oskari.getSandbox().postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [itemData]);
+                                    //close Search bundle after moving to registry editor
+                                    Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
+                                    me._closeGfiInfo();
+                                }});
                         }
                     }
                 }
@@ -405,7 +427,18 @@ Oskari.clazz.define(
                 content.push(contentData);
             }
 
-            this._showGfiInfo(content, data.lonlat);
+            if (_.isObject(this._config)) {
+                colourScheme = this._config.colourScheme;
+                font = this._config.font;
+            }
+
+            this._showGfiInfo(content, data, this.formatters, {
+                colourScheme: colourScheme,
+                font: font,
+                title: this._loc.title,
+                infoboxId: this.infoboxId,
+                hidePrevious: false
+            });
         },
 
         /**
@@ -432,30 +465,28 @@ Oskari.clazz.define(
          * @method _showGfiInfo
          * @private
          * @param {Object[]} content infobox content array
-         * @param {OpenLayers.LonLat} lonlat location for the GFI data
+         * @param {data} data.lonlat location for the GFI data
+         * @param {formatters} formatter functions
+         * @param {params} params for request
          */
-        _showGfiInfo: function (content, lonlat) {
+        _showGfiInfo: function (content, data, formatters, params) {
             var reqBuilder = this.getSandbox().getRequestBuilder(
-                    'InfoBox.ShowInfoBoxRequest'
-                ),
-                request,
-                colourScheme,
-                font;
-
-            if (_.isObject(this._config)) {
-                colourScheme = this._config.colourScheme;
-                font = this._config.font;
-            }
+            'InfoBox.ShowInfoBoxRequest'
+            ),
+            request;
+            var options = {
+                hidePrevious: params.hidePrevious === undefined ? true : params.hidePrevious,
+                colourScheme: params.colourScheme,
+                font: params.font
+            };
 
             if (reqBuilder) {
                 request = reqBuilder(
-                    this.infoboxId,
-                    this._loc.title,
+                    params.infoboxId,
+                    params.title,
                     content,
-                    lonlat,
-                    true,
-                    colourScheme,
-                    font
+                    data.lonlat,
+                    options
                 );
                 this.getSandbox().request(this, request);
             }

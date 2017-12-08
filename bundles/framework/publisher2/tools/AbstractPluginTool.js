@@ -44,7 +44,7 @@ function(sandbox, mapmodule, localization, instance, handlers) {
     * @method init
     * @public
     */
-    init: function(pdata){
+    init: function(pdata) {
         var me = this,
             data = pdata;
 
@@ -55,6 +55,16 @@ function(sandbox, mapmodule, localization, instance, handlers) {
                 }
             });
         }
+    },
+    /**
+     * If the tool requires space for the UI next to the map return the required height/width
+     * @return {Object} object with keys height and width used for map size calculation
+     */
+    getAdditionalSize : function() {
+        return {
+            height: 0,
+            width : 0
+        };
     },
     /**
     * Get tool object.
@@ -96,10 +106,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
             if(me.__started === true) {
                 me.__plugin.stopPlugin(me.__sandbox);
             }
-        }
-
-        if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(me.state.mode);
         }
         var event = sandbox.getEventBuilder('Publisher2.ToolEnabledChangedEvent')(me);
         sandbox.notifyAll(event);
@@ -185,21 +191,6 @@ function(sandbox, mapmodule, localization, instance, handlers) {
         return true;
     },
 
-    /**
-    * Set mode to.
-    * @method setMode
-    * @public
-    *
-    * @param {String} mode the mode
-    */
-    setMode: function(mode){
-        var me = this;
-        me.state.mode = mode;
-
-        if(me.__plugin && typeof me.__plugin.setMode === 'function'){
-            me.__plugin.setMode(mode);
-        }
-    },
     /**
     * Get group
     * @method getGroup

@@ -12,6 +12,10 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         this._element = null;
         this._enabled = true;
         this._visible = true;
+        // plugin index, override this. Smaller number = first plugin, bigger number = latest
+        this._index = 1000;
+
+        this._mobileDefs = null;
     }, {
         /**
          * @method _startPluginImpl
@@ -19,30 +23,95 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * Sets sandbox and registers self to sandbox. Constructs the plugin UI
          * and displays it.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         _startPluginImpl: function (sandbox) {
             var me = this;
-
-            me._element = me._createControlElement();
-            me._ctl = me._createControlAdapter(me._element);
-            if (me._ctl) {
-                me.getMapModule().addMapControl(me._pluginName, me._ctl);
-            }
-            // Set initial UI values
-            me.refresh();
-            // There's a possibility these were set before plugin was started.
             me.setEnabled(me._enabled);
-            me.setVisible(me._visible);
-            if (me._element) {
-                me._element.attr('data-clazz', me.getClazz());
-                me.getMapModule().setMapControlPlugin(
-                    me._element,
-                    me.getLocation(),
-                    me.getIndex()
-                );
+            return me.setVisible(me._visible);
+        },
+        /**
+         * @public @method setVisible
+         * Set the plugin UI's visibility
+         *
+         * @param {Boolean} visible
+         * Whether the UI should be visible or hidden
+         *
+         */
+        setVisible: function (visible) {
+            var toolbarNotReady = false;
+            var wasVisible = this._visible;
+            this._visible = visible;
+            if(!this.getElement() && visible) {
+                toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
             }
+            // toggle element
+            if (this.getElement() && wasVisible !== visible) {
+                this.getElement().toggle(visible);
+            }
+            return toolbarNotReady;
+        },
+        /**
+         * Handle plugin UI and change it when desktop / mobile mode
+         * @method  @public createPluginUI
+         * @param  {Boolean} mapInMobileMode is map in mobile mode
+         * @param {Boolean} forced application has started and ui should be rendered with assets that are available
+         */
+        redrawUI: function(mapInMobileMode, forced) {
+            if(!this.isVisible()) {
+                // no point in drawing the ui if we are not visible
+                return;
+            }
+            var me = this;
+            var sandbox = me.getSandbox();
+            if(this.getElement()) {
+                // ui already in place no need to do anything, override in plugins to do responsive
+                return;
+            }
+            me._element = me._createControlElement();
+            this.addToPluginContainer(me._element);
+        },
+        addToPluginContainer : function(element) {
+            //var element = this.getElement();
+            if(!element) {
+                // no element to place, log a warning
+                return;
+            }
+            this._element = element;
+            element.attr('data-clazz', this.getClazz());
+            try{
+                this.getMapModule().setMapControlPlugin(
+                    element,
+                    this.getLocation(),
+                    this.getIndex()
+                );
+            } catch(e){
+                this.getSandbox().printWarn('"' + this.getName() + '" ', e);
+            }
+        },
+        removeFromPluginContainer : function(element, preserve) {
+            if(!element) {
+                // no element to remove, log a warning
+                return;
+            }
+            var mapModule = this.getMapModule();
+            mapModule.removeMapControlPlugin(
+                element,
+                this.inLayerToolsEditMode(),
+                !!preserve
+            );
+            if(!preserve) {
+                this._element = null;
+            }
+        },
+
+        teardownUI : function() {
+            //remove old element
+            this.removeFromPluginContainer(this.getElement());
+        },
+        getMobileDefs : function() {
+            return this._mobileDefs || {};
         },
 
         /**
@@ -50,28 +119,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * mapmodule.Plugin protocol method.
          * Unregisters self from sandbox and removes plugins UI from screen.
          *
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          *
          */
         _stopPluginImpl: function (sandbox) {
-            var me = this,
-                mapModule = me.getMapModule();
-            // Destroy control adapter if it exists
-            if (me._ctl) {
-                mapModule.removeMapControl(me._pluginName, me._ctl);
-                me._ctl = null;
-            }
-
-            me._destroyControlElement();
-
-            if (me.getElement()) {
-                mapModule.removeMapControlPlugin(
-                    me.getElement(),
-                    me.inLayerToolsEditMode()
-                );
-                me.getElement().remove();
-                me._element = null;
-            }
+            this.removeFromPluginContainer(this.getElement());
         },
 
         /**
@@ -148,14 +200,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             if (!me._config.location) {
                 me._config.location = {};
             }
+
             me._config.location.classes = location;
-            if (el) {
-                me.getMapModule().setMapControlPlugin(
-                    el,
-                    location,
-                    me.getIndex()
-                );
-            }
+            this.addToPluginContainer(el);
         },
 
         /**
@@ -217,16 +264,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         _destroyControlElement: function () {},
 
         /**
-         * @method _createControlAdapter
-         *
-         *
-         * @return {Object} Control adapter object or null if none
-         */
-        _createControlAdapter: function (el) {
-            /* this._el.get()[0] */
-        },
-
-        /**
          * @method _toggleControls
          * Enable/disable plugin controls. Used in map layout edit mode.
          *
@@ -262,22 +299,6 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         isEnabled: function () {
             return this._enabled;
-        },
-
-        /**
-         * @public @method setVisible
-         * Set the plugin UI's visibility
-         *
-         * @param {Boolean} visible
-         * Whether the UI should be visible or hidden
-         *
-         */
-        setVisible: function (visible) {
-            // toggle element
-            if (this._element && this._visible !== visible) {
-                    this._element.toggle(visible);
-            }
-            this._visible = visible;
         },
 
         /**
@@ -344,6 +365,63 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 // Add the new font as a CSS class.
                 el.addClass(classToAdd);
             }
+        },
+        addToolbarButtons : function(buttons, group) {
+            var me  =this;
+            var sandbox = this.getSandbox();
+            var toolbar = this.getMapModule().getMobileToolbar();
+            var themeColors = this.getMapModule().getThemeColours();
+            if(buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
+                return true;
+            }
+            var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
+
+            if (sandbox.hasHandler('Toolbar.AddToolButtonRequest') && addToolButtonBuilder) {
+                for (var tool in buttons) {
+                    var buttonConf = buttons[tool];
+                    buttonConf.toolbarid = toolbar;
+                    // add active color if sticky and toggleChangeIcon
+                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
+                        buttonConf.activeColour =  themeColors.activeColour;
+                    }
+                    sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
+                }
+            }
+        },
+        removeToolbarButtons : function(buttons, group) {
+            var sandbox = this.getSandbox();
+            if(!sandbox) {
+                return true;
+            }
+
+            // don't do anything now if request is not available.
+            // When returning false, this will be called again when the request is available
+            if(buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
+                return true;
+            }
+            var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
+            var toolbar = this.getMapModule().getMobileToolbar();
+            for (var tool in buttons) {
+                var buttonConf = buttons[tool];
+                buttonConf.toolbarid = toolbar;
+                sandbox.request(this, removeToolButtonBuilder(tool, group, toolbar));
+            }
+        },
+
+        /**
+         * Set a tool's mobile icon back to it's initial state after popup closing.
+         */
+        _resetMobileIcon: function(el, iconCls) {
+            var me = this,
+                restoreCls;
+
+            el.css('background-color', '');
+            el.removeClass('selected');
+            el.removeClass(iconCls + '-light');
+            el.removeClass(iconCls + '-dark');
+
+            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls+'-light' : iconCls+'-dark';
+            el.addClass(restoreCls);
         }
     }, {
         /**

@@ -23,14 +23,13 @@ Oskari.registerLocalization(
             "LogoPlugin": {
                 "terms": "Terms of Use",
                 "dataSources": "Data Sources",
-                "layersHeader": "Map Layers",
-                "indicatorsHeader": "Indicators"
+                "layersHeader": "Map Layers"
             },
             "DataSourcePlugin": {
                 "link": "Data source",
                 "popup": {
                     "title": "Data Sources",
-                    "content": "NOT TRANSLATED"
+                    "content": ""
                 },
                 "button": {
                     "close": "Close"
@@ -38,7 +37,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Map layers",
-                "chooseDefaultBaseLayer": "Select background map"
+                "chooseDefaultBaseLayer": "Select background map",
+                "chooseOtherLayers": "Select other map layers"
             },
             "SearchPlugin": {
                 "placeholder": "Search location",
@@ -48,6 +48,7 @@ Oskari.registerLocalization(
                 "noresults": "No results could be found. Please check your search term and try again.",
                 "toomanyresults": "Over 100 results found. Please refine your search term and try again.",
                 "column_name": "Name",
+                "column_region": "Region",
                 "column_village": "Municipality",
                 "column_type": "Type"
             },
@@ -57,7 +58,8 @@ Oskari.registerLocalization(
                 "places": "Features",
                 "description": "Description",
                 "link": "Web address",
-                "name": "Name"
+                "name": "Name",
+                "noAttributeData": "No attributes to show, please open feature data to see hidden attributes."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
@@ -107,7 +109,16 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Center map to your location"
             }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Pan Map View",
+                "message": "You can pan the map view in several ways. <br/><br/>  Select a hand tool and drag the map view with a mouse.<br/><br/>  Use arrow keys on your keyboard. <br/><br/>  Click arrows in the panning tool. You can find it in the upper right corner."
+            },
+            "help2": {
+                "title": "Zoom In and Out Map View",
+                "message": "You can zoom in and out the map view in several ways. <br/><br/> Select a scale from the zoom bar. You can also click (+) and (-) buttons in the heads of the zoom bar. <br/> <br/> Use (+) and (-) keys in your keyboard. <br/> <br/> Double-click the map view or use a \"magnifier tool\" to zoom in the map view."
+            }
         }
     }
-}
-);
+});

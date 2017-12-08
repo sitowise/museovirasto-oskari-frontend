@@ -17,7 +17,12 @@ Oskari.registerLocalization(
             "inspire": "Inspire-metatiedot",
             "jhs": "JHS 158 -metatiedot",
             "quality": "Laatutiedot",
+            "actions": "Toiminnot",
             "xml": "ISO 19139 XML -tiedosto",
+            "coverage": {
+                "removeBBOX": "Piilota kattavuusalue",
+                "showBBOX": "Näytä kattavuusalue"
+            },
             "map": "Kattavuus",
             "pdf": "Tuloste",
             "select_metadata_prompt": "Valitse metatieto klikkaamalla kuvaketta.",
@@ -382,7 +387,24 @@ Oskari.registerLocalization(
             },
             "qualityContent": {
                 "qualityPassTrue": "Aineisto on sääntöjenmukainen.",
-                "qualityPassFalse": "Aineisto ei ole sääntöjenmukainen."
+                "qualityPassFalse": "Aineisto ei ole sääntöjenmukainen.",
+                "nameOfMeasure" : "Laatumittarin nimi",
+                "citationTitle" : "Nimi",
+                "measureIdentificationCode" : "Laatumittarin tunniste koodi",
+                "measureIdentificationAuthorization" : "Laatumittarin tunniste tunnistautuminen",
+                "measureDescription" : "Laatumittarin kuvailu",
+                "evaluationMethodType" : "Arviointimenetelmän tyyppi",
+                "evaluationMethodDescription" : "Arviointimenetelmän kuvailu",
+                "evaluationProcedure" : "Arviointimenettelyn viitetiedot",
+                "dateTime" : "Päivämäärä ja aika",
+                "specification" : "Tietomäärittelyn viitetiedot",
+                "explanation" : "Selitys",
+                "valueType" : "Laatutuloksen tyyppi",
+                "valueUnit" : "Laatutuloksen yksikkö",
+                "errorStatistic" : "Tilastollinen menetelmä",
+                "value" : "Arvo",
+                "conformanceResult" : "Vaatimuksenmukaisuus",
+                "quantitativeResult" : "Mitattu laatutulos"
             },
             "heading": {
                 "abstractTextData": "Aineiston tiivistelmä",
@@ -430,6 +452,11 @@ Oskari.registerLocalization(
                 "temporalValidity": "Ajanmukaisuus",
                 "thematicClassificationCorrectness": "Luokittelun oikeellisuus",
                 "topologicalConsistency": "Topologinen eheys"
+            },
+            "layerList": {
+                "title": "Karttatasot",
+                "show": "Näytä karttataso",
+                "hide": "Piilota karttataso"
             }
         },
         "tile": {
@@ -437,5 +464,4 @@ Oskari.registerLocalization(
             "tooltip": "Metatieto on tietoa tiedosta, tässä tapauksessa joko paikkatietoaineistosta, -aineistosarjasta tai -palvelusta. Metatiedoista selviää mm. kyseisen tietoresurssin käyttöehdot ja saatavuus."
         }
     }
-}
-);
+});

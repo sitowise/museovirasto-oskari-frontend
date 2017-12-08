@@ -7,23 +7,12 @@ Oskari.registerLocalization(
         "desc": "",
         "userFeedback": {
             "userFeedback": "Tilbakemelding fra bruker",
-            "subject": "Emne",
-            "subjectPlaceholder": "Tittel på tilbakemelding",
             "ratingScore": "Vurdering",
             "ratingJustification": "Begrunnelse"
         },
         "feedbackList": {
-            "tabTitle":"Feedback",
-            "average":"Average rating"
-        },
-        "targetSpecification": {
-            "targetSpecification": "Target specification",
-            "targetIdentification": "Target identification",
-            "targetCode": "Target code",
-            "targetCodeNotDefined": "Ikke definert",
-            "targetCodespace": "Target codespace",
-            "primaryTargetCodeSpaceNotDefined": "Ikke definert",
-            "natureOfTarget": "Nature of the target"
+            "tabTitle": "Feedback",
+            "average": "Average rating"
         },
         "userInformation": {
             "userInformation": "Brukerinformasjon",
@@ -59,5 +48,4 @@ Oskari.registerLocalization(
             "savingTheFeedbackSuccesful": "Lagring av tilbakemelding var vellykket."
         }
     }
-}
-);
+});

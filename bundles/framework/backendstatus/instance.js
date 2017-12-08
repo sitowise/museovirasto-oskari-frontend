@@ -74,7 +74,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
         },
         /**
          * @method setSandbox
-         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
         setSandbox: function (sandbox) {
@@ -82,7 +82,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
         },
         /**
          * @method getSandbox
-         * @return {Oskari.mapframework.sandbox.Sandbox}
+         * @return {Oskari.Sandbox}
          */
         getSandbox: function () {
             return this._sandbox;
@@ -128,11 +128,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     sandbox.registerForEventByName(me, p);
                 }
             }
+            // handle ShowMapLayerInfoRequest
+            sandbox.addRequestHandler('ShowMapLayerInfoRequest', this);
 
             /* we may have missed the maplayerevent */
             if (me._mapLayerService.isAllLayersLoaded() && !me.gotStartupProcessCall) {
                 me.updateBackendStatus(true);
             }
+        },
+
+        handleRequest: function (core, request) {
+            if(request.getName() !== 'ShowMapLayerInfoRequest') {
+                return false;
+            }
+
+            var maplayerId = request.getMapLayerId();
+            var layer = this._mapLayerService.findMapLayer(maplayerId);
+            var mapLayerBackendStatus = layer.getBackendStatus();
+            var backendExtendedStatusForLayer = this.backendExtendedStatus[maplayerId];
+
+            if (!backendExtendedStatusForLayer) {
+                this.showFeedbackDialog('missing_backendstatus_information');
+                return;
+            }
+
+            var infoUrl = backendExtendedStatusForLayer.infourl;
+            if (!infoUrl) {
+                this.showFeedbackDialog('missing_backendstatus_infourl');
+                return;
+            }
+
+            this.openURLinWindow(infoUrl);
+            return true;
         },
         /**
          * @method init
@@ -214,30 +241,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
                 this.updateBackendStatus();
             },
-            /**
-             * @method AfterShowMapLayerInfoEvent
-             */
-
-            'AfterShowMapLayerInfoEvent': function (event) {
-
-                var mapLayer = event.getMapLayer();
-                var mapLayerId = mapLayer.getId();
-                var mapLayerBackendStatus = mapLayer.getBackendStatus();
-                var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
-
-                if (!backendExtendedStatusForLayer) {
-                    this.showFeedbackDialog('missing_backendstatus_information');
-                    return;
-                }
-
-                var infoUrl = backendExtendedStatusForLayer.infourl;
-                if (!infoUrl) {
-                    this.showFeedbackDialog('missing_backendstatus_infourl');
-                    return;
-                }
-
-                this.openURLinWindow(infoUrl);
-            },
             'MapLayerEvent': function (event) {
                 // FIXME use ===
                 if (!((event.getLayerId() === null || event.getLayerId() === undefined) && event.getOperation() === 'add')) {
@@ -287,6 +290,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
+            sandbox.removeRequestHandler('ShowMapLayerInfoRequest', this);
 
             sandbox.unregister(this);
             this._started = false;
@@ -360,11 +364,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 return;
             }
 
+            //when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
+            if (allKnown && !me._mapLayerService.isAllLayersLoaded()) {
+                return;
+            }
+
             me._cancelAjaxRequest();
             me._startAjaxRequest(dteMs);
 
             var ajaxUrl = me.getAjaxUrl(null, allKnown);
-
             jQuery.ajax({
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
@@ -491,6 +499,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             if (allKnown) {
                 me._pendingAjaxQuery.timestamp = null;
                 me.backendStatus = {};
+
+                //if all map layers have been loaded, there's no point in _not_ updating their statuses...?
+                //this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
+                if (me._mapLayerService.isAllLayersLoaded()) {
+                    // If too many have changed, just ask to do a bulk update
+                    evt = evtBuilder();
+                    sandbox.notifyAll(evt);
+                }
             } else {
                 edLen = eventData.length;
 

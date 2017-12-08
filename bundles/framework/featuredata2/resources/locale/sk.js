@@ -3,147 +3,101 @@ Oskari.registerLocalization(
     "lang": "sk",
     "key": "FeatureData2",
     "value": {
-        "title": "Feature Data",
+        "title": "Objektové Údaje",
         "desc": "",
-        "loading": "Loading...",
-        "showmore": "Show",
-        "nodata": "The selected map layers contain no feature data.",
-        "featureNameAll": "Data type",
-        "errorscale": "The feature data on this map layer cannot be shown on this scale level. Please change the scale level at scale bar.",
-        "errordata": "The feature data at the server contains errors. Please update the map by moving it slightly.",
-        "columnSelectorTooltip": "Select visible columns.",
+        "loading": "Načítavanie...",
+        "showmore": "Zobraziť",
+        "nodata": "Objektové údaje nie sú dostupné pre vybrané mapové vrstvy.",
+        "featureNameAll": "Typ údajov",
+        "errorscale": "Objektové údaje nie sú dostupné pri tejto mierke. Prosím, použite bežec mierky  a zvoľte inú mierku.",
+        "errordata": "Objektové údaje sú neplatné. Prosím, aktualizujte údaje miernym pohybom mapy.",
+        "columnSelectorTooltip": "Vybrať viditeľné stĺpce",
+        "featureDataPopup": "Štatistické hodnoty",
         "selectionTools": {
-            "title": "Select features on the map.",
-            "instructions": "NOT TRANSLATED",
-            "selectAll": "Select from all layers",
+            "title": "Vybrať objekty",
+            "instructions": "",
+            "selectFromTop": "Od najvyššej vrstvy",
+            "selectAll": "Od všetkých vrstiev",
             "link": {
-                "title": "Select more features"
+                "title": "Označiť viac objektov"
             },
             "button": {
-                "cancel": "Close",
-                "empty": "Remove selection",
-                "show": "Show features",
-                "close": "Close",
-                "edit": "Edit"
+                "cancel": "Zatvoriť",
+                "empty": "Odznačiť všetky",
+                "show": "Zobraziť objekty",
+                "close": "Zatvoriť",
+                "edit": "Editovať"
             },
             "tools": {
                 "point": {
-                    "tooltip": "Add a point feature to the map."
+                    "tooltip": "Nakreslite bod. Ak je bod vo vnútry objektu, tak ten objekt bude označený."
                 },
                 "line": {
-                    "tooltip": "Add a line feature to the map."
+                    "tooltip": "Nakreslite líniu. Ak línia pretína objekt, tak ten objekt bude označený."
                 },
                 "polygon": {
-                    "tooltip": "Add an area feature to the map."
+                    "tooltip": "Nakreslite polygón. Ak polygón pretína objekt, tak ten objekt bude označený."
                 },
                 "square": {
-                    "tooltip": "Add a rectangular area feature to the map."
+                    "tooltip": "Nakreslite štvorec. Ak štvorec pretína objekt, tak ten objekt bude označený."
                 },
                 "circle": {
-                    "tooltip": "Add a circular area feature to the map."
+                    "tooltip": "Nakreslite kruh. Ak kruh pretína objekt, tak ten objekt bude označený."
                 },
                 "select": {
-                    "tooltip": "Select features"
+                    "tooltip": "Nakreslite tvar a vyberte objekty na základe daného tvaru."
                 }
             }
         },
         "layer": {
-            "style": "Style",
-            "show": "Show",
-            "hide": "Hide",
-            "hidden": "The map layer has been temporarily hidden.",
-            "out-of-scale": "The map layer cannot be shown at this scale level.",
-            "move-to-scale": "Please move to a suitable scale level.",
-            "out-of-content-area": "The map layer contains no data at this location.",
-            "move-to-content-area": "Please move to a suitable location.",
-            "description": "Description",
-            "object-data": "Feature data",
+            "style": "Štýl",
+            "show": "Zobraziť",
+            "hide": "Skryť",
+            "hidden": "Mapová vrstva je dočasne skrytá.",
+            "out-of-scale": "Mapová vrstva sa nedá pri danej mierke zobraziť.",
+            "move-to-scale": "Prosím presuňte sa do vhodnejšej mierky.",
+            "out-of-content-area": "Mapová vrstva neobsahuje žiadne objekty pri tomto zobrazení.",
+            "move-to-content-area": "Presuňte sa na vhodnejšie umiestnenie.",
+            "description": "Popis",
+            "object-data": "Údaje o objektoch",
             "rights": {
-                "notavailable": "Publication prohibited.",
-                "guest": "Please log in to publish the map layer in an embedded map.",
-                "loggedin": "Publication permitted",
-                "official": "Publication permitted only for use by authorities.",
-                "need-login": "You need to log in to publish the map level in an embedded map.",
+                "notavailable": "Zverejnenie je zakázané",
+                "guest": "Na zverejnenie mapovej vrstvy vo vloženej mape sa prosím prihláste.",
+                "loggedin": "Zverejnenie je povolené",
+                "official": "Zverejnenie iba pre úrady",
+                "need-login": "Na zverejnenie vloženej mapy sa musíte prihlásiť.",
                 "can_be_published_by_provider": {
-                    "label": "Publication permitted as a data provider",
-                    "tooltip": "Only the data provider can publish the map layer in an embedded map.  If you are a data provider, please contact the support service of Paikkatietoikkuna."
+                    "label": "Zverejnenie je povolené pre poskytovateľov údajov",
+                    "tooltip": "Iba poskytovatelia údajov môžu zverejniť mapovú vrstvu do vloženej mapy. Pokiaľ ste poskytovateľ údajov, kontaktujte prosím podporný servis."
                 },
                 "can_be_published": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
+                    "label": "Zverejnenie je povolené",
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Limit využitia nie je obmedzený."
                 },
                 "can_be_published_map_user": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage may be limited."
+                    "label": "Zverejnenie je povolené",
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape. Limit využitia môže byť obmedzený."
                 },
                 "no_publication_permission": {
-                    "label": "Publication prohibited",
-                    "tooltip": "The map layer cannot be published in an embedded map. The data provider has not granted permission to that."
+                    "label": "Zverejnenie je zakázané",
+                    "tooltip": "Mapová vrstva nemôže byť zverejnená vo vloženej mape. Poskytovateľ údajov nedal povolenie na zverejnenie."
                 },
                 "can_be_published_by_authority": {
-                    "label": "Publication permitted",
-                    "tooltip": "The map layer can be published in an embedded map. The limit of the usage is not limited."
+                    "label": "Zverejnenie je povolené iba pre úrady.",
+                    "tooltip": "Mapová vrstva môže byť zverejnená vo vloženej mape iba pre úrady. Pokiaľ ste z úradu, kontaktujte prosím podporný servis."
                 }
             },
             "tooltip": {
-                "type-base": "Background map",
-                "type-wms": "Map layer",
-                "type-wfs": "Data product"
-            },
-            "filter": {
-                "title": "Filter",
-                "description": "Select the features from the map layer:",
-                "cancelButton": "Cancel",
-                "clearButton": "Clear the filter",
-                "refreshButton": "Refresh the filter",
-                "addFilter": "Add a new filter",
-                "removeFilter": "Delete the filter",
-                "bbox": {
-                    "title": "Map window filter",
-                    "on": "Only the feature visible on the map window.",
-                    "off": "All features."
-                },
-                "clickedFeatures": {
-                    "title": "Feature selection filter",
-                    "label": "Only the features selected on the map."
-                },
-                "values": {
-                    "title": "Filter the features by attribute data",
-                    "placeholders": {
-                        "case-sensitive": "The filter is case sensitive.",
-                        "attribute": "Attribute",
-                        "boolean": "Logical operator",
-                        "operator": "Operator",
-                        "attribute-value": "Value"
-                    },
-                    "equals": "is equal to",
-                    "like": "is like",
-                    "notEquals": "is not equal to",
-                    "notLike": "is not like",
-                    "greaterThan": "is greater than",
-                    "lessThan": "is smaller than",
-                    "greaterThanOrEqualTo": "is greater than or equal to",
-                    "lessThanOrEqualTo": "is smaller than or equal to"
-                },
-                "aggregateAnalysisFilter": {
-                    "addAggregateFilter": "Previously calculated key ratios",
-                    "aggregateValueSelectTitle": "Use a previously calculated key ratios",
-                    "selectAggregateAnalyse": "Select an analysis layer",
-                    "selectIndicator": "Select property",
-                    "selectReadyButton": "Close",
-                    "getAggregateAnalysisFailed": "The aggregate data could not be found.",
-                    "noAggregateAnalysisPopupTitle": "The aggregate analysis did not found.",
-                    "noAggregateAnalysisPopupContent": "You have not done any aggregate analysis. You can create your own aggregata data by the analysis function and then use values in filtering."
-                },
-                "validation": {
-                    "title": "The filter could not be refreshed because of following mistakes:",
-                    "attribute_missing": "The attribute is missing.",
-                    "operator_missing": "The operator is missing.",
-                    "value_missing": "The value is missing.",
-                    "boolean_operator_missing": "The logical operator is missing."
-                }
+                "type-base": "Podkladová mapa",
+                "type-wms": "Mapová vrstva",
+                "type-wfs": "Produktové údaje"
             }
+        },
+        "gridFooter": {
+            "aggregateColumnField": "Počet",
+            "differenceMessage": "Rozdiel hodnôt nepovolených objektov je prezentovaný s hodnotou",
+            "noDataMessage": "Počet = počet objektov bez nepovolených objektov",
+            "noDataCommonMessage": "Údaje obsahujú hodnoty nepovolených objektov"
         }
     }
-}
-);
+});

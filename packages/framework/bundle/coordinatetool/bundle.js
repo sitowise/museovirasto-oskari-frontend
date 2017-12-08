@@ -40,10 +40,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/instance.js"
-        }, {
+        },{
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/plugin/CoordinateToolPlugin.js"
-        }, {
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/plugin/CoordinateTransformationExtension.js"
+        },{
+           "type": "text/javascript",
+           "src": "../../../../bundles/framework/coordinatetool/plugin/ViewChangerExtension.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/service/CoordinateToolService.js"
+        },{
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/publisher/CoordinateTool.js"
+        },{
             "type": "text/css",
             "src": "../../../../bundles/framework/coordinatetool/resources/css/coordinatetool.css"
         }],
@@ -59,6 +71,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/resources/locale/sv.js"
+        }, {
+            "lang": "et",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/et.js"
+        }, {
+            "lang": "is",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/is.js"
+        }, {
+            "lang": "nb",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/nb.js"
+        }, {
+            "lang": "nn",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/nn.js"
+        }, {
+            "lang": "sk",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/sk.js"
         }]
     },
     "bundle": {

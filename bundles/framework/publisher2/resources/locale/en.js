@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "Swedish",
                     "en": "English"
                 },
-                "tooltip": "Select a languge to be used on the map. It affects the user interface and text on the map."
+                "tooltip": "Select a language to be used on the final map. It affects the user interface and text on the map. Note! The language selection is not visible on the preview.",
+                "languageChangedDisclaimer": "Note! The language selection is not visible on the preview."
             },
             "size": {
                 "label": "Map Size",
@@ -61,7 +62,13 @@ Oskari.registerLocalization(
                 "PublisherToolbarPlugin": "Map tools",
                 "selectDrawLayer": "Select map layer",
                 "LayerSelectionPlugin": "Map layers menu",
+                "CoordinateToolPlugin": "Coordinate tool",
+                "FeedbackServiceTool": "Feedback (Open311) service",
+                "MapLegend": "Show map legend",
+                "MapRotator": "Enable map rotation",
+                "CrosshairTool": "Show map focal point",
                 "toolbarToolNames": {
+                    "history": "Move to previous or next view",
                     "history_back": "Move to previous view",
                     "history_forward": "Move to next view",
                     "measureline": "Measure distance",
@@ -149,8 +156,14 @@ Oskari.registerLocalization(
                 }
             },
             "sizes": {
-                "mobile": "Mobile",
-                "desktop": "Desktop"
+                "small": "Small",
+                "medium": "Medium",
+                "large": "Large",
+                "fill": "Space filling",
+                "custom": "Custom size",
+                "width": "width",
+                "height": "height",
+                "separator": "x"
             },
             "buttons": {
                 "save": "Save",
@@ -184,16 +197,14 @@ Oskari.registerLocalization(
                 "name": "The map name is required. Plese type a name and try again.",
                 "nohelp": "The user guide is not available.",
                 "saveFailed": "The embedded map could not be saved.",
-                "nameIllegalCharacters": "The map name contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9), spaces and hyphens (-). Please correct the name and try again.",
-                "domainIllegalCharacters": "The website address contains illegal characters. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
+                "nameIllegalCharacters": "The map name contains illegal characters (e.g. html-tags). Please correct the name and try again.",
+                "domainIllegalCharacters": "The website address contains illegal characters. Type a website URL-address without prefixes or a subpage address. For example: homepage.com. Allowed characters are letters (a-z, A-Z, å, ä, ö, Å, Ä, Ö), numbers (0-9) and special characters (-, _, ., !, ~, *, ' and ()). Please correct the address and try again."
             }
         },
         "NotLoggedView": {
             "text": "Welcome to publish embedded map on your website. Please log in or register first.",
             "signup": "Log in",
-            "signupUrl": "/web/fi/login",
-            "register": "Register",
-            "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+            "register": "Register"
         },
         "StartView": {
             "text": "Welcome to publish embedded map on your website.",
@@ -233,7 +244,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Show only publishable map layers."
             }
+        },
+        "guidedTour": {
+            "title": "Map Publishing",
+            "message": "In the Map Publishing menu you can publish embedded maps on your own website. <br/><br/> Select map layers, define a website, select tools and desing a layout. Click Save and your map is ready for publishing. Jast copy one line html code to your website. <br/><br/> If you want to update the map, you can find it in the My Data menu. Updates are shown immediately on your map. <br/><br/> Map Publishing is available only for logged-in users.",
+            "openLink": "Show Map Publishing",
+            "closeLink": "Hide Map Publishing",
+            "tileText": "Map Publishing"
         }
     }
-}
-);
+});

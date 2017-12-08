@@ -21,6 +21,7 @@ Oskari.registerLocalization(
         "searchArea": "Aluerajaus",
         "delimitArea": "Rajaa hakualue kartalta",
         "deleteArea": "Poista aluerajaus",
+        "startDraw": "Rajaa hakualue",
         "dataset": "Aineisto",
         "series": "Aineistosarja",
         "service": "Palvelu",
@@ -29,10 +30,17 @@ Oskari.registerLocalization(
         "other": "Muu",
         "transformation": "Muunnos",
         "view": "Katselu",
+        "service-discovery": "Hakupalvelu",
+        "service-download": "Latauspalvelu",
+        "service-other": "Muu palvelu",
+        "service-transformation": "Muunnospalvelu",
+        "service-view": "Katselupalvelu",
         "Language": "Metatiedon kieli",
         "ResourceLanguage": "Resurssin kieli",
         "modifySearch": "Muokkaa hakuehtoja",
         "showSearch": "Näytä kaikki hakutulokset",
+        "showDatasets": "Näytä vain aineistot",
+        "showServices": "Näytä vain palvelut",
         "metadataCatalogueResults": "Hakutulokset",
         "show": "Näytä karttataso",
         "hide": "Piilota karttataso",
@@ -45,6 +53,7 @@ Oskari.registerLocalization(
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä. Hakusanassa saa olla vain yksi jokerimerkki sanan lopussa.",
         "searching": "Haetaan…",
+        "updated": "ylläpidon tiheys",
         "grid": {
             "name": "Nimi",
             "removeBBOX": "Piilota kattavuusalue",
@@ -53,7 +62,11 @@ Oskari.registerLocalization(
             "remove": "Poista hakutuloksista",
             "rating": "Arviointi"
         },
-        "licenseText": "Hae lisenssi"
+        "licenseText": "Hae lisenssi",
+        "identificationCode": {
+            "creation": "luonti",
+            "publication": "julkaisu",
+            "revision": "päivitys"
+        }
     }
-}
-);
+});

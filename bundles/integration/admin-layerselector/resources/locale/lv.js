@@ -42,24 +42,6 @@ Oskari.registerLocalization(
             "type-wms": "Map layer",
             "type-wfs": "Data product"
         },
-        "backendStatus": {
-            "OK": {
-                "tooltip": "The map layer is currently available.",
-                "iconClass": "backendstatus-ok"
-            },
-            "DOWN": {
-                "tooltip": "The map layer is currently not available.",
-                "iconClass": "backendstatus-down"
-            },
-            "MAINTENANCE": {
-                "tooltip": "There will be short breaks in the map layer's availability during the next few days.",
-                "iconClass": "backendstatus-maintenance"
-            },
-            "UNKNOWN": {
-                "tooltip": "",
-                "iconClass": "backendstatus-ok"
-            }
-        },
         "admin": {
             "capabilitiesLabel": "Capabilities",
             "confirmResourceKeyChange": "You have changed the unique name or  the interface address for this map layer. For security reasons the user rights for this map layer will be removed and you must set them again. Do you want to continue?",
@@ -140,6 +122,9 @@ Oskari.registerLocalization(
             "legendImage": "Map legend URL",
             "legendImageDesc": "The URL address of the map legend describing the map layer.",
             "legendImagePlaceholder": "Give the URL address of the map legend.",
+            "legendUrl": "Legend URL selection",
+            "legendUrlDesc": "Select default legend via legend url selection",
+            "noServiceLegendUrl": "Legend URL is not in wms service legends",
             "gfiContent": "Additional content for \"Get Feature Info\"-dialog.",
             "gfiResponseType": "GFI response type",
             "gfiResponseTypeDesc": "Response type for Get Feature Info (GFI)",
@@ -202,5 +187,4 @@ Oskari.registerLocalization(
         "delete": "Remove",
         "ok": "OK"
     }
-}
-);
+});
