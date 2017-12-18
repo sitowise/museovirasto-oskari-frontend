@@ -58,6 +58,7 @@ Oskari.registerLocalization(
 				    "error": "Fel",
 				    "featureDeleted": "Objektet har tagits bort.",
 				    "featureHasGeometry": "Objekt har lagrats geometrin. Vill du editera geometrin?",
+				    "featureName": "Objekt namn",
 				    "featureUpdated": "Objektsuppdateringen lyckades",
 				    "geometryDetailsInfo": "Uppdatera rekisteruppgifter som hänför sig till geometrin",
 				    "geometryDetailsInfoTitle": "Uppdatera rekisteruppgifter",
