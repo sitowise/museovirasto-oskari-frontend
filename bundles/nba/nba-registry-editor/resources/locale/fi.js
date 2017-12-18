@@ -58,6 +58,7 @@ Oskari.registerLocalization(
 				    "error": "Virhe",
 				    "featureDeleted": "Kohteen poistaminen onnistui",
 				    "featureHasGeometry": "Kohteella on jo tallennettu geometria. Haluatko muokata geometriaa?",
+				    "featureName": "Kohteen nimi",
 				    "featureUpdated": "Kohteen päivitys onnistui",
 				    "geometryDetailsInfo": "Päivitä geometriaan liittyvät rekisteritiedot",
 				    "geometryDetailsInfoTitle": "Päivitä rekisteritiedot",

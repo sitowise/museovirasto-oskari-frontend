@@ -57,6 +57,7 @@ Oskari.registerLocalization(
 				    "error": "Error",
 				    "featureDeleted": "Feature was succesfully deleted",
 				    "featureHasGeometry": "Feature already has a geometry. Do you want to continue editing?",
+				    "featureName": "Feature name",
 				    "featureUpdated": "Feature was succesfully updated",
 				    "geometryDetailsInfo": "Update registry information for geometry",
 				    "geometryDetailsInfoTitle": "Update registry information",
