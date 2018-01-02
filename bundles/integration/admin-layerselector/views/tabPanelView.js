@@ -338,7 +338,7 @@ define([
                         max: 100,
                         value: 100,
                         slide: function (event, ui) {
-                            jQuery(ui.handle).parents('.left-tools').find("#opacity-slider").val(ui.value);
+                            jQuery(ui.handle).parents('.left-tools').find(".opacity-slider").val(ui.value);
                         }
                     });
                     // change the title of the button
