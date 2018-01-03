@@ -262,6 +262,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             grid.setVisibleFields(['id', 'desc', 'registry', 'municipality']);
 
             grid.setColumnValueRenderer('id', function (name, data) {
+                if(typeof data === 'undefined') {
+                    return name;
+                }
                 var idColumnDiv = jQuery('<div></div>'),
                     registryEditRoles = editorRoles[data.registryIdentifier] != null ? editorRoles[data.registryIdentifier] : editorRoles['general'];
                     
