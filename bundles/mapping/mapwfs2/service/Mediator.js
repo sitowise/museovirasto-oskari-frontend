@@ -457,6 +457,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                                 });
                                 features = features.concat(newFeatures);
                             });
+                            if(features.length == 0) {
+                                features = data;
+                            }
                         } else {
                             features = data;
                         }
