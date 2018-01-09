@@ -721,6 +721,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             baseLayer.setName(baseMapJson.name);
 
+            baseLayer.setLayerOrderNumber(baseMapJson.layerOrderNumber);
+
             baseLayer.setMaxScale(baseMapJson.maxScale);
             baseLayer.setMinScale(baseMapJson.minScale);
 
@@ -849,6 +851,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if(mapLayerJson.layerName) {
                 layer.setLayerName(mapLayerJson.layerName);
             }
+
+            layer.setLayerOrderNumber(mapLayerJson.layerOrderNumber);
 
             if (mapLayerJson.opacity !== null && mapLayerJson.opacity !== undefined) {
                 layer.setOpacity(mapLayerJson.opacity);

@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
                 '  <div class="oskariui layer-opacity">' +
                 '    <div class="layout-slider" id="layout-slider"></div> ' +
                 '    <div class="opacity-slider" style="display:inline-block">' +
-                '      <input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%' +
+                '      <input type="text" name="opacity-slider" class="opacity-slider opacity" />%' +
                 '    </div>' +
                 '  </div>' +
                 '  <br/>' +
