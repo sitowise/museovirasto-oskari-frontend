@@ -7,7 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "tabTitle": "Paikkahaku",
         "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (a-ö, A-Ö), numerot (0-9) sekä piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Voit myös korvata sanassa yhden merkin kysymysmerkillä (?) tai sana loppuosan jokerimerkillä (*).",
-        "searchDescription": "Hae paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella.",
+        "searchDescription": "Hae paikkoja paikannimen, osoitteen, kiinteistötunnuksen tai rakennustunnuksen (VTJ-PRT) perusteella.",
         "searchAssistance": "Anna hakusana",
         "searchResultCount": "Hakusanalla löytyi",
         "searchResultCount2": "hakutulosta.",
@@ -33,7 +33,7 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "title": "Haku",
-            "message": "Haku-valikossa voit hakea paikkoja tai paikkatietoja. <br/><br/>  Paikkahaku: Hae paikkoja paikannimen, osoitteen tai kiinteistötunnuksen perusteella. Klikkaa hakutulosta ja kartta keskittyy valittuun paikkaan. <br/><br/> Metatietohaku: Hae paikkatietoaineistoja, -aineistosarjoja ja -palveluja. Käytä tekstihakua tai valmiiksi määriteltyjä hakuehtoja. Hakutuloksista pääset lukemaan metatietokuvailun tai avaamaan valitun aineiston kartalla, jos karttataso on saatavilla.",
+            "message": "Haku-valikossa voit hakea paikkoja tai paikkatietoja. <br/><br/>  Paikkahaku: Hae paikkoja paikannimen, osoitteen, kiinteistötunnuksen tai rakennustunnuksen (VTJ-PRT) perusteella. Klikkaa hakutulosta ja kartta keskittyy valittuun paikkaan. <br/><br/> Metatietohaku: Hae paikkatietoaineistoja, -aineistosarjoja ja -palveluja. Käytä tekstihakua tai valmiiksi määriteltyjä hakuehtoja. Hakutuloksista pääset lukemaan metatietokuvailun tai avaamaan valitun aineiston kartalla, jos karttataso on saatavilla.",
             "openLink": "Näytä Haku",
             "closeLink": "Piilota Haku",
             "tileText": "Haku"
