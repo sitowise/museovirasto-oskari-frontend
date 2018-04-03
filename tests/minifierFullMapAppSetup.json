@@ -90,6 +90,9 @@
             },
             "mapanalysis": {
                "bundlePath": "../packages/framework/bundle/"
+            },
+            "download-basket": {
+               "bundlePath": "../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance": []
