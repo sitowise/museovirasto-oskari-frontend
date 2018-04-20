@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
          * @method start
          * Implements BundleInstance protocol start method
          */
-        start: function () {            
+        start: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -107,13 +107,13 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 'RegistryEditor.ShowRegistryEditorRequest',
                 me.showRegistryEditorRequestHandler
             );
-            
-            var drawPlugin = Oskari.clazz.create('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin', {id: me.drawPluginId, multipart: true, requests: false}),
+
+            var drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin', {id: me.drawPluginId, multipart: true, requests: false}),
                 mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
             this.plugins.drawPlugin = drawPlugin;
             mapModule.registerPlugin(drawPlugin);
             mapModule.startPlugin(drawPlugin);
-            
+
         },
 
         /**
@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
             }
             return handler.apply(this, [event]);
         },
-        
+
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                     this.mapClickedListener.apply(this.sideRegistryEditor, [event]);
                 }
             }
-            
+
         },
         enableGfi: function (blnEnable) {
             var gfiReqBuilder = this.sandbox.getRequestBuilder(
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 if (me.sideRegistryEditor && me.sandbox._mapMode === 'mapRegistryEditorMode') {
                     me.sideRegistryEditor.destroy();
                 }
-                
+
                 map.addClass('mapRegistryEditorMode');
                 me.sandbox._mapMode = 'mapRegistryEditorMode';
 
@@ -299,9 +299,9 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.RegistryEditorBundleI
                 //postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
-                
+
             }
-            
+
             me.sandbox.postRequestByName('MapFull.MapSizeUpdateRequest', []);
         },
 
