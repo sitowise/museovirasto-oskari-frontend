@@ -206,7 +206,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
          */
         zoomToExtent: function (bounds, suppressStart, suppressEnd) {
             // OpenLayers.Bounds or Array (left, bottom, right, top)
-            this.getMap().zoomToExtent(new OpenLayers.Bounds(bounds.left, bounds.bottom, bounds.right, bounds.top));
+            if(bounds instanceof Array) {
+                this.getMap().zoomToExtent(new OpenLayers.Bounds(bounds));
+            } else {
+                this.getMap().zoomToExtent(new OpenLayers.Bounds(bounds.left, bounds.bottom, bounds.right, bounds.top));
+            }
             this.updateDomain();
             // send note about map change
             if (suppressStart !== true) {
