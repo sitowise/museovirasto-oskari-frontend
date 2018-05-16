@@ -550,7 +550,7 @@ Oskari.clazz.define(
                     var basketObject = {};
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(),'id');
+                    basketObject.layerUrl = layer_value.getId();
                     basketObject.cropLayerName = feature_value.attributes.layerName;
                     basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
                     basketObject.cropLayerUrl = feature_value.attributes.layerUrl;
