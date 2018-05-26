@@ -17,6 +17,8 @@ Oskari.registerLocalization({
                 "move-to-basket" : "Siirrä latauskoriin",
                 "temp-basket-empty" : "Poista valinta",
                 "rect-cropping" : "Suorakaide",
+                "free-cropping" : "Monikulmio",
+                "all-cropping" : "Koko aineisto",
                 "error-in-getfeatureforcropping" : "Alueen valitseminen epäonnistui",
                 "want-to-move-basket" : "Haluatko lisätä valitut alueet latauskoriin?",
                 "notify-move-to-basket" : "Olet vaihtamassa rajausaineistoa, haluatko siirtää valitut alueet latauskoriin?",

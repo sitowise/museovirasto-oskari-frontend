@@ -17,6 +17,7 @@ Oskari.clazz.define(
         this._map = null;
         this.croppingVectorLayer = null;
         this.reqularControl = null;
+        this.freeControl = null;
         this.basket = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket-cropping"></div>'),
@@ -56,8 +57,12 @@ Oskari.clazz.define(
 
                 if(value.rect){
                     jQuery(croppingBtn.getElement()).data("croppingMode","rectangle");
-                }else{
-                    jQuery(croppingBtn.getElement()).data("croppingMode","polygon");
+                }else if (value.free){
+                    jQuery(croppingBtn.getElement()).data("croppingMode","free");
+                }else if (value.all){
+                    jQuery(croppingBtn.getElement()).data("croppingMode","all");
+                } else {
+                  jQuery(croppingBtn.getElement()).data("croppingMode","polygon");
                 }
 
                 jQuery(croppingBtn.getElement()).click(function (event) {
@@ -81,23 +86,41 @@ Oskari.clazz.define(
                             jQuery('.oskari__download-basket-temp-basket').hide();
                             jQuery('.oskari__download-basket-help').hide();
                             me.reqularControl.deactivate();
+                            me.freeControl.deactivate();
                         }else{
                             //User has some cropping going on
                             if(jQuery('.oskari__download-basket-temp-basket').is(':visible')){
-                                me.confirmCroppingAreaChange(value, map, el, value.rect);
-                            }else{
+                                me.confirmCroppingAreaChange(value, map, el, value.rect, value.free);
+                            }else if (value.all) {
+                                var allFeature = new OpenLayers.Feature.Vector();
+                                allFeature.attributes = {
+                                    croppingMode: 'all'
+                                };
+                                me.croppingVectorLayer.features.push(allFeature);
+                                me.addToBasket(map);
+                                jQuery('.oskari__download-basket-temp-basket').hide();
+                                me.removeAllFeaturesFromCroppingLayer(map);
+                                jQuery('li.download-basket-tab>a').trigger('click');
+                            } else {
                                 //Fresh user selection
                                 me.activateNormalGFI(false);
                                 me.activateNormalWFSReq(false);
                                 jQuery('.cropping-btn').removeClass('selected');
                                 el.addClass('selected');
                                 jQuery('.oskari__download-basket-help').show();
-                                if(value.rect){
+                                if (value.rect){
                                     me.reqularControl.activate();
+                                    me.freeControl.deactivate();
+                                    me.removeAllFeaturesFromCroppingLayer(map);
+                                    me.disableAllCroppingLayers(map);
+                                }else if (value.free){
+                                    me.reqularControl.deactivate();
+                                    me.freeControl.activate();
                                     me.removeAllFeaturesFromCroppingLayer(map);
                                     me.disableAllCroppingLayers(map);
                                 }else{
                                     me.reqularControl.deactivate();
+                                    me.freeControl.deactivate();
                                     me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),map);
                                     me.removeAllFeaturesFromCroppingLayer(map);
                                 }
@@ -219,6 +242,14 @@ Oskari.clazz.define(
 
             _map.addControl(me.reqularControl);
 
+            me.freeControl = new OpenLayers.Control.DrawFeature(me.croppingVectorLayer,
+                OpenLayers.Handler.Polygon, {
+                    handlerOptions: {
+                    }
+                });
+
+            _map.addControl(me.freeControl);
+
         },
 
         /**
@@ -259,6 +290,52 @@ Oskari.clazz.define(
             };
 
             croppingLayers.push(regular);
+
+            //Free cropping mode
+            var free = {
+                name : me._getLocalization('free-cropping'),
+                free : true,
+                getName: function(){
+                    return this.name;
+                },
+                getLayerName: function(){
+                    return "";
+                },
+                getLayerUrl: function(){
+                    return "";
+                },
+                getAttributes: function(){
+                    return "";
+                },
+                getId: function(){
+                    return "";
+                }
+            };
+
+            croppingLayers.push(free);
+
+            //All cropping mode
+            var all = {
+                name : me._getLocalization('all-cropping'),
+                all : true,
+                getName: function(){
+                    return this.name;
+                },
+                getLayerName: function(){
+                    return "";
+                },
+                getLayerUrl: function(){
+                    return "";
+                },
+                getAttributes: function(){
+                    return "";
+                },
+                getId: function(){
+                    return "";
+                }
+            };
+
+            croppingLayers.push(all);
 
             return croppingLayers;
         },
@@ -440,9 +517,10 @@ Oskari.clazz.define(
          * @param  {[type]} _map  [Openlayers map]
          * @param  {[type]} el    [Button element]
          * @param  {[type]} rect  [Is rectangle selection]
+         * @param  {[type]} free  [Is free selection]
          * @return {[none]}
          */
-        confirmCroppingAreaChange: function(value, _map, el, rect){
+        confirmCroppingAreaChange: function(value, _map, el, rect, free){
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
@@ -459,8 +537,13 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-help').show();
                 if(rect){
                     me.reqularControl.activate();
+                    me.freeControl.deactivate();
+                }else if(free){
+                    me.reqularControl.deactivate();
+                    me.freeControl.activate();
                 }else{
                     me.reqularControl.deactivate();
+                    me.freeControl.deactivate();
                     me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
                     me.activateNormalGFI(false);
                     me.activateNormalWFSReq(false);
@@ -477,8 +560,16 @@ Oskari.clazz.define(
                 jQuery('.oskari__download-basket-help').show();
                 if(rect){
                     me.reqularControl.activate();
-                }else{
+                    me.freeControl.deactivate();
+                } if (free) {
                     me.reqularControl.deactivate();
+                    me.freeControl.activate();
+                } if (all) {
+                    me.reqularControl.deactivate();
+                    me.freeControl.deactivate();
+                } else {
+                    me.reqularControl.deactivate();
+                    me.freeControl.deactivate();
                     me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),_map);
                     me.activateNormalGFI(false);
                     me.activateNormalWFSReq(false);
@@ -543,7 +634,6 @@ Oskari.clazz.define(
             var selectedLayers = me._buildLayerList();
             var croppedAreaFeatures = me.croppingVectorLayer.features;
 
-
             //Finds layers that are active and loop cropping areas to them, collect are important values
             jQuery.each( selectedLayers, function( layer_key, layer_value ) {
                 jQuery.each( croppedAreaFeatures, function( feature_key, feature_value ) {
@@ -558,13 +648,27 @@ Oskari.clazz.define(
                     basketObject.cropGeometryColumn = feature_value.attributes.geometryColumn;
                     basketObject.cropGeometryName = feature_value.attributes.geometryName;
                     basketObject.cropUniqueKeyValue = feature_value.attributes[feature_value.attributes.uniqueKey];
-                    basketObject.bbox = {
-                        bottom: feature_value.geometry.bounds.bottom,
-                        left: feature_value.geometry.bounds.left,
-                        right: feature_value.geometry.bounds.right,
-                        top: feature_value.geometry.bounds.top
-                    };
+                    if (feature_value.geometry != null) {
+                        basketObject.bbox = {
+                            bottom: feature_value.geometry.bounds.bottom,
+                            left: feature_value.geometry.bounds.left,
+                            right: feature_value.geometry.bounds.right,
+                            top: feature_value.geometry.bounds.top
+                        };
+                    }
                     basketObject.cropMode = feature_value.attributes.croppingMode;
+                    if ((feature_value.attributes.croppingMode === 'free') && (feature_value.geometry != null) && (feature_value.geometry.components != null) && (feature_value.geometry.components.length > 0) && (feature_value.geometry.components[0])) {
+                        var vertices = feature_value.geometry.components[0].getVertices();
+                        var numVertices = vertices.length;
+                        if (numVertices > 0) {
+                            var coordinates = '';
+                            for (var i=0; i < numVertices; i++) {
+                                coordinates += vertices[i].y + ',' + vertices[i].x + ' ';
+                            }
+                            coordinates += vertices[0].y + ',' + vertices[0].x;
+                            basketObject.coordinates = coordinates;
+                        }
+                    }
 
                     me.basket.addToBasket(basketObject);
                 });

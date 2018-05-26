@@ -151,7 +151,8 @@ Oskari.clazz.define(
                     croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
                     id: parent.attr('data-layer-id'),
-                    identifiers: parent.attr('data-identifiers')
+                    identifiers: parent.attr('data-identifiers'),
+                    coordinates: parent.attr('data-coordinates')
                 };
 
                 downloadDetails.push(details);
@@ -340,13 +341,16 @@ Oskari.clazz.define(
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
                     basketEl.attr('data-layer-id',basketItem.layerUrl);
-                    basketEl.attr('data-bbox-bottom',basketItem.bbox.bottom);
-                    basketEl.attr('data-bbox-left',basketItem.bbox.left);
-                    basketEl.attr('data-bbox-right',basketItem.bbox.right);
-                    basketEl.attr('data-bbox-top',basketItem.bbox.top);
+                    if (basketItem.bbox != null) {
+                        basketEl.attr('data-bbox-bottom',basketItem.bbox.bottom);
+                        basketEl.attr('data-bbox-left',basketItem.bbox.left);
+                        basketEl.attr('data-bbox-right',basketItem.bbox.right);
+                        basketEl.attr('data-bbox-top',basketItem.bbox.top);
+                    }
                     basketEl.attr('data-cropping-layer',basketItem.cropLayerName);
                     basketEl.attr('data-cropping-url',basketItem.cropLayerUrl);
                     basketEl.attr('data-cropping-mode',basketItem.cropMode);
+                    basketEl.attr('data-coordinates',basketItem.coordinates);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {

@@ -18,6 +18,8 @@ Oskari.registerLocalization (
                     "move-to-basket": "Move to download basket",
                     "temp-basket-empty": "Remove selection",
                     "rect-cropping": "Rectangle",
+                    "free-cropping": "Polygon",
+                    "all-cropping" : "All data",
                     "error-in-getfeatureforcropping": "Area selection failed",
                     "want-to-move-basket": "Do you wish to add selected areas to the download basket?",
                     "notify-move-to-basket": "You are about to switch between cropping options, do you wish to add selected areas to the download basket?",

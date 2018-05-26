@@ -18,6 +18,8 @@ Oskari.registerLocalization (
                     "move-to-basket": "Flytta till nedladdningskorgen",
                     "temp-basket-empty": "Avmarkera val",
                     "rect-cropping": "Rektangel",
+                    "free-cropping": "Polygon",
+                    "all-cropping" : "Alla data",
                     "error-in-getfeatureforcropping": "Val av område misslyckades",
                     "want-to-move-basket": "Vill du lägga till valda områden i nedladdningskorgen?",
                     "notify-move-to-basket": "Du är på väg att byta avgränsad data, vill du flytta vald data till nedladdningskorgen?",
