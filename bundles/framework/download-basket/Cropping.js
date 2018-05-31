@@ -451,9 +451,8 @@ Oskari.clazz.define(
          * @return {[none]}
          */
         removeAllFeaturesFromCroppingLayer: function(map){
-            var me = this,
-                layer = map.getLayersByName("cropping-areas")[0];
-            if(layer !== null){
+            var layer = map.getLayersByName("cropping-areas")[0];
+            if(layer != null){
                 layer.destroyFeatures();
             }
         },

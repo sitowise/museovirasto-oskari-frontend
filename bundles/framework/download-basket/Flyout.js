@@ -95,6 +95,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
                 jQuery('.oskari__download-basket-temp-basket').hide();
                 var map = this.instance.mapModule.getMap();
                 this.instance.cropping.removeAllFeaturesFromCroppingLayer(map);
+                this.instance.cropping.reqularControl.deactivate();
+                this.instance.cropping.freeControl.deactivate();
             }
         },
         /**
