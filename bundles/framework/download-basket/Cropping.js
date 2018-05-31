@@ -76,7 +76,7 @@ Oskari.clazz.define(
                             dialog.show(me._getLocalization('no-layers-selected-title'), me._getLocalization('no-layers-selected-message'), [btn]);
                             return false;
                         }
-                        //Cropping btn is allready selected
+                        //Cropping btn is already selected
                         if(el.hasClass('selected')){
                             me.activateNormalGFI(true);
                             me.activateNormalWFSReq(true);
@@ -158,9 +158,12 @@ Oskari.clazz.define(
             clearTempBasket.setTitle(me._getLocalization('temp-basket-empty'));
             jQuery(clearTempBasket.getElement()).click(
                 function (event) {
+                    jQuery('.cropping-btn').removeClass('selected');
                     jQuery('.oskari__download-basket-temp-basket').hide();
                     me.removeAllFeaturesFromCroppingLayer(map);
-                    event.preventDefault();
+                    me.reqularControl.deactivate();
+                    me.freeControl.deactivate();
+                  event.preventDefault();
                 }
             );
             clearTempBasket.insertTo(me._templates.tempbasket);
@@ -564,9 +567,6 @@ Oskari.clazz.define(
                 } if (free) {
                     me.reqularControl.deactivate();
                     me.freeControl.activate();
-                } if (all) {
-                    me.reqularControl.deactivate();
-                    me.freeControl.deactivate();
                 } else {
                     me.reqularControl.deactivate();
                     me.freeControl.deactivate();
