@@ -121,7 +121,25 @@ Oskari.clazz.define(
                                 }else{
                                     me.reqularControl.deactivate();
                                     me.freeControl.deactivate();
-                                    me.createCroppingWMSLayer(value.getLayerName(),value.getLayerUrl(),map);
+                                    var layerName;
+                                    var layerUrl;
+                                    var cropWMSLayer = value.getAttributes().cropWMSLayer;
+                                    if ((cropWMSLayer == null) || (cropWMSLayer.length === 0)) {
+                                        layerName = value.getLayerName();
+                                        layerUrl = value.getLayerUrl();
+                                    } else {
+                                        layerName = cropWMSLayer;
+                                        var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                                        var layers = mapLayerService.getAllLayers();
+                                        var numLayers = layers.length;
+                                        for (var i = 0; i < numLayers; i++) {
+                                            if (layers[i].getLayerName() === layerName) {
+                                                layerUrl = layers[i].getLayerUrl();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    me.createCroppingWMSLayer(layerName, layerUrl, map);
                                     me.removeAllFeaturesFromCroppingLayer(map);
                                 }
                             }
