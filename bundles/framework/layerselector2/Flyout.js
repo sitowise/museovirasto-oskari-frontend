@@ -342,6 +342,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             for (n = 0; n < layers.length; n += 1) {
                 layer = layers[n];
+                if (layer.getAttributes().hidden) {
+                    continue;
+                }
                 if (layer.getMetaType && layer.getMetaType() === 'published') {
                     // skip published layers
                     continue;
@@ -392,10 +395,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
             if($.isNumeric(nameA) && $.isNumeric(nameB)) {
                 return nameA - nameB;
-            }            
+            }
             if($.isNumeric(nameA)) {
                 return -1;
-            }            
+            }
             if($.isNumeric(nameB)) {
                 return 1;
             }
