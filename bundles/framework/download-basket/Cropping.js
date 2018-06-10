@@ -45,10 +45,33 @@ Oskari.clazz.define(
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
                 croppingBtn.setTitle(value.getName());
-                jQuery(croppingBtn.getElement()).data("layerId",value.getId());
-                jQuery(croppingBtn.getElement()).data("layerName",value.getLayerName());
-                jQuery(croppingBtn.getElement()).data("layerUrl",value.getLayerUrl());
+                var layerId;
+                var layerName;
+                var layerUrl;
                 var layerAttributes = value.getAttributes();
+                var cropWMSLayer = value.getAttributes().cropWMSLayer;
+                if ((cropWMSLayer != null) && (cropWMSLayer.length > 0)) {
+                    var layerName = value.getLayerName();
+                    var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                    var layers = mapLayerService.getAllLayers();
+                    var numLayers = layers.length;
+                    for (var i = 0; i < numLayers; i++) {
+                        layerName = cropWMSLayer;
+                        if (layers[i].getLayerName() === layerName) {
+                            layerId = layers[i].getId();
+                            layerUrl = layers[i].getLayerUrl();
+                            break;
+                        }
+                    }
+                } else {
+                    layerId = value.getId();
+                    layerName = value.getLayerName();
+                    layerUrl = value.getLayerUrl();
+                }
+                jQuery(croppingBtn.getElement()).data("layerId",layerId);
+                jQuery(croppingBtn.getElement()).data("layerName",layerName);
+                jQuery(croppingBtn.getElement()).data("layerUrl",layerUrl);
+
                 if(layerAttributes.unique !== null){
                     jQuery(croppingBtn.getElement()).data("uniqueKey",layerAttributes.unique);
                     jQuery(croppingBtn.getElement()).data("geometryColumn",layerAttributes.geometryColumn);
