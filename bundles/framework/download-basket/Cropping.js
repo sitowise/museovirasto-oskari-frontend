@@ -668,12 +668,12 @@ Oskari.clazz.define(
         /**
          * [addToBasket Collects all needed information for basket object]
          * @param {[type]} map [description]
+         * @param {[type]} feaetures [description]
          */
-        addToBasket: function(map){
+        addToBasket: function(map, features){
             var me = this;
             var selectedLayers = me._buildLayerList();
-            var croppedAreaFeatures = me.croppingVectorLayer.features;
-
+            var croppedAreaFeatures = (features == null) ? me.croppingVectorLayer.features : features;
             //Finds layers that are active and loop cropping areas to them, collect are important values
             jQuery.each( selectedLayers, function( layer_key, layer_value ) {
                 jQuery.each( croppedAreaFeatures, function( feature_key, feature_value ) {
@@ -688,7 +688,7 @@ Oskari.clazz.define(
                     basketObject.cropGeometryColumn = feature_value.attributes.geometryColumn;
                     basketObject.cropGeometryName = feature_value.attributes.geometryName;
                     basketObject.cropUniqueKeyValue = feature_value.attributes[feature_value.attributes.uniqueKey];
-                    if (feature_value.geometry != null) {
+                    if ((feature_value.geometry != null) && (feature_value.geometry.bounds != null)) {
                         basketObject.bbox = {
                             bottom: feature_value.geometry.bounds.bottom,
                             left: feature_value.geometry.bounds.left,

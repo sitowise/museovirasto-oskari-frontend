@@ -23,6 +23,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.Bundle", function
 
         "scripts": [{
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/download-basket/request/AddToBasketRequest.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/download-basket/request/AddToBasketRequestHandler.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/download-basket/instance.js"
         }, {
             "type": "text/javascript",
