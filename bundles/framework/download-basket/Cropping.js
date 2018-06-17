@@ -45,33 +45,10 @@ Oskari.clazz.define(
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 croppingBtn.addClass('primary cropping-btn');
                 croppingBtn.setTitle(value.getName());
-                var layerId;
-                var layerName;
-                var layerUrl;
+                jQuery(croppingBtn.getElement()).data("layerId",value.getId());
+                jQuery(croppingBtn.getElement()).data("layerName",value.getLayerName());
+                jQuery(croppingBtn.getElement()).data("layerUrl",value.getLayerUrl());
                 var layerAttributes = value.getAttributes();
-                var cropWMSLayer = value.getAttributes().cropWMSLayer;
-                if ((cropWMSLayer != null) && (cropWMSLayer.length > 0)) {
-                    var layerName = value.getLayerName();
-                    var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                    var layers = mapLayerService.getAllLayers();
-                    var numLayers = layers.length;
-                    for (var i = 0; i < numLayers; i++) {
-                        layerName = cropWMSLayer;
-                        if (layers[i].getLayerName() === layerName) {
-                            layerId = layers[i].getId();
-                            layerUrl = layers[i].getLayerUrl();
-                            break;
-                        }
-                    }
-                } else {
-                    layerId = value.getId();
-                    layerName = value.getLayerName();
-                    layerUrl = value.getLayerUrl();
-                }
-                jQuery(croppingBtn.getElement()).data("layerId",layerId);
-                jQuery(croppingBtn.getElement()).data("layerName",layerName);
-                jQuery(croppingBtn.getElement()).data("layerUrl",layerUrl);
-
                 if(layerAttributes.unique !== null){
                     jQuery(croppingBtn.getElement()).data("uniqueKey",layerAttributes.unique);
                     jQuery(croppingBtn.getElement()).data("geometryColumn",layerAttributes.geometryColumn);
@@ -415,13 +392,13 @@ Oskari.clazz.define(
                 layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
                 layerName = jQuery('.cropping-btn.selected').data('layerName'),
                 layerId = jQuery('.cropping-btn.selected').data('layerId'),
-                layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'),'id'),
+                layerUrl = jQuery('.cropping-btn.selected').data('layerUrl'),
                 layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
                 layerNameLang = jQuery('.cropping-btn.selected').val();
 
             jQuery.ajax({
-                type: "POST",
-                dataType: 'json',
+                type: 'POST',
+                dataType: 'text',
                 url: ajaxUrl + 'action_route=GetFeatureForCropping',
                 data : {
                     layers : layerName,
@@ -437,32 +414,30 @@ Oskari.clazz.define(
                 success: function (data) {
                     var uniqueColumn = null;
                     var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
-                    if(layer.getAttributes().unique) {
+                    if (layer.getAttributes().unique) {
                         uniqueColumn = layer.getAttributes().unique;
                     }
-                    var geojson_format = new OpenLayers.Format.GeoJSON();
-                    var features = geojson_format.read(data.features[0]);
-                    var uniqueValue = (uniqueColumn) ? data.features[0].properties[uniqueColumn] : data.features[0].id;
+                    var gml_format = new OpenLayers.Format.GML.v3({
+                      'xy': false
+                    });
+                    var features = gml_format.read(data);
+                    if (features.length === 0) {
+                        return;
+                    }
+                    var uniqueValue = (uniqueColumn) ? features[0].attributes[uniqueColumn] : features[0].id;
                     if(!uniqueValue) {
-                        uniqueValue = data.features[0].id;
+                        uniqueValue = features[0].id;
                     }
-                    var founded = me.croppingVectorLayer.getFeaturesByAttribute("cropid",uniqueValue);
-
-                    if(founded !== null && founded.length>0){
-                        me.croppingVectorLayer.removeFeatures(founded);
-                    }else{
-                        features[0].attributes.cropid = uniqueValue;
-                        features[0].attributes.layerName= layerName;
-                        features[0].attributes.layerUrl = layerUrl;
-                        features[0].attributes.uniqueKey = layerUniqueKey;
-                        features[0].attributes.geometryColumn = layerGeometryColumn;
-                        features[0].attributes.geometryName = layerGeometry;
-                        features[0].attributes.croppingMode = layerCroppingMode;
-                        features[0].attributes.layerNameLang = layerNameLang;
-
-                        me.croppingVectorLayer.addFeatures(features);
-                        map.setLayerIndex(me.croppingVectorLayer, 1000000);
-                    }
+                    features[0].attributes.cropid = uniqueValue;
+                    features[0].attributes.layerName= layerName;
+                    features[0].attributes.layerUrl = layerUrl;
+                    features[0].attributes.uniqueKey = layerUniqueKey;
+                    features[0].attributes.geometryColumn = layerGeometryColumn;
+                    features[0].attributes.geometryName = layerGeometry;
+                    features[0].attributes.croppingMode = layerCroppingMode;
+                    features[0].attributes.layerNameLang = layerNameLang;
+                    me.croppingVectorLayer.addFeatures(features);
+                    map.setLayerIndex(me.croppingVectorLayer, 1000000);
                     me.addToTempBasket(me.croppingVectorLayer.features.length);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -697,7 +672,7 @@ Oskari.clazz.define(
                         };
                     }
                     basketObject.cropMode = feature_value.attributes.croppingMode;
-                    if ((feature_value.attributes.croppingMode === 'free') && (feature_value.geometry != null) && (feature_value.geometry.components != null) && (feature_value.geometry.components.length > 0) && (feature_value.geometry.components[0])) {
+                    if (((feature_value.attributes.croppingMode === 'free') || (feature_value.attributes.croppingMode === 'polygon')) && (feature_value.geometry != null) && (feature_value.geometry.components != null) && (feature_value.geometry.components.length > 0) && (feature_value.geometry.components[0])) {
                         var vertices = feature_value.geometry.components[0].getVertices();
                         var numVertices = vertices.length;
                         if (numVertices > 0) {
