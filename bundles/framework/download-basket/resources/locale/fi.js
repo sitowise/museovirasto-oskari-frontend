@@ -46,7 +46,10 @@ Oskari.registerLocalization({
                 "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria.",
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi"
+                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
+                "basket-rectangle-cropping" : "Suorakaide",
+                "basket-free-cropping" : "Monikulmio",
+                "basket-all-cropping" : "Koko aineisto"
             }
         }
     }

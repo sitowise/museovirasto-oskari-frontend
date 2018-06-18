@@ -363,10 +363,14 @@ Oskari.clazz.define(
                     identifiers.push(identifier);
 
                     basketEl.attr("data-identifiers", JSON.stringify(identifiers));
+                    var contentCropping = basketItem.cropLayerNameLang;
+                    if ((contentCropping == null) || (contentCropping.length === 0)) {
+                        contentCropping = me._localization['basket-'+basketItem.cropMode+'-cropping'];
+                    }
 
                     basketEl.find('.download-basket__component-layer-name').text(basketItem.layerNameLang);
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
-                    basketEl.find('.basket__content-cropping>span').text(basketItem.cropLayerNameLang);
+                    basketEl.find('.basket__content-cropping>span').text(contentCropping);
 
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
