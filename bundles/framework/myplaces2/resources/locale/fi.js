@@ -27,6 +27,7 @@ Oskari.registerLocalization(
             "deleteCategory": "Poista karttataso",
             "edit": "Muokkaa",
             "delete": "Poista",
+            "download": "Siirrä koriin",
             "grid": {
                 "name": "Kohteen nimi",
                 "desc": "Kuvaus",
@@ -34,7 +35,8 @@ Oskari.registerLocalization(
                 "updateDate": "Muokkausaika",
                 "measurement": "Koko",
                 "edit": "Muokkaa",
-                "delete": "Poista"
+                "delete": "Poista",
+                "download": "Latauskori"
             },
             "notification": {
                 "delete": {

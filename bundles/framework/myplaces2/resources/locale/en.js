@@ -27,6 +27,7 @@ Oskari.registerLocalization(
             "deleteCategory": "Delete map layer",
             "edit": "Edit",
             "delete": "Delete",
+            "download": "Move to basket",
             "grid": {
                 "name": "Place name",
                 "desc": "Place description",
@@ -34,7 +35,8 @@ Oskari.registerLocalization(
                 "updateDate": "Updated",
                 "measurement": "Size",
                 "edit": "Edit",
-                "delete": "Delete"
+                "delete": "Delete",
+                "download": "Download basket"
             },
             "notification": {
                 "delete": {

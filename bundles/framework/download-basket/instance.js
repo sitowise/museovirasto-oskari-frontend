@@ -92,6 +92,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                 }
             }
 
+            // create and register request handlers
+            var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.request.AddToBasketRequestHandler', sandbox, this);
+            sandbox.addRequestHandler('DownloadBasket.AddToBasketRequest', reqHandler);
+
             me.cropping = Oskari.clazz.create('Oskari.mapframework.bundle.downloadBasket.Cropping',
                 this._localization.flyout['download-basket-cropping-tab'], me);
             me.cropping.setId('download-basket-cropping-tab');
@@ -172,8 +176,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
             },
             'MapClickedEvent' : function(evt) {
                 var me = this,
-                x = evt.getMouseX(),
-                y = evt.getMouseY();
+                lonlat = evt.getLonLat(),
+                x = lonlat.lon,
+                y = lonlat.lat;
                 if(me.cropping.isCroppingToolActive()){
                     me.cropping.croppingLayersHighlight(x, y);
                 }

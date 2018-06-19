@@ -247,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             panel.setId(me.instance.idPrefix + '-category-' + id);
             panel.setTitle(category.getName());
             panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
+            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete', 'download'];
             panel.grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
@@ -287,6 +287,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                 return link;
             };
             panel.grid.setColumnValueRenderer('delete', deleteRenderer);
+            // set up the link from download basket field
+            var downloadRenderer = function (name, data) {
+                var link = me.linkTemplate.clone();
+                link.append(name);
+                link.bind('click', function () {
+                    var sandbox = me.instance.sandbox,
+                        requestBuilder = sandbox.getRequestBuilder('DownloadBasket.AddToBasketRequest'),
+                        request;
+                    if (requestBuilder) {
+                        request = requestBuilder(data.geometry);
+                        sandbox.request(me.instance, request);
+                    }
+                    return false;
+                });
+                return link;
+            };
+            panel.grid.setColumnValueRenderer('download', downloadRenderer);
             // setup localization
             var i,
                 key;
@@ -324,6 +341,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                         'categoryId': places[i].getCategoryID(),
                         'edit': this.loc('tab.edit'),
                         'delete': this.loc('tab.delete'),
+                        'download': this.loc('tab.download'),
                         'createDate': this._formatDate(service, places[i].getCreateDate()),
                         'updateDate': this._formatDate(service, places[i].getUpdateDate()),
                         'measurement': measurement

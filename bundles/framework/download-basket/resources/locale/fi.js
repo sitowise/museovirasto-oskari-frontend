@@ -17,6 +17,8 @@ Oskari.registerLocalization({
                 "move-to-basket" : "Siirrä latauskoriin",
                 "temp-basket-empty" : "Poista valinta",
                 "rect-cropping" : "Suorakaide",
+                "free-cropping" : "Monikulmio",
+                "all-cropping" : "Koko aineisto",
                 "error-in-getfeatureforcropping" : "Alueen valitseminen epäonnistui",
                 "want-to-move-basket" : "Haluatko lisätä valitut alueet latauskoriin?",
                 "notify-move-to-basket" : "Olet vaihtamassa rajausaineistoa, haluatko siirtää valitut alueet latauskoriin?",
@@ -44,7 +46,10 @@ Oskari.registerLocalization({
                 "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria.",
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi"
+                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
+                "basket-rectangle-cropping" : "Suorakaide",
+                "basket-free-cropping" : "Monikulmio",
+                "basket-all-cropping" : "Koko aineisto"
             }
         }
     }
