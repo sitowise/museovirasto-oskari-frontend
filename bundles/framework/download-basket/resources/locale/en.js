@@ -47,7 +47,10 @@ Oskari.registerLocalization (
                     "basket-email-will-be": "A download link will be sent to the e-mail address you provided. If the selected datasets are very large in file size, the processing may take some time.",
                     "basket-cropping-layer-title": "Cropping option: ",
                     "basket-license-title": "License: ",
-                    "basket-license-name": "Creative Commons Name 4.0 (BY, ByAttribution) –license"
+                    "basket-license-name": "Creative Commons Name 4.0 (BY, ByAttribution) –license",
+                    "basket-rectangle-cropping" : "Rectangle",
+                    "basket-free-cropping" : "Polygon",
+                    "basket-all-cropping" : "All data"
                 }
             }
         }

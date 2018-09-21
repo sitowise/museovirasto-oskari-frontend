@@ -176,8 +176,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
             },
             'MapClickedEvent' : function(evt) {
                 var me = this,
-                x = evt.getMouseX(),
-                y = evt.getMouseY();
+                lonlat = evt.getLonLat(),
+                x = lonlat.lon,
+                y = lonlat.lat;
                 if(me.cropping.isCroppingToolActive()){
                     me.cropping.croppingLayersHighlight(x, y);
                 }
