@@ -20,7 +20,7 @@ Oskari.registerLocalization(
                     "publish": "Publicerad",
                     "edit": "Redigera",
                     "delete": "Ta bort",
-                    "default": "DEFAULT"
+                    "default": "TEST"
                 },
                 "popup": {
                     "edit": "Redigera kartvyn",
