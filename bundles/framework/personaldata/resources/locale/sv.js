@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Beskrivning",
                     "publish": "Publicerad",
                     "edit": "Redigera",
-                    "delete": "Ta bort"
+                    "delete": "Ta bort",
+                    "default": "DEFAULT"
                 },
                 "popup": {
                     "edit": "Redigera kartvyn",

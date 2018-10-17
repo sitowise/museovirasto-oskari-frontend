@@ -74,7 +74,8 @@ Oskari.registerLocalization(
                 "description": "Beskrivning",
                 "source": "Datakälla",
                 "remove": "Ta bort",
-                "removeButton": "Ta bort"
+                "removeButton": "Ta bort",
+                "zoomToData": "Kohdista"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
