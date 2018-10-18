@@ -20,7 +20,7 @@ Oskari.registerLocalization(
                     "publish": "Publicerad",
                     "edit": "Redigera",
                     "delete": "Ta bort",
-                    "default": "TEST"
+                    //"default": "TEST" translation needed
                 },
                 "popup": {
                     "edit": "Redigera kartvyn",
@@ -33,6 +33,7 @@ Oskari.registerLocalization(
                     "error_noname": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
                     "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
+                    //"default": "Oletusnäkymä" translation needed
                 },
                 "save": {
                     "success": "Kartvyn har sparats.",

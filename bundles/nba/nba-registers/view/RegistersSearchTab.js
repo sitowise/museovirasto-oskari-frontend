@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
             //set the title and number of given results
             //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
             //resultGrid.find('div.resultsTitle').append("Search results: " + results.length + " search results for the search " + searchInput.val());
-            resultGrid.find('div.resultsTitle').append("Hakutulokset: " + results.length + " hakutulosta haulle '" + searchInput.val() + "'");
+            resultGrid.find('div.resultsTitle').append(me.loc.searchResults + ": " + results.length + " " + me.loc.forSearch + "'" + searchInput.val() + "'");
 
             gridModel.setIdField('id');
 
