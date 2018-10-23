@@ -41,6 +41,7 @@ Oskari.registerLocalization(
                     "en": "Engelska"
                 },
                 "tooltip": "Välj språk för kartmaterial och användargränssnitt."
+                //"languageChangedDisclaimer": "Huom! Kielivalinnat eivät näy esikatselukartalla." needs translation
             },
             "size": {
                 "label": "Kart storlek",

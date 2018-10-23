@@ -48,7 +48,7 @@ Oskari.registerLocalization(
                     "save": "Spara",
                     "cancel": "Avbryt",
                     "toolbarsave": "Spara kartvyn",
-                    "saveCurrent": "Save current view"
+                    //"saveCurrent": "Save current view" needs translation
                 },
                 "error": {
                     "title": "Fel!",
