@@ -39,7 +39,31 @@ Oskari.clazz.define(
 
     },{
         startBasket: function(){
-            this.setContent(this.createUi());
+            this.setContent(this.createUi());        
+        },
+
+        /**
+         * @method showWarningIfNeeded
+         * Show popup message if any of the selected layers is not available for download
+         */
+        showWarningIfNeeded: function () {
+            var me = this;
+            var selectedLayers = me._sandbox.findAllSelectedMapLayers();
+
+            for (var i = 0; i < selectedLayers.length; i++) {
+                var layer = selectedLayers[i];
+                var layerType = layer.getLayerType().toUpperCase();
+                if (layerType !== 'WFS')
+                    continue;
+                var attributes = layer.getAttributes();
+                if (!attributes.downloadBasketLevel) {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                        btn = dialog.createCloseButton('OK');
+                    btn.addClass('primary');
+                    dialog.show(me._getLocalization('check-form-error-huom'), me._getLocalization('basket-not-downloadable-layers'), [btn]);
+                    break;
+                }
+            };
         },
 
         /**
