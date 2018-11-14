@@ -243,8 +243,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridModel.addData({
                     'id': result.id,
                     'desc': result.desc != null ? result.desc.trim() : '',
-                    //'x': result.coordinateX,
-                    //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
@@ -252,7 +250,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'registryIdentifier': result.registryIdentifier,
                     'registry': dataSourceName,
                     'municipality': result.municipality,
-                    'editable': result.editable
+                    'editable': result.editable,
+                    'markersCoordinates': result.markersCoordinates
                 });
             });
 
@@ -263,6 +262,20 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 if(typeof data === 'undefined') {
                     return name;
                 }
+
+                var filteredData = {
+                    'id': data.id,
+                    'desc': data.desc,
+                    'nbaUrl': data.nbaUrl,
+                    'mapLayers': data.mapLayers,
+                    'bounds': data.bounds,
+                    'itemClassName': data.itemClassName,
+                    'registryIdentifier': data.registryIdentifier,
+                    'registry': data.registry,
+                    'municipality': data.municipality,
+                    'editable': data.editable
+                }
+
                 var idColumnDiv = jQuery('<div></div>'),
                     registryEditRoles = editorRoles[data.registryIdentifier] != null ? editorRoles[data.registryIdentifier] : editorRoles['general'];
                     
@@ -271,10 +284,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     editLink.bind('click', function () {
 
                         //zoom to object
-                        me._zoomToObject(data, false);
+                        me._zoomToObject(filteredData, false);
 
                         //open registry editor
-                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
+                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [filteredData]);
                         //close Search bundle after moving to registry editor
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
 
@@ -288,7 +301,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 idLink.bind('click', function () {
 
                     //zoom to object and show GFI popup
-                    me._zoomToObject(data, true);
+                    me._zoomToObject(filteredData, true);
 
                     return false;
                 });
@@ -341,19 +354,37 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 //move and zoom the map
                 me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
-                //show new marker
-                var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-                if (reqBuilder) {
-                    var marker = {
-                        x: center.lon,
-                        y: center.lat,
-                        color: "000000",
-                        msg: '',
-                        shape: 4,
-                        size: 5
-                    };
-                    var request = reqBuilder(marker, 'registry-search-result');
-                    me.sandbox.request(me.instance, request);
+                //show new marker(s)
+                if (data.markersCoordinates) {
+                    for (var j = 0; j < data.markersCoordinates.length; j++) {
+                        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                        if (reqBuilder) {
+                            var marker = {
+                                x: data.markersCoordinates[j].coordinateX,
+                                y: data.markersCoordinates[j].coordinateY,
+                                color: "000000",
+                                msg: '',
+                                shape: 4,
+                                size: 5
+                            };
+                            var request = reqBuilder(marker, 'registry-search-result-' + j);
+                            me.sandbox.request(me.instance, request);
+                        }
+                    }
+                } else {
+                    var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                    if (reqBuilder) {
+                        var marker = {
+                            x: center.lon,
+                            y: center.lat,
+                            color: "000000",
+                            msg: '',
+                            shape: 4,
+                            size: 5
+                        };
+                        var request = reqBuilder(marker, 'registry-search-result');
+                        me.sandbox.request(me.instance, request);
+                    }
                 }
 
                 //show GFI popup
@@ -505,7 +536,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                                 attribute: data.mapLayers[j].attribute,
                                 itemId: data.id,
                                 layerId: mapLayerId,
-                                bounds: data.bounds
+                                bounds: data.bounds,
+                                markersCoordinates: data.markersCoordinates
                             };
 
                             features.push(featureJson);
@@ -564,22 +596,40 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
                     me.sandbox.notifyAll(evt);
 
-                    //show marker
-                    var bounds = new OpenLayers.Bounds(features[i].bounds);
-                    var boundsCenter = bounds.getCenterLonLat();
+                    //show new marker(s)
+                    if (features[i].markersCoordinates) {
+                        for (var j = 0; j < features[i].markersCoordinates.length; j++) {
+                            var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                            if (reqBuilder) {
+                                var marker = {
+                                    x: features[i].markersCoordinates[j].coordinateX,
+                                    y: features[i].markersCoordinates[j].coordinateY,
+                                    color: "000000",
+                                    msg: '',
+                                    shape: 4,
+                                    size: 5
+                                };
+                                var request = reqBuilder(marker, 'registry-search-result-' + i + '-' + j);
+                                me.sandbox.request(me.instance, request);
+                            }
+                        }
+                    } else {
+                        var bounds = new OpenLayers.Bounds(features[i].bounds);
+                        var boundsCenter = bounds.getCenterLonLat();
 
-                    var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-                    if (reqBuilder) {
-                        var marker = {
-                            x: boundsCenter.lon,
-                            y: boundsCenter.lat,
-                            color: "000000",
-                            msg: '',
-                            shape: 4,
-                            size: 5
-                        };
-                        var request = reqBuilder(marker, 'registry-search-result-' + i);
-                        me.sandbox.request(me.instance, request);
+                        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                        if (reqBuilder) {
+                            var marker = {
+                                x: boundsCenter.lon,
+                                y: boundsCenter.lat,
+                                color: "000000",
+                                msg: '',
+                                shape: 4,
+                                size: 5
+                            };
+                            var request = reqBuilder(marker, 'registry-search-result' + i);
+                            me.sandbox.request(me.instance, request);
+                        }
                     }
                 }
             }
