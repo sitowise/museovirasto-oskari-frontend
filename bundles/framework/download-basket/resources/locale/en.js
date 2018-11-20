@@ -50,7 +50,8 @@ Oskari.registerLocalization (
                     "basket-license-name": "Creative Commons Name 4.0 (BY, ByAttribution) –license",
                     "basket-rectangle-cropping" : "Rectangle",
                     "basket-free-cropping" : "Polygon",
-                    "basket-all-cropping" : "All data"
+                    "basket-all-cropping" : "All data",
+                    "basket-not-downloadable-layers": "The download basket is only available for certain layers. The map now has active layers that can not be downloaded and these layers are not listed in the download basket. You can check the list of downloadable map layers in the user manual."
                 }
             }
         }

@@ -171,7 +171,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
+                    me.basket.showWarningIfNeeded();
                 }
             },
             'MapClickedEvent' : function(evt) {
