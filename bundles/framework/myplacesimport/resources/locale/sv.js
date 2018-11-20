@@ -77,27 +77,27 @@ Oskari.registerLocalization(
                 "remove": "Ta bort",
                 "removeButton": "Ta bort",
                 //"zoomToData": "Kohdista" translation needed
-                //"edit": "Edit", translation needed
+                "edit": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Avbryt",
-                "delete": "Ta bort"
+                "delete": "Ta bort",
                 //"zoomToData": "Kohdista" translation needed
-                //"edit": "Edit", translation needed
-                //"save": "Save", translation needed
+                "edit": "Redigera", 
+                "save": "Lagra"
             },
             "notification": {
                 "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort"
-                //"editedTitle": "Dataset edit", translation needed
-                //"editedMsg": "The dataset has been changed." translation needed
+                "deletedMsg": "Datasetet har tagits bort",
+                "editedTitle": "Dataset redigera", 
+                "editedMsg": "Datasetet har ändrats."
             },
             "error": {
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare."
-                //"save": "An error occured while saving" translation needed
+                "generic": "Systemfel. Försök på nytt senare.",
+                "save": "Ett fel uppstod samtidigt som man räddade"
             }
         },
         "layer": {

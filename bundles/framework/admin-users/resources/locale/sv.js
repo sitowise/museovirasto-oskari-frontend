@@ -27,7 +27,7 @@ Oskari.registerLocalization(
                 "delete_failed": "Kunde inte tas bort.",
                 "fetch_failed": "Sökning användare misslyckades.",
                 "save_failed": "Lagring misslyckades.",
-                "save_failed_message": "Please check at username is unique and try again.",
+                "save_failed_message": "Please check at username is unique and try again.", //needs translation
                 "noMatch": "Inga sökresultat.",
                 "selectRole": "Välj en roll."
             },
@@ -40,7 +40,7 @@ Oskari.registerLocalization(
             }
         },
         "save": "Lagra",
-        "failed_to_get_roles_title": "Failed to get roles",
-        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?"
+        "failed_to_get_roles_title": "Failed to get roles", //needs translation
+        "failed_to_get_roles_message": "Failed to get roles (ManageRoles), perhaps oskari-control-admin is not available?" //needs translation
     }
 });
