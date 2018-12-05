@@ -48,7 +48,7 @@ Oskari.registerLocalization (
                     "basket-cropping-layer-title": "Avgränsningsdata: ",
                     "basket-license-title": "Bruksanvisning: ",
                     "basket-license-name": "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens",
-                    "basket-not-downloadable-layers": "Latauskori on käytettävissä vain tietyille aineistoille. Kartalla on nyt aktiivisena tasoja, joiden lataus ei ole mahdollista ja nämä tasot eivät listaudu latauskoriin. Voit tarkistaa listauksen ladattavissa olevista karttatasoista käyttöohjeesta."
+                    "basket-not-downloadable-layers": "Nedladdningskorgen är tillgänglig endast för vissa data. Kartvyn innehåller lager som kan inte laddas ner och syns därför inte i nerladdningskorgen. Du kan kontrollera listan över lager som kan laddas ner i bruksanvisningen."
                 }
             }
         }

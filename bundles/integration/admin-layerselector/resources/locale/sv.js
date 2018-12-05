@@ -94,7 +94,7 @@ Oskari.registerLocalization(
             "metaInfoId": "Metadatans filtagg",
             "wmsName": "Unik namn för kartlager",
             "wmsNameDesc": "Unik eller teknisk namn för kartlager",
-            "orderNumber": "Order number", //translation needed
+            "orderNumber": "Ordningsnummer",
             "username": "Användarsnamn",
             "password": "Lösenord",
             "attributes": "Attribut",
@@ -124,9 +124,9 @@ Oskari.registerLocalization(
             "sldStylesFetchError": "SLD stilen kunde inte hämtas",
             "styleDesc": "Förvald stil",
             "editStyle": "Editera SLD stil",
-            "noStyleSelected": "No styles selected", //translation needed
-            "noStyleSelectedDesc": "Add atleast one style to layer before editing", //translation needed
-            "selectOneSld": "Select style for editing", //translation needed
+            "noStyleSelected": "Ingen stil vald", 
+            "noStyleSelectedDesc": "Lägg till minst en stil till lagret före redigering",
+            "selectOneSld": "Välj stil för redigering",
             "sldStyleId": "Id",
             "minScale": "Minimi&shy;skala",
             "minScaleDesc": "Lagrets minimiskala (1:5669294)",
@@ -141,25 +141,25 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
             "legendUrl": "Välja kartförklaring URL",
             "legendUrlDesc": "Välja standardval kartförklaring",
-            "noServiceLegendUrl": "Legend URL is not in wms service legends", //translation needed
+            "noServiceLegendUrl": "Innehållsförteckning URL finns inte i wms service innehållsförteckningen",
             "gfiContent": "Tilläggande text för GFI-dialog",
             "gfiResponseType": "GFI svartyp",
             "gfiResponseTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
-            "manualRefresh": "Manual refresh", //translation needed
-            "resolveDepth": "Resolve xlink:hrefs", //translation needed
+            "manualRefresh": "Uppdatera manuellt",
+            "resolveDepth": "Lösning av xlink: hrefs",
             "matrixSetId": "WMTS MatrixSetId",
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
             "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
-            "realtime": "Reaaliaikataso", //translation needed
-            "refreshRate": "Virkistystaajuus (sekunneissa)", //translation needed
+            "realtime": "Realtidslager",
+            "refreshRate": "Uppdateringsfrekvens (sekunder)", 
             "jobTypeDesc": "Service job typ",
             "jobTypeDefault": "default",
             "jobTypes": {
-                "default": "Default", //translation needed
-                "fe": "Feature engine" //translation needed
+                "default": "Standardvärde",
+                "fe": "Objektsmotor"
             },
             "generic": {
                 "placeholder": "Name in {0}",
