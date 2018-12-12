@@ -263,19 +263,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     return name;
                 }
 
-                var filteredData = {
-                    'id': data.id,
-                    'desc': data.desc,
-                    'nbaUrl': data.nbaUrl,
-                    'mapLayers': data.mapLayers,
-                    'bounds': data.bounds,
-                    'itemClassName': data.itemClassName,
-                    'registryIdentifier': data.registryIdentifier,
-                    'registry': data.registry,
-                    'municipality': data.municipality,
-                    'editable': data.editable
-                }
-
                 var idColumnDiv = jQuery('<div></div>'),
                     registryEditRoles = editorRoles[data.registryIdentifier] != null ? editorRoles[data.registryIdentifier] : editorRoles['general'];
                     
@@ -284,10 +271,10 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     editLink.bind('click', function () {
 
                         //zoom to object
-                        me._zoomToObject(filteredData, false);
+                        me._zoomToObject(data, false);
 
                         //open registry editor
-                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [filteredData]);
+                        me.sandbox.postRequestByName('RegistryEditor.ShowRegistryEditorRequest', [data]);
                         //close Search bundle after moving to registry editor
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close', 'Search']);
 
@@ -301,7 +288,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 idLink.bind('click', function () {
 
                     //zoom to object and show GFI popup
-                    me._zoomToObject(filteredData, true);
+                    me._zoomToObject(data, true);
 
                     return false;
                 });
@@ -389,9 +376,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
 
                 //show GFI popup
                 if (showGfi) {
+
+                    var popupData = me._getGfiPopupData(data);
+
                     var registryData = {
                         "via": "registry",
-                        "features": [data],
+                        "features": [popupData],
                         "lonlat": lonlat
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
@@ -402,9 +392,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 me._showMessage(me.loc.noticeTitle, me.loc.searchResultNoGeometry);
 
                 if (data != null && showGfi) {
+
+                    var popupData = me._getGfiPopupData(data);
+
                     var registryData = {
                         "via": "registry",
-                        "features": [data],
+                        "features": [popupData],
                         "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMapCenter()
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
@@ -632,6 +625,28 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                         }
                     }
                 }
+            }
+        },
+
+        /**
+         * @method _getGfiPopupData
+         * Filters grid model data passed to the popup
+         *
+         * @param {Object} data grid model data
+         *            
+         */
+        _getGfiPopupData: function (data) {
+            return {
+                'id': data.id,
+                'desc': data.desc,
+                'nbaUrl': data.nbaUrl,
+                'mapLayers': data.mapLayers,
+                'bounds': data.bounds,
+                'itemClassName': data.itemClassName,
+                'registryIdentifier': data.registryIdentifier,
+                'registry': data.registry,
+                'municipality': data.municipality,
+                'editable': data.editable
             }
         }
     });
