@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.ProjectView',
                 areaRow.find('.registryItemTools').append(me.editor.getEditTools({ 'area': true, 'id': data.areas[i].id, 'type': 'sub', feature: data.areas[i], 'deleteOption': true }));
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.areas[i].id);
+                panel.setTitle(data.areas[i].id + ' / ' + data.areas[i].description);
                 panel.setContent(areaRow);
                 panel.setVisible(true);
                 panel.close();
