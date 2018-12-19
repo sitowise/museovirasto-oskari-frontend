@@ -34,12 +34,12 @@ Oskari.registerLocalization(
                 "tags": "ohje_kartpublicering"
             },
             {
-                "title": "Temakartor",
-                "tags": "ohje_verktyg"
-            },
-            {
                 "title": "Mina Uppgifter",
                 "tags": "ohje_uppgifter"
+            },
+            {
+                "title": "Objektsuppgifter",
+                "tags": "ohje_objektsuppgifter"
             }
         ],
         "help": {
