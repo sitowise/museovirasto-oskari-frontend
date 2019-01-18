@@ -22,6 +22,10 @@ Oskari.registerLocalization(
                 "tags": "ohje_kartlager"
             },
             {
+                "title": "Objektsuppgifter",
+                "tags": "ohje_objektsuppgifter"
+            },
+            {
                 "title": "Kartverktyg",
                 "tags": "ohje_kartverktyg"
             },
@@ -37,10 +41,6 @@ Oskari.registerLocalization(
                 "title": "Mina Uppgifter",
                 "tags": "ohje_uppgifter"
             },
-            {
-                "title": "Objektsuppgifter",
-                "tags": "ohje_objektsuppgifter"
-            }
         ],
         "help": {
             "tags": "kartfönstret,snappguide"

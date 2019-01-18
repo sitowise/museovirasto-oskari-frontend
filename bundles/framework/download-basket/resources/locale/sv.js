@@ -44,7 +44,7 @@ Oskari.registerLocalization (
                     "check-form-error": "Kontrollera",
                     "error-in-downloading": "Nedladdning av data misslyckades",
                     "basket-thank-you": "Tack för nedladdningen!",
-                    "basket-email-will-be": "u får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
+                    "basket-email-will-be": "Du får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
                     "basket-cropping-layer-title": "Avgränsningsdata: ",
                     "basket-license-title": "Bruksanvisning: ",
                     "basket-license-name": "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens",
