@@ -41,6 +41,7 @@ Oskari.registerLocalization(
                 "title": "Mina Uppgifter",
                 "tags": "ohje_uppgifter"
             },
+            
         ],
         "help": {
             "tags": "kartfönstret,snappguide"
