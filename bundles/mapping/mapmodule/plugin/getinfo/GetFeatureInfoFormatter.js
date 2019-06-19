@@ -150,6 +150,9 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     fields = Object.keys(feature);
                 }
 
+                //A workaround for RKY2000 registry items to show feature name in the popup
+                me._setFeatureNameForRky2000Feature(feature);
+
                 var feat = _.chain(fields)
                     .filter(function (key) {
                         return !_.contains(hiddenFields, key);
@@ -575,5 +578,25 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             }
         }
         return html;
+    },
+
+    /**
+     * @method _setFeatureNameForRky2000Feature
+     * @private
+     * Sets featureName property value for RKY2000 feature
+     * @param {Object} feature RKY2000 feature
+     */
+    _setFeatureNameForRky2000Feature: function (feature) {
+
+        if (feature.registryIdentifier !== "rky2000" || feature.featureName != null)
+            return;
+
+        if (feature.areas != null && feature.areas.length > 0) {
+            feature.featureName = feature.areas[0].featureName;
+        } else if (feature.lines != null && feature.lines.length > 0) {
+            feature.featureName = feature.lines[0].featureName;
+        } else if (feature.points != null && feature.points.length > 0) {
+            feature.featureName = feature.points[0].featureName;
+        }
     }
 });
