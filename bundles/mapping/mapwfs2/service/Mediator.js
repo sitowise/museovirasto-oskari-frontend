@@ -305,7 +305,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             if (typeof layer.getFeatureProperties === "function" && layer.hasOrder()) {
                 // this is a "userlayer" type layer
                 this.setOrderForFeatureProperties(layer,data.data.fields);
-                layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
+                layer.setFields(data.data.fields);
                 layer.setLocales (this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
             } else {
                 // this is any other layer supported by transport
