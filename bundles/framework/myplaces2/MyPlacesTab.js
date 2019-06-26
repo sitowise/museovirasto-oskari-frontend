@@ -247,7 +247,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             panel.setId(me.instance.idPrefix + '-category-' + id);
             panel.setTitle(category.getName());
             panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
-            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete', 'download'];
+            //'download' temporary removed from visible fields
+            var visibleFields = ['name', 'desc', 'createDate', 'updateDate', 'measurement', 'edit', 'delete'];
             panel.grid.setVisibleFields(visibleFields);
             // set up the link from name field
             var nameRenderer = function (name, data) {
