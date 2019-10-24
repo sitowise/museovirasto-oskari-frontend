@@ -128,15 +128,11 @@ Oskari.clazz.define(
                                         layerName = value.getLayerName();
                                         layerUrl = value.getLayerUrl();
                                     } else {
-                                        layerName = cropWMSLayer;
-                                        var mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                                        var layers = mapLayerService.getAllLayers();
-                                        var numLayers = layers.length;
-                                        for (var i = 0; i < numLayers; i++) {
-                                            if (layers[i].getLayerName() === layerName) {
-                                                layerUrl = layers[i].getLayerUrl();
-                                                break;
-                                            }
+                                        var layerId = cropWMSLayer;
+                                        var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
+                                        if (layer !== null) {
+                                            layerUrl = layer.getLayerUrl();
+                                            layerName = layer.getLayerName();
                                         }
                                     }
                                     me.createCroppingWMSLayer(layerName, layerUrl, map);
@@ -497,7 +493,6 @@ Oskari.clazz.define(
         createCroppingWMSLayer: function(layerName, layerUrl, map){
             var me = this;
             me.disableAllCroppingLayers(map);
-
             var layer = new OpenLayers.Layer.WMS("download-basket-cropping-layer",layerUrl,{
                     layers: layerName,
                     transparent: "true"

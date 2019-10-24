@@ -223,9 +223,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 currentLocale;
 
             //set the title and number of given results
-            //TODO make localization "Hakutulokset: XX hakutulosta hakusanalla XX"
-            //resultGrid.find('div.resultsTitle').append("Search results: " + results.length + " search results for the search " + searchInput.val());
-            resultGrid.find('div.resultsTitle').append("Hakutulokset: " + results.length + " hakutulosta haulle '" + searchInput.val() + "'");
+            resultGrid.find('div.resultsTitle').append(me.loc.searchResults + ": " + results.length + " " + me.loc.forSearch + " '" + searchInput.val() + "'");
 
             gridModel.setIdField('id');
 
@@ -245,8 +243,6 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 gridModel.addData({
                     'id': result.id,
                     'desc': result.desc != null ? result.desc.trim() : '',
-                    //'x': result.coordinateX,
-                    //'y': result.coordinateY,
                     'nbaUrl': result.nbaUrl,
                     'mapLayers': result.mapLayers,
                     'bounds': result.bounds,
@@ -254,7 +250,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     'registryIdentifier': result.registryIdentifier,
                     'registry': dataSourceName,
                     'municipality': result.municipality,
-                    'editable': result.editable
+                    'editable': result.editable,
+                    'markersCoordinates': result.markersCoordinates
                 });
             });
 
@@ -265,6 +262,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 if(typeof data === 'undefined') {
                     return name;
                 }
+
                 var idColumnDiv = jQuery('<div></div>'),
                     registryEditRoles = editorRoles[data.registryIdentifier] != null ? editorRoles[data.registryIdentifier] : editorRoles['general'];
                     
@@ -343,26 +341,47 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 //move and zoom the map
                 me.sandbox.postRequestByName('MapMoveRequest', [center.lon, center.lat, extent, false]);
 
-                //show new marker
-                var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-                if (reqBuilder) {
-                    var marker = {
-                        x: center.lon,
-                        y: center.lat,
-                        color: "000000",
-                        msg: '',
-                        shape: 4,
-                        size: 5
-                    };
-                    var request = reqBuilder(marker, 'registry-search-result');
-                    me.sandbox.request(me.instance, request);
+                //show new marker(s)
+                if (data.markersCoordinates) {
+                    for (var j = 0; j < data.markersCoordinates.length; j++) {
+                        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                        if (reqBuilder) {
+                            var marker = {
+                                x: data.markersCoordinates[j].coordinateX,
+                                y: data.markersCoordinates[j].coordinateY,
+                                color: "000000",
+                                msg: '',
+                                shape: 4,
+                                size: 5
+                            };
+                            var request = reqBuilder(marker, 'registry-search-result-' + j);
+                            me.sandbox.request(me.instance, request);
+                        }
+                    }
+                } else {
+                    var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                    if (reqBuilder) {
+                        var marker = {
+                            x: center.lon,
+                            y: center.lat,
+                            color: "000000",
+                            msg: '',
+                            shape: 4,
+                            size: 5
+                        };
+                        var request = reqBuilder(marker, 'registry-search-result');
+                        me.sandbox.request(me.instance, request);
+                    }
                 }
 
                 //show GFI popup
                 if (showGfi) {
+
+                    var popupData = me._getGfiPopupData(data);
+
                     var registryData = {
                         "via": "registry",
-                        "features": [data],
+                        "features": [popupData],
                         "lonlat": lonlat
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
@@ -373,9 +392,12 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                 me._showMessage(me.loc.noticeTitle, me.loc.searchResultNoGeometry);
 
                 if (data != null && showGfi) {
+
+                    var popupData = me._getGfiPopupData(data);
+
                     var registryData = {
                         "via": "registry",
-                        "features": [data],
+                        "features": [popupData],
                         "lonlat": Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getMapCenter()
                     };
                     var infoEvent = me.sandbox.getEventBuilder('GetInfoResultEvent')(registryData);
@@ -507,7 +529,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                                 attribute: data.mapLayers[j].attribute,
                                 itemId: data.id,
                                 layerId: mapLayerId,
-                                bounds: data.bounds
+                                bounds: data.bounds,
+                                markersCoordinates: data.markersCoordinates
                             };
 
                             features.push(featureJson);
@@ -566,24 +589,64 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registers.view.RegistersSearchTab',
                     var evt = me.sandbox.getEventBuilder('WFSSetPropertyFilter')(filters, features[i].layerId);
                     me.sandbox.notifyAll(evt);
 
-                    //show marker
-                    var bounds = new OpenLayers.Bounds(features[i].bounds);
-                    var boundsCenter = bounds.getCenterLonLat();
+                    //show new marker(s)
+                    if (features[i].markersCoordinates) {
+                        for (var j = 0; j < features[i].markersCoordinates.length; j++) {
+                            var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                            if (reqBuilder) {
+                                var marker = {
+                                    x: features[i].markersCoordinates[j].coordinateX,
+                                    y: features[i].markersCoordinates[j].coordinateY,
+                                    color: "000000",
+                                    msg: '',
+                                    shape: 4,
+                                    size: 5
+                                };
+                                var request = reqBuilder(marker, 'registry-search-result-' + i + '-' + j);
+                                me.sandbox.request(me.instance, request);
+                            }
+                        }
+                    } else {
+                        var bounds = new OpenLayers.Bounds(features[i].bounds);
+                        var boundsCenter = bounds.getCenterLonLat();
 
-                    var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
-                    if (reqBuilder) {
-                        var marker = {
-                            x: boundsCenter.lon,
-                            y: boundsCenter.lat,
-                            color: "000000",
-                            msg: '',
-                            shape: 4,
-                            size: 5
-                        };
-                        var request = reqBuilder(marker, 'registry-search-result-' + i);
-                        me.sandbox.request(me.instance, request);
+                        var reqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.AddMarkerRequest');
+                        if (reqBuilder) {
+                            var marker = {
+                                x: boundsCenter.lon,
+                                y: boundsCenter.lat,
+                                color: "000000",
+                                msg: '',
+                                shape: 4,
+                                size: 5
+                            };
+                            var request = reqBuilder(marker, 'registry-search-result' + i);
+                            me.sandbox.request(me.instance, request);
+                        }
                     }
                 }
+            }
+        },
+
+        /**
+         * @method _getGfiPopupData
+         * Filters grid model data passed to the popup
+         *
+         * @param {Object} data grid model data
+         *            
+         */
+        _getGfiPopupData: function (data) {
+            return {
+                'id': data.id,
+                'desc': data.desc,
+                'nbaUrl': data.nbaUrl,
+                'mapLayers': data.mapLayers,
+                'bounds': data.bounds,
+                'itemClassName': data.itemClassName,
+                'registryIdentifier': data.registryIdentifier,
+                'registry': data.registry,
+                'municipality': data.municipality,
+                'editable': data.editable
             }
         }
     });

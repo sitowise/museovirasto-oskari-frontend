@@ -19,6 +19,7 @@
             "searchDesc": "Skriv namnet, en del av namnet eller registerobjektets identifierare",
             "searchPlaceholder": "Skriv namnet, en del av namnet eller registerobjektets identifierare",
             "showAllResultsOnMap": "Vis alla resultatet på kartan",
+            "forSearch" : "sökningsresultat för sökningen",
             "searchResults": "Sökresultat",
             "grid": {
                 "id": "Identifierare",

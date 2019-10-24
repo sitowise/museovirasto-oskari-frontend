@@ -7,8 +7,8 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-link.NbaLinkBundleInstance',
  * @static
  */
 function () {
-    // Best practice is to initialize instance variables here.
-    //this.myVar = undefined;
+    this.registryItemData = null;
+    this.linkSucceeded = false;
 }, {
     /**
      * @static
@@ -23,7 +23,52 @@ function () {
     getName: function () {
         return this.__name;
     },
+    /**
+    * @method onEvent
+    * @param {Oskari.mapframework.event.Event} event a Oskari event object
+    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+    */
+    onEvent: function (event) {
+        //"use strict";
+        var handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [event]);
+
+    },
+    /**
+     * @property {Object} eventHandlers
+     * @static
+     */
     eventHandlers: {
+        /**
+         * @method MapLayerEvent
+         * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+         */
+        MapLayerEvent: function (event) {
+            if (!this.linkSucceeded && this.registryItemData != null && event.getOperation() == 'add') {
+                this._showRegistryItemOnMap();
+            }
+        }
+    },
+
+    /**
+     * @method stop
+     * implements BundleInstance protocol stop method
+     */
+    stop: function () {
+        //"use strict";
+        var me = this,
+            sandbox = me.sandbox(),
+            p;
+
+        for (p in me.eventHandlers) {
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                sandbox.unregisterFromEventByName(me, p);
+            }
+        }
     },
     /**
      * DefaultExtension method for doing stuff after the bundle has started.
@@ -48,7 +93,9 @@ function () {
             if (params.registryItemId != null && params.registerName != null) {
                 registerService.getRegistryItem(params,
                     function (result) {
-                        me._showRegistryItemOnMap(result);
+                        me.registryItemData = result;
+                        //first attempt to show registry item on map (if proper layers are not available yet, then the attempt will be repeated)
+                        me._showRegistryItemOnMap();
                     },
                     function (error) {
                         //TODO handle error
@@ -76,7 +123,7 @@ function () {
         return null;
     },
 
-    _showRegistryItemOnMap: function (data) {
+    _showRegistryItemOnMap: function () {
         var me = this,
             layers = [],
             features = [],
@@ -86,7 +133,9 @@ function () {
             feature,
             bounds,
             geometry,
-            itemType;
+            itemType,
+            data = me.registryItemData,
+            allLayersLoaded = true;
 
         if (!$.isArray(data)) {
             data = [data];
@@ -149,10 +198,10 @@ function () {
             if (layer != null) {
                 me.sandbox.postRequestByName('AddMapLayerRequest', [layers[i], true]);
             } else {
-                //TODO show error
+                allLayersLoaded = false;
             }
         }
-
+        
         //remove all markers
         var removeMarkersReqBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
         if (removeMarkersReqBuilder) {
@@ -176,6 +225,8 @@ function () {
                 me.sandbox.request(me, request);
             }
         }
+
+        me.linkSucceeded = allLayersLoaded;
     },
 
     _getCentroidFromGeoJson: function(geoJson) {

@@ -49,7 +49,8 @@ Oskari.registerLocalization({
                 "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi",
                 "basket-rectangle-cropping" : "Suorakaide",
                 "basket-free-cropping" : "Monikulmio",
-                "basket-all-cropping" : "Koko aineisto"
+                "basket-all-cropping" : "Koko aineisto",
+                "basket-not-downloadable-layers": "Latauskori on käytettävissä vain tietyille aineistoille. Kartalla on nyt aktiivisena tasoja, joiden lataus ei ole mahdollista ja nämä tasot eivät listaudu latauskoriin. Voit tarkistaa listauksen ladattavissa olevista karttatasoista käyttöohjeesta."
             }
         }
     }

@@ -19,6 +19,7 @@
             "searchDesc": "Kirjoita rekisterikohteen nimi, nimen osa tai kohdetunnus",
             "searchPlaceholder": "Kirjoita rekisterikohteen nimi, nimen osa tai kohdetunnus",
             "showAllResultsOnMap": "Näytä kaikki tulokset kartalla",
+            "forSearch" : "hakutulosta annetulla haulla", 
             "searchResults": "Hakutulokset",
             "grid": {
                 "id": "Tunnus",

@@ -19,6 +19,7 @@
             "searchDesc": "Write a registry item name, part of name or object identifier",
             "searchPlaceholder": "Write a registry item name, part of name or object identifier",
             "showAllResultsOnMap": "Show all results on the map",
+            "forSearch" : "search results for the search", 
             "searchResults": "Search results",
             "grid": {
                 "id": "ID",

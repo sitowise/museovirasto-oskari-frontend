@@ -40,7 +40,8 @@ Oskari.registerLocalization(
                     "sv": "Svenska",
                     "en": "Engelska"
                 },
-                "tooltip": "Välj språk för kartmaterial och användargränssnitt."
+                "tooltip": "Välj språk för kartmaterial och användargränssnitt.",
+                "languageChangedDisclaimer": "Obs! Språkvalen syns inte i förhandsgranskningen"
             },
             "size": {
                 "label": "Kart storlek",

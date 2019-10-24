@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.nba.bundle.nba-registry-editor.view.BuildingHeritage
                 //sub.append(subItemRow);
 
                 panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-                panel.setTitle(data.points[i].id);
+                panel.setTitle(data.points[i].id + ' / ' + data.points[i].objectName);
                 panel.setContent(subItemRow);
                 panel.setVisible(true);
                 panel.close();

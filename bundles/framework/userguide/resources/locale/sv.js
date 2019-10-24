@@ -18,33 +18,30 @@ Oskari.registerLocalization(
         },
         "tabs": [
             {
-                "title": "Kartfönstret",
-                "tags": "kartfönstret,snappguide"
+                "title": "Kartlager",
+                "tags": "ohje_kartlager"
+            },
+            {
+                "title": "Objektsuppgifter",
+                "tags": "ohje_objektsuppgifter"
             },
             {
                 "title": "Kartverktyg",
-                "tags": "guide_tools"
+                "tags": "ohje_kartverktyg"
             },
             {
                 "title": "Sökning",
-                "tags": "guide_search"
-            },
-            {
-                "title": "Kartlager",
-                "tags": "guide_maplayers"
+                "tags": "ohje_sökning"
             },
             {
                 "title": "Kartpublicering",
-                "tags": "guide_publishing"
+                "tags": "ohje_kartpublicering"
             },
             {
-                "title": "Temakartor",
-                "tags": "guide_thematic"
+                "title": "Mina Uppgifter",
+                "tags": "ohje_uppgifter"
             },
-            {
-                "title": "Analys",
-                "tags": "guide_analysis"
-            }
+            
         ],
         "help": {
             "tags": "kartfönstret,snappguide"

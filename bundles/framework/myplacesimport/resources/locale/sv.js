@@ -53,6 +53,7 @@ Oskari.registerLocalization(
                 "unable_to_store_data": "Objekten kunde inte sparas till databasen eller den inmatade datamängden innehöll inga objekt.",
                 "short_file_prefix": "Hämtningen av datamängderna från zip-filen misslyckades. Kontrollera, att prefixerna av de packade filerna innehåller åtminstone tre tecken.",
                 "file_over_size": "Den valda filen är för stor. Den högsta tillåtna storleken är <xx> Mb.",
+                "no_features":"Kunde inte hitta objekt i indatan",
                 "malformed": "Kontrollera, att filnamnen inte innehåller diakritiska tecken (t.ex. bokstäverna Å,Ä,Ö).",
                 "kml": "Ett kartlager kunde inte skapas från KML-filen.",
                 "shp": "Ett kartlager kunde inte skapas från SHP-filen.",
@@ -74,21 +75,29 @@ Oskari.registerLocalization(
                 "description": "Beskrivning",
                 "source": "Datakälla",
                 "remove": "Ta bort",
-                "removeButton": "Ta bort"
+                "removeButton": "Ta bort",
+                "zoomToData": "Justera vyn till data",
+                "edit": "Redigera"
             },
             "confirmDeleteMsg": "Vill du ta bort \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "cancel": "Avbryt",
-                "delete": "Ta bort"
+                "delete": "Ta bort",
+                "zoomToData": "Justera vyn till data",
+                "edit": "Redigera", 
+                "save": "Lagra"
             },
             "notification": {
                 "deletedTitle": "Ta bort dataset",
-                "deletedMsg": "Datasetet har tagits bort"
+                "deletedMsg": "Datasetet har tagits bort",
+                "editedTitle": "Dataset redigera", 
+                "editedMsg": "Datasetet har ändrats."
             },
             "error": {
                 "title": "Fel!",
-                "generic": "Systemfel. Försök på nytt senare."
+                "generic": "Systemfel. Försök på nytt senare.",
+                "save": "Ett fel uppstod samtidigt som man räddade"
             }
         },
         "layer": {

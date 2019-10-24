@@ -44,10 +44,11 @@ Oskari.registerLocalization (
                     "check-form-error": "Kontrollera",
                     "error-in-downloading": "Nedladdning av data misslyckades",
                     "basket-thank-you": "Tack för nedladdningen!",
-                    "basket-email-will-be": "u får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
+                    "basket-email-will-be": "Du får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
                     "basket-cropping-layer-title": "Avgränsningsdata: ",
                     "basket-license-title": "Bruksanvisning: ",
-                    "basket-license-name": "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens"
+                    "basket-license-name": "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens",
+                    "basket-not-downloadable-layers": "Nedladdningskorgen är tillgänglig endast för vissa data. Kartvyn innehåller lager som kan inte laddas ner och syns därför inte i nerladdningskorgen. Du kan kontrollera listan över lager som kan laddas ner i bruksanvisningen."
                 }
             }
         }

@@ -19,7 +19,8 @@ Oskari.registerLocalization(
                     "description": "Beskrivning",
                     "publish": "Publicerad",
                     "edit": "Redigera",
-                    "delete": "Ta bort"
+                    "delete": "Ta bort",
+                    "default": "Standardvärde"
                 },
                 "popup": {
                     "edit": "Redigera kartvyn",
@@ -31,7 +32,8 @@ Oskari.registerLocalization(
                     "cancel": "Avbryt",
                     "error_noname": "Skriv namnet på kartvyn",
                     "deletetitle": "Ta bort kartvyn",
-                    "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?"
+                    "deletemsg": "Vill du ta bort denna kartvy \"{name}\"?",
+                    "default": "Standardvy"
                 },
                 "save": {
                     "success": "Kartvyn har sparats.",
@@ -46,7 +48,7 @@ Oskari.registerLocalization(
                     "save": "Spara",
                     "cancel": "Avbryt",
                     "toolbarsave": "Spara kartvyn",
-                    "saveCurrent": "Save current view"
+                    "saveCurrent": "Spara denna vy"
                 },
                 "error": {
                     "title": "Fel!",
